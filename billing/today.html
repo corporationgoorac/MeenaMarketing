@@ -76,6 +76,11 @@
         .sales-list { display: flex; flex-direction: column; gap: 15px; }
         .invoice-card { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; overflow: hidden; transition: all 0.3s ease; }
         
+        /* UPGRADE: Advanced 2-Column Grid for Desktop */
+        @media (min-width: 768px) {
+            .sales-list { display: grid; grid-template-columns: 1fr 1fr; align-items: start; }
+        }
+
         .inv-header { background: #1a1a1a; padding: 15px 20px; display: flex; justify-content: space-between; border-bottom: 1px solid #333; align-items: center;}
         .inv-meta h3 { margin: 0; color: var(--marketing-white); font-size: 1.1em; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
         .inv-meta span { font-size: 0.75em; color: var(--text-secondary); font-weight: normal; background: #333; padding: 2px 6px; border-radius: 4px;}
@@ -91,11 +96,13 @@
         .customer-info strong { color: white; font-size: 1.05em; }
 
         .item-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;}
-        .item-row { display: flex; justify-content: space-between; font-size: 0.9em; align-items: flex-start;}
+        
+        /* UPGRADE: Perfect Flex Alignment for Invoice Lines */
+        .item-row { display: flex; justify-content: space-between; font-size: 0.9em; align-items: center;}
         .item-desc { flex: 1; padding-right: 15px; }
         .item-name { font-weight: bold; color: white; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;}
         .item-sub { color: var(--text-secondary); font-size: 0.85em; margin-top: 2px;}
-        .item-price { text-align: right; font-weight: bold; white-space: nowrap; }
+        .item-price { text-align: right; font-weight: bold; white-space: nowrap; min-width: 85px; flex-shrink: 0;}
         
         .tag-ns { background: rgba(255, 152, 0, 0.2); color: var(--warning-color); padding: 1px 6px; border-radius: 4px; font-size: 0.7em; border: 1px solid var(--warning-color); text-transform: uppercase;}
         .tag-gst { color: var(--accent-color); font-size: 0.8em; font-weight: bold; margin-left: 5px;}
@@ -283,9 +290,9 @@
 
     <div id="searchModal" class="search-modal">
         <div class="search-header">
-            <span class="material-symbols-outlined" style="cursor:pointer;" onclick="closeModalManual()">arrow_back</span>
+            <span class="material-symbols-outlined" style="cursor:pointer;" onclick="if(navigator.vibrate) navigator.vibrate(40); closeModalManual()">arrow_back</span>
             <input type="text" id="searchInput" placeholder="Search customer, invoice, etc..." oninput="handleSearch()">
-            <span class="material-symbols-outlined" style="cursor:pointer;" onclick="clearSearch()">close</span>
+            <span class="material-symbols-outlined" style="cursor:pointer;" onclick="if(navigator.vibrate) navigator.vibrate(40); clearSearch()">close</span>
         </div>
         <div class="search-results-container" id="searchModalResults">
             </div>
@@ -293,9 +300,9 @@
 
     <div id="productSearchModal" class="search-modal">
         <div class="search-header">
-            <span class="material-symbols-outlined" style="cursor:pointer;" onclick="closeProductSearchModalManual()">arrow_back</span>
+            <span class="material-symbols-outlined" style="cursor:pointer;" onclick="if(navigator.vibrate) navigator.vibrate(40); closeProductSearchModalManual()">arrow_back</span>
             <input type="text" id="productSearchInput" placeholder="Search product or 'non stock'..." onkeyup="handleProductSearchDelay()">
-            <span class="material-symbols-outlined" style="cursor:pointer;" onclick="clearProductSearch()">close</span>
+            <span class="material-symbols-outlined" style="cursor:pointer;" onclick="if(navigator.vibrate) navigator.vibrate(40); clearProductSearch()">close</span>
         </div>
         <div class="search-results-container" id="productSearchResults">
             <div style="text-align:center; padding: 20px; color: var(--text-secondary);">Type a product name or "non stock" to see customers who bought it.</div>
@@ -304,7 +311,7 @@
 
     <div id="gstModal" class="search-modal">
         <div class="search-header">
-            <span class="material-symbols-outlined" style="cursor:pointer;" onclick="closeGstModalManual()">arrow_back</span>
+            <span class="material-symbols-outlined" style="cursor:pointer;" onclick="if(navigator.vibrate) navigator.vibrate(40); closeGstModalManual()">arrow_back</span>
             <span style="flex-grow: 1; font-size: 1.1em; font-weight: bold; color: white;">GST Filing Export</span>
         </div>
         <div style="padding: 20px; display: flex; flex-direction: column; gap: 20px; max-width: 500px; margin: 0 auto; width: 100%; overflow-y: auto;">
@@ -319,14 +326,14 @@
                         <label style="display: block; font-size: 0.85em; color: var(--text-secondary); margin-bottom: 5px; text-transform: uppercase;">To Date</label>
                         <input type="date" id="gstToDate" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: var(--input-bg); color: white; font-size: 1em; outline: none; box-sizing: border-box;">
                     </div>
-                    <button id="btnDownloadGst" onclick="downloadGstPdf()" style="background: var(--accent-color); color: white; padding: 14px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.05em; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 10px; transition: 0.2s;">
+                    <button id="btnDownloadGst" onclick="if(navigator.vibrate) navigator.vibrate(40); downloadGstPdf()" style="background: var(--accent-color); color: white; padding: 14px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.05em; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 10px; transition: 0.2s;">
                         <span class="material-symbols-outlined">picture_as_pdf</span> Download Summary PDF
                     </button>
 
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #444;">
                         <label style="display: block; font-size: 0.85em; color: var(--text-secondary); margin-bottom: 5px; text-transform: uppercase;">Download from Invoice No. (All Dates)</label>
                         <input type="number" id="gstStartInvoiceNo" placeholder="e.g. 1700 (for GST- 1700)" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: var(--input-bg); color: white; font-size: 1em; outline: none; box-sizing: border-box; margin-bottom: 10px;">
-                        <button id="btnDownloadFromInvoice" onclick="downloadGstBillsFromInvoice()" style="background: var(--success-color); color: white; padding: 14px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.05em; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; transition: 0.2s;">
+                        <button id="btnDownloadFromInvoice" onclick="if(navigator.vibrate) navigator.vibrate(40); downloadGstBillsFromInvoice()" style="background: var(--success-color); color: white; padding: 14px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.05em; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; transition: 0.2s;">
                             <span class="material-symbols-outlined">download</span> Download Bills from No.
                         </button>
                     </div>
@@ -334,7 +341,7 @@
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #444;">
                         <label style="display: block; font-size: 0.85em; color: var(--text-secondary); margin-bottom: 5px; text-transform: uppercase;">Download Exact Bill</label>
                         <input type="text" id="exactBillNo" placeholder="e.g. GST-1700" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: var(--input-bg); color: white; font-size: 1em; outline: none; box-sizing: border-box; margin-bottom: 10px;">
-                        <button id="btnDownloadExactBill" onclick="downloadExactBillData()" style="background: var(--warning-color); color: white; padding: 14px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.05em; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; transition: 0.2s;">
+                        <button id="btnDownloadExactBill" onclick="if(navigator.vibrate) navigator.vibrate(40); downloadExactBillData()" style="background: var(--warning-color); color: white; padding: 14px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.05em; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; transition: 0.2s;">
                             <span class="material-symbols-outlined">download</span> Download Exact Bill
                         </button>
                     </div>
@@ -346,7 +353,7 @@
 
     <header>
         <div class="header-left">
-            <a href="javascript:void(0)" onclick="window.history.back();" class="back-btn"><span class="material-symbols-outlined">arrow_back</span></a>
+            <a href="javascript:void(0)" onclick="if(navigator.vibrate) navigator.vibrate(40); window.history.back();" class="back-btn"><span class="material-symbols-outlined">arrow_back</span></a>
             <div class="brand-container">
                 <img src="icon.png" alt="Icon" class="logo-img">
                 <div class="brand-text">
@@ -356,10 +363,7 @@
             </div>
         </div>
         <div class="header-right">
-            <span class="material-symbols-outlined" style="cursor:pointer; font-size: 26px; margin-right: 15px; color: var(--accent-color);" onclick="openProductSearchModal()" title="Search Customers by Product">manage_search</span>
-            
-            <span class="material-symbols-outlined" style="cursor:pointer; font-size: 26px; margin-right: 15px; color: var(--warning-color);" onclick="openGstModal()">request_quote</span>
-            <span class="material-symbols-outlined" style="cursor:pointer; font-size: 26px;" onclick="openSearchModal()">search</span>
+            <span class="material-symbols-outlined" style="cursor:pointer; font-size: 26px;" onclick="if(navigator.vibrate) navigator.vibrate(40); openSearchModal()">search</span>
         </div>
     </header>
 
@@ -383,11 +387,11 @@
             <div class="sales-summary">
                 <div class="summary-item">
                     <h4>Invoices</h4>
-                    <p class="count" id="totalInvoices">0</p>
+                    <p class="count" id="totalInvoices"><span class="skeleton" style="display: inline-block; width: 35px; height: 24px; border-radius: 20px; vertical-align: middle;"></span></p>
                 </div>
                 <div class="summary-item">
                     <h4>Total Sales</h4>
-                    <p id="totalSales">₹0</p>
+                    <p id="totalSales"><span class="skeleton" style="display: inline-block; width: 110px; height: 24px; border-radius: 20px; vertical-align: middle;"></span></p>
                 </div>
             </div>
         </div>
@@ -509,9 +513,9 @@
             salesListEl.innerHTML = '';
             loaderEl.style.display = 'block';
             
-            // UI Reset
-            document.getElementById('totalInvoices').innerText = '0';
-            document.getElementById('totalSales').innerText = '₹0';
+            // UI Reset - Using upgraded rounded pill skeletons
+            document.getElementById('totalInvoices').innerHTML = '<span class="skeleton" style="display: inline-block; width: 35px; height: 24px; border-radius: 20px; vertical-align: middle;"></span>';
+            document.getElementById('totalSales').innerHTML = '<span class="skeleton" style="display: inline-block; width: 110px; height: 24px; border-radius: 20px; vertical-align: middle;"></span>';
 
             // FIXED TIMEZONE BOUNDS: Manually parse the year, month, day to prevent UTC shifting
             const [year, month, day] = dateString.split('-');
@@ -539,6 +543,8 @@
                             <p>There are no recorded bills for this date.</p>
                         </div>
                     `;
+                    document.getElementById('totalInvoices').innerText = '0';
+                    document.getElementById('totalSales').innerText = '₹0';
                     return;
                 }
 
@@ -684,6 +690,8 @@
                 showToast("Firebase Error: " + err.message); 
                 loaderEl.style.display = 'none';
                 salesListEl.innerHTML = '<div class="empty-state" style="color:var(--meena-red);">Error loading sales data. Please check connection and permissions.</div>';
+                document.getElementById('totalInvoices').innerText = '0';
+                document.getElementById('totalSales').innerText = '₹0';
             }
         }
 
@@ -1694,15 +1702,16 @@
             const printAreaEl = document.getElementById('printArea');
             printAreaEl.innerHTML = generateSingleInvoiceHTMLTemplate(data);
             
-            // FIX: Mobile browsers block window.print() if it's delayed inside a setTimeout.
-            // It MUST be executed synchronously within the user's click interaction.
-            document.getElementById('printLoaderOverlay').classList.remove('active');
-            window.print();
-            
-            // Wait slightly for DOM to settle and fonts to render fallback
+            // FIX: Delay the print thread block to allow vibration hardware to actuate fully
             setTimeout(() => {
                 document.getElementById('printLoaderOverlay').classList.remove('active');
-            }, 800); 
+                window.print();
+                
+                // Wait slightly for DOM to settle and fonts to render fallback
+                setTimeout(() => {
+                    document.getElementById('printLoaderOverlay').classList.remove('active');
+                }, 800); 
+            }, 150);
         };
 
         window.addEventListener('afterprint', () => {
