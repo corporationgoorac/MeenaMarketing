@@ -72,7 +72,7 @@
         .summary-item p { margin: 5px 0 0 0; font-size: 1.5em; font-weight: bold; color: var(--success-color); }
         .summary-item p.count { color: var(--marketing-white); }
 
-        /* Invoice Cards */
+        /* Invoice Cards Layout - FIXED 2-COLUMN BULLETPROOF GRID */
         .sales-list { 
             display: grid; 
             grid-template-columns: 1fr; 
@@ -648,7 +648,7 @@
                         <div class="invoice-card" style="${cardStyle}">
                             <div class="inv-header">
                                 <div class="inv-meta">
-                                    <h3 style="cursor: pointer; text-decoration: underline; text-underline-offset: 4px;" ontouchstart="if(navigator.vibrate) navigator.vibrate(50)" onclick="reprintBill('${data.invoiceNo}')" title="Click to Reprint Bill">${data.invoiceNo || 'INV-UNKNOWN'} <span>BILLED</span> <span class="pay-tag">${paymentMode}</span></h3>
+                                    <h3 style="cursor: pointer; text-decoration: underline; text-underline-offset: 4px;" onclick="reprintBill('${data.invoiceNo}')" title="Click to Reprint Bill">${data.invoiceNo || 'INV-UNKNOWN'} <span>BILLED</span> <span class="pay-tag">${paymentMode}</span></h3>
                                 </div>
                                 <div class="inv-time" style="display: flex; align-items: center; white-space: nowrap; font-size: 0.95em; color: var(--marketing-white); font-weight: bold;">
                                     ${timeString}${badgeHtml}
@@ -1095,7 +1095,7 @@
                                 <p style="margin: 3px 0;"><span class="material-symbols-outlined" style="font-size: 14px; vertical-align: middle;">location_on</span> ${match.customerAddress}</p>
                             </div>
                             <div style="background: var(--input-bg); padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.9em;">
-                                <strong style="color: var(--text-secondary);">Invoice:</strong> <a href="javascript:void(0)" ontouchstart="if(navigator.vibrate) navigator.vibrate(50)" onclick="reprintBill('${match.invoiceNo}')" style="color:var(--accent-color); font-weight:bold; text-decoration:underline;">${match.invoiceNo}</a><br>
+                                <strong style="color: var(--text-secondary);">Invoice:</strong> <a href="javascript:void(0)" onclick="reprintBill('${match.invoiceNo}')" style="color:var(--accent-color); font-weight:bold; text-decoration:underline;">${match.invoiceNo}</a><br>
                                 <strong style="color: var(--text-secondary); display:block; margin-top: 6px;">Bought:</strong> 
                                 <div style="color: white; margin-top: 4px; line-height: 1.4;">${match.products}</div>
                             </div>
@@ -1691,9 +1691,14 @@
             btnPrint.disabled = false;
         }
 
-        // ADDED REPRINT BILL FUNCTION
+        // ADDED REPRINT BILL FUNCTION WITH FIX FOR VIBRATION HARDWARE FREEZE
         window.reprintBill = function(invoiceNo) {
             
+            // 1. Trigger the vibration instantly when the function starts
+            if (navigator.vibrate) {
+                navigator.vibrate([50, 50, 50]); // Stronger double-buzz to ensure it's felt
+            }
+
             const data = window.fetchedSalesData[invoiceNo];
             if (!data) {
                 showToast("Invoice data not found.");
@@ -1703,18 +1708,21 @@
             // SHOW LOADER OVERLAY
             document.getElementById('printLoaderOverlay').classList.add('active');
 
-            const printAreaEl = document.getElementById('printArea');
-            printAreaEl.innerHTML = generateSingleInvoiceHTMLTemplate(data);
-            
-            // FIX: Mobile browsers block window.print() if it's delayed inside a setTimeout.
-            // It MUST be executed synchronously within the user's click interaction.
-            document.getElementById('printLoaderOverlay').classList.remove('active');
-            window.print();
-            
-            // Wait slightly for DOM to settle and fonts to render fallback
+            // 2. FORCE A WAIT: We delay the heavy browser print action by 150ms.
+            // This gives the physical motor the exact time it needs to finish buzzing 
+            // before the browser freezes the thread to render the PDF.
             setTimeout(() => {
+                const printAreaEl = document.getElementById('printArea');
+                printAreaEl.innerHTML = generateSingleInvoiceHTMLTemplate(data);
+                
                 document.getElementById('printLoaderOverlay').classList.remove('active');
-            }, 800); 
+                window.print();
+                
+                // Wait slightly for DOM to settle and fonts to render fallback
+                setTimeout(() => {
+                    document.getElementById('printLoaderOverlay').classList.remove('active');
+                }, 800); 
+            }, 150); 
         };
 
         window.addEventListener('afterprint', () => {
