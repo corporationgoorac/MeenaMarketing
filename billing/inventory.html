@@ -1926,9 +1926,8 @@
                 for (const item of pendingCart) {
                     if (item.isUpdate && item.existingId) {
                         const itemRef = doc(db, "inventory", item.existingId);
-                        const newQty = item.existingQty + item.qty;
                         batch.update(itemRef, {
-                            qty: newQty,
+                            qty: increment(item.qty),
                             previousQty: item.existingQty,
                             lastEditReason: "New Stock Added via Cart",
                             lastEditBy: realEditorName,
@@ -1936,7 +1935,7 @@
                             createdAt: serverTimestamp() 
                         });
                     } else {
-                        const newDocRef = doc(collection(db, "inventory"));
+                       const newDocRef = doc(collection(db, "inventory"));
                         batch.set(newDocRef, {
                             name: item.name,
                             model: item.model,
