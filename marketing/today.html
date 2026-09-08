@@ -73,7 +73,20 @@
         .summary-item p.count { color: var(--marketing-white); }
 
         /* Invoice Cards */
-        .sales-list { display: flex; flex-direction: column; gap: 15px; }
+        .sales-list { 
+            display: grid; 
+            grid-template-columns: 1fr; 
+            gap: 15px; 
+        }
+        @media (min-width: 1024px) {
+            .sales-list { 
+                grid-template-columns: repeat(3, 1fr); 
+            }
+            #loader .sales-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
         .invoice-card { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; overflow: hidden; transition: all 0.3s ease; }
         
         .inv-header { background: #1a1a1a; padding: 15px 20px; display: flex; justify-content: space-between; border-bottom: 1px solid #333; align-items: center;}
@@ -635,7 +648,7 @@
                         <div class="invoice-card" style="${cardStyle}">
                             <div class="inv-header">
                                 <div class="inv-meta">
-                                    <h3 style="cursor: pointer; text-decoration: underline; text-underline-offset: 4px;" onclick="reprintBill('${data.invoiceNo}')" title="Click to Reprint Bill">${data.invoiceNo || 'INV-UNKNOWN'} <span>BILLED</span> <span class="pay-tag">${paymentMode}</span></h3>
+                                    <h3 style="cursor: pointer; text-decoration: underline; text-underline-offset: 4px;" onpointerdown="if(navigator.vibrate) navigator.vibrate(50)" onclick="reprintBill('${data.invoiceNo}')" title="Click to Reprint Bill">${data.invoiceNo || 'INV-UNKNOWN'} <span>BILLED</span> <span class="pay-tag">${paymentMode}</span></h3>
                                 </div>
                                 <div class="inv-time" style="display: flex; align-items: center; white-space: nowrap; font-size: 0.95em; color: var(--marketing-white); font-weight: bold;">
                                     ${timeString}${badgeHtml}
@@ -1082,7 +1095,7 @@
                                 <p style="margin: 3px 0;"><span class="material-symbols-outlined" style="font-size: 14px; vertical-align: middle;">location_on</span> ${match.customerAddress}</p>
                             </div>
                             <div style="background: var(--input-bg); padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.9em;">
-                                <strong style="color: var(--text-secondary);">Invoice:</strong> <a href="javascript:void(0)" onclick="reprintBill('${match.invoiceNo}')" style="color:var(--accent-color); font-weight:bold; text-decoration:underline;">${match.invoiceNo}</a><br>
+                                <strong style="color: var(--text-secondary);">Invoice:</strong> <a href="javascript:void(0)" onpointerdown="if(navigator.vibrate) navigator.vibrate(50)" onclick="reprintBill('${match.invoiceNo}')" style="color:var(--accent-color); font-weight:bold; text-decoration:underline;">${match.invoiceNo}</a><br>
                                 <strong style="color: var(--text-secondary); display:block; margin-top: 6px;">Bought:</strong> 
                                 <div style="color: white; margin-top: 4px; line-height: 1.4;">${match.products}</div>
                             </div>
@@ -1680,7 +1693,6 @@
 
         // ADDED REPRINT BILL FUNCTION
         window.reprintBill = function(invoiceNo) {
-            if (navigator.vibrate) navigator.vibrate(50);
             
             const data = window.fetchedSalesData[invoiceNo];
             if (!data) {
