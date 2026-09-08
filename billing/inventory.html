@@ -1932,7 +1932,8 @@
                             previousQty: item.existingQty,
                             lastEditReason: "New Stock Added via Cart",
                             lastEditBy: realEditorName,
-                            lastUpdated: new Date().toISOString()
+                            lastUpdated: new Date().toISOString(),
+                            createdAt: serverTimestamp() 
                         });
                     } else {
                         const newDocRef = doc(collection(db, "inventory"));
