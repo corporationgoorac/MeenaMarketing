@@ -72,22 +72,9 @@
         .summary-item p { margin: 5px 0 0 0; font-size: 1.5em; font-weight: bold; color: var(--success-color); }
         .summary-item p.count { color: var(--marketing-white); }
 
-        /* Invoice Cards Layout - FIXED 2-COLUMN BULLETPROOF GRID */
-        .sales-list { 
-            display: grid; 
-            grid-template-columns: 1fr; 
-            gap: 15px; 
-        }
-        @media (min-width: 600px) {
-            .sales-list { 
-                grid-template-columns: 1fr 1fr; 
-            }
-            #loader .sales-list {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        .invoice-card { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; overflow: hidden; transition: all 0.3s ease; }
+        /* UPGRADED: Flexbox Layout to prevent collapse in Desktop Mode */
+        .sales-list { display: flex; flex-wrap: wrap; gap: 15px; }
+        .invoice-card { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; overflow: hidden; transition: all 0.3s ease; width: 100%; box-sizing: border-box; }
         
         .inv-header { background: #1a1a1a; padding: 15px 20px; display: flex; justify-content: space-between; border-bottom: 1px solid #333; align-items: center;}
         .inv-meta h3 { margin: 0; color: var(--marketing-white); font-size: 1.1em; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
@@ -135,14 +122,25 @@
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
         }
+        
+        /* UPGRADED: Flexbox specific skeleton properties */
         .skel-card {
             background: var(--surface-color);
             border: 1px solid #333;
             border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 15px;
+            margin-bottom: 0;
             text-align: left;
+            width: 100%; 
+            box-sizing: border-box;
         }
+        
+        @media (min-width: 600px) {
+            .invoice-card, .skel-card {
+                width: calc(50% - 7.5px);
+            }
+        }
+        
         .skel-header { background: #1a1a1a; padding: 15px 20px; display: flex; justify-content: space-between; border-bottom: 1px solid #333; align-items: center; }
         .skel-title { width: 35%; height: 22px; border-radius: 6px; }
         .skel-time { width: 15%; height: 22px; border-radius: 6px; }
@@ -185,6 +183,9 @@
             animation: spin 1s linear infinite; margin-bottom: 20px;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Modal popup animation */
+        @keyframes popupFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
         /* ---------------------------------------------------- */
         /* --- PROFESSIONAL PRINT INVOICE LAYOUT (B&W REPLICA) --- */
@@ -281,6 +282,19 @@
         <div class="spinner"></div>
         <h2 style="color: white; font-size: 1.2em; margin: 0;">Processing Invoice...</h2>
         <p style="color: var(--text-secondary); font-size: 0.9em; margin-top: 10px;">Please wait while we prepare the document.</p>
+    </div>
+
+    <!-- UPGRADED: Reprint Confirmation Modal to fix thread-lock vibration issue -->
+    <div id="reprintModal" class="search-modal" style="justify-content: center; align-items: center; background: rgba(0,0,0,0.7); z-index: 10000; padding: 20px;">
+        <div style="background: var(--surface-color); border: 1px solid #333; border-radius: 16px; padding: 25px; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); animation: popupFadeIn 0.2s ease;">
+            <span class="material-symbols-outlined" style="font-size: 50px; color: var(--accent-color); margin-bottom: 10px;">print</span>
+            <h3 style="margin: 0 0 8px 0; color: white; font-size: 1.3em;">Reprint Invoice</h3>
+            <p style="color: var(--text-secondary); font-size: 0.95em; margin: 0 0 20px 0; line-height: 1.4;">Do you want to print bill <strong id="reprintModalInvNo" style="color: white;"></strong>?</p>
+            <div style="display: flex; gap: 12px;">
+                <button onclick="closeReprintModalManual()" style="flex: 1; padding: 12px; background: transparent; border: 1px solid #555; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1em;">Cancel</button>
+                <button id="btnConfirmReprint" style="flex: 1; padding: 12px; background: var(--accent-color); border: none; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1em; box-shadow: 0 4px 12px rgba(0,86,179,0.4);">Print</button>
+            </div>
+        </div>
     </div>
 
     <div class="toast-msg error" id="errorToast">
@@ -643,12 +657,12 @@
                     else if (grandTotal >= 10000) { cardStyle = "border-color: #00bcd4; border-style: solid; border-width: 2px; box-shadow: 0 0 8px rgba(0, 188, 212, 0.4);"; }
                     else if (grandTotal >= 5000) { cardStyle = "border-color: #4caf50; border-style: solid; border-width: 1px; box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);"; }
 
-                    // Build Card
+                    // Build Card (UPGRADED to confirmReprintBill trigger)
                     htmlOutput += `
                         <div class="invoice-card" style="${cardStyle}">
                             <div class="inv-header">
                                 <div class="inv-meta">
-                                    <h3 style="cursor: pointer; text-decoration: underline; text-underline-offset: 4px;" onclick="reprintBill('${data.invoiceNo}')" title="Click to Reprint Bill">${data.invoiceNo || 'INV-UNKNOWN'} <span>BILLED</span> <span class="pay-tag">${paymentMode}</span></h3>
+                                    <h3 style="cursor: pointer; text-decoration: underline; text-underline-offset: 4px;" ontouchstart="if(navigator.vibrate) navigator.vibrate(50)" onclick="confirmReprintBill('${data.invoiceNo}')" title="Click to Reprint Bill">${data.invoiceNo || 'INV-UNKNOWN'} <span>BILLED</span> <span class="pay-tag">${paymentMode}</span></h3>
                                 </div>
                                 <div class="inv-time" style="display: flex; align-items: center; white-space: nowrap; font-size: 0.95em; color: var(--marketing-white); font-weight: bold;">
                                     ${timeString}${badgeHtml}
@@ -1081,6 +1095,7 @@
             const resultsContainer = document.getElementById('productSearchResults');
             let htmlOutput = '';
             dataArray.forEach(match => {
+                // UPGRADED to confirmReprintBill trigger
                 htmlOutput += `
                     <div class="invoice-card" style="flex-shrink: 0; display: flex; flex-direction: column; margin-bottom: 15px;">
                         <div class="inv-header" style="background: #1a1a1a;">
@@ -1095,7 +1110,7 @@
                                 <p style="margin: 3px 0;"><span class="material-symbols-outlined" style="font-size: 14px; vertical-align: middle;">location_on</span> ${match.customerAddress}</p>
                             </div>
                             <div style="background: var(--input-bg); padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.9em;">
-                                <strong style="color: var(--text-secondary);">Invoice:</strong> <a href="javascript:void(0)" onclick="reprintBill('${match.invoiceNo}')" style="color:var(--accent-color); font-weight:bold; text-decoration:underline;">${match.invoiceNo}</a><br>
+                                <strong style="color: var(--text-secondary);">Invoice:</strong> <a href="javascript:void(0)" ontouchstart="if(navigator.vibrate) navigator.vibrate(50)" onclick="confirmReprintBill('${match.invoiceNo}')" style="color:var(--accent-color); font-weight:bold; text-decoration:underline;">${match.invoiceNo}</a><br>
                                 <strong style="color: var(--text-secondary); display:block; margin-top: 6px;">Bought:</strong> 
                                 <div style="color: white; margin-top: 4px; line-height: 1.4;">${match.products}</div>
                             </div>
@@ -1691,14 +1706,38 @@
             btnPrint.disabled = false;
         }
 
-        // ADDED REPRINT BILL FUNCTION WITH FIX FOR VIBRATION HARDWARE FREEZE
-        window.reprintBill = function(invoiceNo) {
-            
-            // 1. Trigger the vibration instantly when the function starts
-            if (navigator.vibrate) {
-                navigator.vibrate([50, 50, 50]); // Stronger double-buzz to ensure it's felt
-            }
+        // UPGRADED REPRINT LOGIC: Modal separation to fix thread-locking vibration
+        let currentPrintInvoice = null;
 
+        window.confirmReprintBill = function(invoiceNo) {
+            currentPrintInvoice = invoiceNo;
+            document.getElementById('reprintModalInvNo').innerText = invoiceNo;
+            document.getElementById('reprintModal').style.display = 'flex';
+            history.pushState({ reprintModalOpen: true }, "");
+        };
+
+        window.closeReprintModalManual = function() {
+            history.back(); 
+        };
+
+        window.closeReprintModal = function() {
+            document.getElementById('reprintModal').style.display = 'none';
+            currentPrintInvoice = null;
+        };
+
+        document.getElementById('btnConfirmReprint').addEventListener('click', function() {
+            history.back(); // Clear state
+            if(currentPrintInvoice) {
+                // Short delay to let the modal animate away before the browser freezes
+                setTimeout(() => {
+                    reprintBill(currentPrintInvoice);
+                }, 50);
+            }
+        });
+
+        window.reprintBill = function(invoiceNo) {
+            // if (navigator.vibrate) navigator.vibrate(50); // Removed redundant vibration here
+            
             const data = window.fetchedSalesData[invoiceNo];
             if (!data) {
                 showToast("Invoice data not found.");
@@ -1708,21 +1747,18 @@
             // SHOW LOADER OVERLAY
             document.getElementById('printLoaderOverlay').classList.add('active');
 
-            // 2. FORCE A WAIT: We delay the heavy browser print action by 150ms.
-            // This gives the physical motor the exact time it needs to finish buzzing 
-            // before the browser freezes the thread to render the PDF.
+            const printAreaEl = document.getElementById('printArea');
+            printAreaEl.innerHTML = generateSingleInvoiceHTMLTemplate(data);
+            
+            // FIX: Mobile browsers block window.print() if it's delayed inside a setTimeout.
+            // It MUST be executed synchronously within the user's click interaction.
+            document.getElementById('printLoaderOverlay').classList.remove('active');
+            window.print();
+            
+            // Wait slightly for DOM to settle and fonts to render fallback
             setTimeout(() => {
-                const printAreaEl = document.getElementById('printArea');
-                printAreaEl.innerHTML = generateSingleInvoiceHTMLTemplate(data);
-                
                 document.getElementById('printLoaderOverlay').classList.remove('active');
-                window.print();
-                
-                // Wait slightly for DOM to settle and fonts to render fallback
-                setTimeout(() => {
-                    document.getElementById('printLoaderOverlay').classList.remove('active');
-                }, 800); 
-            }, 150); 
+            }, 800); 
         };
 
         window.addEventListener('afterprint', () => {
@@ -1736,6 +1772,11 @@
 
         // Ensure popstate handles the closing of ALL modals including the new Product Search Modal
         window.addEventListener('popstate', (e) => {
+            const reprintModal = document.getElementById('reprintModal');
+            if (reprintModal && reprintModal.style.display === 'flex') {
+                closeReprintModal();
+            }
+
             const searchModal = document.getElementById('searchModal');
             if (searchModal.classList.contains('active')) {
                 searchModal.classList.remove('active');
