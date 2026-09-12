@@ -292,8 +292,9 @@
     </template>
 
     <script type="module">
+        // Added getDoc, increment, and serverTimestamp to the imports
         import { db } from './config.js';
-        import { collection, query, where, limit, onSnapshot, doc, deleteDoc, getDocs, writeBatch, getCountFromServer, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { collection, query, where, limit, onSnapshot, doc, deleteDoc, getDocs, writeBatch, getCountFromServer, getDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
         // ADVANCED FIX: Global Vibration Engine
         window.vibrateApp = function(pattern) {
@@ -548,40 +549,62 @@
             });
         };
 
-        // 2. Confirm & Execute Update (Sync + Delete)
-        window.confirmUpdate = function(id, discrepancyQty) {
+        // 2. Confirm & Execute Update (Pre-flight check + Sync + Delete)
+        window.confirmUpdate = async function(id, discrepancyQty) {
             vibrateApp(20);
             
-            // Dynamic message based on over or short stock
-            let msg = discrepancyQty > 0 
-                ? `Update master inventory by ADDING ${discrepancyQty} units? This cannot be undone.`
-                : `Update master inventory by REMOVING ${Math.abs(discrepancyQty)} units? This cannot be undone.`;
-                
-            openConfirmModal(msg, async () => {
-                try {
-                    const batch = writeBatch(db);
-                    
-                    // A. Update the Master Inventory (Using increment to avoid reading first)
-                    const invRef = doc(db, "inventory", id);
-                    batch.update(invRef, {
-                        qty: increment(discrepancyQty),
-                        lastUpdated: new Date().toISOString(), // String Timestamp
-                        createdAt: serverTimestamp()           // Firebase Timestamp
+            try {
+                // Pre-flight check: Does the item still exist in the master inventory?
+                const invRef = doc(db, "inventory", id);
+                const invSnap = await getDoc(invRef);
+
+                if (!invSnap.exists()) {
+                    // Fallback Path: Product was deleted from master inventory
+                    openConfirmModal("The main database is not available for this product. Continue with deleting the card?", async () => {
+                        try {
+                            deleteDoc(doc(db, "daily_check", id)).catch(e => console.log("Background sync pending"));
+                            showToast("Card deleted safely.", "success");
+                        } catch (err) {
+                            showToast("Failed to delete card.", "error");
+                        }
                     });
-                    
-                    // B. Delete from the daily_check queue
-                    const checkRef = doc(db, "daily_check", id);
-                    batch.delete(checkRef);
-                    
-                    // C. Commit both atomically
-                    await batch.commit();
-                    
-                    showToast("Inventory updated successfully!", "success");
-                } catch (e) {
-                    console.error(e);
-                    showToast("Failed to update inventory.", "error");
+                    return;
                 }
-            });
+
+                // Normal Path: Product exists, dynamic message based on over or short stock
+                let msg = discrepancyQty > 0 
+                    ? `Update master inventory by ADDING ${discrepancyQty} units? This cannot be undone.`
+                    : `Update master inventory by REMOVING ${Math.abs(discrepancyQty)} units? This cannot be undone.`;
+                    
+                openConfirmModal(msg, async () => {
+                    try {
+                        const batch = writeBatch(db);
+                        
+                        // A. Update the Master Inventory atomically
+                        batch.update(invRef, {
+                            qty: increment(discrepancyQty),
+                            lastUpdated: new Date().toISOString(), // String Timestamp
+                            createdAt: serverTimestamp()           // Firebase Timestamp
+                        });
+                        
+                        // B. Delete from the daily_check queue
+                        const checkRef = doc(db, "daily_check", id);
+                        batch.delete(checkRef);
+                        
+                        // C. Commit both atomically
+                        await batch.commit();
+                        
+                        showToast("Inventory updated successfully!", "success");
+                    } catch (e) {
+                        console.error(e);
+                        showToast("Failed to update inventory.", "error");
+                    }
+                });
+
+            } catch (error) {
+                console.error("Error verifying product:", error);
+                showToast("Failed to connect to database.", "error");
+            }
         };
 
 
