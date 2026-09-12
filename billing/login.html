@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Login - Meena Marketing</title>
     
-    <meta name="theme-color" content="#121212">
+    <!-- UPGRADED: Theme color precisely matches the new Hero Arch for a seamless Android toolbar -->
+    <meta name="theme-color" content="#0b111a">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet" />
@@ -22,7 +23,7 @@
             --button-hover: rgba(255, 51, 51, 0.1);
         }
 
-        /* UPGRADED: Anti-copy and anti-zoom global rules */
+        /* UPGRADED: Anti-copy, anti-zoom, and 100dvh anti-wobble scroll lock */
         html, body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -32,7 +33,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 100dvh; /* UPGRADED: Dynamic Viewport Height prevents fake scrolling on mobile */
             width: 100vw;
             overflow: hidden; /* Prevents bounce scrolling on mobile */
             
@@ -44,6 +45,23 @@
             -ms-user-select: none;
             user-select: none;
             touch-action: manipulation; 
+        }
+
+        /* =========================================================================
+           NEW HERO ARCH: Seamless Status Bar Integration & Vivid Red Glow
+           ========================================================================= */
+        .hero-arch {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 38vh; 
+            background: linear-gradient(to bottom, #212121 40%, transparent 100%); /* Exact match to the Daily Check / Inventory header, blending smoothly at the bottom */
+            border-radius: 0 0 50% 50%;
+            transform: scaleX(1.5); /* Sweeping premium curve */
+            /* Vivid neon-red glow: 55% opacity with a 5px spread to perfectly separate from the dark background */
+            box-shadow: 0 15px 35px 5px rgba(255, 51, 51, 0.55); 
+            z-index: 0;
         }
 
         /* UPGRADED: Professional Sleek Login Card */
@@ -58,6 +76,7 @@
             text-align: center;
             position: relative;
             box-sizing: border-box;
+            z-index: 10; /* Ensures the card floats safely above the glowing Hero Arch */
         }
 
         .brand-logo {
@@ -258,6 +277,9 @@
 </head>
 <body>
 
+    <!-- NEW: The Premium Sweeping Arch Background Layer -->
+    <div class="hero-arch"></div>
+
     <div class="auth-container">
         <div id="login-section">
             <img src="icon.png" alt="Meena Marketing" class="brand-logo" onerror="this.src='https://via.placeholder.com/70/212121/ff3333?text=MM'">
@@ -327,7 +349,7 @@
 
                 if (userSnap.exists()) {
                     // User exists, send to dashboard!
-                    window.location.href = 'bill.html';
+                    window.location.href = 'index.html';
                 } else {
                     // User is NEW. Hide login, show setup UI.
                     pendingUser = user;
@@ -374,7 +396,7 @@
                 });
 
                 // Redirect to dashboard
-                window.location.href = 'bill.html';
+                window.location.href = 'index.html';
                 
             } catch (error) {
                 console.error("Error saving user data:", error);
