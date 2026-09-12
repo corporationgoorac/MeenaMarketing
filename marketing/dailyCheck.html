@@ -293,7 +293,7 @@
 
     <script type="module">
         import { db } from './config.js';
-        import { collection, query, where, limit, onSnapshot, doc, deleteDoc, getDocs, writeBatch, getCountFromServer } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { collection, query, where, limit, onSnapshot, doc, deleteDoc, getDocs, writeBatch, getCountFromServer, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
         // ADVANCED FIX: Global Vibration Engine
         window.vibrateApp = function(pattern) {
@@ -344,36 +344,6 @@
             if(unsubMissing) unsubMissing();
             const qMissing = query(collection(db, "daily_check"), where("status", "==", "missing"), limit(limitMissing));
             unsubMissing = onSnapshot(qMissing, (snap) => {
-                
-                // --- ORIGINAL DESTRUCTIVE CODE PRESERVED VIA COMMENTS ---
-                /*
-                if (snap.empty) {
-                    missingGrid.innerHTML = `
-                        <div class="empty-state">
-                            ${svgMissingEmpty}
-                            <h3 style="margin:0; color:white;">All Clear!</h3>
-                            <p style="margin:0;">No discrepancies reported by employees.</p>
-                        </div>`;
-                    return;
-                }
-                let html = '';
-                snap.forEach(docSnap => {
-                    const data = docSnap.data();
-                    
-                    // ADVANCED FIX: Over/Short Badges mirroring employee page
-                    let discrepancyAmount = data.discrepancy;
-                    let displayBadge = "";
-                    ...
-                    html += `
-                    <div class="inv-card missing">
-                       ...
-                    </div>`;
-                });
-                if (snap.size === limitMissing) {
-                    html += `<div class="loader-row"><button class="btn-load-more" onclick="loadMoreMissing()">Load Next 10</button></div>`;
-                }
-                missingGrid.innerHTML = html;
-                */
 
                 // --- ADVANCED NON-DESTRUCTIVE RENDER (Fixes flicker and scroll jump) ---
                 if (snap.empty) {
@@ -420,7 +390,7 @@
                         }
                     }
                     
-                    // DOM Updates injected cleanly without destroying the wrapper node
+                    // DOM Updates injected cleanly without destroying the wrapper node (Added Side-by-Side UI)
                     el.innerHTML = `
                         <div class="card-top">
                             <div class="inv-info">
@@ -430,9 +400,14 @@
                             </div>
                             <div class="missing-badge">${displayBadge}</div>
                         </div>
-                        <button class="btn-full btn-danger" onclick="deleteMissingItem('${docSnap.id}')">
-                            <span class="material-symbols-outlined">delete_sweep</span> Acknowledge & Delete
-                        </button>
+                        <div style="display: flex; gap: 10px; margin-top: 5px; width: 100%;">
+                            <button class="btn-full btn-danger" style="flex: 1; padding: 12px; font-size: 0.9em; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--meena-red);" onclick="confirmDismiss('${docSnap.id}')">
+                                <span class="material-symbols-outlined">delete_sweep</span> Dismiss
+                            </button>
+                            <button class="btn-full btn-primary" style="flex: 1; padding: 12px; font-size: 0.9em;" onclick="confirmUpdate('${docSnap.id}', ${data.discrepancy || 0})">
+                                <span class="material-symbols-outlined">system_update_alt</span> Update
+                            </button>
+                        </div>
                     `;
                 });
                 
@@ -457,31 +432,6 @@
             if(unsubPending) unsubPending();
             const qPending = query(collection(db, "daily_check"), where("status", "==", "pending"), limit(limitPending));
             unsubPending = onSnapshot(qPending, (snap) => {
-                
-                // --- ORIGINAL DESTRUCTIVE CODE PRESERVED VIA COMMENTS ---
-                /*
-                if (snap.empty) {
-                    pendingGrid.innerHTML = `
-                        <div class="empty-state">
-                            ${svgPendingEmpty}
-                            <h3 style="margin:0; color:white;">Queue is Empty</h3>
-                            <p style="margin:0;">No active tasks assigned to employees.</p>
-                        </div>`;
-                    return;
-                }
-                let html = '';
-                snap.forEach(docSnap => {
-                    const data = docSnap.data();
-                    html += `
-                    <div class="inv-card pending" style="flex-direction: row;">
-                       ...
-                    </div>`;
-                });
-                if (snap.size === limitPending) {
-                    html += `<div class="loader-row"><button class="btn-load-more" onclick="loadMorePending()">Load Next 10</button></div>`;
-                }
-                pendingGrid.innerHTML = html;
-                */
 
                 // --- ADVANCED NON-DESTRUCTIVE RENDER (Fixes flicker and scroll jump) ---
                 if (snap.empty) {
@@ -583,15 +533,55 @@
             }
         });
 
-        // Delete Missing Item (Admin Action) - ADVANCED FIX: Instant offline speed (No await)
-        window.deleteMissingItem = function(id) {
+
+        // 1. Confirm & Execute Dismiss (Delete only)
+        window.confirmDismiss = function(id) {
             vibrateApp(20);
-            try {
-                deleteDoc(doc(db, "daily_check", id)).catch(e => console.log("Background sync pending"));
-                showToast("Item acknowledged and deleted.", "success");
-            } catch (e) {
-                showToast("Failed to delete item.", "error");
-            }
+            openConfirmModal("Dismiss this discrepancy? The master inventory will NOT be changed.", async () => {
+                try {
+                    // Background sync (instant UI response)
+                    deleteDoc(doc(db, "daily_check", id)).catch(e => console.log("Background sync pending"));
+                    showToast("Discrepancy dismissed.", "success");
+                } catch (e) {
+                    showToast("Failed to dismiss item.", "error");
+                }
+            });
+        };
+
+        // 2. Confirm & Execute Update (Sync + Delete)
+        window.confirmUpdate = function(id, discrepancyQty) {
+            vibrateApp(20);
+            
+            // Dynamic message based on over or short stock
+            let msg = discrepancyQty > 0 
+                ? `Update master inventory by ADDING ${discrepancyQty} units? This cannot be undone.`
+                : `Update master inventory by REMOVING ${Math.abs(discrepancyQty)} units? This cannot be undone.`;
+                
+            openConfirmModal(msg, async () => {
+                try {
+                    const batch = writeBatch(db);
+                    
+                    // A. Update the Master Inventory (Using increment to avoid reading first)
+                    const invRef = doc(db, "inventory", id);
+                    batch.update(invRef, {
+                        qty: increment(discrepancyQty),
+                        lastUpdated: new Date().toISOString(), // String Timestamp
+                        createdAt: serverTimestamp()           // Firebase Timestamp
+                    });
+                    
+                    // B. Delete from the daily_check queue
+                    const checkRef = doc(db, "daily_check", id);
+                    batch.delete(checkRef);
+                    
+                    // C. Commit both atomically
+                    await batch.commit();
+                    
+                    showToast("Inventory updated successfully!", "success");
+                } catch (e) {
+                    console.error(e);
+                    showToast("Failed to update inventory.", "error");
+                }
+            });
         };
 
 
