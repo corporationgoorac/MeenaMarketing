@@ -1268,7 +1268,7 @@
             }
 
             try {
-                const searchWords = suggCurrentTerm.toLowerCase().split(/[\s\-_]+/).filter(w => w.trim().length > 0);
+                const searchWords = suggCurrentTerm.toLowerCase().replace(/[.\/\\~*\[\]]/g, ' ').split(/[\s\-_]+/).filter(w => w.trim().length > 0);
                 if (searchWords.length === 0) {
                     suggestionsBox.style.display = 'none';
                     suggIsFetching = false;
