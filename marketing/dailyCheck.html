@@ -137,6 +137,17 @@
         /* ADVANCED FIX: Hide useless buttons for infinite scroll */
         .btn-load-more { background: transparent; border: 1px solid var(--input-border); color: var(--accent-color); padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; margin: 0 auto; display: block; transition: 0.2s; display: none !important; opacity: 0; pointer-events: none; }
         .btn-load-more:hover { background: rgba(13, 148, 136, 0.1); }
+        
+        /* --- NEW: Review Modal Specifics --- */
+        .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; width: 100%; }
+        .stat-card { background: var(--bg-color); border: 1px solid var(--input-border); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; gap: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+        .stat-card span { font-size: 0.75em; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px; font-weight: 600; }
+        .stat-card h3 { margin: 0; font-size: 2em; color: var(--marketing-white); }
+        .stat-card.highlight h3 { color: var(--accent-color); }
+        
+        /* Zero Value Skeleton State */
+        .stat-card h3.skeleton-zero { color: transparent; background: #1e293b; background-image: linear-gradient(90deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0.06) 40px, rgba(255,255,255,0) 80px); background-size: 200% 100%; animation: shimmer 1.5s infinite linear; border-radius: 6px; min-width: 40px; height: 38px; display: inline-block; }
+        .product-review-name { font-size: 1.1em; color: white; font-weight: 600; margin-bottom: 5px; line-height: 1.4; }
     </style>
 </head>
 <body>
@@ -226,6 +237,40 @@
                 <div style="display: flex; gap: 10px; margin-top: 10px;">
                     <button class="btn-full btn-outline" onclick="vibrateApp(15); closeConfirmModal()">Cancel</button>
                     <button class="btn-full btn-danger" id="btnConfirmProceed" onclick="vibrateApp(35);">Proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Professional Review Update -->
+    <div class="app-modal" id="modalReviewUpdate">
+        <div class="modal-content-wrap">
+            <div class="modal-header">
+                <h2>Review Inventory Update</h2>
+                <button class="close-modal" onclick="vibrateApp(15); closeModal('modalReviewUpdate')">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="product-review-name" id="reviewProductName">Product Name</div>
+                <div style="font-size: 0.85em; color: var(--text-secondary);" id="reviewProductDelta">Discrepancy: --</div>
+                
+                <div class="review-grid">
+                    <div class="stat-card">
+                        <span>Current Stock</span>
+                        <h3 id="reviewCurrentQty">--</h3>
+                    </div>
+                    <div class="stat-card highlight">
+                        <span>Final Stock</span>
+                        <h3 id="reviewNewQty">--</h3>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="btn-full btn-outline" onclick="vibrateApp(15); closeModal('modalReviewUpdate')">Cancel</button>
+                    <button class="btn-full btn-primary" id="btnConfirmFinalUpdate" onclick="vibrateApp(35);">
+                        <span class="material-symbols-outlined">check_circle</span> Acknowledge
+                    </button>
                 </div>
             </div>
         </div>
@@ -553,13 +598,28 @@
         window.confirmUpdate = async function(id, discrepancyQty) {
             vibrateApp(20);
             
+            // Add loading state to the button being clicked
+            const cardEl = document.getElementById(`missing-${id}`);
+            const updateBtn = cardEl ? cardEl.querySelectorAll('button')[1] : null;
+            let originalBtnHtml = '';
+            
+            if (updateBtn) {
+                originalBtnHtml = updateBtn.innerHTML;
+                updateBtn.innerHTML = '<span class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></span> Fetching...';
+                updateBtn.disabled = true;
+            }
+            
             try {
-                // Pre-flight check: Does the item still exist in the master inventory?
                 const invRef = doc(db, "inventory", id);
                 const invSnap = await getDoc(invRef);
 
+                // Restore button state
+                if (updateBtn) {
+                    updateBtn.innerHTML = originalBtnHtml;
+                    updateBtn.disabled = false;
+                }
+
                 if (!invSnap.exists()) {
-                    // Fallback Path: Product was deleted from master inventory
                     openConfirmModal("The main database is not available for this product. Continue with deleting the card?", async () => {
                         try {
                             deleteDoc(doc(db, "daily_check", id)).catch(e => console.log("Background sync pending"));
@@ -571,38 +631,72 @@
                     return;
                 }
 
-                // Normal Path: Product exists, dynamic message based on over or short stock
-                let msg = discrepancyQty > 0 
-                    ? `Update master inventory by ADDING ${discrepancyQty} units? This cannot be undone.`
-                    : `Update master inventory by REMOVING ${Math.abs(discrepancyQty)} units? This cannot be undone.`;
+                // Parse current database data
+                const masterData = invSnap.data();
+                const currentQty = parseInt(masterData.qty) || 0;
+                const newQty = currentQty + parseInt(discrepancyQty);
+
+                // Populate Modal UI
+                document.getElementById('reviewProductName').innerText = masterData.name || 'Unknown Product';
+                
+                const deltaText = discrepancyQty > 0 
+                    ? `<span style="color: var(--success-color)">+${discrepancyQty} (Over)</span>` 
+                    : `<span style="color: var(--meena-red)">${discrepancyQty} (Short)</span>`;
+                document.getElementById('reviewProductDelta').innerHTML = `Adjustment: ${deltaText}`;
+                
+                document.getElementById('reviewCurrentQty').innerText = currentQty;
+                
+                const newQtyEl = document.getElementById('reviewNewQty');
+                
+                // Handle visual state for zero values
+                if (newQty === 0) {
+                    newQtyEl.innerText = "0";
+                    newQtyEl.classList.add('skeleton-zero');
+                } else {
+                    newQtyEl.innerText = newQty;
+                    newQtyEl.classList.remove('skeleton-zero');
+                }
+
+                // Setup the final commit action
+                const confirmBtn = document.getElementById('btnConfirmFinalUpdate');
+                confirmBtn.onclick = async () => {
+                    vibrateApp(35);
                     
-                openConfirmModal(msg, async () => {
+                    // Add quick internal loader in case of slow connection
+                    const initialConfirmHtml = confirmBtn.innerHTML;
+                    confirmBtn.innerHTML = '<span class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></span> Updating...';
+                    
                     try {
                         const batch = writeBatch(db);
-                        
-                        // A. Update the Master Inventory atomically
                         batch.update(invRef, {
                             qty: increment(discrepancyQty),
-                            lastUpdated: new Date().toISOString(), // String Timestamp
-                            createdAt: serverTimestamp()           // Firebase Timestamp
+                            lastUpdated: new Date().toISOString(),
+                            createdAt: serverTimestamp() 
                         });
                         
-                        // B. Delete from the daily_check queue
                         const checkRef = doc(db, "daily_check", id);
                         batch.delete(checkRef);
                         
-                        // C. Commit both atomically
                         await batch.commit();
-                        
+                        closeModal('modalReviewUpdate');
                         showToast("Inventory updated successfully!", "success");
                     } catch (e) {
                         console.error(e);
                         showToast("Failed to update inventory.", "error");
+                    } finally {
+                        confirmBtn.innerHTML = initialConfirmHtml;
                     }
-                });
+                };
+
+                // Display the modal
+                openModal('modalReviewUpdate');
 
             } catch (error) {
                 console.error("Error verifying product:", error);
+                if (updateBtn) {
+                    updateBtn.innerHTML = originalBtnHtml;
+                    updateBtn.disabled = false;
+                }
                 showToast("Failed to connect to database.", "error");
             }
         };
