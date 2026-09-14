@@ -147,7 +147,12 @@
         
         /* Zero Value Skeleton State */
         .stat-card h3.skeleton-zero { color: transparent; background: #1e293b; background-image: linear-gradient(90deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0.06) 40px, rgba(255,255,255,0) 80px); background-size: 200% 100%; animation: shimmer 1.5s infinite linear; border-radius: 6px; min-width: 40px; height: 38px; display: inline-block; }
-        .product-review-name { font-size: 1.1em; color: white; font-weight: 600; margin-bottom: 5px; line-height: 1.4; }
+        
+        /* Product Name: Always shows in full, wraps infinitely */
+        .product-review-name { font-size: 1.1em; color: white; font-weight: 600; margin-bottom: 5px; line-height: 1.4; word-break: break-word; white-space: normal; }
+        
+        /* Model Badge: Wraps up to 3 lines, then truncates with '...' */
+        .modal-model-badge { font-size: 0.75em; font-weight: 500; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word; width: fit-content; max-width: 100%; }
     </style>
 </head>
 <body>
@@ -253,6 +258,8 @@
             </div>
             <div class="modal-body">
                 <div class="product-review-name" id="reviewProductName">Product Name</div>
+                <div class="modal-model-badge" id="reviewProductModel">--</div>
+                
                 <div style="font-size: 0.85em; color: var(--text-secondary);" id="reviewProductDelta">Discrepancy: --</div>
                 
                 <div class="review-grid">
@@ -638,6 +645,7 @@
 
                 // Populate Modal UI
                 document.getElementById('reviewProductName').innerText = masterData.name || 'Unknown Product';
+                document.getElementById('reviewProductModel').innerText = masterData.model || 'No Model ID';
                 
                 const deltaText = discrepancyQty > 0 
                     ? `<span style="color: var(--success-color)">+${discrepancyQty} (Over)</span>` 
