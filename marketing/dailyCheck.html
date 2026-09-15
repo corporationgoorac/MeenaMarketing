@@ -843,10 +843,16 @@
             const initialHtml = this.innerHTML;
             this.disabled = true; this.innerHTML = '<span class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></span> Processing...';
             
-            executeAssignProcess(actionToTake, assignLimit).finally(() => {
-                this.disabled = false; this.innerHTML = initialHtml;
-                closeModal('modalCustomAssign');
-            });
+            // ADVANCED FIX: Close modal first to pop the first history state cleanly
+            closeModal('modalCustomAssign');
+            
+            // Delay the execution slightly to let the history API resolve before closing the screen
+            setTimeout(() => {
+                executeAssignProcess(actionToTake, assignLimit).finally(() => {
+                    this.disabled = false; 
+                    this.innerHTML = initialHtml;
+                });
+            }, 150);
         });
 
         // --- DATABASE SYNC LOGIC ---
