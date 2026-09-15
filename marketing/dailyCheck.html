@@ -151,8 +151,12 @@
         /* Product Name: Always shows in full, wraps infinitely */
         .product-review-name { font-size: 1.1em; color: white; font-weight: 600; margin-bottom: 5px; line-height: 1.4; word-break: break-word; white-space: normal; }
         
-        /* Model Badge: Wraps up to 3 lines, then truncates with '...' */
-        .modal-model-badge { font-size: 0.75em; font-weight: 500; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word; width: fit-content; max-width: 100%; }
+        /* Model Badge: Wraps up to 3 lines, then truncates with '...', centered for professionalism */
+        .modal-model-badge { font-size: 0.75em; font-weight: 500; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; margin-bottom: 12px; margin-left: auto; margin-right: auto; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word; width: fit-content; max-width: 100%; }
+        
+        /* NEW: Custom Assign Input Style */
+        .assign-input { background: var(--input-bg); border: 1px solid var(--input-border); color: white; padding: 15px; border-radius: 10px; width: 100%; font-size: 1.2em; text-align: center; font-family: 'Inter', sans-serif; outline: none; margin-bottom: 15px; box-sizing: border-box; transition: 0.2s; }
+        .assign-input:focus { border-color: var(--accent-color); box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.2); }
     </style>
 </head>
 <body>
@@ -283,6 +287,40 @@
         </div>
     </div>
 
+    <!-- NEW MODAL: Custom Assign Input Engine -->
+    <div class="app-modal" id="modalCustomAssign">
+        <div class="modal-content-wrap">
+            <div class="modal-header">
+                <h2>Custom Assign</h2>
+                <button class="close-modal" onclick="vibrateApp(15); closeModal('modalCustomAssign')"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="modal-body">
+                <p style="color: white; font-weight: 500; font-size: 1.05em; margin-bottom: 5px;">How many items to assign?</p>
+                <p style="font-size: 0.85em; color: var(--text-secondary); margin-bottom: 15px;">Enter the exact target number of products.</p>
+                
+                <input type="number" id="customAssignCount" class="assign-input" placeholder="e.g. 7 or 40" min="1" max="500">
+                
+                <!-- Smart Action Group (Only shows if there are old unfinished tasks) -->
+                <div id="customAssignActionGroup" style="display: none; text-align: left; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px;">
+                    <p style="font-size: 0.85em; margin-bottom: 12px; text-align: center; color: var(--warning-color); font-weight: 600;">Old tasks detected in queue:</p>
+                    <label style="display: flex; align-items: center; gap: 10px; font-size: 0.9em; margin-bottom: 10px; cursor: pointer; color: white;">
+                        <input type="radio" name="customOldAction" value="unassign" checked> Unassign old & Add New
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 10px; font-size: 0.9em; cursor: pointer; color: white;">
+                        <input type="radio" name="customOldAction" value="delete"> Delete old & Add New
+                    </label>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 5px;">
+                    <button class="btn-full btn-outline" onclick="vibrateApp(15); closeModal('modalCustomAssign')">Cancel</button>
+                    <button class="btn-full btn-primary" id="btnConfirmCustomAssign" onclick="vibrateApp(35);">
+                        <span class="material-symbols-outlined">rocket_launch</span> Start Target
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- SCREEN 2: Assign Tasks -->
     <div class="full-screen" id="screenAssign">
         <header style="position: sticky; top: 0;">
@@ -301,10 +339,15 @@
             <div id="assignZero" style="display: none; width: 100%; max-width: 400px;">
                 <span class="material-symbols-outlined" style="font-size: 60px; color: var(--success-color); margin-bottom: 20px;">check_circle</span>
                 <h2 style="margin: 0 0 10px 0;">No Pending Tasks</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 30px;">The queue is clear. Ready to assign the next batch of 20 items to employees.</p>
-                <button class="btn-full btn-primary" id="btnAssignFresh20" style="padding: 18px; font-size: 1.1em;" onclick="vibrateApp(20);">
-                    <span class="material-symbols-outlined">play_arrow</span> Assign Random 20 Items
-                </button>
+                <p style="color: var(--text-secondary); margin-bottom: 30px;">The queue is clear. Ready to assign the next batch of items to employees.</p>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <button class="btn-full btn-primary" id="btnAssignFresh20" style="padding: 18px; font-size: 1.1em;" onclick="vibrateApp(20);">
+                        <span class="material-symbols-outlined">play_arrow</span> Assign Random 20 Items
+                    </button>
+                    <button class="btn-full btn-outline" id="btnCustomAssignEmptyBtn" style="padding: 18px; font-size: 1.1em;" onclick="vibrateApp(15); openCustomAssignModal('none');">
+                        <span class="material-symbols-outlined">edit_note</span> Custom Assign
+                    </button>
+                </div>
             </div>
 
             <div id="assignExisting" style="display: none; width: 100%; max-width: 400px;">
@@ -318,6 +361,9 @@
                     </button>
                     <button class="btn-full btn-danger" id="btnDeleteAndAdd" onclick="vibrateApp(25);">
                         <span class="material-symbols-outlined">delete_forever</span> Delete Old & Assign 20 New
+                    </button>
+                    <button class="btn-full btn-outline" id="btnCustomAssignExistBtn" onclick="vibrateApp(15); openCustomAssignModal('ask');" style="border-color: var(--accent-color); color: var(--accent-color);">
+                        <span class="material-symbols-outlined">edit_note</span> Custom Assign Target
                     </button>
                 </div>
                 <p style="font-size: 0.75em; color: var(--text-secondary); margin-top: 20px;">*Unassigning returns them to the pool to be checked later. Deleting skips them for this entire audit cycle.</p>
@@ -756,6 +802,52 @@
             if (e.state && e.state.screen) document.getElementById(e.state.screen).classList.add('active');
         });
 
+        // --- NEW: Custom Assign Modal Logic ---
+        let pendingCustomAction = 'none';
+
+        window.openCustomAssignModal = function(mode) {
+            document.getElementById('customAssignCount').value = '';
+            const actionGroup = document.getElementById('customAssignActionGroup');
+            
+            // If triggered from the "Tasks Detected" view, show the unassign/delete radio choices
+            if (mode === 'ask') {
+                actionGroup.style.display = 'block';
+                pendingCustomAction = 'ask';
+            } else {
+                actionGroup.style.display = 'none';
+                pendingCustomAction = 'none';
+            }
+            
+            openModal('modalCustomAssign');
+            
+            // UX Polish: Automatically focus the input after modal finishes animating in
+            setTimeout(() => document.getElementById('customAssignCount').focus(), 150);
+        };
+
+        document.getElementById('btnConfirmCustomAssign').addEventListener('click', function() {
+            const countInput = document.getElementById('customAssignCount').value;
+            const assignLimit = parseInt(countInput);
+            
+            if (isNaN(assignLimit) || assignLimit <= 0) {
+                showToast("Please enter a valid target number.", "error");
+                return;
+            }
+
+            let actionToTake = pendingCustomAction;
+            if (actionToTake === 'ask') {
+                const selectedRadio = document.querySelector('input[name="customOldAction"]:checked');
+                actionToTake = selectedRadio ? selectedRadio.value : 'unassign';
+            }
+
+            const initialHtml = this.innerHTML;
+            this.disabled = true; this.innerHTML = '<span class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></span> Processing...';
+            
+            executeAssignProcess(actionToTake, assignLimit).finally(() => {
+                this.disabled = false; this.innerHTML = initialHtml;
+                closeModal('modalCustomAssign');
+            });
+        });
+
         // --- DATABASE SYNC LOGIC ---
         async function fetchSyncStats() {
             const countEl = document.getElementById('syncTotalCount');
@@ -801,9 +893,6 @@
         }
 
         document.getElementById('btnDeleteAuditDb').addEventListener('click', function() {
-            // ADVANCED FIX: Using Custom Modal instead of system confirm()
-            /* if(!confirm("Are you sure you want to completely wipe the audit database?")) return; */
-            
             openConfirmModal("Are you sure you want to completely wipe the audit database?", async () => {
                 this.disabled = true; this.innerHTML = '<span class="spinner"></span> Deleting...';
                 try {
@@ -816,9 +905,6 @@
         });
 
         document.getElementById('btnRefillAuditDb').addEventListener('click', function() {
-            // ADVANCED FIX: Using Custom Modal instead of system confirm()
-            /* if(!confirm("This will wipe the current audit list and clone the live inventory. Proceed?")) return; */
-            
             openConfirmModal("This will wipe the current audit list and clone the live inventory. Proceed?", async () => {
                 this.disabled = true; this.innerHTML = '<span class="spinner"></span> Syncing Data...';
                 try {
@@ -864,7 +950,8 @@
         // ADVANCED FIX: Lock Button State to Prevent "Double Tap" Assignment Bug
         let isAssigningGlobal = false;
 
-        async function executeAssignProcess(actionOnOld) {
+        // Upgraded engine to accept a variable assignLimit (defaults to 20 for standard buttons)
+        async function executeAssignProcess(actionOnOld, assignLimit = 20) {
             if (isAssigningGlobal) return;
             isAssigningGlobal = true;
             try {
@@ -877,8 +964,8 @@
                     oldPendingDocs.forEach(d => batch.update(d.ref, { status: "unassigned" }));
                 }
 
-                // 2. Grab 20 new Unassigned
-                const qNew = query(collection(db, "daily_check"), where("status", "==", "unassigned"), limit(20));
+                // 2. Grab new Unassigned using the dynamically passed assignLimit
+                const qNew = query(collection(db, "daily_check"), where("status", "==", "unassigned"), limit(assignLimit));
                 const snapNew = await getDocs(qNew);
                 
                 if (snapNew.empty) {
