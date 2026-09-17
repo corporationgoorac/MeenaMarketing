@@ -473,6 +473,7 @@
         .status-chip.healthy { background: rgba(0, 200, 83, 0.15); color: #00c853; border: 1px solid rgba(0, 200, 83, 0.3); }
         .status-chip.warning { background: rgba(255, 160, 0, 0.15); color: #ffa000; border: 1px solid rgba(255, 160, 0, 0.3); }
         .status-chip.danger { background: rgba(255, 51, 51, 0.15); color: #ff3333; border: 1px solid rgba(255, 51, 51, 0.3); }
+        .status-chip.empty { background: rgba(170, 170, 170, 0.15); color: #aaaaaa; border: 1px solid rgba(170, 170, 170, 0.3); }
         
         .ai-skeleton-container { transition: opacity 0.3s ease; }
         .skel-text-line { height: 16px; border-radius: 4px; margin-bottom: 12px; }
@@ -484,6 +485,19 @@
             line-height: 1.7;
             color: var(--text-secondary);
             font-size: 1.05em;
+            
+            /* Bulletproof Layout Constraints */
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+            max-height: 250px;
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+
+        .ai-content-text::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
         }
     </style>
 </head>
@@ -779,29 +793,54 @@
             }
         }
 
+        // --- HTML-AWARE TYPEWRITER FUNCTION ---
+        function typeHTML(element, htmlContent, speed) {
+            element.innerHTML = '';
+            let i = 0;
+            function type() {
+                if (i < htmlContent.length) {
+                    if (htmlContent.charAt(i) === '<') {
+                        let tagEnd = htmlContent.indexOf('>', i);
+                        if (tagEnd !== -1) {
+                            i = tagEnd + 1;
+                        } else {
+                            i++;
+                        }
+                        element.innerHTML = htmlContent.substring(0, i);
+                        type(); // instantly jump past the html tag
+                    } else {
+                        i++;
+                        element.innerHTML = htmlContent.substring(0, i);
+                        setTimeout(type, speed);
+                    }
+                }
+            }
+            type();
+        }
+
         function generateAIBriefing(data) {
             const skel = document.getElementById('ai-skeleton');
             const content = document.getElementById('ai-content');
             const chip = document.getElementById('ai-status-chip');
+            
+            let finalHtml = "";
+            let chipClass = "";
+            let chipText = "";
 
-            if (!data || data.totalBilled === 0) {
-                content.innerHTML = "Insufficient transaction data available to generate a portfolio briefing at this time.";
+            if (!data || !data.totalBilled || data.totalBilled === 0) {
+                finalHtml = "Insufficient transaction data available to generate a portfolio briefing at this time.";
+                chipClass = "empty";
+                chipText = "No Data";
             } else {
                 const efficiency = ((data.totalPaid / data.totalBilled) * 100).toFixed(1);
-                let statusText = "";
-                let chipClass = "";
-                let chipText = "";
-
+                
                 if (efficiency >= 75) {
-                    statusText = "strong liquidity health";
                     chipClass = "healthy";
                     chipText = "Strong Cashflow";
                 } else if (efficiency >= 50) {
-                    statusText = "moderate cashflow exposure";
                     chipClass = "warning";
                     chipText = "Moderate Risk";
                 } else {
-                    statusText = "high risk liquidity metrics";
                     chipClass = "danger";
                     chipText = "High Risk";
                 }
@@ -823,13 +862,13 @@
                     debtorText = "Currently, there are no significant outstanding debtor concentrations impacting the portfolio.";
                 }
 
-                content.innerHTML = `Portfolio recovery currently stands at <strong style="color: #00c853;">${efficiency}%</strong> across all registered accounts, reflecting ${statusText}. ${debtorText}`;
-                
-                chip.className = `status-chip ${chipClass}`;
-                chip.innerText = chipText;
+                finalHtml = `Portfolio recovery currently stands at <strong style="color: #00c853;">${efficiency}%</strong> across all registered accounts, reflecting ${chipText.toLowerCase()} metrics. ${debtorText}`;
             }
 
-            // Smooth transition from skeleton to text
+            chip.className = `status-chip ${chipClass}`;
+            chip.innerText = chipText;
+
+            // Smooth transition from skeleton to typewriter effect
             skel.style.opacity = '0';
             setTimeout(() => {
                 skel.style.display = 'none';
@@ -839,6 +878,7 @@
                 // Allow browser reflow before fading in
                 setTimeout(() => {
                     content.style.opacity = '1';
+                    typeHTML(content, finalHtml, 18); // Start typing effect at 18ms per character
                 }, 50);
             }, 300);
         }
