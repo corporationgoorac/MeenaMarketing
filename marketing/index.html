@@ -196,6 +196,60 @@
             font-variation-settings: 'FILL' 1; /* Fills the icon when active */
         }
 
+        /* --- SKELETON LOADING UI STYLES --- */
+        .skeleton-box {
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            background-color: #2a2a2a; /* Sleek dark mode skeleton base */
+            border-radius: 6px;
+        }
+
+        .skeleton-box::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform: translateX(-100%);
+            background-image: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0,
+                rgba(255, 255, 255, 0.05) 20%,
+                rgba(255, 255, 255, 0.1) 60%,
+                rgba(255, 255, 255, 0)
+            );
+            animation: shimmer 1.5s infinite;
+            content: '';
+        }
+
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+
+        .skel-text { width: 70%; height: 28px; margin: 0 auto; display: block; }
+        .skel-text-sm { width: 40%; height: 28px; margin: 0 auto; display: block; }
+        
+        .skel-chart {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100%; height: 100%;
+            border-radius: 8px;
+            z-index: 5;
+            transition: opacity 0.3s ease;
+        }
+
+        .skel-list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .skel-avatar { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; }
+        .skel-line { height: 18px; border-radius: 4px; }
+        .skel-amount { width: 60px; height: 18px; border-radius: 4px; flex-shrink: 0; margin-left: auto; }
+
         /* Media Query: Switch Navs based on screen size */
         @media (max-width: 768px) {
             .desktop-nav { display: none; }
@@ -204,11 +258,12 @@
         @media (min-width: 769px) {
             body { padding-bottom: 0; }
             
-            /* THIS FIXES THE BUTTONS ON DESKTOP */
-            .fab-left {
-                left: auto; /* Removes the left positioning */
-                right: 20px; /* Aligns it to the right */
-                bottom: 160px; /* Stacks it above the inventory button */
+            /* DESKTOP FAB FIX - Stacks them in the bottom right corner */
+            .fab-wrapper {
+                flex-direction: column-reverse !important;
+                right: 20px !important;
+                left: auto !important;
+                gap: 15px !important;
             }
         }
 
@@ -363,14 +418,21 @@
         
         .chart-container { position: relative; height: 250px; width: 100%; }
 
-        /* --- NEW: Sleek Floating Ask Icon --- */
-        .fab-left {
+        /* --- BULLETPROOF FAB CONTAINER (Handles Mobile Split & Desktop Grouping) --- */
+        .fab-wrapper {
             position: fixed;
             bottom: 90px;
             left: 20px;
-            background-color: var(--surface-color);
-            color: var(--meena-red);
-            border: 1px solid #333;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none; /* Let clicks pass through empty space */
+            z-index: 1000;
+        }
+        
+        .fab-left, .fab-right {
+            position: relative; /* Overrides original fixed positioning */
+            pointer-events: auto; /* Re-enables clicking on the actual buttons */
             width: 56px;
             height: 56px;
             border-radius: 50%;
@@ -378,162 +440,50 @@
             justify-content: center;
             align-items: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-            z-index: 1000;
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        .fab-left:hover {
-            transform: scale(1.05);
-            background-color: #2a2a2a;
-            box-shadow: 0 6px 20px rgba(255, 51, 51, 0.2);
-        }
+
+        .fab-left { background-color: var(--surface-color); color: var(--meena-red); border: 1px solid #333; }
+        .fab-left:hover { transform: scale(1.05); background-color: #2a2a2a; box-shadow: 0 6px 20px rgba(255, 51, 51, 0.2); }
         .fab-left:active { transform: scale(0.95); }
-        .fab-left .material-symbols-outlined { font-size: 28px; }
-
-        .fab-right {
-            position: fixed;
-            bottom: 90px;
-            right: 20px; /* Switched to right side */
-            background-color: var(--accent-color);
-            color: white;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            z-index: 1000;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
+        
+        .fab-right { background-color: var(--accent-color); color: white; }
         .fab-right:active { transform: scale(0.95); }
-        .fab-right .material-symbols-outlined { font-size: 28px; }
+        .fab-left .material-symbols-outlined, .fab-right .material-symbols-outlined { font-size: 28px; }
 
-        /* --- SKELETON LOADING UI STYLES --- */
-        .skeleton-box {
-            display: inline-block;
-            position: relative;
-            overflow: hidden;
-            background-color: #2a2a2a; /* Sleek dark mode skeleton base */
-            border-radius: 6px;
-        }
-
-        .skeleton-box::after {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            transform: translateX(-100%);
-            background-image: linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 0) 0,
-                rgba(255, 255, 255, 0.05) 20%,
-                rgba(255, 255, 255, 0.1) 60%,
-                rgba(255, 255, 255, 0)
-            );
-            animation: shimmer 1.5s infinite;
-            content: '';
-        }
-
-        @keyframes shimmer {
-            100% { transform: translateX(100%); }
-        }
-
-        .skel-text { width: 70%; height: 28px; margin: 0 auto; display: block; }
-        .skel-text-sm { width: 40%; height: 28px; margin: 0 auto; display: block; }
-        
-        .skel-chart {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100%; height: 100%;
-            border-radius: 8px;
-            z-index: 5;
-            transition: opacity 0.3s ease;
-        }
-
-        .skel-list-item {
+        /* --- AI TEXT INSIGHTS PANEL STYLES --- */
+        .ai-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 12px;
-            width: 100%;
-        }
-
-        .skel-avatar { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; }
-        .skel-line { height: 18px; border-radius: 4px; }
-        .skel-amount { width: 60px; height: 18px; border-radius: 4px; flex-shrink: 0; margin-left: auto; }
-        
-        /* --- NEW EFFICIENCY CARD STYLES --- */
-        .efficiency-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2.2em;
-            font-weight: bold;
-            color: var(--marketing-white);
-            z-index: 10;
-        }
-
-        /* Specialized Circular Skeleton for Efficiency Chart */
-        .skel-ring-container {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 5;
-            transition: opacity 0.3s ease;
+            border-bottom: 1px solid #444;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
         }
         
-        .skel-ring {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 20px solid #2a2a2a; /* Creates the hollow doughnut look */
-            position: relative;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-        
-        .skel-ring::after {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%; right: -50%; bottom: -50%;
-            background-image: linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 0) 0,
-                rgba(255, 255, 255, 0.05) 20%,
-                rgba(255, 255, 255, 0.1) 60%,
-                rgba(255, 255, 255, 0)
-            );
-            animation: shimmer 1.5s infinite;
-            transform: translateX(-100%);
-        }
-
-        .skel-center-pill {
-            position: absolute;
-            width: 60px;
-            height: 24px;
-            background-color: #2a2a2a;
+        .status-chip {
+            padding: 4px 10px;
             border-radius: 12px;
-            overflow: hidden;
+            font-size: 0.75em;
+            font-weight: bold;
+            white-space: nowrap;
         }
         
-        .skel-center-pill::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            transform: translateX(-100%);
-            background-image: linear-gradient(
-                90deg, 
-                rgba(255,255,255,0) 0, 
-                rgba(255,255,255,0.05) 20%, 
-                rgba(255,255,255,0.1) 60%, 
-                rgba(255,255,255,0)
-            );
-            animation: shimmer 1.5s infinite;
+        .status-chip.healthy { background: rgba(0, 200, 83, 0.15); color: #00c853; border: 1px solid rgba(0, 200, 83, 0.3); }
+        .status-chip.warning { background: rgba(255, 160, 0, 0.15); color: #ffa000; border: 1px solid rgba(255, 160, 0, 0.3); }
+        .status-chip.danger { background: rgba(255, 51, 51, 0.15); color: #ff3333; border: 1px solid rgba(255, 51, 51, 0.3); }
+        
+        .ai-skeleton-container { transition: opacity 0.3s ease; }
+        .skel-text-line { height: 16px; border-radius: 4px; margin-bottom: 12px; }
+        
+        .ai-content-text {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            font-size: 1.05em;
         }
     </style>
 </head>
@@ -673,17 +623,26 @@
                 </ul>
             </div>
 
-            <!-- NEW EFFICIENCY PANEL (Balances the desktop layout to 3 columns) -->
+            <!-- NEW AI TEXT PANEL (Balances the desktop layout to 3 columns, zero APIs) -->
             <div class="panel">
-                <h2>Collection Efficiency</h2>
-                <div class="chart-container" style="display: flex; justify-content: center; align-items: center;">
-                    <div class="skel-ring-container" id="skel-efficiency-chart">
-                        <div class="skel-ring"></div>
-                        <div class="skel-center-pill"></div>
-                    </div>
-                    <canvas id="efficiencyChart"></canvas>
-                    <div id="efficiency-value" class="efficiency-text" style="display: none;">0%</div>
+                <div class="ai-header">
+                    <h2 style="margin: 0; display: flex; align-items: center; gap: 8px; border: none; padding: 0;">
+                        <span class="material-symbols-outlined" style="color: var(--accent-color);">auto_awesome</span>
+                        AI Portfolio Briefing
+                    </h2>
+                    <span id="ai-status-chip" class="status-chip" style="display: none;">Analyzing...</span>
                 </div>
+                
+                <!-- Multi-line professional staggered skeleton -->
+                <div id="ai-skeleton" class="ai-skeleton-container">
+                    <div class="skeleton-box skel-text-line" style="width: 96%;"></div>
+                    <div class="skeleton-box skel-text-line" style="width: 90%;"></div>
+                    <div class="skeleton-box skel-text-line" style="width: 94%;"></div>
+                    <div class="skeleton-box skel-text-line" style="width: 85%;"></div>
+                    <div class="skeleton-box skel-text-line" style="width: 55%; margin-bottom: 0;"></div>
+                </div>
+                
+                <div id="ai-content" class="ai-content-text"></div>
             </div>
 
             <div class="panel" style="grid-column: 1 / -1;">
@@ -696,12 +655,14 @@
         </div>
     </div>
 
-    <div class="fab-left" onclick="window.location.href='ask.html'" title="Ask a Question">
-        <span class="material-symbols-outlined">question_mark</span>
-    </div>
-
-    <div class="fab-right" onclick="window.location.href='inventory.html'">
-        <span class="material-symbols-outlined">inventory_2</span>
+    <!-- WRAPPED FABs FOR BULLETPROOF POSITIONING -->
+    <div class="fab-wrapper">
+        <div class="fab-left" onclick="window.location.href='ask.html'" title="Ask a Question">
+            <span class="material-symbols-outlined">question_mark</span>
+        </div>
+        <div class="fab-right" onclick="window.location.href='inventory.html'" title="Inventory">
+            <span class="material-symbols-outlined">inventory_2</span>
+        </div>
     </div>
 
     <script>
@@ -744,12 +705,10 @@
         });
 
         // 2. Firebase Import & Data Fetching
-        // Using "app" directly to avoid crash if "auth" isn't exported from config.js
         import { app, db } from './config.js';
         import { doc, getDoc, collection, query, orderBy, limit, getDocs, where } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
-        // Initialize auth locally to prevent undefined module errors
         const auth = getAuth(app);
 
         // --- Auth Check & Instant DP Load ---
@@ -757,7 +716,6 @@
         const dpSkel = document.getElementById('profile-skeleton');
         const cachedDp = localStorage.getItem('user_dp');
         
-        // 0ms load if cached
         if (cachedDp) {
             dpImg.src = cachedDp;
             dpImg.style.display = 'block';
@@ -766,14 +724,12 @@
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Update DP if it's new or wasn't cached
                 if (user.photoURL && user.photoURL !== cachedDp) {
                     localStorage.setItem('user_dp', user.photoURL);
                     dpImg.src = user.photoURL;
                     dpImg.style.display = 'block';
                     dpSkel.style.display = 'none';
                 } else if (!user.photoURL && !cachedDp) {
-                    // Fallback if no photo
                     dpImg.src = 'https://via.placeholder.com/32/333/fff?text=' + (user.displayName ? user.displayName.charAt(0) : 'U');
                     dpImg.style.display = 'block';
                     dpSkel.style.display = 'none';
@@ -781,17 +737,13 @@
                     dpSkel.style.display = 'none';
                 }
             } else {
-                // Not logged in -> redirect to login
                 window.location.replace('login.html');
             }
         });
 
-        // Global instances for charts
         let paymentChartInstance = null;
         let debtorsChartInstance = null;
-        let efficiencyChartInstance = null; // New chart instance
 
-        // --- NEW INDIAN CURRENCY FORMATTER ---
         function formatIndianCurrency(num) {
             if (num === undefined || num === null) return "₹0";
             if (num >= 10000000) return `₹${(num / 10000000).toFixed(1)}Cr`;
@@ -818,15 +770,77 @@
             } catch (error) {
                 console.error("Error loading dashboard data:", error);
                 
-                // CRITICAL FIX: Ensure skeletons clear even if Firebase fails
                 const cached = localStorage.getItem('dashboardDataCache');
                 if (cached) {
                     updateDashboardUI(JSON.parse(cached));
                 } else {
-                    // Force clear the UI with empty data if cache is empty
                     updateDashboardUI({ totalBilled: 0, totalPaid: 0, totalBalance: 0, totalCompanies: 0, topDebtors: [] });
                 }
             }
+        }
+
+        function generateAIBriefing(data) {
+            const skel = document.getElementById('ai-skeleton');
+            const content = document.getElementById('ai-content');
+            const chip = document.getElementById('ai-status-chip');
+
+            if (!data || data.totalBilled === 0) {
+                content.innerHTML = "Insufficient transaction data available to generate a portfolio briefing at this time.";
+            } else {
+                const efficiency = ((data.totalPaid / data.totalBilled) * 100).toFixed(1);
+                let statusText = "";
+                let chipClass = "";
+                let chipText = "";
+
+                if (efficiency >= 75) {
+                    statusText = "strong liquidity health";
+                    chipClass = "healthy";
+                    chipText = "Strong Cashflow";
+                } else if (efficiency >= 50) {
+                    statusText = "moderate cashflow exposure";
+                    chipClass = "warning";
+                    chipText = "Moderate Risk";
+                } else {
+                    statusText = "high risk liquidity metrics";
+                    chipClass = "danger";
+                    chipText = "High Risk";
+                }
+
+                let debtorText = "";
+                if (data.topDebtors && data.topDebtors.length > 0) {
+                    const topDebtor = data.topDebtors[0];
+                    const topDebtorConcentration = ((topDebtor.balance / data.totalBalance) * 100).toFixed(1);
+                    
+                    let top3Balance = 0;
+                    const maxDebtorsToCount = Math.min(3, data.topDebtors.length);
+                    for (let i = 0; i < maxDebtorsToCount; i++) {
+                        top3Balance += data.topDebtors[i].balance;
+                    }
+                    const top3Concentration = ((top3Balance / data.totalBalance) * 100).toFixed(1);
+
+                    debtorText = `However, portfolio credit risk requires focused attention: <strong style="color: var(--marketing-white);">${topDebtor.name}</strong> currently represents <strong style="color: var(--meena-red);">${topDebtorConcentration}%</strong> (${formatIndianCurrency(topDebtor.balance)}) of all outstanding market liabilities. Furthermore, the top ${maxDebtorsToCount} debtors collectively hold <strong style="color: var(--marketing-white);">${top3Concentration}%</strong> of pending dues. Implementing targeted recovery operations on these primary accounts will rapidly stabilize the remaining pending balance.`;
+                } else {
+                    debtorText = "Currently, there are no significant outstanding debtor concentrations impacting the portfolio.";
+                }
+
+                content.innerHTML = `Portfolio recovery currently stands at <strong style="color: #00c853;">${efficiency}%</strong> across all registered accounts, reflecting ${statusText}. ${debtorText}`;
+                
+                chip.className = `status-chip ${chipClass}`;
+                chip.innerText = chipText;
+            }
+
+            // Smooth transition from skeleton to text
+            skel.style.opacity = '0';
+            setTimeout(() => {
+                skel.style.display = 'none';
+                content.style.display = 'block';
+                chip.style.display = 'block';
+                
+                // Allow browser reflow before fading in
+                setTimeout(() => {
+                    content.style.opacity = '1';
+                }, 50);
+            }, 300);
         }
 
         function updateDashboardUI(data) {
@@ -838,9 +852,7 @@
             const debtorsList = document.getElementById('debtors-list');
             debtorsList.innerHTML = '';
             if (data.topDebtors && data.topDebtors.length > 0) {
-                
-                // Get the max balance to scale the backgrounds
-                const maxBalance = data.topDebtors?.balance || 1; 
+                const maxBalance = data.topDebtors[0]?.balance || 1; 
 
                 data.topDebtors.forEach((debtor, index) => {
                     if (debtor.balance > 0) {
@@ -860,6 +872,8 @@
                 debtorsList.innerHTML = '<li style="color:var(--text-secondary); padding: 10px;">No pending balances found.</li>';
             }
 
+            // Trigger AI Generation purely from local data state
+            generateAIBriefing(data);
             initCharts(data);
         }
 
@@ -867,7 +881,6 @@
             Chart.defaults.color = '#aaaaaa'; 
             Chart.defaults.font.family = "'Segoe UI', sans-serif";
             
-            // Fade out and remove the skeleton overlays
             const skelPaymentChart = document.getElementById('skel-payment-chart');
             if(skelPaymentChart) {
                 skelPaymentChart.style.opacity = '0';
@@ -880,16 +893,8 @@
                 setTimeout(() => { skelDebtorsChart.style.display = 'none'; }, 300);
             }
 
-            // NEW: Fade out the custom efficiency ring skeleton
-            const skelEfficiencyChart = document.getElementById('skel-efficiency-chart');
-            if(skelEfficiencyChart) {
-                skelEfficiencyChart.style.opacity = '0';
-                setTimeout(() => { skelEfficiencyChart.style.display = 'none'; }, 300);
-            }
-
             if (paymentChartInstance) paymentChartInstance.destroy();
             if (debtorsChartInstance) debtorsChartInstance.destroy();
-            if (efficiencyChartInstance) efficiencyChartInstance.destroy(); // NEW
 
             const ctxDoughnut = document.getElementById('paymentChart').getContext('2d');
             paymentChartInstance = new Chart(ctxDoughnut, {
@@ -904,45 +909,6 @@
                     }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-            });
-
-            // NEW: Efficiency Chart Calculation and Rendering
-            const efficiency = data.totalBilled > 0 ? Math.round((data.totalPaid / data.totalBilled) * 100) : 0;
-            const remainingPercentage = 100 - efficiency;
-            
-            // Reveal text inside the ring
-            const effText = document.getElementById('efficiency-value');
-            if (effText) {
-                effText.innerText = efficiency + '%';
-                effText.style.display = 'block';
-            }
-
-            const ctxEfficiency = document.getElementById('efficiencyChart').getContext('2d');
-            efficiencyChartInstance = new Chart(ctxEfficiency, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Collected', 'Pending'],
-                    datasets: [{
-                        data: [efficiency, remainingPercentage],
-                        backgroundColor: ['#00c853', '#333333'], // Green for collected, dark grey for pending
-                        borderWidth: 0,
-                        cutout: '80%' // Makes it a sleek ring
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }, // Hides the legend to keep it clean
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.label + ': ' + context.raw + '%';
-                                }
-                            }
-                        }
-                    }
-                }
             });
 
             const ctxBar = document.getElementById('debtorsChart').getContext('2d');
