@@ -703,14 +703,9 @@
                 
                 const newQtyEl = document.getElementById('reviewNewQty');
                 
-                // Handle visual state for zero values
-                if (newQty === 0) {
-                    newQtyEl.innerText = "0";
-                    newQtyEl.classList.add('skeleton-zero');
-                } else {
-                    newQtyEl.innerText = newQty;
-                    newQtyEl.classList.remove('skeleton-zero');
-                }
+                // Handle visual state for zero values (FIXED: removed skeleton-zero for valid 0 values)
+                newQtyEl.innerText = newQty;
+                newQtyEl.classList.remove('skeleton-zero');
 
                 // Setup the final commit action
                 const confirmBtn = document.getElementById('btnConfirmFinalUpdate');
