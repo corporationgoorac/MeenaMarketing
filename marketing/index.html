@@ -203,6 +203,13 @@
         }
         @media (min-width: 769px) {
             body { padding-bottom: 0; }
+            
+            /* THIS FIXES THE BUTTONS ON DESKTOP */
+            .fab-left {
+                left: auto; /* Removes the left positioning */
+                right: 20px; /* Aligns it to the right */
+                bottom: 160px; /* Stacks it above the inventory button */
+            }
         }
 
         /* --- Custom Install Popup --- */
@@ -457,6 +464,77 @@
         .skel-line { height: 18px; border-radius: 4px; }
         .skel-amount { width: 60px; height: 18px; border-radius: 4px; flex-shrink: 0; margin-left: auto; }
         
+        /* --- NEW EFFICIENCY CARD STYLES --- */
+        .efficiency-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.2em;
+            font-weight: bold;
+            color: var(--marketing-white);
+            z-index: 10;
+        }
+
+        /* Specialized Circular Skeleton for Efficiency Chart */
+        .skel-ring-container {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+            transition: opacity 0.3s ease;
+        }
+        
+        .skel-ring {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 20px solid #2a2a2a; /* Creates the hollow doughnut look */
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        
+        .skel-ring::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; right: -50%; bottom: -50%;
+            background-image: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0,
+                rgba(255, 255, 255, 0.05) 20%,
+                rgba(255, 255, 255, 0.1) 60%,
+                rgba(255, 255, 255, 0)
+            );
+            animation: shimmer 1.5s infinite;
+            transform: translateX(-100%);
+        }
+
+        .skel-center-pill {
+            position: absolute;
+            width: 60px;
+            height: 24px;
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .skel-center-pill::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            transform: translateX(-100%);
+            background-image: linear-gradient(
+                90deg, 
+                rgba(255,255,255,0) 0, 
+                rgba(255,255,255,0.05) 20%, 
+                rgba(255,255,255,0.1) 60%, 
+                rgba(255,255,255,0)
+            );
+            animation: shimmer 1.5s infinite;
+        }
     </style>
 </head>
 <body>
@@ -595,6 +673,19 @@
                 </ul>
             </div>
 
+            <!-- NEW EFFICIENCY PANEL (Balances the desktop layout to 3 columns) -->
+            <div class="panel">
+                <h2>Collection Efficiency</h2>
+                <div class="chart-container" style="display: flex; justify-content: center; align-items: center;">
+                    <div class="skel-ring-container" id="skel-efficiency-chart">
+                        <div class="skel-ring"></div>
+                        <div class="skel-center-pill"></div>
+                    </div>
+                    <canvas id="efficiencyChart"></canvas>
+                    <div id="efficiency-value" class="efficiency-text" style="display: none;">0%</div>
+                </div>
+            </div>
+
             <div class="panel" style="grid-column: 1 / -1;">
                 <h2>Balance by Company</h2>
                 <div class="chart-container" style="height: 300px;">
@@ -698,6 +789,7 @@
         // Global instances for charts
         let paymentChartInstance = null;
         let debtorsChartInstance = null;
+        let efficiencyChartInstance = null; // New chart instance
 
         // --- NEW INDIAN CURRENCY FORMATTER ---
         function formatIndianCurrency(num) {
@@ -788,8 +880,16 @@
                 setTimeout(() => { skelDebtorsChart.style.display = 'none'; }, 300);
             }
 
+            // NEW: Fade out the custom efficiency ring skeleton
+            const skelEfficiencyChart = document.getElementById('skel-efficiency-chart');
+            if(skelEfficiencyChart) {
+                skelEfficiencyChart.style.opacity = '0';
+                setTimeout(() => { skelEfficiencyChart.style.display = 'none'; }, 300);
+            }
+
             if (paymentChartInstance) paymentChartInstance.destroy();
             if (debtorsChartInstance) debtorsChartInstance.destroy();
+            if (efficiencyChartInstance) efficiencyChartInstance.destroy(); // NEW
 
             const ctxDoughnut = document.getElementById('paymentChart').getContext('2d');
             paymentChartInstance = new Chart(ctxDoughnut, {
@@ -804,6 +904,45 @@
                     }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+
+            // NEW: Efficiency Chart Calculation and Rendering
+            const efficiency = data.totalBilled > 0 ? Math.round((data.totalPaid / data.totalBilled) * 100) : 0;
+            const remainingPercentage = 100 - efficiency;
+            
+            // Reveal text inside the ring
+            const effText = document.getElementById('efficiency-value');
+            if (effText) {
+                effText.innerText = efficiency + '%';
+                effText.style.display = 'block';
+            }
+
+            const ctxEfficiency = document.getElementById('efficiencyChart').getContext('2d');
+            efficiencyChartInstance = new Chart(ctxEfficiency, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Collected', 'Pending'],
+                    datasets: [{
+                        data: [efficiency, remainingPercentage],
+                        backgroundColor: ['#00c853', '#333333'], // Green for collected, dark grey for pending
+                        borderWidth: 0,
+                        cutout: '80%' // Makes it a sleek ring
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }, // Hides the legend to keep it clean
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
             });
 
             const ctxBar = document.getElementById('debtorsChart').getContext('2d');
