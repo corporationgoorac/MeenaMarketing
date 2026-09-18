@@ -91,8 +91,11 @@
         
         .card-top { display: flex; justify-content: space-between; width: 100%; align-items: flex-start; gap: 10px; min-width: 0;}
         .inv-info { display: flex; flex-direction: column; gap: 6px; flex-grow: 1; min-width: 0; } 
-        .inv-name { font-size: 1.05em; font-weight: 600; color: var(--marketing-white); white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word; line-height: 1.35; }
-        .inv-model { font-size: 0.75em; font-weight: 500; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; display: inline-block; width: fit-content; max-width: 100%; word-break: break-word;}
+        
+        /* ADVANCED FIX: Bulletproof wrapping for Name */
+        .inv-name { font-size: 1.05em; font-weight: 600; color: var(--marketing-white); white-space: normal; word-wrap: break-word; line-height: 1.35; word-break: break-word; overflow-wrap: anywhere; }
+        /* ADVANCED FIX: Bulletproof wrapping for Model ID */
+        .inv-model { font-size: 0.75em; font-weight: 500; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; display: inline-block; width: fit-content; max-width: 100%; word-break: break-all; white-space: normal; }
         
         .missing-badge { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--meena-red); padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 0.85em; text-align: center; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
         .missing-badge span { font-size: 1.4em; }
@@ -150,10 +153,10 @@
         .stat-card h3.skeleton-zero { color: transparent; background: #1e293b; background-image: linear-gradient(90deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0.06) 40px, rgba(255,255,255,0) 80px); background-size: 200% 100%; animation: shimmer 1.5s infinite linear; border-radius: 6px; min-width: 40px; height: 38px; display: inline-block; }
         
         /* Product Name: Always shows in full, wraps infinitely */
-        .product-review-name { font-size: 1.1em; color: white; font-weight: 600; margin-bottom: 5px; line-height: 1.4; word-break: break-word; white-space: normal; }
+        .product-review-name { font-size: 1.1em; color: white; font-weight: 600; margin-bottom: 5px; line-height: 1.4; word-break: break-word; white-space: normal; overflow-wrap: anywhere; }
         
         /* Model Badge: Wraps up to 3 lines, then truncates with '...', centered for professionalism */
-        .modal-model-badge { font-size: 0.75em; font-weight: 500; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; margin-bottom: 12px; margin-left: auto; margin-right: auto; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word; width: fit-content; max-width: 100%; }
+        .modal-model-badge { font-size: 0.75em; font-weight: 500; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; margin-bottom: 12px; margin-left: auto; margin-right: auto; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; word-break: break-all; width: fit-content; max-width: 100%; }
         
         /* NEW: Custom Assign Input Style */
         .assign-input { background: var(--input-bg); border: 1px solid var(--input-border); color: white; padding: 15px; border-radius: 10px; width: 100%; font-size: 1.2em; text-align: center; font-family: 'Inter', sans-serif; outline: none; margin-bottom: 15px; box-sizing: border-box; transition: 0.2s; }
