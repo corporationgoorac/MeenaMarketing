@@ -1758,7 +1758,7 @@
                 
                 tbody.innerHTML += `
                     <tr style="height: 25mm; max-height: 25mm;">
-                        <td style="border-bottom: ${dynamicBorder};">${num}.</td>
+                        <td style="white-space: nowrap; border-bottom: ${dynamicBorder};">${num}.</td>
                         <td style="border-bottom: ${dynamicBorder};">${desc}</td>
                         <td class="text-right" style="border-bottom: ${dynamicBorder};">₹${item.originalUnitPriceBase.toFixed(2)}</td>
                         <td class="text-center" style="border-bottom: ${dynamicBorder};">${item.qty.toString().padStart(2, '0')}</td>
