@@ -90,8 +90,10 @@
         .inv-card.pending { border-color: rgba(13, 148, 136, 0.3); }
         
         .inv-info { display: flex; flex-direction: column; gap: 6px; flex-grow: 1; min-width: 0; } 
-        .inv-name { font-size: 1.05em; font-weight: 600; color: var(--marketing-white); white-space: normal; word-wrap: break-word; line-height: 1.35; }
-        .inv-model { font-size: 0.75em; font-weight: 500; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; display: inline-block; width: fit-content;}
+        /* ADVANCED FIX: Bulletproof wrapping for Name */
+        .inv-name { font-size: 1.05em; font-weight: 600; color: var(--marketing-white); white-space: normal; word-wrap: break-word; line-height: 1.35; word-break: break-word; overflow-wrap: anywhere; }
+        /* ADVANCED FIX: Bulletproof wrapping for Model ID */
+        .inv-model { font-size: 0.75em; font-weight: 500; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; display: inline-block; width: fit-content; max-width: 100%; word-break: break-all; white-space: normal;}
         
         .action-arrow { color: var(--accent-color); background: rgba(13, 148, 136, 0.1); padding: 12px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .inv-card:hover .action-arrow { background: var(--accent-color); color: white; }
