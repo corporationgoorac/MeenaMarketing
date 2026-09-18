@@ -6,7 +6,7 @@
     <title>Billing & Invoicing - Meena Marketing</title>
     
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#121212">
+    <meta name="theme-color" content="#212121">
     
     <!-- Dynamic Fonts added to match Theme Engine -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -77,7 +77,9 @@
         .suggestions { position: absolute; top: 100%; left: 0; right: 0; background: var(--surface-color); border: 1px solid var(--accent-color); border-radius: 8px; max-height: 200px; overflow-y: auto; z-index: 100; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.8); }
         .suggestion-item { padding: 12px 15px; border-bottom: 1px solid #333; cursor: pointer; display: flex; justify-content: space-between; align-items: center;}
         .suggestion-item:hover { background: #2a2a2a; }
-        .s-name { font-weight: bold; font-size: 1.05em; color: var(--marketing-white); }
+        .suggestion-item > div:first-child { min-width: 0; flex: 1; padding-right: 10px; }
+        .suggestion-item > div:first-child > div:last-child { white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
+        .s-name { font-weight: bold; font-size: 1.05em; color: var(--marketing-white); white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
         .s-stock { font-size: 0.85em; background: rgba(0, 200, 83, 0.2); color: var(--success-color); padding: 3px 8px; border-radius: 4px;}
         .s-stock.zero { background: rgba(255, 51, 51, 0.2); color: var(--meena-red); }
 
@@ -93,9 +95,9 @@
         .cart-container { border: 1px solid #444; border-radius: 8px; overflow: hidden; margin-top: 15px; }
         .cart-item { display: flex; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid #333; background: #1a1a1a; align-items: center;}
         .cart-item:last-child { border-bottom: none; }
-        .c-details { flex: 1; }
-        .c-title { font-weight: bold; color: var(--marketing-white); font-size: 1.05em;}
-        .c-meta { font-size: 0.8em; color: var(--text-secondary); margin-top: 3px;}
+        .c-details { flex: 1; min-width: 0; }
+        .c-title { font-weight: bold; color: var(--marketing-white); font-size: 1.05em; white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
+        .c-meta { font-size: 0.8em; color: var(--text-secondary); margin-top: 3px; white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
         .c-meta span.gst-tag { color: var(--accent-color); background: rgba(0, 86, 179, 0.2); padding: 1px 5px; border-radius: 3px; }
         .c-meta span.ns-tag { color: var(--warning-color); background: rgba(255, 152, 0, 0.2); padding: 1px 5px; border-radius: 3px; }
         .c-price { text-align: right; font-weight: bold; color: white; font-size: 1.1em; margin-right: 15px;}
@@ -327,11 +329,11 @@
 
             /* Table Layout - Professional Alignment */
             .print-table-container { padding: 0 40px; display: block; width: 100%; box-sizing: border-box; z-index: 2; position: relative;}
-            .print-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; } 
+            .print-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; } 
             .print-table th { background-color: var(--pv-th-bg, #cccccc) !important; padding: 12px 10px; font-size: 11px; text-transform: uppercase; text-align: left; color: var(--pv-th-text, #000) !important; font-weight: bold; border-top: var(--pv-border-style, 1px solid #000) !important; border-bottom: var(--pv-border-style, 1px solid #000) !important; }
             
             /* FIX: Allow Custom Borders to pass through to the Table Cells */
-            .print-table td { padding: 12px 10px; font-size: 12px; vertical-align: middle; color: #000;}
+            .print-table td { padding: 12px 10px; font-size: 12px; vertical-align: middle; color: #000; overflow-wrap: anywhere; word-break: break-word; }
             
             .print-table th.text-right, .print-table td.text-right { text-align: right; padding-right: 15px; } /* Perfect Right Alignment */
             .print-table th.text-center, .print-table td.text-center { text-align: center; }
