@@ -355,7 +355,7 @@
             .print-middle-section { 
                 display: flex; justify-content: space-between; padding: 15px 40px; margin-top: 0; 
                 page-break-inside: avoid; break-inside: avoid; 
-                position: absolute !important; bottom: 105px; left: 0; right: 0; width: 100%; box-sizing: border-box; background-color: transparent; z-index: 999;
+                position: fixed !important; bottom: 105px; left: 0; right: 0; width: 100%; box-sizing: border-box; background-color: transparent; z-index: 999;
             }
             
             .print-left-footer-info { width: 45%; }
@@ -378,7 +378,7 @@
             .print-signature-area { 
                 display: flex; justify-content: flex-end; padding: 0 40px; margin-top: 0; 
                 page-break-inside: avoid; break-inside: avoid; 
-                position: absolute !important; bottom: 35px; left: 0; right: 0; width: 100%; box-sizing: border-box; background-color: transparent; z-index: 999;
+                position: fixed !important; bottom: 35px; left: 0; right: 0; width: 100%; box-sizing: border-box; background-color: transparent; z-index: 999;
             }
             .sign-box { text-align: center; width: 220px; }
             .sign-box div.sign-placeholder { border-bottom: 1px solid #000; height: 35px; margin-bottom: 8px; width: 100%; }
@@ -390,7 +390,7 @@
             .print-absolute-footer { 
                 background-color: var(--pv-header-bg, #cccccc) !important; padding: 10px 40px; display: flex; justify-content: center; align-items: center; margin-top: 0; 
                 page-break-inside: avoid; break-inside: avoid; 
-                position: absolute !important; bottom: 0; left: 0; right: 0; width: 100%; box-sizing: border-box; border-bottom: 6px solid var(--pv-accent, transparent) !important; z-index: 999;
+                position: fixed !important; bottom: 0; left: 0; right: 0; width: 100%; box-sizing: border-box; border-bottom: 6px solid var(--pv-accent, transparent) !important; z-index: 999;
             }
             .print-absolute-footer p { margin: 0; font-size: 9px; font-weight: bold; color: var(--pv-header-sub, #333) !important; text-transform: uppercase; letter-spacing: 1px;}
         }
