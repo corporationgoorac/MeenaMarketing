@@ -837,8 +837,8 @@
             <table class="print-table">
                 <thead>
                     <tr>
-                        <th style="width: 5%;">No.</th>
-                        <th style="width: 50%;">Descriptions</th>
+                        <th style="width: 6%;">No.</th>
+                        <th style="width: 49%;">Descriptions</th>
                         <th style="width: 15%;" class="text-right">Unit Price</th>
                         <th style="width: 10%;" class="text-center">Unit</th>
                         <th style="width: 20%;" class="text-right">Price</th>
@@ -1760,9 +1760,9 @@
                     <tr style="height: 25mm; max-height: 25mm;">
                         <td style="white-space: nowrap; border-bottom: ${dynamicBorder};">${num}.</td>
                         <td style="border-bottom: ${dynamicBorder};">${desc}</td>
-                        <td class="text-right" style="border-bottom: ${dynamicBorder};">₹${item.originalUnitPriceBase.toFixed(2)}</td>
-                        <td class="text-center" style="border-bottom: ${dynamicBorder};">${item.qty.toString().padStart(2, '0')}</td>
-                        <td class="text-right" style="font-weight:bold; color:var(--pv-header-text, #000); border-bottom: ${dynamicBorder};">₹${item.finalTotal.toFixed(2)}</td>
+                        <td class="text-right" style="white-space: nowrap; border-bottom: ${dynamicBorder};">₹${item.originalUnitPriceBase.toFixed(2)}</td>
+                        <td class="text-center" style="white-space: nowrap; border-bottom: ${dynamicBorder};">${item.qty.toString().padStart(2, '0')}</td>
+                        <td class="text-right" style="white-space: nowrap; font-weight:bold; color:var(--pv-header-text, #000); border-bottom: ${dynamicBorder};">₹${item.finalTotal.toFixed(2)}</td>
                     </tr>
                 `;
             });
