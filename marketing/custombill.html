@@ -10,7 +10,7 @@
     
     <!-- Material Symbols & Dynamic Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     
     <!-- Added QR Code Library for Functional UPI Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -204,7 +204,7 @@
         .pv-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 80px; font-weight: 900; color: var(--pv-accent, #d32f2f); opacity: 0.15; text-transform: uppercase; white-space: nowrap; z-index: 5; pointer-events: none; letter-spacing: 5px; font-family: 'Playfair Display', serif; transition: color 0.3s;}
 
         /* Middle Section Fixed Dummy - Pushed up to accommodate Signature */
-        .pv-middle-section { display: flex; justify-content: space-between; padding: 15px 40px; position: absolute; bottom: 120px; left: 0; right: 0; width: 100%; box-sizing: border-box; z-index: 2;}
+        .pv-middle-section { display: flex; justify-content: space-between; padding: 15px 40px; position: absolute; bottom: 105px; left: 0; right: 0; width: 100%; box-sizing: border-box; z-index: 2;}
         .pv-left-footer-info { width: 45%; }
         
         /* Strict CSS to protect pagination from massive text */
@@ -219,10 +219,10 @@
         .pv-grand-row td { font-size: 16px; font-weight: 900; color: var(--pv-invoice-title, #d32f2f); padding: 12px 15px 12px 10px; transition: color 0.3s;} 
 
         /* Signature Area */
-        .pv-signature-area { display: flex; justify-content: flex-end; padding: 0 40px; position: absolute; bottom: 40px; left: 0; right: 0; width: 100%; box-sizing: border-box; z-index: 2; }
+        .pv-signature-area { display: flex; justify-content: flex-end; padding: 0 40px; position: absolute; bottom: 35px; left: 0; right: 0; width: 100%; box-sizing: border-box; z-index: 2; }
         .sign-box { text-align: center; width: 220px; }
         .sign-placeholder { border-bottom: 1px solid var(--pv-th-text, #000); height: 35px; margin-bottom: 8px; width: 100%; transition: border-color 0.3s;}
-        .sign-box h4 { margin: 0; font-size: 18px; font-family: 'Brush Script MT', cursive; font-weight: normal; color: var(--pv-th-text, #000); transition: color 0.3s;}
+        .sign-box h4 { margin: 0; font-family: 'Dancing Script', 'Brush Script MT', cursive !important; font-style: italic !important; font-size: 24px !important; font-weight: 700 !important; color: #000; transition: color 0.3s;}
         .sign-box p { margin: 0; font-size: 11px; font-weight: bold; color: var(--pv-th-text, #000); transition: color 0.3s;}
 
         /* Absolute Footer */
@@ -772,6 +772,8 @@
                             <div class="pv-invoice-to">
                                 <p class="pv-section-label">INVOICE TO</p>
                                 <h3>Sample Customer</h3>
+                                <p><strong>PHONE :</strong> <span>9876543210</span></p>
+                                <p><strong>ADDRESS :</strong> <span>Sample City, TN</span></p>
                             </div>
                         </div>
                         <div class="pv-header-right">
@@ -817,6 +819,9 @@
                             <div class="pv-thanks-box" id="pvThanksBox">
                                 <strong id="pvGreetTitle">Thank you for your business!</strong>
                                 <p id="pvGreetMsg">We appreciate your trust in Meena Marketing. If you have any questions about this invoice, please contact us.</p>
+                            </div>
+                            <div class="payment-methods" style="margin-top: 8px;">
+                                <p style="margin: 6px 0; font-size: 11px; font-weight: bold; color: #000;">Payment Mode:<br><span style="font-weight: normal; font-size: 11px; color: #444;">Cash / UPI / Bank Transfer</span></p>
                             </div>
                         </div>
                         <div class="pv-totals-box">
