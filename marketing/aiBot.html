@@ -23,7 +23,6 @@
             --accent-color: #0d9488; 
             --success-color: #10b981; 
             --warning-color: #f59e0b;
-            --info-color: #3b82f6;
             --input-bg: #1e293b;
             --input-border: #334155;
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -60,6 +59,7 @@
         
         .msg-user { align-self: flex-end; background: var(--accent-color); color: white; border-bottom-right-radius: 4px; box-shadow: 0 4px 10px rgba(13, 148, 136, 0.2); }
         .msg-ai { align-self: flex-start; background: var(--surface-color); border: 1px solid var(--input-border); color: var(--text-color); border-bottom-left-radius: 4px; }
+        .msg-error { align-self: flex-start; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; border-bottom-left-radius: 4px; font-family: monospace; font-size: 0.85em; }
         
         .chat-input-area { background: var(--surface-color); padding: 15px 20px 25px 20px; border-top: 1px solid var(--input-border); display: flex; gap: 10px; align-items: flex-end; flex-shrink: 0; }
         .chat-input-wrapper { flex-grow: 1; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 20px; padding: 2px 15px; display: flex; align-items: center; transition: 0.3s; }
@@ -72,17 +72,26 @@
         .btn-send:active { transform: scale(0.95); }
         .btn-send:disabled { background: var(--input-border); color: var(--text-secondary); cursor: not-allowed; transform: none; }
 
-        /* --- LIVE CALL VIEW --- */
+        /* --- PURE VOICE CALL VIEW --- */
         .call-wrapper { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; position: relative; }
-        .webcam-container { width: 160px; height: 220px; border-radius: 20px; overflow: hidden; border: 2px solid var(--input-border); position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); background: var(--surface-color); margin-bottom: 30px; transition: 0.3s; }
-        .webcam-container.active { border-color: var(--success-color); box-shadow: 0 0 30px rgba(16, 185, 129, 0.2); }
-        #webcam { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         
-        .ai-avatar { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--surface-color); z-index: 2; transition: 0.3s opacity; }
-        .ai-avatar .material-symbols-outlined { font-size: 64px; color: var(--accent-color); }
+        .voice-container { width: 180px; height: 180px; border-radius: 50%; position: relative; margin-bottom: 40px; display: flex; justify-content: center; align-items: center; }
+        
+        /* Hardware visualizer rings */
+        .ring { position: absolute; border-radius: 50%; border: 2px solid var(--success-color); opacity: 0; transition: 0.3s; }
+        .voice-container.active .ring:nth-child(1) { width: 100%; height: 100%; animation: ripple 2s infinite linear; }
+        .voice-container.active .ring:nth-child(2) { width: 100%; height: 100%; animation: ripple 2s infinite linear 0.6s; }
+        .voice-container.active .ring:nth-child(3) { width: 100%; height: 100%; animation: ripple 2s infinite linear 1.2s; }
+        
+        @keyframes ripple { 0% { transform: scale(0.8); opacity: 0.8; border-color: var(--success-color); } 100% { transform: scale(1.8); opacity: 0; border-color: var(--accent-color); } }
+
+        .ai-avatar { width: 140px; height: 140px; border-radius: 50%; background: var(--surface-color); border: 2px solid var(--input-border); display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s; }
+        .voice-container.active .ai-avatar { border-color: var(--success-color); box-shadow: 0 0 30px rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.1); }
+        .ai-avatar .material-symbols-outlined { font-size: 56px; color: var(--text-secondary); transition: 0.3s; }
+        .voice-container.active .ai-avatar .material-symbols-outlined { color: var(--success-color); }
         
         .call-status { font-size: 1.1em; font-weight: 600; margin-bottom: 8px; color: white; }
-        .call-sub-status { font-size: 0.85em; color: var(--text-secondary); margin-bottom: 40px; }
+        .call-sub-status { font-size: 0.85em; color: var(--text-secondary); margin-bottom: 40px; height: 20px; }
 
         .orb { width: 12px; height: 12px; border-radius: 50%; background: var(--success-color); display: inline-block; margin-right: 8px; box-shadow: 0 0 10px var(--success-color); animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
@@ -94,14 +103,6 @@
         .btn-call.end { background: linear-gradient(135deg, var(--meena-red), #b91c1c); display: none; }
         .btn-call .material-symbols-outlined { font-size: 28px; }
 
-        /* Floating Nav Override */
-        .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(19, 27, 38, 0.7); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.12); display: flex; justify-content: space-evenly; align-items: center; padding: 6px 14px; z-index: 1000; border-radius: 50px; width: auto; min-width: 260px; }
-        .nav-item { display: flex; justify-content: center; align-items: center; color: var(--text-secondary); width: 44px; height: 44px; cursor: pointer; border-radius: 50%; transition: 0.2s;}
-        .nav-item.active { color: var(--accent-color); background: rgba(13, 148, 136, 0.15); }
-        .nav-item:hover { color: white; }
-
-        /* Hide elements dynamically */
-        .hidden { display: none !important; }
     </style>
 </head>
 <body>
@@ -111,10 +112,10 @@
             <img src="icon.png" alt="Icon" class="logo-img" onerror="this.style.display='none'">
             <div class="brand-text">
                 <span class="brand-title"><span class="meena">Meena</span> <span class="marketing">Marketing</span></span>
-                <span class="goorac">AI Store Assistant</span>
+                <span class="goorac">AI Voice Engine</span>
             </div>
         </div>
-        <span class="material-symbols-outlined" style="color: var(--text-secondary); cursor: pointer;" onclick="clearHistory()">delete_sweep</span>
+        <span class="material-symbols-outlined" style="color: var(--text-secondary); cursor: pointer; transition: 0.2s;" onclick="clearHistory()" onmouseover="this.style.color='var(--meena-red)'" onmouseout="this.style.color='var(--text-secondary)'">delete_sweep</span>
     </header>
 
     <div class="mode-switcher">
@@ -122,7 +123,7 @@
             <span class="material-symbols-outlined">forum</span> Text Chat
         </button>
         <button class="mode-btn" id="btnModeCall" onclick="switchMode('call')">
-            <span class="material-symbols-outlined">videocam</span> Live Call
+            <span class="material-symbols-outlined">mic</span> Voice Call
         </button>
     </div>
 
@@ -141,16 +142,21 @@
         </div>
     </div>
 
-    <!-- LIVE CALL INTERFACE -->
+    <!-- PURE VOICE CALL INTERFACE -->
     <div class="view-container" id="viewCall">
         <div class="call-wrapper">
-            <div class="webcam-container" id="webcamContainer">
-                <div class="ai-avatar" id="aiAvatar"><span class="material-symbols-outlined">graphic_eq</span></div>
-                <video id="webcam" autoplay playsinline muted></video>
+            
+            <div class="voice-container" id="voiceContainer">
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ai-avatar" id="aiAvatar">
+                    <span class="material-symbols-outlined">graphic_eq</span>
+                </div>
             </div>
             
             <div class="call-status" id="callStatus">Ready to Connect</div>
-            <div class="call-sub-status" id="callSubStatus">Tap the green button to start a live video call.</div>
+            <div class="call-sub-status" id="callSubStatus">Tap to start a voice call.</div>
 
             <div class="call-controls">
                 <button class="btn-call start" id="btnStartCall" onclick="startCall()">
@@ -168,7 +174,7 @@
         const BACKEND_URL = 'https://shiva757-meenaai.hf.space';
         const WS_URL = 'wss://shiva757-meenaai.hf.space/voice';
         
-        // SHARED STATE (In-Memory Context)
+        // SHARED STATE
         let conversationHistory = [];
         const MAX_HISTORY = 100;
 
@@ -184,9 +190,7 @@
         const btnSend = document.getElementById('btnSend');
 
         // CALL ELEMENTS
-        const webcam = document.getElementById('webcam');
-        const aiAvatar = document.getElementById('aiAvatar');
-        const webcamContainer = document.getElementById('webcamContainer');
+        const voiceContainer = document.getElementById('voiceContainer');
         const callStatus = document.getElementById('callStatus');
         const callSubStatus = document.getElementById('callSubStatus');
         const btnStartCall = document.getElementById('btnStartCall');
@@ -198,7 +202,6 @@
         let audioContext;
         let playbackContext;
         let processor;
-        let videoInterval;
         let nextPlaybackTime = 0;
 
         // ==========================================
@@ -225,10 +228,16 @@
             textarea.style.height = (textarea.scrollHeight < 100 ? textarea.scrollHeight : 100) + 'px';
         }
 
-        function appendMessageToUI(role, text) {
+        function appendMessageToUI(role, text, isError = false) {
             if(!text) return;
             const div = document.createElement('div');
-            div.className = `msg-bubble ${role === 'user' ? 'msg-user' : 'msg-ai'}`;
+            
+            if (isError) {
+                div.className = 'msg-bubble msg-error';
+            } else {
+                div.className = `msg-bubble ${role === 'user' ? 'msg-user' : 'msg-ai'}`;
+            }
+            
             div.innerText = text;
             chatHistoryEl.appendChild(div);
             chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
@@ -250,7 +259,7 @@
         }
 
         // ==========================================
-        // 2. TEXT CHAT MODE (REST API)
+        // 2. TEXT CHAT MODE (REST API - FIXED ERROR PARSING)
         // ==========================================
 
         async function sendChatMessage() {
@@ -266,10 +275,8 @@
             btnSend.disabled = true;
 
             try {
-                // Send payload matching the Node.js backend structure
                 const payload = {
                     message: text,
-                    // Send up to last 15 context turns
                     history: conversationHistory.slice(0, -1) 
                 };
 
@@ -281,24 +288,43 @@
 
                 const data = await response.json();
                 
-                // Parse Gemini REST response structure
-                let aiText = "Error parsing response.";
-                if (data && data.candidates && data.candidates[0].content.parts[0].text) {
+                // Advanced Error Catching
+                if (!response.ok || data.error) {
+                    let errorMessage = "Unknown API error.";
+                    
+                    if (data.error && data.error.message) {
+                        errorMessage = data.error.message;
+                    } else if (typeof data.error === 'string') {
+                        errorMessage = data.error;
+                    } else if (response.statusText) {
+                        errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+                    }
+
+                    appendMessageToUI('model', `Server Error: ${errorMessage}`, true);
+                    return;
+                }
+                
+                // Successful Parsing
+                let aiText = "";
+                try {
                     aiText = data.candidates[0].content.parts[0].text;
+                } catch(parseError) {
+                    // Failsafe if structure changes but HTTP was 200 OK
+                    appendMessageToUI('model', `Format Error: Received malformed JSON from API.\nPayload: ${JSON.stringify(data).substring(0, 100)}...`, true);
+                    return;
                 }
 
                 appendMessageToUI('model', aiText);
                 saveToHistory('model', aiText);
 
             } catch (err) {
-                console.error("Chat Error:", err);
-                appendMessageToUI('model', '⚠️ Server connection failed. Check your network.');
+                console.error("Chat Request Failed:", err);
+                appendMessageToUI('model', `Network Error: ${err.message}. Backend might be asleep or unreachable.`, true);
             } finally {
                 btnSend.disabled = false;
             }
         }
 
-        // Enter key to send
         chatInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -307,61 +333,53 @@
         });
 
         // ==========================================
-        // 3. LIVE CALL MODE (WEBSOCKETS + WEBRTC)
+        // 3. PURE VOICE CALL MODE (NO WEBCAM)
         // ==========================================
 
         async function startCall() {
             try {
-                callStatus.innerText = "Requesting permissions...";
-                callSubStatus.innerText = "Please allow camera and microphone access.";
+                callStatus.innerText = "Requesting microphone...";
+                callSubStatus.innerText = "";
                 
-                // 1. Get Hardware Access
-                localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-                webcam.srcObject = localStream;
-                aiAvatar.style.opacity = '0'; // Reveal webcam
+                // Get Audio Only
+                localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
                 
                 callStatus.innerText = "Connecting to Gateway...";
                 
-                // 2. Open Proxy WebSocket
                 ws = new WebSocket(WS_URL);
 
                 ws.onopen = () => {
                     callStatus.innerHTML = "<span class='orb'></span> Connection Live";
                     callSubStatus.innerText = "AI is listening. Speak naturally.";
-                    webcamContainer.classList.add('active');
+                    voiceContainer.classList.add('active');
                     
                     btnStartCall.style.display = 'none';
                     btnEndCall.style.display = 'flex';
 
-                    // 3. Send Init Payload to Backend (Injects RAM history)
                     ws.send(JSON.stringify({
                         type: 'init',
-                        history: conversationHistory.slice(-15) // Bridge context
+                        history: conversationHistory.slice(-15)
                     }));
 
                     startAudioCapture();
-                    startVideoCapture();
                 };
 
                 ws.onmessage = (event) => {
-                    // Expecting stringified JSON from backend (bridged from Gemini)
                     try {
                         const data = JSON.parse(event.data);
                         
                         if (data.serverContent?.modelTurn?.parts) {
                             for (const part of data.serverContent.modelTurn.parts) {
-                                // Handle Audio Playback
                                 if (part.inlineData && part.inlineData.mimeType.startsWith("audio/pcm")) {
                                     playAudio(part.inlineData.data);
                                 }
-                                // Handle Text Transcript (Sync back to chat history)
                                 if (part.text) {
                                     saveToHistory('model', part.text);
-                                    appendMessageToUI('model', part.text); // Silently sync UI
+                                    appendMessageToUI('model', part.text); 
                                 }
                             }
                         }
-                    } catch(e) { /* Ignore non-JSON or formatting errors */ }
+                    } catch(e) { /* Ignore non-JSON wrapper frames */ }
                 };
 
                 ws.onclose = () => stopCall();
@@ -372,7 +390,7 @@
                 };
 
             } catch (err) {
-                console.error("Call init failed", err);
+                console.error("Mic access denied or error:", err);
                 callStatus.innerText = "Hardware Error";
                 callSubStatus.innerText = err.message;
             }
@@ -393,7 +411,6 @@
                     pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
                 }
                 
-                // Convert to Base64
                 const bytes = new Uint8Array(pcm16.buffer);
                 let binary = '';
                 for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
@@ -406,26 +423,6 @@
 
             source.connect(processor);
             processor.connect(audioContext.destination);
-        }
-
-        function startVideoCapture() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-
-            videoInterval = setInterval(() => {
-                if (!ws || ws.readyState !== WebSocket.OPEN) return;
-                
-                canvas.width = webcam.videoWidth;
-                canvas.height = webcam.videoHeight;
-                ctx.drawImage(webcam, 0, 0);
-                
-                // Extremely compressed JPEG to save backend bandwidth
-                const base64Image = canvas.toDataURL('image/jpeg', 0.4).split(',')[1];
-                
-                ws.send(JSON.stringify({
-                    realtimeInput: { mediaChunks: [{ mimeType: "image/jpeg", data: base64Image }] }
-                }));
-            }, 1000); // 1 frame per second is sufficient for multimodal
         }
 
         function playAudio(base64Data) {
@@ -460,7 +457,6 @@
 
         function stopCall() {
             if (ws) {
-                // Send client turn complete before severing
                 if(ws.readyState === WebSocket.OPEN) {
                     ws.send(JSON.stringify({ clientContent: { turnComplete: true } }));
                     ws.close();
@@ -468,19 +464,14 @@
             }
             if (processor) processor.disconnect();
             if (audioContext) audioContext.close();
-            if (videoInterval) clearInterval(videoInterval);
             if (localStream) localStream.getTracks().forEach(track => track.stop());
             
-            // Reset UI
             btnStartCall.style.display = 'flex';
             btnEndCall.style.display = 'none';
             callStatus.innerText = "Call Ended";
-            callSubStatus.innerText = "Tap the green button to reconnect.";
-            webcamContainer.classList.remove('active');
-            aiAvatar.style.opacity = '1';
-            webcam.srcObject = null;
+            callSubStatus.innerText = "Tap to reconnect.";
+            voiceContainer.classList.remove('active');
         }
-
     </script>
 </body>
 </html>
