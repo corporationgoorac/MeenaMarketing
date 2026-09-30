@@ -16,7 +16,7 @@
     <style>
         :root {
             --bg-color: #070b11; 
-            --surface-color: #0f1724; 
+            --surface-color: rgba(15, 23, 36, 0.6); 
             --surface-card: #141f30;
             --surface-hover: #1c2b42;
             --text-color: #f8fafc;
@@ -29,7 +29,7 @@
             --success-glow: rgba(16, 185, 129, 0.4);
             --warning-color: #f59e0b;
             --input-bg: #121c2c;
-            --input-border: #1e2e46;
+            --input-border: rgba(255, 255, 255, 0.1);
             --shadow-glow: 0 0 20px rgba(13, 148, 136, 0.25);
         }
 
@@ -43,15 +43,40 @@
             display: flex; 
             flex-direction: column; 
             user-select: none;
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(13, 148, 136, 0.12) 0%, transparent 60%),
-                radial-gradient(circle at 50% 100%, rgba(239, 68, 68, 0.05) 0%, transparent 50%);
+        }
+
+        /* --- GLU 3D ANIMATED BACKGROUND --- */
+        .ambient-bg { 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100vw; height: 100vh; 
+            z-index: -1; 
+            overflow: hidden; 
+            background: #04070b; 
+        }
+        .bg-orb { 
+            position: absolute; 
+            border-radius: 50%; 
+            filter: blur(90px); 
+            opacity: 0.55; 
+            animation: floatOrb 22s infinite alternate ease-in-out; 
+            pointer-events: none;
+        }
+        .bg-orb-1 { width: 55vw; height: 55vw; background: rgba(13, 148, 136, 0.3); top: -15%; left: -10%; } /* Teal */
+        .bg-orb-2 { width: 65vw; height: 65vw; background: rgba(79, 70, 229, 0.25); bottom: -25%; right: -15%; animation-delay: -7s; } /* Indigo */
+        .bg-orb-3 { width: 45vw; height: 45vw; background: rgba(6, 182, 212, 0.25); top: 35%; left: 35%; animation-delay: -12s; } /* Cyan */
+        
+        @keyframes floatOrb { 
+            0% { transform: translate(0, 0) scale(1); } 
+            50% { transform: translate(3vw, 5vh) scale(1.05); }
+            100% { transform: translate(-2vw, 8vh) scale(1.1); } 
         }
 
         /* Top Header */
         header { 
-            background: rgba(15, 23, 36, 0.85); 
-            backdrop-filter: blur(14px); 
+            background: rgba(11, 15, 20, 0.7); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
             padding: 14px 20px; 
             display: flex; 
             justify-content: space-between; 
@@ -71,7 +96,7 @@
 
         /* Dynamic Header Action Button (Headphones / Close) */
         .header-action-btn {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--input-border);
             border-radius: 50%;
             width: 44px;
@@ -81,7 +106,7 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         .header-action-btn:active { transform: scale(0.9); }
         .header-action-btn .material-symbols-outlined { font-size: 24px; transition: color 0.3s; }
@@ -97,50 +122,52 @@
             padding: 14px 18px; 
             display: flex; 
             flex-direction: column; 
-            gap: 14px; 
+            gap: 16px; 
             scroll-behavior: smooth; 
             user-select: text;
         }
         .msg-bubble { 
-            max-width: 85%; 
-            padding: 12px 16px; 
-            border-radius: 18px; 
-            font-size: 0.94em; 
-            line-height: 1.5; 
+            max-width: 88%; 
+            padding: 14px 18px; 
+            border-radius: 20px; 
+            font-size: 0.96em; 
+            line-height: 1.55; 
             word-wrap: break-word; 
-            animation: fadeIn 0.25s ease-out; 
-            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            animation: fadeIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            position: relative;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         
         .msg-user { 
             align-self: flex-end; 
             background: linear-gradient(135deg, var(--accent-color), #0f766e); 
             color: #ffffff; 
-            border-bottom-right-radius: 4px; 
+            border-bottom-right-radius: 6px; 
         }
         .msg-ai { 
             align-self: flex-start; 
-            background: var(--surface-card); 
+            background: rgba(20, 31, 48, 0.8); 
+            backdrop-filter: blur(10px);
             border: 1px solid var(--input-border); 
             color: var(--text-color); 
-            border-bottom-left-radius: 4px; 
+            border-bottom-left-radius: 6px; 
         }
         .msg-error { 
             align-self: flex-start; 
-            background: rgba(239, 68, 68, 0.12); 
-            border: 1px solid rgba(239, 68, 68, 0.35); 
+            background: rgba(239, 68, 68, 0.15); 
+            border: 1px solid rgba(239, 68, 68, 0.4); 
             color: #fca5a5; 
-            border-bottom-left-radius: 4px; 
+            border-bottom-left-radius: 6px; 
             font-family: 'JetBrains Mono', monospace; 
             font-size: 0.85em; 
         }
 
         /* --- ADVANCED MARKDOWN & ACTIONS STYLING --- */
-        .msg-content { width: 100%; overflow-x: auto; font-size: 0.96em; }
+        .msg-content { width: 100%; overflow-x: auto; }
         .msg-content p { margin: 0 0 10px 0; }
         .msg-content p:last-child { margin: 0; }
-        .msg-content strong { color: var(--accent-color); font-weight: 700; }
+        .msg-content strong { color: var(--accent-color); font-weight: 700; text-shadow: 0 0 10px rgba(13, 148, 136, 0.3); }
         .msg-content ul, .msg-content ol { margin: 10px 0; padding-left: 24px; }
         .msg-content li { margin-bottom: 6px; }
         
@@ -148,26 +175,50 @@
         .msg-content code { 
             font-family: 'JetBrains Mono', monospace; 
             font-size: 0.85em; 
-            background: rgba(0, 0, 0, 0.25); 
+            background: rgba(0, 0, 0, 0.3); 
             color: #fbbf24; /* Amber colored inline code */
             padding: 3px 6px; 
             border-radius: 6px; 
             border: 1px solid rgba(255,255,255,0.05);
         }
         
-        /* Professional Code Box (Preformatted) */
-        .msg-content pre { 
-            background: #0d1117; /* Deep terminal background */
-            padding: 40px 16px 16px 16px; /* Top padding accommodates the header/copy button */
+        /* PROFESSIONAL CODE BOX (Fixed Scroll Issue) */
+        .code-wrapper {
+            background: #0a0e14; /* Deep terminal background */
+            border: 1px solid rgba(255,255,255,0.1); 
             border-radius: 12px; 
-            position: relative; 
             margin: 16px 0; 
-            border: 1px solid var(--input-border); 
-            overflow-x: auto; 
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
+            overflow: hidden; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
         }
-        /* Override inline code style when inside a pre block */
-        .msg-content pre code { 
+        .code-header {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 8px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .code-lang {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .code-wrapper pre { 
+            margin: 0;
+            padding: 16px; 
+            background: transparent; 
+            border: none; 
+            overflow-x: auto; 
+        }
+        .code-wrapper pre code { 
             background: transparent; 
             padding: 0; 
             color: #e2e8f0; 
@@ -175,33 +226,10 @@
             border: none;
             box-shadow: none;
         }
-
-        /* Terminal-style header bar for code blocks */
-        .msg-content pre::before {
-            content: "code";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 34px;
-            background: rgba(255,255,255,0.03);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--text-secondary);
-            font-size: 0.75em;
-            padding: 8px 16px;
-            box-sizing: border-box;
-            pointer-events: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
+        
         /* Modern Copy Button inside Code Block */
         .copy-code-btn { 
-            position: absolute; 
-            top: 4px; 
-            right: 4px; 
-            background: rgba(255,255,255,0.05); 
+            background: transparent; 
             border: 1px solid rgba(255,255,255,0.1); 
             color: var(--text-secondary); 
             padding: 4px 10px; 
@@ -214,9 +242,8 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            z-index: 2;
         }
-        .copy-code-btn:hover { color: white; background: var(--accent-color); border-color: var(--accent-color); }
+        .copy-code-btn:hover { color: white; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
         .copy-code-btn .material-symbols-outlined { font-size: 14px; }
 
         /* Blockquotes */
@@ -232,7 +259,7 @@
 
         /* Tables */
         .msg-content table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9em; border-radius: 8px; overflow: hidden; }
-        .msg-content th, .msg-content td { border: 1px solid var(--input-border); padding: 10px 12px; text-align: left; }
+        .msg-content th, .msg-content td { border: 1px solid rgba(255,255,255,0.1); padding: 10px 12px; text-align: left; }
         .msg-content th { background: rgba(255,255,255,0.05); font-weight: 600; color: var(--marketing-white); }
         .msg-content tr:nth-child(even) { background: rgba(255,255,255,0.02); }
 
@@ -240,19 +267,21 @@
         .msg-actions { 
             display: flex; 
             gap: 16px; 
-            margin-top: 10px; 
-            padding-top: 10px; 
+            margin-top: 12px; 
+            padding-top: 12px; 
             border-top: 1px solid rgba(255,255,255,0.05); 
         }
         .action-icon { 
-            font-size: 18px; 
+            font-size: 20px; 
             color: var(--text-secondary); 
             cursor: pointer; 
-            transition: 0.2s; 
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); 
             display: flex;
             align-items: center;
+            padding: 4px;
+            border-radius: 50%;
         }
-        .action-icon:hover { color: var(--marketing-white); transform: scale(1.1); }
+        .action-icon:hover { color: var(--marketing-white); transform: scale(1.1); background: rgba(255,255,255,0.05);}
 
         /* Thinking Animation Indicator */
         .thinking-bubble {
@@ -274,28 +303,42 @@
             100% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 10px var(--accent-color); }
         }
         
+        /* Typing Cursor */
+        .typing-cursor::after {
+            content: '▌';
+            display: inline-block;
+            color: var(--accent-color);
+            animation: blink 1s step-start infinite;
+            margin-left: 2px;
+            text-shadow: 0 0 8px var(--accent-color);
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* --- CHATGPT STYLE INPUT AREA --- */
         .chat-input-area { 
-            background: var(--surface-color); 
-            padding: 12px 16px 20px 16px; 
-            border-top: 1px solid var(--input-border); 
+            background: transparent; 
+            padding: 10px 20px 24px 20px; 
             display: flex; 
-            gap: 10px; 
             align-items: flex-end; 
-            flex-shrink: 0; 
+            position: relative;
+            z-index: 100;
         }
         .chat-input-wrapper { 
             flex-grow: 1; 
-            background: var(--input-bg); 
-            border: 1px solid var(--input-border); 
-            border-radius: 22px; 
-            padding: 4px 16px; 
+            background: rgba(30, 41, 59, 0.85); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12); 
+            border-radius: 26px; 
+            padding: 6px 6px 6px 20px; 
             display: flex; 
-            align-items: center; 
+            align-items: flex-end; 
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
             transition: border-color 0.25s, box-shadow 0.25s; 
         }
         .chat-input-wrapper:focus-within { 
-            border-color: var(--accent-color); 
-            box-shadow: var(--shadow-glow); 
+            border-color: rgba(255,255,255,0.25); 
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 20px rgba(255,255,255,0.05); 
         }
         .chat-input-wrapper textarea { 
             width: 100%; 
@@ -303,21 +346,22 @@
             border: none; 
             color: #ffffff; 
             font-family: 'Inter', sans-serif; 
-            font-size: 0.95em; 
+            font-size: 1em; 
             outline: none; 
             resize: none; 
-            max-height: 100px; 
-            padding: 10px 0; 
+            max-height: 120px; 
+            padding: 12px 0; 
             line-height: 1.4;
             user-select: text;
+            margin-right: 10px;
         }
         .chat-input-wrapper textarea::placeholder { color: var(--text-secondary); }
         
         .btn-send { 
-            background: var(--accent-color); 
-            color: #ffffff; 
-            width: 44px; 
-            height: 44px; 
+            background: var(--marketing-white); 
+            color: var(--bg-color); 
+            width: 38px; 
+            height: 38px; 
             border-radius: 50%; 
             display: flex; 
             justify-content: center; 
@@ -326,10 +370,12 @@
             cursor: pointer; 
             transition: transform 0.15s, background 0.2s; 
             flex-shrink: 0; 
-            box-shadow: 0 4px 12px var(--accent-glow);
+            box-shadow: 0 4px 12px rgba(255,255,255,0.15);
+            margin-bottom: 4px;
         }
         .btn-send:active { transform: scale(0.92); }
         .btn-send:disabled { background: var(--input-border); color: var(--text-secondary); cursor: not-allowed; box-shadow: none; }
+        .btn-send .material-symbols-outlined { font-size: 20px; font-weight: 600; margin-left: 2px;}
 
         /* --- PURE VOICE CALL VIEW --- */
         .call-wrapper { 
@@ -353,8 +399,8 @@
         }
 
         .voice-container { 
-            width: 200px; 
-            height: 200px; 
+            width: 220px; 
+            height: 220px; 
             border-radius: 50%; 
             position: relative; 
             margin-bottom: 34px; 
@@ -363,77 +409,78 @@
             align-items: center; 
         }
         
-        /* Dynamic Hardware Visualizer Rings */
+        /* Upgraded Premium Voice Rings */
         .ring { 
             position: absolute; 
             border-radius: 50%; 
             border: 2px solid var(--success-color); 
             opacity: 0; 
             pointer-events: none;
+            box-shadow: inset 0 0 20px transparent, 0 0 20px transparent;
         }
         /* Active (Listening) Animation */
-        .voice-container.active .ring:nth-child(1) { width: 100%; height: 100%; animation: ripple 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1); border-color: var(--success-color); }
-        .voice-container.active .ring:nth-child(2) { width: 100%; height: 100%; animation: ripple 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1) 0.7s; border-color: var(--success-color); }
-        .voice-container.active .ring:nth-child(3) { width: 100%; height: 100%; animation: ripple 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1) 1.4s; border-color: var(--success-color); }
+        .voice-container.active .ring:nth-child(1) { width: 100%; height: 100%; animation: ripplePremium 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1); border-color: var(--success-color); }
+        .voice-container.active .ring:nth-child(2) { width: 100%; height: 100%; animation: ripplePremium 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1) 0.7s; border-color: var(--success-color); }
+        .voice-container.active .ring:nth-child(3) { width: 100%; height: 100%; animation: ripplePremium 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1) 1.4s; border-color: var(--success-color); }
         
         /* Processing Animation */
         .voice-container.processing .ring:nth-child(1) { width: 100%; height: 100%; animation: pulseRing 1.5s infinite alternate; border-color: var(--accent-color); }
         
         /* Speaking Animation */
-        .voice-container.speaking .ring:nth-child(1) { width: 100%; height: 100%; animation: ripple 1.2s infinite ease-out; border-color: var(--cyan); }
-        .voice-container.speaking .ring:nth-child(2) { width: 100%; height: 100%; animation: ripple 1.2s infinite ease-out 0.4s; border-color: var(--cyan); }
+        .voice-container.speaking .ring:nth-child(1) { width: 100%; height: 100%; animation: ripplePremium 1.2s infinite ease-out; border-color: var(--cyan); }
+        .voice-container.speaking .ring:nth-child(2) { width: 100%; height: 100%; animation: ripplePremium 1.2s infinite ease-out 0.4s; border-color: var(--cyan); }
 
-        @keyframes ripple { 
-            0% { transform: scale(0.75); opacity: 0.9; } 
-            100% { transform: scale(1.85); opacity: 0; } 
+        @keyframes ripplePremium { 
+            0% { transform: scale(0.75); opacity: 0.9; box-shadow: inset 0 0 20px currentColor, 0 0 20px currentColor; } 
+            100% { transform: scale(1.85); opacity: 0; box-shadow: inset 0 0 0px transparent, 0 0 0px transparent; } 
         }
         @keyframes pulseRing {
-            0% { transform: scale(0.85); opacity: 0.5; }
-            100% { transform: scale(1.15); opacity: 0.8; }
+            0% { transform: scale(0.85); opacity: 0.5; box-shadow: inset 0 0 20px currentColor, 0 0 20px currentColor;}
+            100% { transform: scale(1.15); opacity: 0.9; box-shadow: inset 0 0 40px currentColor, 0 0 40px currentColor;}
         }
 
         .ai-avatar { 
             width: 140px; 
             height: 140px; 
             border-radius: 50%; 
-            background: var(--surface-card); 
-            border: 2px solid var(--input-border); 
+            background: rgba(20, 31, 48, 0.8); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.1); 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             z-index: 10; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 2px 10px rgba(255,255,255,0.1); 
             transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); 
         }
         .voice-container.active .ai-avatar { 
-            border-color: var(--success-color); 
-            box-shadow: 0 0 35px var(--success-glow); 
-            background: rgba(16, 185, 129, 0.12); 
+            border-color: rgba(16, 185, 129, 0.5); 
+            box-shadow: 0 0 40px var(--success-glow), inset 0 0 20px rgba(16, 185, 129, 0.2); 
             transform: scale(1.04);
         }
         .voice-container.processing .ai-avatar {
-            border-color: var(--accent-color); 
-            box-shadow: 0 0 35px var(--accent-glow); 
-            background: rgba(13, 148, 136, 0.12); 
+            border-color: rgba(13, 148, 136, 0.5); 
+            box-shadow: 0 0 40px var(--accent-glow), inset 0 0 20px rgba(13, 148, 136, 0.2); 
         }
         .voice-container.speaking .ai-avatar {
-            border-color: var(--cyan); 
-            box-shadow: 0 0 35px rgba(6, 182, 212, 0.4); 
-            background: rgba(6, 182, 212, 0.12); 
+            border-color: rgba(6, 182, 212, 0.5); 
+            box-shadow: 0 0 40px rgba(6, 182, 212, 0.4), inset 0 0 20px rgba(6, 182, 212, 0.2); 
             transform: scale(1.08);
         }
 
         .ai-avatar .material-symbols-outlined { 
-            font-size: 58px; 
+            font-size: 64px; 
             color: var(--text-secondary); 
             transition: color 0.3s; 
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
-        .voice-container.active .ai-avatar .material-symbols-outlined { color: var(--success-color); }
-        .voice-container.processing .ai-avatar .material-symbols-outlined { color: var(--accent-color); }
-        .voice-container.speaking .ai-avatar .material-symbols-outlined { color: var(--cyan); }
+        .voice-container.active .ai-avatar .material-symbols-outlined { color: var(--success-color); text-shadow: 0 0 20px var(--success-color); }
+        .voice-container.processing .ai-avatar .material-symbols-outlined { color: var(--accent-color); text-shadow: 0 0 20px var(--accent-color); }
+        .voice-container.speaking .ai-avatar .material-symbols-outlined { color: var(--cyan); text-shadow: 0 0 20px var(--cyan); }
         
         .call-status { 
-            font-size: 1.25em; 
+            font-size: 1.3em; 
             font-weight: 700; 
             margin-bottom: 8px; 
             color: #ffffff; 
@@ -441,7 +488,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
         .call-sub-status { 
             font-size: 0.9em; 
@@ -449,28 +497,30 @@
             min-height: 24px;
             max-width: 320px;
             line-height: 1.4;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         /* Live Caption Box */
         .live-caption-box { 
-            background: rgba(19, 27, 38, 0.8); 
-            border: 1px solid var(--input-border); 
-            padding: 15px 20px; 
-            border-radius: 16px; 
+            background: rgba(15, 23, 36, 0.7); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1); 
+            padding: 16px 24px; 
+            border-radius: 20px; 
             width: 100%; 
             max-width: 400px; 
             min-height: 80px; 
             max-height: 120px; 
             overflow-y: auto; 
             font-size: 0.95em; 
-            line-height: 1.5; 
+            line-height: 1.6; 
             color: var(--text-main); 
             text-align: left; 
             display: none; 
             flex-direction: column; 
             gap: 8px; 
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 2px 10px rgba(0,0,0,0.2);
         }
         .live-caption-box.active { display: flex; }
         .caption-ai { color: var(--success-color); font-weight: 500; }
@@ -478,8 +528,8 @@
         .caption-interim { color: var(--text-secondary); font-style: italic; }
 
         .orb { 
-            width: 10px; 
-            height: 10px; 
+            width: 12px; 
+            height: 12px; 
             border-radius: 50%; 
             background: var(--success-color); 
             display: inline-block; 
@@ -503,33 +553,40 @@
             padding-bottom: 10px;
         }
         .btn-call { 
-            width: 68px; 
-            height: 68px; 
+            width: 72px; 
+            height: 72px; 
             border-radius: 50%; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             border: none; 
             cursor: pointer; 
-            transition: transform 0.15s, box-shadow 0.2s; 
+            transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s; 
             color: #ffffff; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4); 
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5); 
         }
-        .btn-call:active { transform: scale(0.92); }
+        .btn-call:active { transform: scale(0.9); }
         .btn-call.start { 
             background: linear-gradient(135deg, var(--success-color), #059669); 
-            box-shadow: 0 8px 25px var(--success-glow); 
+            box-shadow: 0 8px 30px var(--success-glow); 
             display: none; 
         }
         .btn-call.end { 
             background: linear-gradient(135deg, var(--meena-red), #b91c1c); 
-            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4); 
+            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.4); 
         }
-        .btn-call .material-symbols-outlined { font-size: 32px; }
+        .btn-call .material-symbols-outlined { font-size: 36px; }
 
     </style>
 </head>
 <body>
+
+    <!-- GLU 3D Animated Background -->
+    <div class="ambient-bg">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+    </div>
 
     <header>
         <div class="brand-container" onclick="triggerHaptic([20]); window.location.href='inventory_2.html'">
@@ -549,19 +606,19 @@
     <!-- CHAT INTERFACE -->
     <div class="view-container active" id="viewChat">
         <div class="chat-history" id="chatHistory">
-            <!-- Initial content will be generated dynamically on load to include Gemini Actions -->
+            <!-- Initial content generated by JS -->
         </div>
         <div class="chat-input-area">
             <div class="chat-input-wrapper">
-                <textarea id="chatInput" rows="1" placeholder="Ask stock or product query..." oninput="autoResize(this)"></textarea>
+                <textarea id="chatInput" rows="1" placeholder="Message Meena AI..." oninput="autoResize(this)"></textarea>
+                <button class="btn-send" id="btnSend" onclick="sendChatMessage()">
+                    <span class="material-symbols-outlined">arrow_upward</span>
+                </button>
             </div>
-            <button class="btn-send" id="btnSend" onclick="sendChatMessage()">
-                <span class="material-symbols-outlined">send</span>
-            </button>
         </div>
     </div>
 
-    <!-- PURE VOICE CALL INTERFACE (Native REST + Web Speech API Loop) -->
+    <!-- PURE VOICE CALL INTERFACE -->
     <div class="view-container" id="viewCall">
         <div class="call-wrapper">
             <div class="voice-top-stage">
@@ -725,41 +782,106 @@
             return cleanText;
         }
 
+        // Professional Typing Engine that preserves HTML structure
+        async function typeWriterHTML(element, htmlContent) {
+            element.innerHTML = '';
+            element.classList.add('typing-cursor');
+            
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = htmlContent;
+            
+            async function processNode(node, parent) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const text = node.textContent;
+                    const textNode = document.createTextNode('');
+                    parent.appendChild(textNode);
+                    
+                    for (let i = 0; i < text.length; i++) {
+                        textNode.textContent += text[i];
+                        chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
+                        // Ultra fast typing speed for professional feel
+                        await new Promise(r => setTimeout(r, 8)); 
+                    }
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    const newEl = document.createElement(node.tagName);
+                    for (let attr of node.attributes) {
+                        newEl.setAttribute(attr.name, attr.value);
+                    }
+                    parent.appendChild(newEl);
+                    for (let child of Array.from(node.childNodes)) {
+                        await processNode(child, newEl);
+                    }
+                }
+            }
+            
+            for (let child of Array.from(tempDiv.childNodes)) {
+                await processNode(child, element);
+            }
+            
+            element.classList.remove('typing-cursor');
+        }
+
         // Advanced Chat Rendering with Markdown & Gemini Actions
-        function appendMessageToUI(role, text, isError = false) {
+        async function appendMessageToUI(role, text, isError = false, animate = false) {
             if(!text) return;
             const div = document.createElement('div');
             
             if (isError) {
                 div.className = 'msg-bubble msg-error';
                 div.innerText = text;
+                chatHistoryEl.appendChild(div);
+                chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
             } else if (role === 'user') {
                 div.className = 'msg-bubble msg-user';
                 div.innerText = text; // Raw text for user
+                chatHistoryEl.appendChild(div);
+                chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
             } else {
                 div.className = 'msg-bubble msg-ai';
                 
                 // Content Wrapper for Markdown
                 const contentDiv = document.createElement('div');
                 contentDiv.className = 'msg-content';
-                contentDiv.innerHTML = marked.parse(text);
                 
-                // Add exact "Copy" overlay on all code blocks with proper icons
+                // Parse markdown to HTML
+                let parsedHTML = marked.parse(text);
+                
+                // If not animating, insert HTML directly so we can attach buttons instantly
+                contentDiv.innerHTML = parsedHTML;
+                
+                // Fix Code Blocks by wrapping them safely to prevent horizontal scroll bleeding
                 contentDiv.querySelectorAll('pre').forEach(pre => {
-                    const btn = document.createElement('button');
-                    btn.className = 'copy-code-btn';
-                    btn.innerHTML = '<span class="material-symbols-outlined">content_copy</span> Copy';
-                    btn.onclick = () => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'code-wrapper';
+                    
+                    const header = document.createElement('div');
+                    header.className = 'code-header';
+                    
+                    // Detect language if possible, else default to CODE
+                    let lang = "CODE";
+                    const codeEl = pre.querySelector('code');
+                    if (codeEl && codeEl.className) {
+                        const match = codeEl.className.match(/language-(\w+)/);
+                        if (match) lang = match[1];
+                    }
+                    header.innerHTML = `<span class="code-lang"><span class="material-symbols-outlined" style="font-size: 16px;">code</span> ${lang}</span>`;
+                    
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-code-btn';
+                    copyBtn.innerHTML = '<span class="material-symbols-outlined">content_copy</span> Copy';
+                    copyBtn.onclick = () => {
                         triggerHaptic([20]);
                         const codeText = pre.querySelector('code').innerText;
                         navigator.clipboard.writeText(codeText);
-                        btn.innerHTML = '<span class="material-symbols-outlined">check</span> Copied!';
-                        setTimeout(() => btn.innerHTML = '<span class="material-symbols-outlined">content_copy</span> Copy', 2000);
+                        copyBtn.innerHTML = '<span class="material-symbols-outlined">check</span> Copied!';
+                        setTimeout(() => copyBtn.innerHTML = '<span class="material-symbols-outlined">content_copy</span> Copy', 2000);
                     };
-                    pre.appendChild(btn);
+                    
+                    header.appendChild(copyBtn);
+                    pre.parentNode.insertBefore(wrapper, pre);
+                    wrapper.appendChild(header);
+                    wrapper.appendChild(pre);
                 });
-
-                div.appendChild(contentDiv);
 
                 // Bottom Actions (Gemini-Style: Copy & Speak)
                 const actionsDiv = document.createElement('div');
@@ -768,6 +890,7 @@
                 const speakBtn = document.createElement('span');
                 speakBtn.className = 'material-symbols-outlined action-icon';
                 speakBtn.innerText = 'volume_up';
+                speakBtn.title = 'Speak text';
                 speakBtn.onclick = () => {
                     triggerHaptic([20]);
                     playTTSResponse(text, true); // Play manually
@@ -776,6 +899,7 @@
                 const copyBtn = document.createElement('span');
                 copyBtn.className = 'material-symbols-outlined action-icon';
                 copyBtn.innerText = 'content_copy';
+                copyBtn.title = 'Copy text';
                 copyBtn.onclick = () => {
                     triggerHaptic([20]);
                     navigator.clipboard.writeText(text);
@@ -785,11 +909,19 @@
 
                 actionsDiv.appendChild(speakBtn);
                 actionsDiv.appendChild(copyBtn);
+                
+                div.appendChild(contentDiv);
                 div.appendChild(actionsDiv);
+                chatHistoryEl.appendChild(div);
+                chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
+
+                if (animate) {
+                    // Cache the fully structured HTML (including our injected code wrappers)
+                    const fullHTML = contentDiv.innerHTML;
+                    // Run typewriter over it
+                    await typeWriterHTML(contentDiv, fullHTML);
+                }
             }
-            
-            chatHistoryEl.appendChild(div);
-            chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
         }
 
         function saveToHistory(role, text) {
@@ -800,10 +932,10 @@
             }
         }
 
-        // Initialize first message dynamically so it gets markdown & buttons
+        // Initialize first message dynamically
         function initChat() {
             chatHistoryEl.innerHTML = '';
-            appendMessageToUI('model', 'வணக்கம்! நான் மீனா மார்க்கெட்டிங் AI. கடையில என்ன ஸ்டாக் இருக்குன்னு பாக்கணுமா?');
+            appendMessageToUI('model', 'வணக்கம்! நான் **மீனா மார்க்கெட்டிங் AI**. கடையில என்ன ஸ்டாக் இருக்குன்னு பாக்கணுமா?', false, false);
         }
         window.onload = initChat;
 
@@ -872,7 +1004,8 @@
                 }
                 
                 const aiText = data.candidates[0].content.parts[0].text;
-                appendMessageToUI('model', aiText);
+                // Pass animate=true for the professional typing effect
+                await appendMessageToUI('model', aiText, false, true);
                 saveToHistory('model', aiText);
                 return aiText;
 
@@ -927,7 +1060,9 @@
 
         function updateCaption(role, text, isInterim = false) {
             if (role === "Meena") {
-                liveCaptionContent.innerHTML = `<span class="caption-ai">${text}</span>`;
+                // Strip markdown for clean captions
+                const cleanCap = stripMarkdownForTTS(text);
+                liveCaptionContent.innerHTML = `<span class="caption-ai">${cleanCap}</span>`;
             } else if (role === "User") {
                 const colorClass = isInterim ? "caption-interim" : "caption-user";
                 liveCaptionContent.innerHTML = `<span class="${colorClass}">${text}</span>`;
@@ -1017,7 +1152,7 @@
                 liveCaptionContent.innerHTML = `<span style="color:var(--accent-color); font-style:italic;">${thinkingPhrases[i]}</span>`;
             }, 600);
 
-            // Fetch the response using the exact same Chat logic (maintains history)
+            // Fetch the response using the exact same Chat logic
             const aiResponse = await sendChatMessage(userText);
             
             clearInterval(thinkingCycle);
@@ -1052,7 +1187,7 @@
             const utterance = new SpeechSynthesisUtterance(cleanText);
             
             utterance.lang = 'ta-IN'; // Ensure Tamil/Tanglish pronunciation
-            utterance.rate = 1.15; // Moderately faster voice speed
+            utterance.rate = 1.15; // Slightly faster for natural conversation
 
             if(!isManual) {
                 utterance.onend = () => {
