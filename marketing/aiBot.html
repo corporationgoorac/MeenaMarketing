@@ -41,7 +41,7 @@
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* Flexbox Viewport fix: Allows dvh to handle keyboard pushes correctly */
+        /* Strict Viewport Lock & Overscroll Prevention */
         html { 
             height: 100%; 
             height: 100dvh; 
@@ -50,6 +50,7 @@
             width: 100%; 
             overflow: hidden; 
             background-color: var(--bg-color); 
+            overscroll-behavior: none;
         }
         body { 
             height: 100%; 
@@ -64,6 +65,8 @@
             user-select: none;
             background-color: var(--bg-color);
             overflow: hidden;
+            overscroll-behavior: none;
+            touch-action: manipulation;
         }
 
         /* --- MAIN APP CONTAINER STRUCTURE --- */
@@ -129,9 +132,9 @@
             100% { transform: translate3d(-6vw, 12vh, -60px) scale(1.25) rotate(-45deg); } 
         }
 
-        /* --- APP-LIKE FROSTED GLASS TOP BAR HEADER --- */
+        /* --- FIXED APP FROSTED GLASS TOP BAR HEADER --- */
         header, .top-bar { 
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
@@ -143,10 +146,12 @@
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            z-index: 500; 
+            z-index: 1000; 
             border-bottom: 1px solid var(--input-border); 
             width: 100%;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
         }
         .brand-container { display: flex; align-items: center; gap: 14px; }
         
@@ -199,7 +204,9 @@
         .chat-history { 
             flex: 1; 
             overflow-y: auto; 
-            padding: calc(72px + env(safe-area-inset-top)) 18px calc(80px + env(safe-area-inset-bottom)) 18px; 
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            padding: calc(76px + env(safe-area-inset-top)) 18px calc(86px + env(safe-area-inset-bottom)) 18px; 
             display: flex; 
             flex-direction: column; 
             gap: 16px; 
@@ -377,9 +384,9 @@
             100% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 10px var(--accent-color); }
         }
 
-        /* --- FLOATING CHATGPT STYLE INPUT AREA --- */
+        /* --- FIXED CHAT INPUT AREA AT BOTTOM --- */
         .chat-input-area { 
-            position: absolute;
+            position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
@@ -389,8 +396,10 @@
             padding: 10px 20px calc(14px + env(safe-area-inset-bottom)) 20px; 
             display: flex; 
             align-items: flex-end; 
-            z-index: 100;
+            z-index: 1000;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
         }
         .chat-input-wrapper { 
             flex-grow: 1; 
