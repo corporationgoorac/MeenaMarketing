@@ -973,7 +973,9 @@
             
             headerIcon.innerText = 'close';
             headerIcon.style.color = 'var(--meena-red)';
-            history.pushState({ view: 'voice' }, '', '#voice');
+            if (window.location.hash !== '#voice') {
+                history.pushState({ view: 'voice' }, '', '#voice');
+            }
 
             // Prime TTS Engine on user interaction to bypass mobile restrictions
             let primer = new SpeechSynthesisUtterance('');
@@ -996,12 +998,28 @@
             headerIcon.style.color = 'var(--accent-color)';
             
             if (window.location.hash === '#voice') {
-                history.back();
+                if (history.length > 1) {
+                    history.back();
+                } else {
+                    history.replaceState(null, '', window.location.pathname + window.location.search);
+                }
             }
         }
 
         window.addEventListener('popstate', (e) => {
-            if (currentMode === 'voice') exitVoiceMode();
+            if (currentMode === 'voice' && window.location.hash !== '#voice') {
+                exitVoiceMode();
+            } else if (currentMode === 'chat' && window.location.hash === '#voice') {
+                enterVoiceMode();
+            }
+        });
+
+        window.addEventListener('hashchange', () => {
+            if (window.location.hash === '#voice' && currentMode !== 'voice') {
+                enterVoiceMode();
+            } else if (window.location.hash !== '#voice' && currentMode === 'voice') {
+                exitVoiceMode();
+            }
         });
 
         function autoResize(textarea) {
@@ -1126,10 +1144,18 @@
             }
         }
 
-        // Initialize first message dynamically
+        // Initialize first message dynamically and handle #voice / mode=voice auto-start
         function initChat() {
             chatHistoryEl.innerHTML = '';
             appendMessageToUI('model', 'வணக்கம்! நான் **மீனா மார்க்கெட்டிங் AI**. கடையில என்ன ஸ்டாக் இருக்குன்னு பாக்கணுமா?');
+
+            // Detect #voice hash or ?mode=voice URL parameter to auto launch voice mode on load
+            const urlParams = new URLSearchParams(window.location.search);
+            const isVoiceRequested = window.location.hash === '#voice' || urlParams.get('mode') === 'voice';
+
+            if (isVoiceRequested) {
+                enterVoiceMode();
+            }
         }
         window.onload = initChat;
 
