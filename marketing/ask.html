@@ -103,7 +103,7 @@
         .empty-state h3 { margin: 0 0 10px 0; color: white; font-weight: 600; }
         .empty-state p { margin: 0; color: var(--text-secondary); font-size: 0.9em; line-height: 1.5; }
 
-        /* Floating Attendance Button - Redesigned to signify "Attendance" */
+        /* Floating Attendance Button - Bottom Right */
         @keyframes pulse-soft {
             0% { box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4), 0 0 0 0 rgba(16, 185, 129, 0.4); }
             70% { box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4), 0 0 0 10px rgba(16, 185, 129, 0); }
@@ -134,7 +134,7 @@
         .fab-attendance:hover {
             transform: translateY(-4px) scale(1.05);
             box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6);
-            animation: none; /* Stops pulse on hover for cleaner interaction */
+            animation: none; 
         }
         .fab-attendance:active {
             transform: translateY(0) scale(0.95);
@@ -143,6 +143,47 @@
             width: 28px;
             height: 28px;
         }
+
+        /* Floating AI Chat Button - Bottom Left */
+        @keyframes pulse-ai {
+            0% { box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4), 0 0 0 0 rgba(6, 182, 212, 0.4); }
+            70% { box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4), 0 0 0 10px rgba(6, 182, 212, 0); }
+            100% { box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4), 0 0 0 0 rgba(6, 182, 212, 0); }
+        }
+
+        .fab-ai {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            background: linear-gradient(135deg, var(--accent-color), #0f766e);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(13, 148, 136, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            -webkit-tap-highlight-color: transparent;
+            animation: pulse-ai 2.5s infinite 1.25s; /* Offset animation timing */
+        }
+        .fab-ai:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(13, 148, 136, 0.6);
+            animation: none; 
+        }
+        .fab-ai:active {
+            transform: translateY(0) scale(0.95);
+        }
+        .fab-ai .material-symbols-outlined {
+            font-size: 28px;
+        }
+
     </style>
 </head>
 <body>
@@ -241,7 +282,12 @@
 
     </div>
 
-    <!-- Floating Attendance Button - Redesigned Icon & Color -->
+    <!-- Floating AI Chat Button - Bottom Left -->
+    <a href="aiBot.html" class="fab-ai" onclick="if(navigator.vibrate) navigator.vibrate(30);" title="AI Assistant">
+        <span class="material-symbols-outlined">smart_toy</span>
+    </a>
+
+    <!-- Floating Attendance Button - Bottom Right -->
     <a href="attandance.html" class="fab-attendance" onclick="if(navigator.vibrate) navigator.vibrate(30);" title="Attendance">
         <svg class="material-symbols-outlined" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
             <path d="M684-136 492-328l56-56 136 136 292-292 56 56-348 348ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q32 0 63 3.5t61 10.5l-44 63q-39-11-79-17h-41v112H160Zm160-400q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Z"/>
