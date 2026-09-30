@@ -73,9 +73,11 @@
         .btn-send:disabled { background: var(--input-border); color: var(--text-secondary); cursor: not-allowed; transform: none; }
 
         /* --- PURE VOICE CALL VIEW --- */
-        .call-wrapper { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; position: relative; }
+        .call-wrapper { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 40px 20px; text-align: center; position: relative; }
         
-        .voice-container { width: 180px; height: 180px; border-radius: 50%; position: relative; margin-bottom: 40px; display: flex; justify-content: center; align-items: center; }
+        .voice-top-section { display: flex; flex-direction: column; align-items: center; width: 100%; }
+        
+        .voice-container { width: 180px; height: 180px; border-radius: 50%; position: relative; margin-bottom: 30px; display: flex; justify-content: center; align-items: center; }
         
         /* Hardware visualizer rings */
         .ring { position: absolute; border-radius: 50%; border: 2px solid var(--success-color); opacity: 0; transition: 0.3s; }
@@ -91,12 +93,19 @@
         .voice-container.active .ai-avatar .material-symbols-outlined { color: var(--success-color); }
         
         .call-status { font-size: 1.1em; font-weight: 600; margin-bottom: 8px; color: white; }
-        .call-sub-status { font-size: 0.85em; color: var(--text-secondary); margin-bottom: 40px; height: 20px; }
+        .call-sub-status { font-size: 0.85em; color: var(--text-secondary); min-height: 40px; display: flex; align-items: center; justify-content: center; padding: 0 15px;}
+
+        /* Live Caption Box */
+        .live-caption-box { background: rgba(19, 27, 38, 0.8); border: 1px solid var(--input-border); padding: 15px 20px; border-radius: 16px; width: 100%; max-width: 400px; min-height: 80px; max-height: 120px; overflow-y: auto; font-size: 0.95em; line-height: 1.5; color: var(--text-main); margin-bottom: 20px; text-align: left; display: none; flex-direction: column; gap: 8px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);}
+        .live-caption-box.active { display: flex; }
+        .caption-ai { color: var(--emerald); font-weight: 500; }
+        .caption-error { color: var(--meena-red); font-weight: 500; font-family: monospace; font-size: 0.9em; }
 
         .orb { width: 12px; height: 12px; border-radius: 50%; background: var(--success-color); display: inline-block; margin-right: 8px; box-shadow: 0 0 10px var(--success-color); animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        .orb.error { background: var(--meena-red); box-shadow: 0 0 10px var(--meena-red); animation: none; }
 
-        .call-controls { display: flex; gap: 20px; justify-content: center; }
+        .call-controls { display: flex; gap: 20px; justify-content: center; width: 100%; padding-bottom: 20px; }
         .btn-call { width: 64px; height: 64px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: none; cursor: pointer; transition: 0.3s; color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
         .btn-call:active { transform: scale(0.9); }
         .btn-call.start { background: linear-gradient(135deg, var(--success-color), #059669); }
@@ -146,17 +155,23 @@
     <div class="view-container" id="viewCall">
         <div class="call-wrapper">
             
-            <div class="voice-container" id="voiceContainer">
-                <div class="ring"></div>
-                <div class="ring"></div>
-                <div class="ring"></div>
-                <div class="ai-avatar" id="aiAvatar">
-                    <span class="material-symbols-outlined">graphic_eq</span>
+            <div class="voice-top-section">
+                <div class="voice-container" id="voiceContainer">
+                    <div class="ring"></div>
+                    <div class="ring"></div>
+                    <div class="ring"></div>
+                    <div class="ai-avatar" id="aiAvatar">
+                        <span class="material-symbols-outlined">graphic_eq</span>
+                    </div>
+                </div>
+                
+                <div class="call-status" id="callStatus">Ready to Connect</div>
+                <div class="call-sub-status" id="callSubStatus">Tap to start a voice call.</div>
+
+                <div class="live-caption-box" id="liveCaptionBox">
+                    <!-- Captions and errors append here during call -->
                 </div>
             </div>
-            
-            <div class="call-status" id="callStatus">Ready to Connect</div>
-            <div class="call-sub-status" id="callSubStatus">Tap to start a voice call.</div>
 
             <div class="call-controls">
                 <button class="btn-call start" id="btnStartCall" onclick="startCall()">
@@ -193,6 +208,7 @@
         const voiceContainer = document.getElementById('voiceContainer');
         const callStatus = document.getElementById('callStatus');
         const callSubStatus = document.getElementById('callSubStatus');
+        const liveCaptionBox = document.getElementById('liveCaptionBox');
         const btnStartCall = document.getElementById('btnStartCall');
         const btnEndCall = document.getElementById('btnEndCall');
 
@@ -241,6 +257,19 @@
             div.innerText = text;
             chatHistoryEl.appendChild(div);
             chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
+        }
+
+        function appendCaption(text, type = "normal") {
+            const div = document.createElement('div');
+            if (type === "error") {
+                div.className = "caption-error";
+                div.innerText = `⚠️ ${text}`;
+            } else {
+                div.className = "caption-ai";
+                div.innerText = text;
+            }
+            liveCaptionBox.appendChild(div);
+            liveCaptionBox.scrollTop = liveCaptionBox.scrollHeight;
         }
 
         function saveToHistory(role, text) {
@@ -340,6 +369,8 @@
             try {
                 callStatus.innerText = "Requesting microphone...";
                 callSubStatus.innerText = "";
+                liveCaptionBox.innerHTML = "";
+                liveCaptionBox.classList.remove('active');
                 
                 // Get Audio Only
                 localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
@@ -352,6 +383,7 @@
                     callStatus.innerHTML = "<span class='orb'></span> Connection Live";
                     callSubStatus.innerText = "AI is listening. Speak naturally.";
                     voiceContainer.classList.add('active');
+                    liveCaptionBox.classList.add('active');
                     
                     btnStartCall.style.display = 'none';
                     btnEndCall.style.display = 'flex';
@@ -368,6 +400,20 @@
                     try {
                         const data = JSON.parse(event.data);
                         
+                        // 1. Catch Google API Errors sent over the WebSocket
+                        if (data.error) {
+                            console.error("Gemini WebSocket Error:", data.error);
+                            const errMsg = data.error.message || 'Server Overloaded';
+                            callStatus.innerHTML = "<span class='orb error'></span> Server Overloaded";
+                            callSubStatus.innerText = "Google AI is at capacity. Try again.";
+                            appendCaption(`API Error: ${errMsg}`, "error");
+                            
+                            // Automatically cleanly close the connection after showing error
+                            setTimeout(() => { stopCall(); }, 2000);
+                            return;
+                        }
+                        
+                        // 2. Process Audio and Text Transcripts
                         if (data.serverContent?.modelTurn?.parts) {
                             for (const part of data.serverContent.modelTurn.parts) {
                                 if (part.inlineData && part.inlineData.mimeType.startsWith("audio/pcm")) {
@@ -375,24 +421,37 @@
                                 }
                                 if (part.text) {
                                     saveToHistory('model', part.text);
-                                    appendMessageToUI('model', part.text); 
+                                    appendMessageToUI('model', part.text); // Sync to text chat
+                                    appendCaption(part.text, "normal"); // Show in live call view
                                 }
                             }
                         }
-                    } catch(e) { /* Ignore non-JSON wrapper frames */ }
+                    } catch(e) { 
+                        // Ignore non-JSON wrapper frames 
+                    }
                 };
 
-                ws.onclose = () => stopCall();
-                ws.onerror = () => {
-                    callStatus.innerText = "Connection Error";
-                    callSubStatus.innerText = "Failed to connect to backend.";
+                ws.onclose = (event) => {
+                    if (event.code !== 1000 && event.code !== 1005) {
+                        appendCaption(`Socket closed abruptly (Code: ${event.code})`, "error");
+                    }
+                    stopCall();
+                };
+                
+                ws.onerror = (err) => {
+                    console.error("WebSocket network error:", err);
+                    callStatus.innerHTML = "<span class='orb error'></span> Connection Error";
+                    callSubStatus.innerText = "Failed to route to backend.";
+                    appendCaption("Network route to Hugging Face dropped.", "error");
                     stopCall();
                 };
 
             } catch (err) {
                 console.error("Mic access denied or error:", err);
-                callStatus.innerText = "Hardware Error";
-                callSubStatus.innerText = err.message;
+                callStatus.innerHTML = "<span class='orb error'></span> Hardware Error";
+                callSubStatus.innerText = "Could not access microphone.";
+                liveCaptionBox.classList.add('active');
+                appendCaption(err.message, "error");
             }
         }
 
@@ -458,7 +517,9 @@
         function stopCall() {
             if (ws) {
                 if(ws.readyState === WebSocket.OPEN) {
-                    ws.send(JSON.stringify({ clientContent: { turnComplete: true } }));
+                    try {
+                        ws.send(JSON.stringify({ clientContent: { turnComplete: true } }));
+                    } catch(e) {}
                     ws.close();
                 }
             }
@@ -468,8 +529,13 @@
             
             btnStartCall.style.display = 'flex';
             btnEndCall.style.display = 'none';
-            callStatus.innerText = "Call Ended";
-            callSubStatus.innerText = "Tap to reconnect.";
+            
+            // Only overwrite status if it wasn't an error state
+            if (!callStatus.innerHTML.includes('error')) {
+                callStatus.innerText = "Call Ended";
+                callSubStatus.innerText = "Tap to reconnect.";
+            }
+            
             voiceContainer.classList.remove('active');
         }
     </script>
