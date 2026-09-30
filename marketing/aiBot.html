@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- PWA & Viewport fixes for mobile keyboard and scaling -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Meena AI Assistant - Meena Marketing</title>
     
-    <meta name="theme-color" content="#0b111a">
+    <!-- Seamless Toolbar Color matching the Header -->
+    <meta name="theme-color" content="#0f1724">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- External Markdown Parser for beautiful text rendering -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -36,76 +40,87 @@
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* Fixed height using dvh and position fixed to prevent mobile keyboard from pushing header out of view */
-        html { height: 100dvh; min-height: 100dvh; max-height: 100dvh; margin: 0; padding: 0; width: 100%; overflow: hidden; background-color: var(--bg-color); }
+        /* Flexbox Viewport fix: Allows dvh to handle keyboard pushes correctly */
+        html { 
+            height: 100%; 
+            height: 100dvh; 
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            overflow: hidden; 
+            background-color: var(--bg-color); 
+        }
         body { 
-            position: fixed; /* Crucial for keeping header anchored during mobile keyboard pop */
-            top: 0; left: 0; right: 0; bottom: 0;
-            height: 100dvh; width: 100%; margin: 0; padding: 0;
+            height: 100%; 
+            height: 100dvh; 
+            width: 100%; 
+            margin: 0; 
+            padding: 0;
             font-family: 'Inter', sans-serif; 
             color: var(--text-color); 
             display: flex; 
             flex-direction: column; 
             user-select: none;
             background-color: transparent;
+            overflow: hidden;
         }
 
-        /* --- GLU 3D ANIMATED BACKGROUND (Fixed Z-Index & Accelerator) --- */
+        /* --- GLU 3D FLUID ANIMATED BACKGROUND --- */
         .ambient-bg { 
-            position: fixed; 
+            position: absolute; 
             top: 0; left: 0; 
-            width: 100vw; height: 100vh; 
-            z-index: 0; /* Fixed visibility issue by changing from -1 to 0 */
+            width: 100vw; height: 100dvh; 
+            z-index: 0; 
             overflow: hidden; 
-            background: transparent; /* Moved base background color to html */
+            background: transparent; 
+            perspective: 1000px; /* Gives spatial depth */
+            transform-style: preserve-3d;
             transition: all 0.5s ease;
         }
         .bg-orb { 
             position: absolute; 
             border-radius: 50%; 
-            filter: blur(90px); 
-            opacity: 0.45; 
-            animation: floatOrb 22s infinite alternate ease-in-out; 
+            filter: blur(80px); /* Creates the fluid melting effect */
+            mix-blend-mode: screen; /* Lightens intersections */
+            opacity: 0.55; 
+            animation: floatOrb 22s infinite alternate cubic-bezier(0.4, 0, 0.2, 1); 
             pointer-events: none;
             transition: all 1s ease-in-out;
+            will-change: transform;
         }
-        .bg-orb-1 { width: 55vw; height: 55vw; background: rgba(13, 148, 136, 0.4); top: -10%; left: -10%; } /* Teal */
-        .bg-orb-2 { width: 65vw; height: 65vw; background: rgba(79, 70, 229, 0.35); bottom: -20%; right: -10%; animation-delay: -7s; } /* Indigo */
-        .bg-orb-3 { width: 45vw; height: 45vw; background: rgba(6, 182, 212, 0.35); top: 30%; left: 30%; animation-delay: -12s; } /* Cyan */
+        .bg-orb-1 { width: 60vw; height: 60vw; background: rgba(13, 148, 136, 0.9); top: -10%; left: -10%; } /* Teal */
+        .bg-orb-2 { width: 70vw; height: 70vw; background: rgba(79, 70, 229, 0.8); bottom: -10%; right: -10%; animation-delay: -7s; } /* Indigo */
+        .bg-orb-3 { width: 50vw; height: 50vw; background: rgba(6, 182, 212, 0.8); top: 30%; left: 30%; animation-delay: -12s; } /* Cyan */
         
         /* Accelerated state for processing/typing */
         .ambient-bg.accelerated .bg-orb {
             animation-duration: 4s;
-            filter: blur(60px);
-            opacity: 0.8;
-            transform: scale(1.2);
+            filter: blur(50px);
+            opacity: 0.9;
         }
         
         @keyframes floatOrb { 
-            0% { transform: translate(0, 0) scale(1) rotate(0deg); } 
-            50% { transform: translate(4vw, 6vh) scale(1.05) rotate(45deg); }
-            100% { transform: translate(-3vw, 9vh) scale(1.1) rotate(-45deg); } 
+            0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); } 
+            50% { transform: translate3d(6vw, 8vh, 60px) scale(1.15) rotate(45deg); }
+            100% { transform: translate3d(-6vw, 12vh, -60px) scale(1.25) rotate(-45deg); } 
         }
 
-        /* Top Header (Restored Original Colors, Perfected Height) */
+        /* Top Header (Matches Status Bar, Reduced Height) */
         header { 
-            background: rgba(15, 23, 36, 0.85); 
-            backdrop-filter: blur(14px); 
-            -webkit-backdrop-filter: blur(14px);
-            padding: 0 20px; 
+            background: var(--surface-color); /* Perfectly matches meta theme-color */
+            padding: env(safe-area-inset-top) 20px 0 20px; /* Safe area for mobile notches */
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             position: relative; 
             z-index: 500; 
             border-bottom: 1px solid var(--input-border); 
-            flex-shrink: 0; 
+            flex-shrink: 0; /* Prevents squishing */
             width: 100%;
-            height: 70px; /* Fixed perfect height */
+            height: calc(60px + env(safe-area-inset-top)); /* Reduced standard height */
         }
         .brand-container { display: flex; align-items: center; gap: 14px; }
         
-        /* New Back Button Styling */
         .back-btn { 
             font-size: 26px; 
             color: var(--marketing-white); 
@@ -121,13 +136,12 @@
         .marketing { color: var(--marketing-white); }
         .goorac { font-size: 0.72em; color: var(--accent-color); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
 
-        /* Dynamic Header Action Button (Headphones / Close) */
         .header-action-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--input-border);
             border-radius: 50%;
-            width: 44px;
-            height: 44px;
+            width: 40px; /* Adjusted to fit new header */
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -136,10 +150,10 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         .header-action-btn:active { transform: scale(0.9); }
-        .header-action-btn .material-symbols-outlined { font-size: 24px; transition: color 0.3s; }
+        .header-action-btn .material-symbols-outlined { font-size: 22px; transition: color 0.3s; }
 
-        /* View Containers */
-        .view-container { flex-grow: 1; display: none; flex-direction: column; overflow: hidden; position: relative; z-index: 10; }
+        /* View Containers (min-height 0 prevents flex overflow on mobile keyboards) */
+        .view-container { flex-grow: 1; display: none; flex-direction: column; overflow: hidden; position: relative; z-index: 10; min-height: 0; }
         .view-container.active { display: flex; }
 
         /* --- CHAT VIEW --- */
@@ -152,6 +166,7 @@
             gap: 16px; 
             scroll-behavior: smooth; 
             user-select: text;
+            min-height: 0; /* Important for flex scrolling */
         }
         .msg-bubble { 
             max-width: 88%; 
@@ -197,20 +212,18 @@
         .msg-content ul, .msg-content ol { margin: 10px 0; padding-left: 24px; }
         .msg-content li { margin-bottom: 6px; }
         
-        /* Inline Code Styling */
         .msg-content code { 
             font-family: 'JetBrains Mono', monospace; 
             font-size: 0.85em; 
             background: rgba(0, 0, 0, 0.3); 
-            color: #fbbf24; /* Amber colored inline code */
+            color: #fbbf24; 
             padding: 3px 6px; 
             border-radius: 6px; 
             border: 1px solid rgba(255,255,255,0.05);
         }
         
-        /* PROFESSIONAL CODE BOX (Fixed Horizontal Scroll Issue) */
         .code-wrapper {
-            background: #0a0e14; /* Deep terminal background */
+            background: #0a0e14; 
             border: 1px solid var(--input-border); 
             border-radius: 12px; 
             margin: 16px 0; 
@@ -242,7 +255,7 @@
             padding: 16px; 
             background: transparent; 
             border: none; 
-            overflow-x: auto; /* Allows only the code text to scroll, not the header */
+            overflow-x: auto; 
         }
         .code-wrapper pre code { 
             background: transparent; 
@@ -253,7 +266,6 @@
             box-shadow: none;
         }
         
-        /* Modern Copy Button inside Code Block Header */
         .copy-code-btn { 
             background: rgba(255,255,255,0.05); 
             border: 1px solid rgba(255,255,255,0.1); 
@@ -272,7 +284,6 @@
         .copy-code-btn:hover { color: white; background: var(--accent-color); border-color: var(--accent-color); }
         .copy-code-btn .material-symbols-outlined { font-size: 14px; }
 
-        /* Blockquotes */
         .msg-content blockquote {
             border-left: 4px solid var(--accent-color);
             margin: 12px 0;
@@ -283,13 +294,11 @@
             font-style: italic;
         }
 
-        /* Tables */
         .msg-content table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9em; border-radius: 8px; overflow: hidden; }
         .msg-content th, .msg-content td { border: 1px solid var(--input-border); padding: 10px 12px; text-align: left; }
         .msg-content th { background: rgba(255,255,255,0.05); font-weight: 600; color: var(--marketing-white); }
         .msg-content tr:nth-child(even) { background: rgba(255,255,255,0.02); }
 
-        /* Gemini-style Bottom Action Buttons */
         .msg-actions { 
             display: flex; 
             gap: 16px; 
@@ -309,7 +318,6 @@
         }
         .action-icon:hover { color: var(--marketing-white); transform: scale(1.1); background: rgba(255,255,255,0.05);}
 
-        /* Thinking Animation Indicator */
         .thinking-bubble {
             display: flex;
             align-items: center;
@@ -329,18 +337,20 @@
             100% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 10px var(--accent-color); }
         }
 
-        /* --- CHATGPT STYLE INPUT AREA --- */
+        /* --- CHATGPT STYLE INPUT AREA (Fixed for PWA) --- */
         .chat-input-area { 
             background: transparent; 
-            padding: 10px 20px 24px 20px; 
+            /* Safe area padding guarantees it doesn't get hidden behind iOS home bar */
+            padding: 10px 20px calc(14px + env(safe-area-inset-bottom)) 20px; 
             display: flex; 
             align-items: flex-end; 
             position: relative;
             z-index: 100;
+            flex-shrink: 0;
         }
         .chat-input-wrapper { 
             flex-grow: 1; 
-            background: rgba(18, 28, 44, 0.85); /* Matches var(--input-bg) with glassmorphism */
+            background: rgba(18, 28, 44, 0.85); 
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--input-border); 
@@ -399,7 +409,7 @@
             flex-direction: column; 
             align-items: center; 
             justify-content: space-between; 
-            padding: 40px 24px 34px 24px; 
+            padding: 40px 24px calc(34px + env(safe-area-inset-bottom)) 24px; 
             text-align: center; 
             position: relative; 
         }
@@ -423,7 +433,6 @@
             align-items: center; 
         }
         
-        /* Advanced Holographic Rings */
         .v-ring { 
             position: absolute; 
             border-radius: 50%; 
@@ -434,19 +443,16 @@
             pointer-events: none;
         }
         
-        /* Active (Listening) State */
         .voice-container.active .v-ring { opacity: 0.6; }
         .voice-container.active .v-ring:nth-child(1) { width: 180px; height: 180px; background: var(--accent-color); animation: vSpin 4s infinite linear; }
         .voice-container.active .v-ring:nth-child(2) { width: 200px; height: 160px; background: var(--success-color); animation: vSpin 3s infinite linear reverse; }
         .voice-container.active .v-ring:nth-child(3) { width: 160px; height: 200px; background: var(--cyan); animation: vPulse 2s infinite alternate; }
         
-        /* Processing State */
         .voice-container.processing .v-ring { filter: blur(25px); opacity: 0.85; }
         .voice-container.processing .v-ring:nth-child(1) { background: #8b5cf6; width: 190px; height: 190px; animation: vSpin 1.5s infinite linear; }
         .voice-container.processing .v-ring:nth-child(2) { background: var(--meena-red); width: 170px; height: 170px; animation: vSpin 1.5s infinite linear reverse; }
         .voice-container.processing .v-ring:nth-child(3) { background: var(--accent-color); width: 150px; height: 150px; animation: vPulse 1s infinite alternate; }
         
-        /* Speaking State */
         .voice-container.speaking .v-ring { filter: blur(12px); opacity: 1; }
         .voice-container.speaking .v-ring:nth-child(1) { background: var(--cyan); width: 220px; height: 220px; animation: vSpeakPulse 0.4s infinite alternate; }
         .voice-container.speaking .v-ring:nth-child(2) { background: var(--success-color); width: 210px; height: 210px; animation: vSpeakPulse 0.6s infinite alternate-reverse; }
@@ -504,7 +510,6 @@
             margin-bottom: 24px;
         }
 
-        /* Live Caption Box */
         .live-caption-box { 
             background: rgba(20, 31, 48, 0.8); 
             backdrop-filter: blur(15px);
@@ -585,7 +590,7 @@
 </head>
 <body>
 
-    <!-- GLU 3D Animated Background -->
+    <!-- GLU 3D Animated Fluid Background -->
     <div class="ambient-bg" id="ambientBg">
         <div class="bg-orb bg-orb-1"></div>
         <div class="bg-orb bg-orb-2"></div>
@@ -601,7 +606,6 @@
             </div>
         </div>
         
-        <!-- Dynamic Header Button: Headphone to call, Cross to close -->
         <div class="header-action-btn" id="headerBtn" onclick="toggleMode()">
             <span class="material-symbols-outlined" id="headerIcon" style="color: var(--accent-color);">headphones</span>
         </div>
