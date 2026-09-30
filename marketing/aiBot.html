@@ -31,7 +31,9 @@
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { height: 100%; margin: 0; padding: 0; width: 100%; overflow: hidden; background-color: var(--bg-color); }
+        
+        /* Fixed height using dvh to prevent mobile keyboard from pushing header out of view */
+        html, body { height: 100dvh; min-height: 100dvh; max-height: 100dvh; margin: 0; padding: 0; width: 100%; overflow: hidden; background-color: var(--bg-color); }
         body { 
             font-family: 'Inter', sans-serif; 
             color: var(--text-color); 
@@ -64,41 +66,22 @@
         .marketing { color: var(--marketing-white); }
         .goorac { font-size: 0.72em; color: var(--accent-color); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
 
-        /* Mode Switcher Tabs */
-        .mode-switcher { 
-            display: flex; 
-            background: var(--surface-color); 
-            padding: 5px; 
-            border-radius: 14px; 
-            margin: 12px 18px 8px 18px; 
-            border: 1px solid var(--input-border); 
-            flex-shrink: 0; 
-            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        /* Dynamic Header Action Button (Headphones / Close) */
+        .header-action-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--input-border);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-        .mode-btn { 
-            flex: 1; 
-            padding: 10px; 
-            text-align: center; 
-            font-weight: 600; 
-            font-size: 0.9em; 
-            color: var(--text-secondary); 
-            border-radius: 10px; 
-            cursor: pointer; 
-            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px; 
-            border: none; 
-            background: transparent; 
-            font-family: inherit;
-        }
-        .mode-btn.active { 
-            background: var(--accent-color); 
-            color: #ffffff; 
-            box-shadow: 0 2px 10px var(--accent-glow); 
-        }
-        .mode-btn .material-symbols-outlined { font-size: 20px; }
+        .header-action-btn:active { transform: scale(0.9); }
+        .header-action-btn .material-symbols-outlined { font-size: 24px; transition: color 0.3s; }
 
         /* View Containers */
         .view-container { flex-grow: 1; display: none; flex-direction: column; overflow: hidden; position: relative; }
@@ -148,6 +131,26 @@
             border-bottom-left-radius: 4px; 
             font-family: 'JetBrains Mono', monospace; 
             font-size: 0.85em; 
+        }
+
+        /* Thinking Animation Indicator */
+        .thinking-bubble {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent !important;
+            border: 1px solid var(--input-border) !important;
+            color: var(--text-secondary) !important;
+            font-style: italic;
+            box-shadow: none !important;
+        }
+        .sparkle-icon {
+            color: var(--accent-color);
+            animation: pulseGlow 1.5s infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            100% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 10px var(--accent-color); }
         }
         
         .chat-input-area { 
@@ -343,11 +346,11 @@
         .btn-call.start { 
             background: linear-gradient(135deg, var(--success-color), #059669); 
             box-shadow: 0 8px 25px var(--success-glow); 
+            display: none; /* Auto-start removes need for this initially */
         }
         .btn-call.end { 
             background: linear-gradient(135deg, var(--meena-red), #b91c1c); 
             box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4); 
-            display: none; 
         }
         .btn-call .material-symbols-outlined { font-size: 32px; }
 
@@ -363,19 +366,14 @@
                 <span class="goorac">AI Voice & Stock Engine</span>
             </div>
         </div>
-        <span class="material-symbols-outlined" style="color: var(--text-secondary); cursor: pointer; transition: 0.2s;" onclick="clearHistory()" onmouseover="this.style.color='var(--meena-red)'" onmouseout="this.style.color='var(--text-secondary)'">delete_sweep</span>
+        
+        <!-- Dynamic Header Button: Headphone to call, Cross to close -->
+        <div class="header-action-btn" id="headerBtn" onclick="toggleMode()">
+            <span class="material-symbols-outlined" id="headerIcon" style="color: var(--accent-color);">headphones</span>
+        </div>
     </header>
 
-    <div class="mode-switcher">
-        <button class="mode-btn active" id="btnModeChat" onclick="switchMode('chat')">
-            <span class="material-symbols-outlined">forum</span> Text Chat
-        </button>
-        <button class="mode-btn" id="btnModeCall" onclick="switchMode('call')">
-            <span class="material-symbols-outlined">mic</span> Voice Call
-        </button>
-    </div>
-
-    <!-- CHAT INTERFACE -->
+    <!-- CHAT INTERFACE (Default) -->
     <div class="view-container active" id="viewChat">
         <div class="chat-history" id="chatHistory">
             <div class="msg-bubble msg-ai">வணக்கம்! நான் மீனா மார்க்கெட்டிங் AI. கடையில என்ன ஸ்டாக் இருக்குன்னு பாக்கணுமா?</div>
@@ -390,7 +388,7 @@
         </div>
     </div>
 
-    <!-- PURE VOICE CALL INTERFACE (NO CAPTIONS) -->
+    <!-- PURE VOICE CALL INTERFACE -->
     <div class="view-container" id="viewCall">
         <div class="call-wrapper">
             <div class="voice-top-stage">
@@ -404,14 +402,14 @@
                 </div>
                 
                 <div class="call-status" id="callStatus">Ready to Connect</div>
-                <div class="call-sub-status" id="callSubStatus">Tap the green button to start a voice call.</div>
+                <div class="call-sub-status" id="callSubStatus">Initializing secure line...</div>
             </div>
 
             <div class="call-controls">
                 <button class="btn-call start" id="btnStartCall" onclick="startCall()">
                     <span class="material-symbols-outlined">call</span>
                 </button>
-                <button class="btn-call end" id="btnEndCall" onclick="stopCall()">
+                <button class="btn-call end" id="btnEndCall" onclick="exitVoiceMode()">
                     <span class="material-symbols-outlined">call_end</span>
                 </button>
             </div>
@@ -430,8 +428,6 @@
         // UI ELEMENTS
         const viewChat = document.getElementById('viewChat');
         const viewCall = document.getElementById('viewCall');
-        const btnModeChat = document.getElementById('btnModeChat');
-        const btnModeCall = document.getElementById('btnModeCall');
         
         // CHAT ELEMENTS
         const chatHistoryEl = document.getElementById('chatHistory');
@@ -444,6 +440,9 @@
         const callSubStatus = document.getElementById('callSubStatus');
         const btnStartCall = document.getElementById('btnStartCall');
         const btnEndCall = document.getElementById('btnEndCall');
+        
+        // HEADER ELEMENTS
+        const headerIcon = document.getElementById('headerIcon');
 
         // AUDIO CONTEXT & STREAM PIPELINE
         let ws;
@@ -453,6 +452,23 @@
         let processor;
         let micMuteGain;
         let nextPlaybackTime = 0;
+        let currentMode = 'chat';
+
+        // GLOBAL SPEAKER ROUTING HACK FOR MOBILE
+        let speakerAudio = new Audio();
+        speakerAudio.autoplay = true;
+        speakerAudio.playsInline = true; 
+        let playbackDest;
+
+        // THINKING ANIMATION STATE
+        let thinkingInterval;
+        const thinkingPhrases = [
+            "Thinking...", 
+            "Checking database...", 
+            "Scanning inventory...", 
+            "Analyzing models...", 
+            "Just a moment..."
+        ];
 
         // ==========================================
         // HAPTIC FEEDBACK (VIBRATE ENGINE)
@@ -466,24 +482,65 @@
         }
 
         // ==========================================
-        // 1. UI & SHARED STATE MANAGEMENT
+        // 1. UI & NAVIGATION MANAGEMENT
         // ==========================================
 
-        function switchMode(mode) {
-            triggerHaptic([25]);
-            if (mode === 'chat') {
-                btnModeChat.classList.add('active');
-                btnModeCall.classList.remove('active');
-                viewChat.classList.add('active');
-                viewCall.classList.remove('active');
-                if(ws && ws.readyState === WebSocket.OPEN) stopCall();
+        function toggleMode() {
+            if (currentMode === 'chat') {
+                // Vibrate 3 times as requested
+                triggerHaptic([40, 50, 40, 50, 40]);
+                enterVoiceMode();
             } else {
-                btnModeCall.classList.add('active');
-                btnModeChat.classList.remove('active');
-                viewCall.classList.add('active');
-                viewChat.classList.remove('active');
+                exitVoiceMode();
             }
         }
+
+        function enterVoiceMode() {
+            currentMode = 'voice';
+            
+            // Switch Views
+            viewChat.classList.remove('active');
+            viewCall.classList.add('active');
+            
+            // Update Header Icon to Cross
+            headerIcon.innerText = 'close';
+            headerIcon.style.color = 'var(--meena-red)';
+            
+            // Push browser history state for mobile back button compatibility
+            history.pushState({ view: 'voice' }, '', '#voice');
+
+            // Automatically start the call
+            startCall();
+        }
+
+        function exitVoiceMode() {
+            triggerHaptic([30, 40]);
+            currentMode = 'chat';
+            
+            // Stop active call
+            stopCall();
+            
+            // Switch Views
+            viewCall.classList.remove('active');
+            viewChat.classList.add('active');
+            
+            // Update Header Icon to Headphones
+            headerIcon.innerText = 'headphones';
+            headerIcon.style.color = 'var(--accent-color)';
+            
+            // Clean up URL hash if user clicked the cross icon instead of using hardware back
+            if (window.location.hash === '#voice') {
+                history.back();
+            }
+        }
+
+        // Mobile Hardware Back Button Handler
+        window.addEventListener('popstate', (e) => {
+            if (currentMode === 'voice') {
+                // User pressed physical back button while in voice call
+                exitVoiceMode();
+            }
+        });
 
         function autoResize(textarea) {
             textarea.style.height = 'auto';
@@ -513,17 +570,32 @@
             }
         }
 
-        function clearHistory() {
-            triggerHaptic([40, 60, 40]);
-            if(confirm("Clear conversation history?")) {
-                conversationHistory = [];
-                chatHistoryEl.innerHTML = '<div class="msg-bubble msg-ai">வணக்கம்! நான் மீனா மார்க்கெட்டிங் AI. கடையில என்ன ஸ்டாக் இருக்குன்னு பாக்கணுமா?</div>';
-            }
+        // ==========================================
+        // 2. TEXT CHAT MODE (REST API & LOADING UI)
+        // ==========================================
+
+        function showThinkingBubble() {
+            const div = document.createElement('div');
+            div.id = "activeThinkingBubble";
+            div.className = "msg-bubble msg-ai thinking-bubble";
+            div.innerHTML = `<span class="material-symbols-outlined sparkle-icon">auto_awesome</span> <span id="thinkText">Thinking...</span>`;
+            
+            chatHistoryEl.appendChild(div);
+            chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
+            
+            let i = 0;
+            thinkingInterval = setInterval(() => {
+                i = (i + 1) % thinkingPhrases.length;
+                const txt = document.getElementById('thinkText');
+                if (txt) txt.innerText = thinkingPhrases[i];
+            }, 800);
         }
 
-        // ==========================================
-        // 2. TEXT CHAT MODE (REST API)
-        // ==========================================
+        function hideThinkingBubble() {
+            clearInterval(thinkingInterval);
+            const bubble = document.getElementById('activeThinkingBubble');
+            if (bubble) bubble.remove();
+        }
 
         async function sendChatMessage() {
             const text = chatInput.value.trim();
@@ -537,6 +609,9 @@
             chatInput.value = '';
             chatInput.style.height = 'auto';
             btnSend.disabled = true;
+
+            // Show Gemini-style thinking animation
+            showThinkingBubble();
 
             try {
                 // Send strictly the last 15 messages of conversation history to keep latency low
@@ -555,6 +630,8 @@
 
                 const data = await response.json();
                 
+                hideThinkingBubble();
+
                 if (!response.ok || data.error) {
                     let errorMessage = "API error occurred.";
                     if (data.error && data.error.message) errorMessage = data.error.message;
@@ -577,6 +654,7 @@
                 triggerHaptic([20]);
 
             } catch (err) {
+                hideThinkingBubble();
                 console.error("Chat Request Failed:", err);
                 appendMessageToUI('model', `Network Error: ${err.message}. Backend may be warming up.`, true);
                 triggerHaptic([80, 50, 80]);
@@ -597,12 +675,12 @@
         // ==========================================
 
         async function startCall() {
-            triggerHaptic([40]);
             try {
                 callStatus.innerText = "Requesting mic...";
                 callSubStatus.innerText = "Please allow microphone permissions.";
+                btnStartCall.style.display = 'none';
+                btnEndCall.style.display = 'flex';
                 
-                // 1. Direct synchronous AudioContext initialization on user gesture
                 const AudioCtx = window.AudioContext || window.webkitAudioContext;
                 audioContext = new AudioCtx({ sampleRate: 16000 });
                 playbackContext = new AudioCtx({ sampleRate: 24000 });
@@ -610,7 +688,11 @@
                 await audioContext.resume();
                 await playbackContext.resume();
 
-                // 2. Hardware microphone acquisition
+                // FORCE AUDIO TO MAIN SPEAKER (MediaStream API hack for mobile)
+                playbackDest = playbackContext.createMediaStreamDestination();
+                speakerAudio.srcObject = playbackDest.stream;
+                try { await speakerAudio.play(); } catch(e) { console.log("Speaker routing warm-up pending."); }
+
                 localStream = await navigator.mediaDevices.getUserMedia({
                     audio: {
                         channelCount: 1,
@@ -632,9 +714,6 @@
                     callStatus.innerHTML = "<span class='orb'></span> Connection Live";
                     callSubStatus.innerText = "AI is listening. Speak naturally.";
                     voiceContainer.classList.add('active');
-                    
-                    btnStartCall.style.display = 'none';
-                    btnEndCall.style.display = 'flex';
 
                     // Send setup init with conversation history (last 15 messages)
                     ws.send(JSON.stringify({
@@ -649,17 +728,15 @@
                     try {
                         const data = JSON.parse(event.data);
                         
-                        // Handle server capacity spikes or load errors
                         if (data.error) {
                             console.error("Gemini Live Error:", data.error);
                             callStatus.innerHTML = "<span class='orb error'></span> Server Overloaded";
                             callSubStatus.innerText = "Google API capacity reached. Please retry in a moment.";
                             triggerHaptic([100, 50, 100]);
-                            setTimeout(() => stopCall(), 2500);
+                            setTimeout(() => { if(currentMode === 'voice') exitVoiceMode(); }, 3000);
                             return;
                         }
 
-                        // Process incoming AI audio streams
                         if (data.serverContent?.modelTurn?.parts) {
                             for (const part of data.serverContent.modelTurn.parts) {
                                 if (part.inlineData && part.inlineData.mimeType.startsWith("audio/pcm")) {
@@ -673,14 +750,14 @@
                     } catch(e) {}
                 };
 
-                ws.onclose = () => stopCall();
+                ws.onclose = () => { if(currentMode === 'voice') stopCallStateOnly(); };
                 
                 ws.onerror = (err) => {
                     console.error("Live WebSocket Error:", err);
                     callStatus.innerHTML = "<span class='orb error'></span> Connection Error";
                     callSubStatus.innerText = "Could not maintain connection to server.";
                     triggerHaptic([100, 50, 100]);
-                    stopCall();
+                    setTimeout(() => { if(currentMode === 'voice') exitVoiceMode(); }, 2500);
                 };
 
             } catch (err) {
@@ -688,7 +765,7 @@
                 callStatus.innerHTML = "<span class='orb error'></span> Hardware Error";
                 callSubStatus.innerText = err.message || "Could not access microphone.";
                 triggerHaptic([120, 80, 120]);
-                stopCall();
+                setTimeout(() => { if(currentMode === 'voice') exitVoiceMode(); }, 3500);
             }
         }
 
@@ -696,12 +773,8 @@
             if (!audioContext || !localStream) return;
 
             const source = audioContext.createMediaStreamSource(localStream);
-            
-            // Optimal micro-buffer (2048 samples = 128ms packets at 16kHz for responsive VAD)
             processor = audioContext.createScriptProcessor(2048, 1, 1);
 
-            // CRITICAL FIX: Route processor to zero-gain node instead of speakers.
-            // This prevents microphone loopback into speakers that causes AEC to silence speech!
             micMuteGain = audioContext.createGain();
             micMuteGain.gain.value = 0.0;
 
@@ -734,6 +807,9 @@
         function playAudio(base64Data) {
             if (!playbackContext) {
                 playbackContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+                playbackDest = playbackContext.createMediaStreamDestination();
+                speakerAudio.srcObject = playbackDest.stream;
+                speakerAudio.play().catch(e => {});
             }
             if (playbackContext.state === 'suspended') {
                 playbackContext.resume();
@@ -754,7 +830,9 @@
 
             const source = playbackContext.createBufferSource();
             source.buffer = buffer;
-            source.connect(playbackContext.destination);
+            
+            // Connect to our speaker-forced MediaStream API destination instead of default earpiece context
+            source.connect(playbackDest);
 
             if (nextPlaybackTime < playbackContext.currentTime) {
                 nextPlaybackTime = playbackContext.currentTime;
@@ -764,50 +842,39 @@
             nextPlaybackTime += buffer.duration;
         }
 
-        function stopCall() {
-            triggerHaptic([30, 30]);
-
+        // Just kills audio engines without altering UI mode
+        function stopCallStateOnly() {
             if (ws) {
                 if (ws.readyState === WebSocket.OPEN) {
-                    try {
-                        ws.send(JSON.stringify({ clientContent: { turnComplete: true } }));
-                    } catch(e) {}
+                    try { ws.send(JSON.stringify({ clientContent: { turnComplete: true } })); } catch(e) {}
                     ws.close();
                 }
                 ws = null;
             }
-
-            if (processor) {
-                processor.disconnect();
-                processor = null;
-            }
-            if (micMuteGain) {
-                micMuteGain.disconnect();
-                micMuteGain = null;
-            }
-            if (audioContext) {
-                audioContext.close();
-                audioContext = null;
-            }
-            if (playbackContext) {
-                playbackContext.close();
-                playbackContext = null;
-            }
-            if (localStream) {
-                localStream.getTracks().forEach(track => track.stop());
-                localStream = null;
-            }
+            if (processor) { processor.disconnect(); processor = null; }
+            if (micMuteGain) { micMuteGain.disconnect(); micMuteGain = null; }
+            if (audioContext) { audioContext.close(); audioContext = null; }
+            
+            if (speakerAudio) { speakerAudio.pause(); speakerAudio.srcObject = null; }
+            if (playbackDest) { playbackDest.disconnect(); playbackDest = null; }
+            if (playbackContext) { playbackContext.close(); playbackContext = null; }
+            
+            if (localStream) { localStream.getTracks().forEach(track => track.stop()); localStream = null; }
             
             nextPlaybackTime = 0;
-            btnStartCall.style.display = 'flex';
-            btnEndCall.style.display = 'none';
+            voiceContainer.classList.remove('active');
             
             if (!callStatus.innerHTML.includes('error')) {
                 callStatus.innerText = "Call Ended";
                 callSubStatus.innerText = "Tap the green button to reconnect.";
             }
             
-            voiceContainer.classList.remove('active');
+            btnStartCall.style.display = 'flex';
+            btnEndCall.style.display = 'none';
+        }
+
+        function stopCall() {
+            stopCallStateOnly();
         }
     </script>
 </body>
