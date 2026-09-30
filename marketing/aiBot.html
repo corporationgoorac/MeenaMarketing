@@ -14,9 +14,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
+        /* Restored EXACT original colors */
         :root {
             --bg-color: #070b11; 
-            --surface-color: rgba(15, 23, 36, 0.6); 
+            --surface-color: #0f1724; 
             --surface-card: #141f30;
             --surface-hover: #1c2b42;
             --text-color: #f8fafc;
@@ -28,14 +29,14 @@
             --success-color: #10b981; 
             --success-glow: rgba(16, 185, 129, 0.4);
             --warning-color: #f59e0b;
+            --cyan: #06b6d4;
             --input-bg: #121c2c;
-            --input-border: rgba(255, 255, 255, 0.1);
+            --input-border: #1e2e46;
             --shadow-glow: 0 0 20px rgba(13, 148, 136, 0.25);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* Fixed height using dvh to prevent mobile keyboard from pushing header out of view */
         html, body { height: 100dvh; min-height: 100dvh; max-height: 100dvh; margin: 0; padding: 0; width: 100%; overflow: hidden; background-color: var(--bg-color); }
         body { 
             font-family: 'Inter', sans-serif; 
@@ -43,28 +44,33 @@
             display: flex; 
             flex-direction: column; 
             user-select: none;
+            position: relative;
         }
 
-        /* --- GLU 3D ANIMATED BACKGROUND --- */
+        /* --- GLU 3D ANIMATED BACKGROUND (Fixed & Linked to Typing) --- */
         .ambient-bg { 
-            position: fixed; 
+            position: absolute; 
             top: 0; left: 0; 
-            width: 100vw; height: 100vh; 
-            z-index: -1; 
+            width: 100%; height: 100%; 
+            z-index: 0; 
             overflow: hidden; 
-            background: #04070b; 
+            pointer-events: none;
+            /* Overlay the original theme's radial gradients */
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(13, 148, 136, 0.12) 0%, transparent 60%),
+                radial-gradient(circle at 50% 100%, rgba(239, 68, 68, 0.05) 0%, transparent 50%);
         }
         .bg-orb { 
             position: absolute; 
             border-radius: 50%; 
-            filter: blur(90px); 
-            opacity: 0.55; 
-            animation: floatOrb 22s infinite alternate ease-in-out; 
-            pointer-events: none;
+            filter: blur(80px); 
+            opacity: 0.4; 
+            animation: floatOrb 20s infinite alternate ease-in-out; 
+            transition: all 0.5s ease;
         }
-        .bg-orb-1 { width: 55vw; height: 55vw; background: rgba(13, 148, 136, 0.3); top: -15%; left: -10%; } /* Teal */
-        .bg-orb-2 { width: 65vw; height: 65vw; background: rgba(79, 70, 229, 0.25); bottom: -25%; right: -15%; animation-delay: -7s; } /* Indigo */
-        .bg-orb-3 { width: 45vw; height: 45vw; background: rgba(6, 182, 212, 0.25); top: 35%; left: 35%; animation-delay: -12s; } /* Cyan */
+        .bg-orb-1 { width: 55vw; height: 55vw; background: rgba(13, 148, 136, 0.4); top: -15%; left: -10%; } 
+        .bg-orb-2 { width: 65vw; height: 65vw; background: rgba(79, 70, 229, 0.25); bottom: -25%; right: -15%; animation-delay: -7s; } 
+        .bg-orb-3 { width: 45vw; height: 45vw; background: rgba(6, 182, 212, 0.25); top: 35%; left: 35%; animation-delay: -12s; } 
         
         @keyframes floatOrb { 
             0% { transform: translate(0, 0) scale(1); } 
@@ -72,11 +78,23 @@
             100% { transform: translate(-2vw, 8vh) scale(1.1); } 
         }
 
-        /* Top Header */
+        /* Typing state pushes the 3D background into overdrive */
+        .ambient-bg.typing .bg-orb {
+            animation: floatOrbTyping 4s infinite alternate ease-in-out;
+            opacity: 0.75;
+            filter: blur(60px);
+        }
+        @keyframes floatOrbTyping {
+            0% { transform: translate(0, 0) scale(1.1); }
+            50% { transform: translate(2vw, -2vh) scale(1.25); }
+            100% { transform: translate(-2vw, 2vh) scale(1.15); }
+        }
+
+        /* Top Header (Restored Original Colors) */
         header { 
-            background: rgba(11, 15, 20, 0.7); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(15, 23, 36, 0.85); 
+            backdrop-filter: blur(14px); 
+            -webkit-backdrop-filter: blur(14px);
             padding: 14px 20px; 
             display: flex; 
             justify-content: space-between; 
@@ -94,9 +112,8 @@
         .marketing { color: var(--marketing-white); }
         .goorac { font-size: 0.72em; color: var(--accent-color); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
 
-        /* Dynamic Header Action Button (Headphones / Close) */
         .header-action-btn {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--input-border);
             border-radius: 50%;
             width: 44px;
@@ -106,13 +123,13 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
         .header-action-btn:active { transform: scale(0.9); }
         .header-action-btn .material-symbols-outlined { font-size: 24px; transition: color 0.3s; }
 
         /* View Containers */
-        .view-container { flex-grow: 1; display: none; flex-direction: column; overflow: hidden; position: relative; }
+        .view-container { flex-grow: 1; display: none; flex-direction: column; overflow: hidden; position: relative; z-index: 10; }
         .view-container.active { display: flex; }
 
         /* --- CHAT VIEW --- */
@@ -134,7 +151,7 @@
             line-height: 1.55; 
             word-wrap: break-word; 
             animation: fadeIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
             position: relative;
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
@@ -147,23 +164,22 @@
         }
         .msg-ai { 
             align-self: flex-start; 
-            background: rgba(20, 31, 48, 0.8); 
-            backdrop-filter: blur(10px);
+            background: var(--surface-card); 
             border: 1px solid var(--input-border); 
             color: var(--text-color); 
             border-bottom-left-radius: 6px; 
         }
         .msg-error { 
             align-self: flex-start; 
-            background: rgba(239, 68, 68, 0.15); 
-            border: 1px solid rgba(239, 68, 68, 0.4); 
+            background: rgba(239, 68, 68, 0.12); 
+            border: 1px solid rgba(239, 68, 68, 0.35); 
             color: #fca5a5; 
             border-bottom-left-radius: 6px; 
             font-family: 'JetBrains Mono', monospace; 
             font-size: 0.85em; 
         }
 
-        /* --- ADVANCED MARKDOWN & ACTIONS STYLING --- */
+        /* --- ADVANCED MARKDOWN STYLING --- */
         .msg-content { width: 100%; overflow-x: auto; }
         .msg-content p { margin: 0 0 10px 0; }
         .msg-content p:last-child { margin: 0; }
@@ -171,27 +187,27 @@
         .msg-content ul, .msg-content ol { margin: 10px 0; padding-left: 24px; }
         .msg-content li { margin-bottom: 6px; }
         
-        /* Inline Code Styling */
+        /* Inline Code */
         .msg-content code { 
             font-family: 'JetBrains Mono', monospace; 
             font-size: 0.85em; 
             background: rgba(0, 0, 0, 0.3); 
-            color: #fbbf24; /* Amber colored inline code */
+            color: #fbbf24; 
             padding: 3px 6px; 
             border-radius: 6px; 
             border: 1px solid rgba(255,255,255,0.05);
         }
         
-        /* PROFESSIONAL CODE BOX (Fixed Scroll Issue) */
+        /* PROFESSIONAL CODE BOX (Fixed Horizontal Scroll Issue) */
         .code-wrapper {
-            background: #0a0e14; /* Deep terminal background */
-            border: 1px solid rgba(255,255,255,0.1); 
+            background: #0a0e14; 
+            border: 1px solid var(--input-border); 
             border-radius: 12px; 
             margin: 16px 0; 
-            overflow: hidden; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            overflow: hidden; /* Contains the header and pre safely */
             display: flex;
             flex-direction: column;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         }
         .code-header {
             background: rgba(255, 255, 255, 0.04);
@@ -216,7 +232,7 @@
             padding: 16px; 
             background: transparent; 
             border: none; 
-            overflow-x: auto; 
+            overflow-x: auto; /* Scroll ONLY applies to the code area */
         }
         .code-wrapper pre code { 
             background: transparent; 
@@ -227,7 +243,7 @@
             box-shadow: none;
         }
         
-        /* Modern Copy Button inside Code Block */
+        /* Modern Copy Button inside Code Block Header */
         .copy-code-btn { 
             background: transparent; 
             border: 1px solid rgba(255,255,255,0.1); 
@@ -243,7 +259,7 @@
             align-items: center;
             gap: 4px;
         }
-        .copy-code-btn:hover { color: white; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+        .copy-code-btn:hover { color: white; background: var(--accent-color); border-color: var(--accent-color); }
         .copy-code-btn .material-symbols-outlined { font-size: 14px; }
 
         /* Blockquotes */
@@ -259,7 +275,7 @@
 
         /* Tables */
         .msg-content table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9em; border-radius: 8px; overflow: hidden; }
-        .msg-content th, .msg-content td { border: 1px solid rgba(255,255,255,0.1); padding: 10px 12px; text-align: left; }
+        .msg-content th, .msg-content td { border: 1px solid var(--input-border); padding: 10px 12px; text-align: left; }
         .msg-content th { background: rgba(255,255,255,0.05); font-weight: 600; color: var(--marketing-white); }
         .msg-content tr:nth-child(even) { background: rgba(255,255,255,0.02); }
 
@@ -302,43 +318,31 @@
             0% { transform: scale(0.9); opacity: 0.7; }
             100% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 10px var(--accent-color); }
         }
-        
-        /* Typing Cursor */
-        .typing-cursor::after {
-            content: '▌';
-            display: inline-block;
-            color: var(--accent-color);
-            animation: blink 1s step-start infinite;
-            margin-left: 2px;
-            text-shadow: 0 0 8px var(--accent-color);
-        }
-        @keyframes blink { 50% { opacity: 0; } }
 
-        /* --- CHATGPT STYLE INPUT AREA --- */
+        /* --- CHAT INPUT AREA (Restored Original Theme Colors) --- */
         .chat-input-area { 
-            background: transparent; 
-            padding: 10px 20px 24px 20px; 
+            background: var(--surface-color); 
+            padding: 12px 16px 20px 16px; 
+            border-top: 1px solid var(--input-border); 
             display: flex; 
+            gap: 10px; 
             align-items: flex-end; 
-            position: relative;
+            flex-shrink: 0; 
             z-index: 100;
         }
         .chat-input-wrapper { 
             flex-grow: 1; 
-            background: rgba(30, 41, 59, 0.85); 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.12); 
-            border-radius: 26px; 
-            padding: 6px 6px 6px 20px; 
+            background: var(--input-bg); 
+            border: 1px solid var(--input-border); 
+            border-radius: 22px; 
+            padding: 4px 16px; 
             display: flex; 
-            align-items: flex-end; 
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            align-items: center; 
             transition: border-color 0.25s, box-shadow 0.25s; 
         }
         .chat-input-wrapper:focus-within { 
-            border-color: rgba(255,255,255,0.25); 
-            box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 20px rgba(255,255,255,0.05); 
+            border-color: var(--accent-color); 
+            box-shadow: var(--shadow-glow); 
         }
         .chat-input-wrapper textarea { 
             width: 100%; 
@@ -346,22 +350,21 @@
             border: none; 
             color: #ffffff; 
             font-family: 'Inter', sans-serif; 
-            font-size: 1em; 
+            font-size: 0.95em; 
             outline: none; 
             resize: none; 
-            max-height: 120px; 
-            padding: 12px 0; 
+            max-height: 100px; 
+            padding: 10px 0; 
             line-height: 1.4;
             user-select: text;
-            margin-right: 10px;
         }
         .chat-input-wrapper textarea::placeholder { color: var(--text-secondary); }
         
         .btn-send { 
-            background: var(--marketing-white); 
-            color: var(--bg-color); 
-            width: 38px; 
-            height: 38px; 
+            background: var(--accent-color); 
+            color: #ffffff; 
+            width: 44px; 
+            height: 44px; 
             border-radius: 50%; 
             display: flex; 
             justify-content: center; 
@@ -370,14 +373,12 @@
             cursor: pointer; 
             transition: transform 0.15s, background 0.2s; 
             flex-shrink: 0; 
-            box-shadow: 0 4px 12px rgba(255,255,255,0.15);
-            margin-bottom: 4px;
+            box-shadow: 0 4px 12px var(--accent-glow);
         }
         .btn-send:active { transform: scale(0.92); }
         .btn-send:disabled { background: var(--input-border); color: var(--text-secondary); cursor: not-allowed; box-shadow: none; }
-        .btn-send .material-symbols-outlined { font-size: 20px; font-weight: 600; margin-left: 2px;}
 
-        /* --- PURE VOICE CALL VIEW --- */
+        /* --- REDESIGNED PROFESSIONAL VOICE CALL VIEW --- */
         .call-wrapper { 
             flex-grow: 1; 
             display: flex; 
@@ -399,86 +400,93 @@
         }
 
         .voice-container { 
-            width: 220px; 
-            height: 220px; 
-            border-radius: 50%; 
             position: relative; 
-            margin-bottom: 34px; 
+            width: 260px; 
+            height: 260px; 
+            margin-bottom: 40px; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
         }
         
-        /* Upgraded Premium Voice Rings */
-        .ring { 
+        /* Central Glowing Avatar Core */
+        .voice-core {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--surface-hover) 0%, var(--surface-card) 100%);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 10;
+            transition: all 0.4s ease;
+        }
+        .voice-core .material-symbols-outlined {
+            font-size: 64px;
+            color: var(--text-secondary);
+            z-index: 20;
+            transition: 0.4s ease;
+        }
+
+        /* Abstract Rings */
+        .voice-ring { 
             position: absolute; 
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
             border-radius: 50%; 
-            border: 2px solid var(--success-color); 
-            opacity: 0; 
+            border: 2px solid transparent; 
             pointer-events: none;
-            box-shadow: inset 0 0 20px transparent, 0 0 20px transparent;
-        }
-        /* Active (Listening) Animation */
-        .voice-container.active .ring:nth-child(1) { width: 100%; height: 100%; animation: ripplePremium 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1); border-color: var(--success-color); }
-        .voice-container.active .ring:nth-child(2) { width: 100%; height: 100%; animation: ripplePremium 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1) 0.7s; border-color: var(--success-color); }
-        .voice-container.active .ring:nth-child(3) { width: 100%; height: 100%; animation: ripplePremium 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1) 1.4s; border-color: var(--success-color); }
-        
-        /* Processing Animation */
-        .voice-container.processing .ring:nth-child(1) { width: 100%; height: 100%; animation: pulseRing 1.5s infinite alternate; border-color: var(--accent-color); }
-        
-        /* Speaking Animation */
-        .voice-container.speaking .ring:nth-child(1) { width: 100%; height: 100%; animation: ripplePremium 1.2s infinite ease-out; border-color: var(--cyan); }
-        .voice-container.speaking .ring:nth-child(2) { width: 100%; height: 100%; animation: ripplePremium 1.2s infinite ease-out 0.4s; border-color: var(--cyan); }
-
-        @keyframes ripplePremium { 
-            0% { transform: scale(0.75); opacity: 0.9; box-shadow: inset 0 0 20px currentColor, 0 0 20px currentColor; } 
-            100% { transform: scale(1.85); opacity: 0; box-shadow: inset 0 0 0px transparent, 0 0 0px transparent; } 
-        }
-        @keyframes pulseRing {
-            0% { transform: scale(0.85); opacity: 0.5; box-shadow: inset 0 0 20px currentColor, 0 0 20px currentColor;}
-            100% { transform: scale(1.15); opacity: 0.9; box-shadow: inset 0 0 40px currentColor, 0 0 40px currentColor;}
         }
 
-        .ai-avatar { 
-            width: 140px; 
-            height: 140px; 
-            border-radius: 50%; 
-            background: rgba(20, 31, 48, 0.8); 
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 2px solid rgba(255,255,255,0.1); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            z-index: 10; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 2px 10px rgba(255,255,255,0.1); 
-            transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); 
+        /* State: Listening */
+        .voice-container.active .voice-core {
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, var(--surface-card) 100%);
+            box-shadow: inset 0 0 30px rgba(16, 185, 129, 0.3), 0 0 40px var(--success-glow);
         }
-        .voice-container.active .ai-avatar { 
-            border-color: rgba(16, 185, 129, 0.5); 
-            box-shadow: 0 0 40px var(--success-glow), inset 0 0 20px rgba(16, 185, 129, 0.2); 
-            transform: scale(1.04);
+        .voice-container.active .voice-core .material-symbols-outlined { color: var(--success-color); text-shadow: 0 0 15px var(--success-color); }
+        .voice-container.active .voice-ring { border-color: var(--success-color); animation: vRingPulse 2s infinite ease-out; }
+        .voice-container.active .voice-ring:nth-child(1) { animation-delay: 0s; }
+        .voice-container.active .voice-ring:nth-child(2) { animation-delay: 0.6s; }
+        .voice-container.active .voice-ring:nth-child(3) { animation-delay: 1.2s; }
+        
+        /* State: Processing */
+        .voice-container.processing .voice-core {
+            background: radial-gradient(circle, rgba(13, 148, 136, 0.2) 0%, var(--surface-card) 100%);
+            box-shadow: inset 0 0 30px rgba(13, 148, 136, 0.3), 0 0 40px var(--accent-glow);
+            animation: coreSpin 2s infinite linear;
         }
-        .voice-container.processing .ai-avatar {
-            border-color: rgba(13, 148, 136, 0.5); 
-            box-shadow: 0 0 40px var(--accent-glow), inset 0 0 20px rgba(13, 148, 136, 0.2); 
-        }
-        .voice-container.speaking .ai-avatar {
-            border-color: rgba(6, 182, 212, 0.5); 
-            box-shadow: 0 0 40px rgba(6, 182, 212, 0.4), inset 0 0 20px rgba(6, 182, 212, 0.2); 
-            transform: scale(1.08);
+        .voice-container.processing .voice-core .material-symbols-outlined { color: var(--accent-color); animation: counterSpin 2s infinite linear; text-shadow: 0 0 15px var(--accent-color); }
+        .voice-container.processing .voice-ring { 
+            border: 2px dashed var(--accent-color); 
+            width: 190px; height: 190px; 
+            animation: coreSpin 4s infinite linear reverse; 
+            opacity: 0.5; 
         }
 
-        .ai-avatar .material-symbols-outlined { 
-            font-size: 64px; 
-            color: var(--text-secondary); 
-            transition: color 0.3s; 
-            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        /* State: Speaking */
+        .voice-container.speaking .voice-core {
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, var(--surface-card) 100%);
+            box-shadow: inset 0 0 30px rgba(6, 182, 212, 0.3), 0 0 50px rgba(6, 182, 212, 0.4);
+            animation: speakPulse 1s infinite alternate;
         }
-        .voice-container.active .ai-avatar .material-symbols-outlined { color: var(--success-color); text-shadow: 0 0 20px var(--success-color); }
-        .voice-container.processing .ai-avatar .material-symbols-outlined { color: var(--accent-color); text-shadow: 0 0 20px var(--accent-color); }
-        .voice-container.speaking .ai-avatar .material-symbols-outlined { color: var(--cyan); text-shadow: 0 0 20px var(--cyan); }
-        
+        .voice-container.speaking .voice-core .material-symbols-outlined { color: var(--cyan); text-shadow: 0 0 20px var(--cyan); }
+        .voice-container.speaking .voice-ring { 
+            background: rgba(6, 182, 212, 0.1); 
+            border: none; 
+            animation: speakWave 1.5s infinite ease-out; 
+        }
+        .voice-container.speaking .voice-ring:nth-child(1) { animation-delay: 0s; }
+        .voice-container.speaking .voice-ring:nth-child(2) { animation-delay: 0.4s; }
+        .voice-container.speaking .voice-ring:nth-child(3) { animation-delay: 0.8s; }
+
+        @keyframes vRingPulse { 0% { width: 150px; height: 150px; opacity: 1; } 100% { width: 350px; height: 350px; opacity: 0; } }
+        @keyframes coreSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes counterSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
+        @keyframes speakPulse { 0% { transform: scale(0.95); } 100% { transform: scale(1.08); } }
+        @keyframes speakWave { 0% { width: 150px; height: 150px; opacity: 0.8; } 100% { width: 300px; height: 300px; opacity: 0; } }
+
         .call-status { 
             font-size: 1.3em; 
             font-weight: 700; 
@@ -581,8 +589,8 @@
 </head>
 <body>
 
-    <!-- GLU 3D Animated Background -->
-    <div class="ambient-bg">
+    <!-- GLU 3D Animated Background (Sits behind everything) -->
+    <div class="ambient-bg" id="ambientBg">
         <div class="bg-orb bg-orb-1"></div>
         <div class="bg-orb bg-orb-2"></div>
         <div class="bg-orb bg-orb-3"></div>
@@ -610,23 +618,23 @@
         </div>
         <div class="chat-input-area">
             <div class="chat-input-wrapper">
-                <textarea id="chatInput" rows="1" placeholder="Message Meena AI..." oninput="autoResize(this)"></textarea>
+                <textarea id="chatInput" rows="1" placeholder="Ask stock or product query..." oninput="autoResize(this)"></textarea>
                 <button class="btn-send" id="btnSend" onclick="sendChatMessage()">
-                    <span class="material-symbols-outlined">arrow_upward</span>
+                    <span class="material-symbols-outlined">send</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- PURE VOICE CALL INTERFACE -->
+    <!-- PURE VOICE CALL INTERFACE (Native REST + Web Speech API Loop) -->
     <div class="view-container" id="viewCall">
         <div class="call-wrapper">
             <div class="voice-top-stage">
                 <div class="voice-container" id="voiceContainer">
-                    <div class="ring"></div>
-                    <div class="ring"></div>
-                    <div class="ring"></div>
-                    <div class="ai-avatar" id="aiAvatar">
+                    <div class="voice-ring"></div>
+                    <div class="voice-ring"></div>
+                    <div class="voice-ring"></div>
+                    <div class="voice-core" id="aiAvatar">
                         <span class="material-symbols-outlined" id="avatarIcon">graphic_eq</span>
                     </div>
                 </div>
@@ -659,6 +667,7 @@
         const MAX_HISTORY = 100;
 
         // UI ELEMENTS
+        const ambientBg = document.getElementById('ambientBg');
         const viewChat = document.getElementById('viewChat');
         const viewCall = document.getElementById('viewCall');
         
@@ -782,47 +791,8 @@
             return cleanText;
         }
 
-        // Professional Typing Engine that preserves HTML structure
-        async function typeWriterHTML(element, htmlContent) {
-            element.innerHTML = '';
-            element.classList.add('typing-cursor');
-            
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = htmlContent;
-            
-            async function processNode(node, parent) {
-                if (node.nodeType === Node.TEXT_NODE) {
-                    const text = node.textContent;
-                    const textNode = document.createTextNode('');
-                    parent.appendChild(textNode);
-                    
-                    for (let i = 0; i < text.length; i++) {
-                        textNode.textContent += text[i];
-                        chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
-                        // Ultra fast typing speed for professional feel
-                        await new Promise(r => setTimeout(r, 8)); 
-                    }
-                } else if (node.nodeType === Node.ELEMENT_NODE) {
-                    const newEl = document.createElement(node.tagName);
-                    for (let attr of node.attributes) {
-                        newEl.setAttribute(attr.name, attr.value);
-                    }
-                    parent.appendChild(newEl);
-                    for (let child of Array.from(node.childNodes)) {
-                        await processNode(child, newEl);
-                    }
-                }
-            }
-            
-            for (let child of Array.from(tempDiv.childNodes)) {
-                await processNode(child, element);
-            }
-            
-            element.classList.remove('typing-cursor');
-        }
-
-        // Advanced Chat Rendering with Markdown & Gemini Actions
-        async function appendMessageToUI(role, text, isError = false, animate = false) {
+        // Advanced Chat Rendering with Markdown & Gemini Actions (Instant Insert, No Typewriter)
+        function appendMessageToUI(role, text, isError = false) {
             if(!text) return;
             const div = document.createElement('div');
             
@@ -845,8 +815,6 @@
                 
                 // Parse markdown to HTML
                 let parsedHTML = marked.parse(text);
-                
-                // If not animating, insert HTML directly so we can attach buttons instantly
                 contentDiv.innerHTML = parsedHTML;
                 
                 // Fix Code Blocks by wrapping them safely to prevent horizontal scroll bleeding
@@ -864,20 +832,25 @@
                         const match = codeEl.className.match(/language-(\w+)/);
                         if (match) lang = match[1];
                     }
-                    header.innerHTML = `<span class="code-lang"><span class="material-symbols-outlined" style="font-size: 16px;">code</span> ${lang}</span>`;
+                    
+                    const langSpan = document.createElement('span');
+                    langSpan.className = 'code-lang';
+                    langSpan.innerHTML = `<span class="material-symbols-outlined" style="font-size: 16px;">code</span> ${lang}`;
                     
                     const copyBtn = document.createElement('button');
                     copyBtn.className = 'copy-code-btn';
                     copyBtn.innerHTML = '<span class="material-symbols-outlined">content_copy</span> Copy';
                     copyBtn.onclick = () => {
                         triggerHaptic([20]);
-                        const codeText = pre.querySelector('code').innerText;
+                        const codeText = codeEl ? codeEl.innerText : pre.innerText;
                         navigator.clipboard.writeText(codeText);
                         copyBtn.innerHTML = '<span class="material-symbols-outlined">check</span> Copied!';
                         setTimeout(() => copyBtn.innerHTML = '<span class="material-symbols-outlined">content_copy</span> Copy', 2000);
                     };
                     
+                    header.appendChild(langSpan);
                     header.appendChild(copyBtn);
+                    
                     pre.parentNode.insertBefore(wrapper, pre);
                     wrapper.appendChild(header);
                     wrapper.appendChild(pre);
@@ -914,13 +887,6 @@
                 div.appendChild(actionsDiv);
                 chatHistoryEl.appendChild(div);
                 chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
-
-                if (animate) {
-                    // Cache the fully structured HTML (including our injected code wrappers)
-                    const fullHTML = contentDiv.innerHTML;
-                    // Run typewriter over it
-                    await typeWriterHTML(contentDiv, fullHTML);
-                }
             }
         }
 
@@ -935,7 +901,7 @@
         // Initialize first message dynamically
         function initChat() {
             chatHistoryEl.innerHTML = '';
-            appendMessageToUI('model', 'வணக்கம்! நான் **மீனா மார்க்கெட்டிங் AI**. கடையில என்ன ஸ்டாக் இருக்குன்னு பாக்கணுமா?', false, false);
+            appendMessageToUI('model', 'வணக்கம்! நான் **மீனா மார்க்கெட்டிங் AI**. கடையில என்ன ஸ்டாக் இருக்குன்னு பாக்கணுமா?');
         }
         window.onload = initChat;
 
@@ -978,6 +944,9 @@
             btnSend.disabled = true;
 
             showThinkingBubble();
+            
+            // Activate GLU 3D Background processing animation
+            ambientBg.classList.add('typing');
 
             try {
                 // Core Rule: Send ONLY the last 20 messages as context to backend
@@ -1004,8 +973,7 @@
                 }
                 
                 const aiText = data.candidates[0].content.parts[0].text;
-                // Pass animate=true for the professional typing effect
-                await appendMessageToUI('model', aiText, false, true);
+                appendMessageToUI('model', aiText);
                 saveToHistory('model', aiText);
                 return aiText;
 
@@ -1015,6 +983,8 @@
                 return null;
             } finally {
                 btnSend.disabled = false;
+                // Deactivate GLU 3D Background processing animation
+                ambientBg.classList.remove('typing');
             }
         }
 
