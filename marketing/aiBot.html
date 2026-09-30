@@ -87,9 +87,11 @@
 
         /* --- GLU 3D FLUID & THREE.JS CANVAS BACKGROUND --- */
         .ambient-bg { 
-            position: absolute; 
+            position: fixed; 
             top: 0; left: 0; 
-            width: 100%; height: 100%; 
+            width: 100vw; 
+            height: 100vh;
+            height: 100dvh; 
             z-index: 0; 
             overflow: hidden; 
             background: transparent; 
@@ -99,11 +101,11 @@
             pointer-events: none;
         }
         #bg3dCanvas {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             z-index: 1;
             pointer-events: none;
             opacity: 0.85;
@@ -425,7 +427,7 @@
             display: flex; 
             align-items: flex-end; 
             gap: 10px;
-            margin-bottom: 15px; /* Same 15px margin above bottom as requested */
+            margin-bottom: 5px; /* Updated gap from 15px to 5px */
             box-shadow: 0 0 20px var(--accent-glow), inset 0 0 10px rgba(255,255,255,0.02);
             transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s; 
         }
@@ -689,7 +691,7 @@
             </div>
             <div class="chat-input-area">
                 <div class="chat-input-wrapper">
-                    <textarea id="chatInput" rows="1" placeholder="Message Meena AI..." oninput="autoResize(this)"></textarea>
+                    <textarea id="chatInput" rows="1" placeholder="Message Meena AI..." oninput="autoResize(this); if(window.trigger3dTypingColor) window.trigger3dTypingColor();"></textarea>
                     <button class="btn-send" id="btnSend" onclick="sendChatMessage()">
                         <span class="material-symbols-outlined">arrow_upward</span>
                     </button>
@@ -795,6 +797,41 @@
             const ambientLight = new THREE.AmbientLight(0x141f30, 1.2);
             scene.add(ambientLight);
 
+            // Dynamic Color Palettes for Typing (Orange, Blue, Green, Yellow in gradients)
+            const colorPalettes = [
+                { main: new THREE.Color(0xf97316), l1: new THREE.Color(0x3b82f6), l2: new THREE.Color(0xeab308) }, // Orange base, Blue light, Yellow accent
+                { main: new THREE.Color(0x3b82f6), l1: new THREE.Color(0x10b981), l2: new THREE.Color(0xf97316) }, // Blue base, Green light, Orange accent
+                { main: new THREE.Color(0x10b981), l1: new THREE.Color(0xeab308), l2: new THREE.Color(0x3b82f6) }, // Green base, Yellow light, Blue accent
+                { main: new THREE.Color(0xeab308), l1: new THREE.Color(0xf97316), l2: new THREE.Color(0x10b981) }  // Yellow base, Orange light, Green accent
+            ];
+
+            const defaultPalette = {
+                main: new THREE.Color(0x0d9488),
+                l1: new THREE.Color(0x06b6d4),
+                l2: new THREE.Color(0xef4444)
+            };
+
+            let paletteIndex = 0;
+            let targetMain = defaultPalette.main.clone();
+            let targetL1 = defaultPalette.l1.clone();
+            let targetL2 = defaultPalette.l2.clone();
+            let typingTimer = null;
+
+            window.trigger3dTypingColor = function() {
+                paletteIndex = (paletteIndex + 1) % colorPalettes.length;
+                const p = colorPalettes[paletteIndex];
+                targetMain.copy(p.main);
+                targetL1.copy(p.l1);
+                targetL2.copy(p.l2);
+
+                clearTimeout(typingTimer);
+                typingTimer = setTimeout(() => {
+                    targetMain.copy(defaultPalette.main);
+                    targetL1.copy(defaultPalette.l1);
+                    targetL2.copy(defaultPalette.l2);
+                }, 1500);
+            };
+
             // Smooth random procedural vertex morphing logic
             let time = 0;
             let speed = 0.006;
@@ -807,6 +844,11 @@
 
                 mesh.rotation.x += 0.002;
                 mesh.rotation.y += 0.004;
+
+                // Smoothly lerp colors when typing triggers changes
+                material.color.lerp(targetMain, 0.05);
+                light1.color.lerp(targetL1, 0.05);
+                light2.color.lerp(targetL2, 0.05);
 
                 const count = pos.count;
                 for (let i = 0; i < count; i++) {
@@ -830,10 +872,15 @@
 
             animate();
 
+            let lastWidth = window.innerWidth;
             window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
+                // Ignore height-only resizes caused by virtual keyboard opening/closing to prevent background shrink/growth
+                if (window.innerWidth !== lastWidth) {
+                    lastWidth = window.innerWidth;
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                }
             });
         })();
 
