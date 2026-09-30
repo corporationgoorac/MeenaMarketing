@@ -136,41 +136,105 @@
             font-size: 0.85em; 
         }
 
-        /* --- MARKDOWN & ACTIONS STYLING --- */
-        .msg-content { width: 100%; overflow-x: auto; }
+        /* --- ADVANCED MARKDOWN & ACTIONS STYLING --- */
+        .msg-content { width: 100%; overflow-x: auto; font-size: 0.96em; }
         .msg-content p { margin: 0 0 10px 0; }
         .msg-content p:last-child { margin: 0; }
         .msg-content strong { color: var(--accent-color); font-weight: 700; }
-        .msg-content ul, .msg-content ol { margin: 10px 0; padding-left: 20px; }
-        .msg-content code { font-family: 'JetBrains Mono', monospace; font-size: 0.85em; background: rgba(0, 0, 0, 0.2); padding: 2px 5px; border-radius: 4px; }
+        .msg-content ul, .msg-content ol { margin: 10px 0; padding-left: 24px; }
+        .msg-content li { margin-bottom: 6px; }
         
-        /* Code Box Styling */
+        /* Inline Code Styling */
+        .msg-content code { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 0.85em; 
+            background: rgba(0, 0, 0, 0.25); 
+            color: #fbbf24; /* Amber colored inline code */
+            padding: 3px 6px; 
+            border-radius: 6px; 
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        /* Professional Code Box (Preformatted) */
         .msg-content pre { 
-            background: rgba(0, 0, 0, 0.3); 
-            padding: 14px; 
-            border-radius: 8px; 
+            background: #0d1117; /* Deep terminal background */
+            padding: 40px 16px 16px 16px; /* Top padding accommodates the header/copy button */
+            border-radius: 12px; 
             position: relative; 
-            margin: 12px 0; 
+            margin: 16px 0; 
             border: 1px solid var(--input-border); 
             overflow-x: auto; 
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
         }
-        .msg-content pre code { background: transparent; padding: 0; color: #e2e8f0; font-size: 0.85em; }
+        /* Override inline code style when inside a pre block */
+        .msg-content pre code { 
+            background: transparent; 
+            padding: 0; 
+            color: #e2e8f0; 
+            font-size: 0.85em; 
+            border: none;
+            box-shadow: none;
+        }
+
+        /* Terminal-style header bar for code blocks */
+        .msg-content pre::before {
+            content: "code";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 34px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-secondary);
+            font-size: 0.75em;
+            padding: 8px 16px;
+            box-sizing: border-box;
+            pointer-events: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Modern Copy Button inside Code Block */
         .copy-code-btn { 
             position: absolute; 
-            top: 8px; 
-            right: 8px; 
-            background: var(--surface-hover); 
-            border: 1px solid var(--input-border); 
+            top: 4px; 
+            right: 4px; 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.1); 
             color: var(--text-secondary); 
-            padding: 4px 8px; 
+            padding: 4px 10px; 
             border-radius: 6px; 
             font-size: 0.75em; 
             cursor: pointer; 
-            transition: 0.2s; 
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); 
             font-family: 'Inter', sans-serif;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 2;
         }
         .copy-code-btn:hover { color: white; background: var(--accent-color); border-color: var(--accent-color); }
+        .copy-code-btn .material-symbols-outlined { font-size: 14px; }
+
+        /* Blockquotes */
+        .msg-content blockquote {
+            border-left: 4px solid var(--accent-color);
+            margin: 12px 0;
+            padding: 8px 16px;
+            background: rgba(13, 148, 136, 0.05);
+            border-radius: 0 8px 8px 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* Tables */
+        .msg-content table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9em; border-radius: 8px; overflow: hidden; }
+        .msg-content th, .msg-content td { border: 1px solid var(--input-border); padding: 10px 12px; text-align: left; }
+        .msg-content th { background: rgba(255,255,255,0.05); font-weight: 600; color: var(--marketing-white); }
+        .msg-content tr:nth-child(even) { background: rgba(255,255,255,0.02); }
 
         /* Gemini-style Bottom Action Buttons */
         .msg-actions { 
@@ -680,17 +744,17 @@
                 contentDiv.className = 'msg-content';
                 contentDiv.innerHTML = marked.parse(text);
                 
-                // Add exact "Copy" overlay on all code blocks
+                // Add exact "Copy" overlay on all code blocks with proper icons
                 contentDiv.querySelectorAll('pre').forEach(pre => {
                     const btn = document.createElement('button');
                     btn.className = 'copy-code-btn';
-                    btn.innerText = 'Copy';
+                    btn.innerHTML = '<span class="material-symbols-outlined">content_copy</span> Copy';
                     btn.onclick = () => {
                         triggerHaptic([20]);
                         const codeText = pre.querySelector('code').innerText;
                         navigator.clipboard.writeText(codeText);
-                        btn.innerText = 'Copied!';
-                        setTimeout(() => btn.innerText = 'Copy', 2000);
+                        btn.innerHTML = '<span class="material-symbols-outlined">check</span> Copied!';
+                        setTimeout(() => btn.innerHTML = '<span class="material-symbols-outlined">content_copy</span> Copy', 2000);
                     };
                     pre.appendChild(btn);
                 });
@@ -988,7 +1052,7 @@
             const utterance = new SpeechSynthesisUtterance(cleanText);
             
             utterance.lang = 'ta-IN'; // Ensure Tamil/Tanglish pronunciation
-            utterance.rate = 1.0;
+            utterance.rate = 1.15; // Moderately faster voice speed
 
             if(!isManual) {
                 utterance.onend = () => {
