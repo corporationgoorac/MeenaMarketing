@@ -36,14 +36,18 @@
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* Fixed height using dvh to prevent mobile keyboard from pushing header out of view */
-        html, body { height: 100dvh; min-height: 100dvh; max-height: 100dvh; margin: 0; padding: 0; width: 100%; overflow: hidden; background-color: transparent; }
+        /* Fixed height using dvh and position fixed to prevent mobile keyboard from pushing header out of view */
+        html { height: 100dvh; min-height: 100dvh; max-height: 100dvh; margin: 0; padding: 0; width: 100%; overflow: hidden; background-color: var(--bg-color); }
         body { 
+            position: fixed; /* Crucial for keeping header anchored during mobile keyboard pop */
+            top: 0; left: 0; right: 0; bottom: 0;
+            height: 100dvh; width: 100%; margin: 0; padding: 0;
             font-family: 'Inter', sans-serif; 
             color: var(--text-color); 
             display: flex; 
             flex-direction: column; 
             user-select: none;
+            background-color: transparent;
         }
 
         /* --- GLU 3D ANIMATED BACKGROUND (Fixed Z-Index & Accelerator) --- */
@@ -51,9 +55,9 @@
             position: fixed; 
             top: 0; left: 0; 
             width: 100vw; height: 100vh; 
-            z-index: -1; 
+            z-index: 0; /* Fixed visibility issue by changing from -1 to 0 */
             overflow: hidden; 
-            background: var(--bg-color); /* Base theme color */
+            background: transparent; /* Moved base background color to html */
             transition: all 0.5s ease;
         }
         .bg-orb { 
@@ -83,12 +87,12 @@
             100% { transform: translate(-3vw, 9vh) scale(1.1) rotate(-45deg); } 
         }
 
-        /* Top Header (Restored Original Colors) */
+        /* Top Header (Restored Original Colors, Perfected Height) */
         header { 
             background: rgba(15, 23, 36, 0.85); 
             backdrop-filter: blur(14px); 
             -webkit-backdrop-filter: blur(14px);
-            padding: 14px 20px; 
+            padding: 0 20px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
@@ -96,10 +100,22 @@
             z-index: 500; 
             border-bottom: 1px solid var(--input-border); 
             flex-shrink: 0; 
+            width: 100%;
+            height: 70px; /* Fixed perfect height */
         }
-        .brand-container { display: flex; align-items: center; gap: 14px; cursor: pointer; }
-        .logo-img { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--input-border); }
-        .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+        .brand-container { display: flex; align-items: center; gap: 14px; }
+        
+        /* New Back Button Styling */
+        .back-btn { 
+            font-size: 26px; 
+            color: var(--marketing-white); 
+            cursor: pointer; 
+            transition: transform 0.2s; 
+            padding: 10px 10px 10px 0; 
+        }
+        .back-btn:active { transform: scale(0.85); }
+        
+        .brand-text { display: flex; flex-direction: column; line-height: 1.15; cursor: pointer; }
         .brand-title { font-size: 1.05em; font-weight: 800; letter-spacing: -0.02em; }
         .meena { color: var(--meena-red); }
         .marketing { color: var(--marketing-white); }
@@ -123,7 +139,7 @@
         .header-action-btn .material-symbols-outlined { font-size: 24px; transition: color 0.3s; }
 
         /* View Containers */
-        .view-container { flex-grow: 1; display: none; flex-direction: column; overflow: hidden; position: relative; }
+        .view-container { flex-grow: 1; display: none; flex-direction: column; overflow: hidden; position: relative; z-index: 10; }
         .view-container.active { display: flex; }
 
         /* --- CHAT VIEW --- */
@@ -577,9 +593,9 @@
     </div>
 
     <header>
-        <div class="brand-container" onclick="triggerHaptic([20]); window.location.href='inventory_2.html'">
-            <img src="icon.png" alt="Icon" class="logo-img" onerror="this.style.display='none'">
-            <div class="brand-text">
+        <div class="brand-container">
+            <span class="material-symbols-outlined back-btn" onclick="triggerHaptic([20]); history.back();">arrow_back</span>
+            <div class="brand-text" onclick="triggerHaptic([20]); window.location.href='inventory_2.html'">
                 <span class="brand-title"><span class="meena">Meena</span> <span class="marketing">Marketing</span></span>
                 <span class="goorac">AI Voice & Stock Engine</span>
             </div>
