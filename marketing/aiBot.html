@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <!-- PWA & Viewport fixes for mobile keyboard and scaling -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
     <title>Meena AI Assistant - Meena Marketing</title>
     
     <!-- Seamless Toolbar Color matching the Header -->
@@ -37,14 +37,17 @@
             --input-border: #1e2e46;
             --shadow-glow: 0 0 20px rgba(13, 148, 136, 0.25);
             --cyan: #06b6d4;
+            --app-height: 100dvh;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         /* Strict Viewport Lock & Overscroll Prevention */
         html { 
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
             height: 100%; 
-            height: 100dvh; 
+            height: var(--app-height, 100dvh); 
             margin: 0; 
             padding: 0; 
             width: 100%; 
@@ -53,8 +56,10 @@
             overscroll-behavior: none;
         }
         body { 
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
             height: 100%; 
-            height: 100dvh; 
+            height: var(--app-height, 100dvh); 
             width: 100%; 
             margin: 0; 
             padding: 0;
@@ -74,7 +79,7 @@
             position: relative;
             width: 100%;
             height: 100%;
-            height: 100dvh;
+            height: var(--app-height, 100dvh);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -132,16 +137,16 @@
             100% { transform: translate3d(-6vw, 12vh, -60px) scale(1.25) rotate(-45deg); } 
         }
 
-        /* --- FIXED APP FROSTED GLASS TOP BAR HEADER --- */
+        /* --- PREMIUM FROSTED TOP BAR HEADER (MATCHING INDEX) --- */
         header, .top-bar { 
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             height: calc(60px + env(safe-area-inset-top)); 
-            background: rgba(15, 23, 36, 0.85); /* Perfectly matches meta theme-color #0f1724 */
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(15, 23, 36, 0.75); 
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             padding: env(safe-area-inset-top) 20px 0 20px; 
             display: flex; 
             justify-content: space-between; 
@@ -149,9 +154,11 @@
             z-index: 1000; 
             border-bottom: 1px solid var(--input-border); 
             width: 100%;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 30px var(--accent-glow);
             transform: translateZ(0);
             -webkit-transform: translateZ(0);
+            flex-shrink: 0;
+            transition: box-shadow 0.8s ease;
         }
         .brand-container { display: flex; align-items: center; gap: 14px; }
         
@@ -206,12 +213,15 @@
             overflow-y: auto; 
             -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;
-            padding: calc(76px + env(safe-area-inset-top)) 18px calc(86px + env(safe-area-inset-bottom)) 18px; 
+            padding: calc(76px + env(safe-area-inset-top)) 18px calc(100px + env(safe-area-inset-bottom)) 18px; 
             display: flex; 
             flex-direction: column; 
             gap: 16px; 
             scroll-behavior: smooth; 
             user-select: text;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
         }
         .msg-bubble { 
             max-width: 88%; 
@@ -384,62 +394,68 @@
             100% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 10px var(--accent-color); }
         }
 
-        /* --- FIXED CHAT INPUT AREA AT BOTTOM --- */
+        /* --- PROFESSIONAL FROSTED INPUT CONTAINER (MATCHING INDEX) --- */
         .chat-input-area { 
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(7, 11, 17, 0.75); 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 10px 20px calc(14px + env(safe-area-inset-bottom)) 20px; 
+            background: transparent; 
+            padding: 12px 16px; 
+            padding-bottom: calc(12px + env(safe-area-inset-bottom)); 
             display: flex; 
-            align-items: flex-end; 
+            flex-direction: column;
+            align-items: center; 
             z-index: 1000;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            flex-shrink: 0;
             transform: translateZ(0);
             -webkit-transform: translateZ(0);
         }
         .chat-input-wrapper { 
-            flex-grow: 1; 
+            width: 100%;
             background: rgba(18, 28, 44, 0.85); 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--input-border); 
-            border-radius: 26px; 
-            padding: 6px 6px 6px 20px; 
+            border-radius: 24px; 
+            padding: 8px 12px 8px 18px; 
             display: flex; 
             align-items: flex-end; 
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-            transition: border-color 0.25s, box-shadow 0.25s; 
+            gap: 10px;
+            margin-bottom: 15px; /* Same 15px margin above bottom as requested */
+            box-shadow: 0 0 20px var(--accent-glow), inset 0 0 10px rgba(255,255,255,0.02);
+            transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s; 
         }
         .chat-input-wrapper:focus-within { 
             border-color: var(--accent-color); 
-            box-shadow: 0 8px 30px rgba(0,0,0,0.6), var(--shadow-glow); 
+            box-shadow: 0 0 30px var(--accent-glow), inset 0 0 10px rgba(255,255,255,0.05); 
+            transform: translateY(-2px);
         }
         .chat-input-wrapper textarea { 
-            width: 100%; 
+            flex: 1; 
             background: transparent; 
             border: none; 
             color: #ffffff; 
             font-family: 'Inter', sans-serif; 
-            font-size: 1em; 
+            font-size: 0.95em; 
             outline: none; 
             resize: none; 
             max-height: 120px; 
-            padding: 12px 0; 
-            line-height: 1.4;
+            padding: 10px 0; 
+            line-height: 1.45;
             user-select: text;
-            margin-right: 10px;
+            overscroll-behavior-y: contain;
         }
         .chat-input-wrapper textarea::placeholder { color: var(--text-secondary); }
         
         .btn-send { 
             background: var(--marketing-white); 
             color: var(--bg-color); 
-            width: 38px; 
-            height: 38px; 
+            width: 40px; 
+            height: 40px; 
             border-radius: 50%; 
             display: flex; 
             justify-content: center; 
@@ -449,7 +465,7 @@
             transition: transform 0.15s, background 0.2s; 
             flex-shrink: 0; 
             box-shadow: 0 4px 12px rgba(255,255,255,0.15);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .btn-send:active { transform: scale(0.92); }
         .btn-send:disabled { background: var(--input-border); color: var(--text-secondary); cursor: not-allowed; box-shadow: none; }
@@ -716,6 +732,25 @@
 
     <script>
         // ==========================================
+        // MOBILE VIRTUAL KEYBOARD VIEWPORT LOCK
+        // ==========================================
+        function lockViewport() {
+            window.scrollTo(0, 0);
+            document.body.scrollTop = 0;
+        }
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', () => {
+                const vh = window.visualViewport.height;
+                document.documentElement.style.setProperty('--app-height', `${vh}px`);
+                lockViewport();
+            });
+            window.visualViewport.addEventListener('scroll', lockViewport);
+        }
+
+        window.addEventListener('scroll', lockViewport);
+
+        // ==========================================
         // THREE.JS 3D RANDOM MORPHING BLOB ENGINE
         // ==========================================
         (function init3D() {
@@ -924,8 +959,17 @@
 
         function autoResize(textarea) {
             textarea.style.height = 'auto';
-            textarea.style.height = (textarea.scrollHeight < 100 ? textarea.scrollHeight : 100) + 'px';
+            textarea.style.height = (textarea.scrollHeight < 120 ? textarea.scrollHeight : 120) + 'px';
         }
+
+        chatInput.addEventListener('focus', () => {
+            setTimeout(lockViewport, 100);
+            setTimeout(lockViewport, 300);
+        });
+
+        chatInput.addEventListener('blur', () => {
+            setTimeout(lockViewport, 100);
+        });
 
         // Markdown Stripper for TTS (Removes *, #, _, ` but keeps ₹ and text)
         function stripMarkdownForTTS(rawText) {
