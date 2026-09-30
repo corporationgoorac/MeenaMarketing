@@ -250,13 +250,25 @@
             opacity: 0; 
             pointer-events: none;
         }
-        .voice-container.active .ring:nth-child(1) { width: 100%; height: 100%; animation: ripple 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1); }
-        .voice-container.active .ring:nth-child(2) { width: 100%; height: 100%; animation: ripple 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1) 0.7s; }
-        .voice-container.active .ring:nth-child(3) { width: 100%; height: 100%; animation: ripple 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1) 1.4s; }
+        /* Active (Listening) Animation */
+        .voice-container.active .ring:nth-child(1) { width: 100%; height: 100%; animation: ripple 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1); border-color: var(--success-color); }
+        .voice-container.active .ring:nth-child(2) { width: 100%; height: 100%; animation: ripple 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1) 0.7s; border-color: var(--success-color); }
+        .voice-container.active .ring:nth-child(3) { width: 100%; height: 100%; animation: ripple 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1) 1.4s; border-color: var(--success-color); }
         
+        /* Processing Animation */
+        .voice-container.processing .ring:nth-child(1) { width: 100%; height: 100%; animation: pulseRing 1.5s infinite alternate; border-color: var(--accent-color); }
+        
+        /* Speaking Animation */
+        .voice-container.speaking .ring:nth-child(1) { width: 100%; height: 100%; animation: ripple 1.2s infinite ease-out; border-color: var(--cyan); }
+        .voice-container.speaking .ring:nth-child(2) { width: 100%; height: 100%; animation: ripple 1.2s infinite ease-out 0.4s; border-color: var(--cyan); }
+
         @keyframes ripple { 
-            0% { transform: scale(0.75); opacity: 0.9; border-color: var(--success-color); } 
-            100% { transform: scale(1.85); opacity: 0; border-color: var(--accent-color); } 
+            0% { transform: scale(0.75); opacity: 0.9; } 
+            100% { transform: scale(1.85); opacity: 0; } 
+        }
+        @keyframes pulseRing {
+            0% { transform: scale(0.85); opacity: 0.5; }
+            100% { transform: scale(1.15); opacity: 0.8; }
         }
 
         .ai-avatar { 
@@ -278,14 +290,26 @@
             background: rgba(16, 185, 129, 0.12); 
             transform: scale(1.04);
         }
+        .voice-container.processing .ai-avatar {
+            border-color: var(--accent-color); 
+            box-shadow: 0 0 35px var(--accent-glow); 
+            background: rgba(13, 148, 136, 0.12); 
+        }
+        .voice-container.speaking .ai-avatar {
+            border-color: var(--cyan); 
+            box-shadow: 0 0 35px rgba(6, 182, 212, 0.4); 
+            background: rgba(6, 182, 212, 0.12); 
+            transform: scale(1.08);
+        }
+
         .ai-avatar .material-symbols-outlined { 
             font-size: 58px; 
             color: var(--text-secondary); 
             transition: color 0.3s; 
         }
-        .voice-container.active .ai-avatar .material-symbols-outlined { 
-            color: var(--success-color); 
-        }
+        .voice-container.active .ai-avatar .material-symbols-outlined { color: var(--success-color); }
+        .voice-container.processing .ai-avatar .material-symbols-outlined { color: var(--accent-color); }
+        .voice-container.speaking .ai-avatar .material-symbols-outlined { color: var(--cyan); }
         
         .call-status { 
             font-size: 1.25em; 
@@ -304,7 +328,33 @@
             min-height: 24px;
             max-width: 320px;
             line-height: 1.4;
+            margin-bottom: 20px;
         }
+
+        /* Live Caption Box */
+        .live-caption-box { 
+            background: rgba(19, 27, 38, 0.8); 
+            border: 1px solid var(--input-border); 
+            padding: 15px 20px; 
+            border-radius: 16px; 
+            width: 100%; 
+            max-width: 400px; 
+            min-height: 80px; 
+            max-height: 120px; 
+            overflow-y: auto; 
+            font-size: 0.95em; 
+            line-height: 1.5; 
+            color: var(--text-main); 
+            text-align: left; 
+            display: none; 
+            flex-direction: column; 
+            gap: 8px; 
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .live-caption-box.active { display: flex; }
+        .caption-ai { color: var(--success-color); font-weight: 500; }
+        .caption-user { color: #ffffff; opacity: 0.9; }
+        .caption-interim { color: var(--text-secondary); font-style: italic; }
 
         .orb { 
             width: 10px; 
@@ -320,6 +370,8 @@
             50% { transform: scale(1.2); opacity: 1; } 
             100% { transform: scale(0.9); opacity: 0.8; } 
         }
+        .orb.processing { background: var(--accent-color); box-shadow: 0 0 12px var(--accent-color); }
+        .orb.speaking { background: var(--cyan); box-shadow: 0 0 12px var(--cyan); animation: pulseOrb 0.8s infinite ease-in-out; }
         .orb.error { background: var(--meena-red); box-shadow: 0 0 12px var(--meena-red); animation: none; }
 
         .call-controls { 
@@ -346,7 +398,7 @@
         .btn-call.start { 
             background: linear-gradient(135deg, var(--success-color), #059669); 
             box-shadow: 0 8px 25px var(--success-glow); 
-            display: none; /* Auto-start removes need for this initially */
+            display: none; 
         }
         .btn-call.end { 
             background: linear-gradient(135deg, var(--meena-red), #b91c1c); 
@@ -367,13 +419,12 @@
             </div>
         </div>
         
-        <!-- Dynamic Header Button: Headphone to call, Cross to close -->
         <div class="header-action-btn" id="headerBtn" onclick="toggleMode()">
             <span class="material-symbols-outlined" id="headerIcon" style="color: var(--accent-color);">headphones</span>
         </div>
     </header>
 
-    <!-- CHAT INTERFACE (Default) -->
+    <!-- CHAT INTERFACE -->
     <div class="view-container active" id="viewChat">
         <div class="chat-history" id="chatHistory">
             <div class="msg-bubble msg-ai">வணக்கம்! நான் மீனா மார்க்கெட்டிங் AI. கடையில என்ன ஸ்டாக் இருக்குன்னு பாக்கணுமா?</div>
@@ -388,7 +439,7 @@
         </div>
     </div>
 
-    <!-- PURE VOICE CALL INTERFACE -->
+    <!-- PURE VOICE CALL INTERFACE (Native REST + Web Speech API Loop) -->
     <div class="view-container" id="viewCall">
         <div class="call-wrapper">
             <div class="voice-top-stage">
@@ -397,12 +448,16 @@
                     <div class="ring"></div>
                     <div class="ring"></div>
                     <div class="ai-avatar" id="aiAvatar">
-                        <span class="material-symbols-outlined">graphic_eq</span>
+                        <span class="material-symbols-outlined" id="avatarIcon">graphic_eq</span>
                     </div>
                 </div>
                 
                 <div class="call-status" id="callStatus">Ready to Connect</div>
                 <div class="call-sub-status" id="callSubStatus">Initializing secure line...</div>
+
+                <div class="live-caption-box" id="liveCaptionBox">
+                    <div id="liveCaptionContent"></div>
+                </div>
             </div>
 
             <div class="call-controls">
@@ -419,9 +474,8 @@
     <script>
         // BACKEND CONFIGURATION
         const BACKEND_URL = 'https://shiva757-meenaai.hf.space';
-        const WS_URL = 'wss://shiva757-meenaai.hf.space/voice';
         
-        // SHARED CONVERSATION MEMORY
+        // CONVERSATION MEMORY: Retain 100 max, but send only 20 to the backend
         let conversationHistory = [];
         const MAX_HISTORY = 100;
 
@@ -429,45 +483,53 @@
         const viewChat = document.getElementById('viewChat');
         const viewCall = document.getElementById('viewCall');
         
-        // CHAT ELEMENTS
         const chatHistoryEl = document.getElementById('chatHistory');
         const chatInput = document.getElementById('chatInput');
         const btnSend = document.getElementById('btnSend');
 
-        // CALL ELEMENTS
         const voiceContainer = document.getElementById('voiceContainer');
         const callStatus = document.getElementById('callStatus');
         const callSubStatus = document.getElementById('callSubStatus');
+        const liveCaptionBox = document.getElementById('liveCaptionBox');
+        const liveCaptionContent = document.getElementById('liveCaptionContent');
+        const avatarIcon = document.getElementById('avatarIcon');
         const btnStartCall = document.getElementById('btnStartCall');
         const btnEndCall = document.getElementById('btnEndCall');
-        
-        // HEADER ELEMENTS
         const headerIcon = document.getElementById('headerIcon');
 
-        // AUDIO CONTEXT & STREAM PIPELINE
-        let ws;
-        let localStream;
-        let audioContext;
-        let playbackContext;
-        let processor;
-        let micMuteGain;
-        let nextPlaybackTime = 0;
         let currentMode = 'chat';
 
-        // GLOBAL SPEAKER ROUTING HACK FOR MOBILE
-        let speakerAudio = new Audio();
-        speakerAudio.autoplay = true;
-        speakerAudio.playsInline = true; 
-        let playbackDest;
+        // ==========================================
+        // WEB SPEECH API (STT & TTS) STATE
+        // ==========================================
+        let recognition = null;
+        let synth = window.speechSynthesis;
+        let voiceState = 'idle'; // idle, listening, processing, speaking
+        let isVoiceModeActive = false;
 
-        // THINKING ANIMATION STATE
+        // THINKING ANIMATION: 20 Array Texts
         let thinkingInterval;
         const thinkingPhrases = [
             "Thinking...", 
-            "Checking database...", 
-            "Scanning inventory...", 
-            "Analyzing models...", 
-            "Just a moment..."
+            "Analyzing query...", 
+            "Checking inventory...", 
+            "Scanning database...", 
+            "Crunching numbers...", 
+            "Reviewing stock levels...", 
+            "Verifying prices...", 
+            "Formulating response...", 
+            "Fetching details...", 
+            "Looking up models...", 
+            "Calculating totals...", 
+            "Processing request...", 
+            "Consulting knowledge base...", 
+            "Gathering data...", 
+            "Evaluating options...", 
+            "Synthesizing answer...", 
+            "Retrieving records...", 
+            "Cross-referencing items...", 
+            "Preparing output...", 
+            "Almost ready..."
         ];
 
         // ==========================================
@@ -475,20 +537,16 @@
         // ==========================================
         function triggerHaptic(pattern = [30]) {
             if (navigator.vibrate) {
-                try {
-                    navigator.vibrate(pattern);
-                } catch(e) {}
+                try { navigator.vibrate(pattern); } catch(e) {}
             }
         }
 
         // ==========================================
         // 1. UI & NAVIGATION MANAGEMENT
         // ==========================================
-
         function toggleMode() {
             if (currentMode === 'chat') {
-                // Vibrate 3 times as requested
-                triggerHaptic([40, 50, 40, 50, 40]);
+                triggerHaptic([40, 50, 40, 50, 40]); // Vibrate 3 times
                 enterVoiceMode();
             } else {
                 exitVoiceMode();
@@ -497,19 +555,18 @@
 
         function enterVoiceMode() {
             currentMode = 'voice';
-            
-            // Switch Views
             viewChat.classList.remove('active');
             viewCall.classList.add('active');
             
-            // Update Header Icon to Cross
             headerIcon.innerText = 'close';
             headerIcon.style.color = 'var(--meena-red)';
-            
-            // Push browser history state for mobile back button compatibility
             history.pushState({ view: 'voice' }, '', '#voice');
 
-            // Automatically start the call
+            // Prime TTS Engine on user interaction to bypass mobile restrictions
+            let primer = new SpeechSynthesisUtterance('');
+            primer.volume = 0;
+            synth.speak(primer);
+
             startCall();
         }
 
@@ -517,29 +574,21 @@
             triggerHaptic([30, 40]);
             currentMode = 'chat';
             
-            // Stop active call
             stopCall();
             
-            // Switch Views
             viewCall.classList.remove('active');
             viewChat.classList.add('active');
             
-            // Update Header Icon to Headphones
             headerIcon.innerText = 'headphones';
             headerIcon.style.color = 'var(--accent-color)';
             
-            // Clean up URL hash if user clicked the cross icon instead of using hardware back
             if (window.location.hash === '#voice') {
                 history.back();
             }
         }
 
-        // Mobile Hardware Back Button Handler
         window.addEventListener('popstate', (e) => {
-            if (currentMode === 'voice') {
-                // User pressed physical back button while in voice call
-                exitVoiceMode();
-            }
+            if (currentMode === 'voice') exitVoiceMode();
         });
 
         function autoResize(textarea) {
@@ -550,13 +599,7 @@
         function appendMessageToUI(role, text, isError = false) {
             if(!text) return;
             const div = document.createElement('div');
-            
-            if (isError) {
-                div.className = 'msg-bubble msg-error';
-            } else {
-                div.className = `msg-bubble ${role === 'user' ? 'msg-user' : 'msg-ai'}`;
-            }
-            
+            div.className = isError ? 'msg-bubble msg-error' : `msg-bubble ${role === 'user' ? 'msg-user' : 'msg-ai'}`;
             div.innerText = text;
             chatHistoryEl.appendChild(div);
             chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
@@ -573,13 +616,11 @@
         // ==========================================
         // 2. TEXT CHAT MODE (REST API & LOADING UI)
         // ==========================================
-
         function showThinkingBubble() {
             const div = document.createElement('div');
             div.id = "activeThinkingBubble";
             div.className = "msg-bubble msg-ai thinking-bubble";
             div.innerHTML = `<span class="material-symbols-outlined sparkle-icon">auto_awesome</span> <span id="thinkText">Thinking...</span>`;
-            
             chatHistoryEl.appendChild(div);
             chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
             
@@ -597,11 +638,11 @@
             if (bubble) bubble.remove();
         }
 
-        async function sendChatMessage() {
-            const text = chatInput.value.trim();
+        async function sendChatMessage(overrideText = null) {
+            const text = overrideText !== null ? overrideText : chatInput.value.trim();
             if (!text) return;
 
-            triggerHaptic([35]);
+            if (overrideText === null) triggerHaptic([35]);
 
             appendMessageToUI('user', text);
             saveToHistory('user', text);
@@ -610,12 +651,11 @@
             chatInput.style.height = 'auto';
             btnSend.disabled = true;
 
-            // Show Gemini-style thinking animation
             showThinkingBubble();
 
             try {
-                // Send strictly the last 15 messages of conversation history to keep latency low
-                const recentHistory = conversationHistory.slice(-16, -1);
+                // Core Rule: Send ONLY the last 20 messages as context to backend
+                const recentHistory = conversationHistory.slice(-21, -1);
 
                 const payload = {
                     message: text,
@@ -629,35 +669,23 @@
                 });
 
                 const data = await response.json();
-                
                 hideThinkingBubble();
 
                 if (!response.ok || data.error) {
-                    let errorMessage = "API error occurred.";
-                    if (data.error && data.error.message) errorMessage = data.error.message;
-                    else if (typeof data.error === 'string') errorMessage = data.error;
-                    appendMessageToUI('model', `Server Error: ${errorMessage}`, true);
-                    triggerHaptic([60, 40, 60]);
-                    return;
+                    let errMsg = data.error?.message || data.error || "API error occurred.";
+                    appendMessageToUI('model', `Server Error: ${errMsg}`, true);
+                    return null;
                 }
                 
-                let aiText = "";
-                try {
-                    aiText = data.candidates[0].content.parts[0].text;
-                } catch(parseError) {
-                    appendMessageToUI('model', `Format Error: Invalid structure from model.`, true);
-                    return;
-                }
-
+                const aiText = data.candidates[0].content.parts[0].text;
                 appendMessageToUI('model', aiText);
                 saveToHistory('model', aiText);
-                triggerHaptic([20]);
+                return aiText;
 
             } catch (err) {
                 hideThinkingBubble();
-                console.error("Chat Request Failed:", err);
-                appendMessageToUI('model', `Network Error: ${err.message}. Backend may be warming up.`, true);
-                triggerHaptic([80, 50, 80]);
+                appendMessageToUI('model', `Network Error: ${err.message}`, true);
+                return null;
             } finally {
                 btnSend.disabled = false;
             }
@@ -671,210 +699,193 @@
         });
 
         // ==========================================
-        // 3. MULTIMODAL LIVE VOICE CALL ENGINE
+        // 3. VOICE CALL ENGINE (STT -> REST -> TTS Loop)
         // ==========================================
+        function updateVoiceUI() {
+            voiceContainer.className = 'voice-container';
+            let statusHtml = '';
+            let subStatusText = '';
 
-        async function startCall() {
-            try {
-                callStatus.innerText = "Requesting mic...";
-                callSubStatus.innerText = "Please allow microphone permissions.";
-                btnStartCall.style.display = 'none';
-                btnEndCall.style.display = 'flex';
-                
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                audioContext = new AudioCtx({ sampleRate: 16000 });
-                playbackContext = new AudioCtx({ sampleRate: 24000 });
-                
-                await audioContext.resume();
-                await playbackContext.resume();
-
-                // FORCE AUDIO TO MAIN SPEAKER (MediaStream API hack for mobile)
-                playbackDest = playbackContext.createMediaStreamDestination();
-                speakerAudio.srcObject = playbackDest.stream;
-                try { await speakerAudio.play(); } catch(e) { console.log("Speaker routing warm-up pending."); }
-
-                localStream = await navigator.mediaDevices.getUserMedia({
-                    audio: {
-                        channelCount: 1,
-                        sampleRate: 16000,
-                        echoCancellation: true,
-                        noiseSuppression: true,
-                        autoGainControl: true
-                    },
-                    video: false
-                });
-
-                callStatus.innerText = "Connecting to Gateway...";
-                callSubStatus.innerText = "Initializing live bidirectional stream...";
-
-                ws = new WebSocket(WS_URL);
-
-                ws.onopen = () => {
-                    triggerHaptic([30, 40, 30]);
-                    callStatus.innerHTML = "<span class='orb'></span> Connection Live";
-                    callSubStatus.innerText = "AI is listening. Speak naturally.";
-                    voiceContainer.classList.add('active');
-
-                    // Send setup init with conversation history (last 15 messages)
-                    ws.send(JSON.stringify({
-                        type: 'init',
-                        history: conversationHistory.slice(-15)
-                    }));
-
-                    startAudioCapture();
-                };
-
-                ws.onmessage = (event) => {
-                    try {
-                        const data = JSON.parse(event.data);
-                        
-                        if (data.error) {
-                            console.error("Gemini Live Error:", data.error);
-                            callStatus.innerHTML = "<span class='orb error'></span> Server Overloaded";
-                            callSubStatus.innerText = "Google API capacity reached. Please retry in a moment.";
-                            triggerHaptic([100, 50, 100]);
-                            setTimeout(() => { if(currentMode === 'voice') exitVoiceMode(); }, 3000);
-                            return;
-                        }
-
-                        if (data.serverContent?.modelTurn?.parts) {
-                            for (const part of data.serverContent.modelTurn.parts) {
-                                if (part.inlineData && part.inlineData.mimeType.startsWith("audio/pcm")) {
-                                    playAudio(part.inlineData.data);
-                                }
-                                if (part.text) {
-                                    saveToHistory('model', part.text);
-                                }
-                            }
-                        }
-                    } catch(e) {}
-                };
-
-                ws.onclose = () => { if(currentMode === 'voice') stopCallStateOnly(); };
-                
-                ws.onerror = (err) => {
-                    console.error("Live WebSocket Error:", err);
-                    callStatus.innerHTML = "<span class='orb error'></span> Connection Error";
-                    callSubStatus.innerText = "Could not maintain connection to server.";
-                    triggerHaptic([100, 50, 100]);
-                    setTimeout(() => { if(currentMode === 'voice') exitVoiceMode(); }, 2500);
-                };
-
-            } catch (err) {
-                console.error("Mic Access Error:", err);
-                callStatus.innerHTML = "<span class='orb error'></span> Hardware Error";
-                callSubStatus.innerText = err.message || "Could not access microphone.";
-                triggerHaptic([120, 80, 120]);
-                setTimeout(() => { if(currentMode === 'voice') exitVoiceMode(); }, 3500);
+            if (voiceState === 'listening') {
+                voiceContainer.classList.add('active');
+                avatarIcon.innerText = 'mic';
+                statusHtml = "<span class='orb'></span> Listening...";
+                subStatusText = "Speak naturally. I'm listening.";
+            } else if (voiceState === 'processing') {
+                voiceContainer.classList.add('processing');
+                avatarIcon.innerText = 'auto_awesome';
+                statusHtml = "<span class='orb processing'></span> Processing";
+                subStatusText = "Working on your request...";
+            } else if (voiceState === 'speaking') {
+                voiceContainer.classList.add('speaking');
+                avatarIcon.innerText = 'graphic_eq';
+                statusHtml = "<span class='orb speaking'></span> Speaking";
+                subStatusText = "AI is responding.";
+            } else {
+                avatarIcon.innerText = 'mic_off';
+                statusHtml = "Call Ended";
+                subStatusText = "Tap the cross to exit.";
             }
+
+            callStatus.innerHTML = statusHtml;
+            callSubStatus.innerText = subStatusText;
         }
 
-        function startAudioCapture() {
-            if (!audioContext || !localStream) return;
+        function updateCaption(role, text, isInterim = false) {
+            if (role === "Meena") {
+                liveCaptionContent.innerHTML = `<span class="caption-ai">${text}</span>`;
+            } else if (role === "User") {
+                const colorClass = isInterim ? "caption-interim" : "caption-user";
+                liveCaptionContent.innerHTML = `<span class="${colorClass}">${text}</span>`;
+            }
+            liveCaptionBox.scrollTop = liveCaptionBox.scrollHeight;
+        }
 
-            const source = audioContext.createMediaStreamSource(localStream);
-            processor = audioContext.createScriptProcessor(2048, 1, 1);
+        function startCall() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                callStatus.innerHTML = "<span class='orb error'></span> Not Supported";
+                callSubStatus.innerText = "Voice chat is not supported on this browser.";
+                return;
+            }
 
-            micMuteGain = audioContext.createGain();
-            micMuteGain.gain.value = 0.0;
+            isVoiceModeActive = true;
+            liveCaptionBox.classList.add('active');
+            liveCaptionContent.innerHTML = "";
+            btnStartCall.style.display = 'none';
+            btnEndCall.style.display = 'flex';
 
-            processor.onaudioprocess = (e) => {
-                if (!ws || ws.readyState !== WebSocket.OPEN) return;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false; // Stop automatically when user pauses
+            recognition.interimResults = true;
+            recognition.lang = 'ta-IN'; // Tamil/Tanglish processing
 
-                const inputData = e.inputBuffer.getChannelData(0);
-                const pcm16 = new Int16Array(inputData.length);
-                
-                for (let i = 0; i < inputData.length; i++) {
-                    let s = Math.max(-1, Math.min(1, inputData[i]));
-                    pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
-                }
-                
-                const bytes = new Uint8Array(pcm16.buffer);
-                let binary = '';
-                for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
-                const base64 = btoa(binary);
-
-                ws.send(JSON.stringify({
-                    realtimeInput: { mediaChunks: [{ mimeType: "audio/pcm;rate=16000", data: base64 }] }
-                }));
+            recognition.onstart = () => {
+                if(!isVoiceModeActive) return;
+                voiceState = 'listening';
+                updateVoiceUI();
+                updateCaption("User", "Listening...", true);
             };
 
-            source.connect(processor);
-            processor.connect(micMuteGain);
-            micMuteGain.connect(audioContext.destination);
-        }
+            recognition.onresult = (event) => {
+                if(!isVoiceModeActive) return;
+                let interimTranscript = '';
+                let finalTranscript = '';
 
-        function playAudio(base64Data) {
-            if (!playbackContext) {
-                playbackContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
-                playbackDest = playbackContext.createMediaStreamDestination();
-                speakerAudio.srcObject = playbackDest.stream;
-                speakerAudio.play().catch(e => {});
-            }
-            if (playbackContext.state === 'suspended') {
-                playbackContext.resume();
-            }
-
-            const binaryString = atob(base64Data);
-            const bytes = new Uint8Array(binaryString.length);
-            for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
-            
-            const int16Array = new Int16Array(bytes.buffer);
-            const float32Array = new Float32Array(int16Array.length);
-            for (let i = 0; i < int16Array.length; i++) {
-                float32Array[i] = int16Array[i] / 32768.0;
-            }
-
-            const buffer = playbackContext.createBuffer(1, float32Array.length, 24000);
-            buffer.getChannelData(0).set(float32Array);
-
-            const source = playbackContext.createBufferSource();
-            source.buffer = buffer;
-            
-            // Connect to our speaker-forced MediaStream API destination instead of default earpiece context
-            source.connect(playbackDest);
-
-            if (nextPlaybackTime < playbackContext.currentTime) {
-                nextPlaybackTime = playbackContext.currentTime;
-            }
-            
-            source.start(nextPlaybackTime);
-            nextPlaybackTime += buffer.duration;
-        }
-
-        // Just kills audio engines without altering UI mode
-        function stopCallStateOnly() {
-            if (ws) {
-                if (ws.readyState === WebSocket.OPEN) {
-                    try { ws.send(JSON.stringify({ clientContent: { turnComplete: true } })); } catch(e) {}
-                    ws.close();
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                    }
                 }
-                ws = null;
+
+                if (interimTranscript) {
+                    updateCaption("User", interimTranscript, true);
+                }
+                if (finalTranscript) {
+                    updateCaption("User", finalTranscript, false);
+                    recognition.stop();
+                    processVoiceTurn(finalTranscript);
+                }
+            };
+
+            recognition.onend = () => {
+                // If it ended automatically (due to silence) and we aren't doing anything else, restart it
+                if (isVoiceModeActive && voiceState === 'listening') {
+                    try { recognition.start(); } catch(e) {}
+                }
+            };
+
+            recognition.onerror = (event) => {
+                if (event.error === 'no-speech') return; // Ignore silent timeouts
+                console.error("Speech Recognition Error:", event.error);
+                if (event.error === 'not-allowed') {
+                    callStatus.innerHTML = "<span class='orb error'></span> Mic Denied";
+                    callSubStatus.innerText = "Please grant microphone permissions.";
+                    stopCall();
+                }
+            };
+
+            try { recognition.start(); } catch(e) {}
+        }
+
+        async function processVoiceTurn(userText) {
+            if(!isVoiceModeActive) return;
+            voiceState = 'processing';
+            updateVoiceUI();
+            
+            // Loop through 20 thinking phrases in the caption box
+            let i = 0;
+            liveCaptionContent.innerHTML = `<span style="color:var(--accent-color)">${thinkingPhrases[i]}</span>`;
+            const thinkingCycle = setInterval(() => {
+                i = (i + 1) % thinkingPhrases.length;
+                liveCaptionContent.innerHTML = `<span style="color:var(--accent-color); font-style:italic;">${thinkingPhrases[i]}</span>`;
+            }, 600);
+
+            // Fetch the response using the exact same Chat logic (maintains history)
+            const aiResponse = await sendChatMessage(userText);
+            
+            clearInterval(thinkingCycle);
+
+            if (!aiResponse) {
+                updateCaption("Meena", "Sorry, network error.", false);
+                setTimeout(() => {
+                    if (isVoiceModeActive) {
+                        voiceState = 'listening';
+                        try { recognition.start(); } catch(e) {}
+                    }
+                }, 2000);
+                return;
             }
-            if (processor) { processor.disconnect(); processor = null; }
-            if (micMuteGain) { micMuteGain.disconnect(); micMuteGain = null; }
-            if (audioContext) { audioContext.close(); audioContext = null; }
-            
-            if (speakerAudio) { speakerAudio.pause(); speakerAudio.srcObject = null; }
-            if (playbackDest) { playbackDest.disconnect(); playbackDest = null; }
-            if (playbackContext) { playbackContext.close(); playbackContext = null; }
-            
-            if (localStream) { localStream.getTracks().forEach(track => track.stop()); localStream = null; }
-            
-            nextPlaybackTime = 0;
-            voiceContainer.classList.remove('active');
-            
-            if (!callStatus.innerHTML.includes('error')) {
-                callStatus.innerText = "Call Ended";
-                callSubStatus.innerText = "Tap the green button to reconnect.";
-            }
-            
-            btnStartCall.style.display = 'flex';
-            btnEndCall.style.display = 'none';
+
+            playTTSResponse(aiResponse);
+        }
+
+        function playTTSResponse(text) {
+            if(!isVoiceModeActive) return;
+            voiceState = 'speaking';
+            updateVoiceUI();
+            updateCaption("Meena", text, false);
+
+            synth.cancel(); // Clear any queued speech
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ta-IN'; // Ensure Tamil/Tanglish pronunciation
+            utterance.rate = 1.0;
+
+            utterance.onend = () => {
+                if (isVoiceModeActive) {
+                    voiceState = 'listening';
+                    try { recognition.start(); } catch(e) {}
+                }
+            };
+
+            utterance.onerror = () => {
+                if (isVoiceModeActive) {
+                    voiceState = 'listening';
+                    try { recognition.start(); } catch(e) {}
+                }
+            };
+
+            synth.speak(utterance);
         }
 
         function stopCall() {
-            stopCallStateOnly();
+            isVoiceModeActive = false;
+            voiceState = 'idle';
+            
+            if (recognition) {
+                recognition.onend = null; // Prevent restart loops
+                recognition.stop();
+            }
+            synth.cancel(); // Stop talking instantly
+            
+            voiceContainer.classList.remove('active', 'processing', 'speaking');
+            liveCaptionBox.classList.remove('active');
+            
+            btnStartCall.style.display = 'flex';
+            btnEndCall.style.display = 'none';
         }
     </script>
 </body>
