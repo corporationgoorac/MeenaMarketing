@@ -8,44 +8,96 @@
     <meta name="theme-color" content="#0b111a">
     
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* Meena Marketing Core Theme */
         :root {
-            --bg-color: #0b111a; 
-            --surface-color: #131b26; 
-            --surface-hover: #1b2636;
-            --text-color: #ffffff;
+            --bg-color: #070b11; 
+            --surface-color: #0f1724; 
+            --surface-card: #141f30;
+            --surface-hover: #1c2b42;
+            --text-color: #f8fafc;
             --text-secondary: #94a3b8;
             --meena-red: #ef4444; 
             --marketing-white: #ffffff;
             --accent-color: #0d9488; 
+            --accent-glow: rgba(13, 148, 136, 0.35);
             --success-color: #10b981; 
+            --success-glow: rgba(16, 185, 129, 0.4);
             --warning-color: #f59e0b;
-            --input-bg: #1e293b;
-            --input-border: #334155;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-glow: 0 0 15px rgba(13, 148, 136, 0.3);
+            --input-bg: #121c2c;
+            --input-border: #1e2e46;
+            --shadow-glow: 0 0 20px rgba(13, 148, 136, 0.25);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { height: 100%; margin: 0; padding: 0; width: 100%; overflow: hidden; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; }
+        html, body { height: 100%; margin: 0; padding: 0; width: 100%; overflow: hidden; background-color: var(--bg-color); }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            color: var(--text-color); 
+            display: flex; 
+            flex-direction: column; 
+            user-select: none;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(13, 148, 136, 0.12) 0%, transparent 60%),
+                radial-gradient(circle at 50% 100%, rgba(239, 68, 68, 0.05) 0%, transparent 50%);
+        }
 
-        header { background-color: #212121; backdrop-filter: blur(12px); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 500; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; }
-        .brand-container { display: flex; align-items: center; gap: 14px; }
-        .logo-img { width: 38px; height: 38px; border-radius: 10px; }
+        /* Top Header */
+        header { 
+            background: rgba(15, 23, 36, 0.85); 
+            backdrop-filter: blur(14px); 
+            padding: 14px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: relative; 
+            z-index: 500; 
+            border-bottom: 1px solid var(--input-border); 
+            flex-shrink: 0; 
+        }
+        .brand-container { display: flex; align-items: center; gap: 14px; cursor: pointer; }
+        .logo-img { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--input-border); }
         .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
-        .brand-title { font-size: 1em; font-weight: 700; letter-spacing: -0.02em;}
+        .brand-title { font-size: 1.05em; font-weight: 800; letter-spacing: -0.02em; }
         .meena { color: var(--meena-red); }
         .marketing { color: var(--marketing-white); }
-        .goorac { font-size: 0.75em; color: var(--accent-color); font-weight: 600; }
+        .goorac { font-size: 0.72em; color: var(--accent-color); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
 
-        /* Mode Switcher */
-        .mode-switcher { display: flex; background: var(--surface-color); padding: 6px; border-radius: 12px; margin: 15px 20px; border: 1px solid var(--input-border); flex-shrink: 0; }
-        .mode-btn { flex: 1; padding: 10px; text-align: center; font-weight: 600; font-size: 0.9em; color: var(--text-secondary); border-radius: 8px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; background: transparent; font-family: inherit;}
-        .mode-btn.active { background: var(--accent-color); color: white; box-shadow: var(--shadow-sm); }
+        /* Mode Switcher Tabs */
+        .mode-switcher { 
+            display: flex; 
+            background: var(--surface-color); 
+            padding: 5px; 
+            border-radius: 14px; 
+            margin: 12px 18px 8px 18px; 
+            border: 1px solid var(--input-border); 
+            flex-shrink: 0; 
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        }
+        .mode-btn { 
+            flex: 1; 
+            padding: 10px; 
+            text-align: center; 
+            font-weight: 600; 
+            font-size: 0.9em; 
+            color: var(--text-secondary); 
+            border-radius: 10px; 
+            cursor: pointer; 
+            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            border: none; 
+            background: transparent; 
+            font-family: inherit;
+        }
+        .mode-btn.active { 
+            background: var(--accent-color); 
+            color: #ffffff; 
+            box-shadow: 0 2px 10px var(--accent-glow); 
+        }
         .mode-btn .material-symbols-outlined { font-size: 20px; }
 
         /* View Containers */
@@ -53,75 +105,262 @@
         .view-container.active { display: flex; }
 
         /* --- CHAT VIEW --- */
-        .chat-history { flex-grow: 1; overflow-y: auto; padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
-        .msg-bubble { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 0.95em; line-height: 1.5; word-wrap: break-word; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .chat-history { 
+            flex-grow: 1; 
+            overflow-y: auto; 
+            padding: 14px 18px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 14px; 
+            scroll-behavior: smooth; 
+            user-select: text;
+        }
+        .msg-bubble { 
+            max-width: 85%; 
+            padding: 12px 16px; 
+            border-radius: 18px; 
+            font-size: 0.94em; 
+            line-height: 1.5; 
+            word-wrap: break-word; 
+            animation: fadeIn 0.25s ease-out; 
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         
-        .msg-user { align-self: flex-end; background: var(--accent-color); color: white; border-bottom-right-radius: 4px; box-shadow: 0 4px 10px rgba(13, 148, 136, 0.2); }
-        .msg-ai { align-self: flex-start; background: var(--surface-color); border: 1px solid var(--input-border); color: var(--text-color); border-bottom-left-radius: 4px; }
-        .msg-error { align-self: flex-start; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; border-bottom-left-radius: 4px; font-family: monospace; font-size: 0.85em; }
+        .msg-user { 
+            align-self: flex-end; 
+            background: linear-gradient(135deg, var(--accent-color), #0f766e); 
+            color: #ffffff; 
+            border-bottom-right-radius: 4px; 
+        }
+        .msg-ai { 
+            align-self: flex-start; 
+            background: var(--surface-card); 
+            border: 1px solid var(--input-border); 
+            color: var(--text-color); 
+            border-bottom-left-radius: 4px; 
+        }
+        .msg-error { 
+            align-self: flex-start; 
+            background: rgba(239, 68, 68, 0.12); 
+            border: 1px solid rgba(239, 68, 68, 0.35); 
+            color: #fca5a5; 
+            border-bottom-left-radius: 4px; 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 0.85em; 
+        }
         
-        .chat-input-area { background: var(--surface-color); padding: 15px 20px 25px 20px; border-top: 1px solid var(--input-border); display: flex; gap: 10px; align-items: flex-end; flex-shrink: 0; }
-        .chat-input-wrapper { flex-grow: 1; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 20px; padding: 2px 15px; display: flex; align-items: center; transition: 0.3s; }
-        .chat-input-wrapper:focus-within { border-color: var(--accent-color); box-shadow: var(--shadow-glow); }
-        .chat-input-wrapper textarea { width: 100%; background: transparent; border: none; color: white; font-family: 'Inter', sans-serif; font-size: 0.95em; outline: none; resize: none; max-height: 100px; padding: 12px 0; }
+        .chat-input-area { 
+            background: var(--surface-color); 
+            padding: 12px 16px 20px 16px; 
+            border-top: 1px solid var(--input-border); 
+            display: flex; 
+            gap: 10px; 
+            align-items: flex-end; 
+            flex-shrink: 0; 
+        }
+        .chat-input-wrapper { 
+            flex-grow: 1; 
+            background: var(--input-bg); 
+            border: 1px solid var(--input-border); 
+            border-radius: 22px; 
+            padding: 4px 16px; 
+            display: flex; 
+            align-items: center; 
+            transition: border-color 0.25s, box-shadow 0.25s; 
+        }
+        .chat-input-wrapper:focus-within { 
+            border-color: var(--accent-color); 
+            box-shadow: var(--shadow-glow); 
+        }
+        .chat-input-wrapper textarea { 
+            width: 100%; 
+            background: transparent; 
+            border: none; 
+            color: #ffffff; 
+            font-family: 'Inter', sans-serif; 
+            font-size: 0.95em; 
+            outline: none; 
+            resize: none; 
+            max-height: 100px; 
+            padding: 10px 0; 
+            line-height: 1.4;
+            user-select: text;
+        }
         .chat-input-wrapper textarea::placeholder { color: var(--text-secondary); }
         
-        .btn-send { background: var(--accent-color); color: white; width: 44px; height: 44px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: none; cursor: pointer; transition: 0.2s; flex-shrink: 0; }
-        .btn-send:hover { transform: scale(1.05); }
-        .btn-send:active { transform: scale(0.95); }
-        .btn-send:disabled { background: var(--input-border); color: var(--text-secondary); cursor: not-allowed; transform: none; }
+        .btn-send { 
+            background: var(--accent-color); 
+            color: #ffffff; 
+            width: 44px; 
+            height: 44px; 
+            border-radius: 50%; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            border: none; 
+            cursor: pointer; 
+            transition: transform 0.15s, background 0.2s; 
+            flex-shrink: 0; 
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+        .btn-send:active { transform: scale(0.92); }
+        .btn-send:disabled { background: var(--input-border); color: var(--text-secondary); cursor: not-allowed; box-shadow: none; }
 
         /* --- PURE VOICE CALL VIEW --- */
-        .call-wrapper { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 40px 20px; text-align: center; position: relative; }
+        .call-wrapper { 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 40px 24px 34px 24px; 
+            text-align: center; 
+            position: relative; 
+        }
         
-        .voice-top-section { display: flex; flex-direction: column; align-items: center; width: 100%; }
-        
-        .voice-container { width: 180px; height: 180px; border-radius: 50%; position: relative; margin-bottom: 30px; display: flex; justify-content: center; align-items: center; }
-        
-        /* Hardware visualizer rings */
-        .ring { position: absolute; border-radius: 50%; border: 2px solid var(--success-color); opacity: 0; transition: 0.3s; }
-        .voice-container.active .ring:nth-child(1) { width: 100%; height: 100%; animation: ripple 2s infinite linear; }
-        .voice-container.active .ring:nth-child(2) { width: 100%; height: 100%; animation: ripple 2s infinite linear 0.6s; }
-        .voice-container.active .ring:nth-child(3) { width: 100%; height: 100%; animation: ripple 2s infinite linear 1.2s; }
-        
-        @keyframes ripple { 0% { transform: scale(0.8); opacity: 0.8; border-color: var(--success-color); } 100% { transform: scale(1.8); opacity: 0; border-color: var(--accent-color); } }
+        .voice-top-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            width: 100%;
+        }
 
-        .ai-avatar { width: 140px; height: 140px; border-radius: 50%; background: var(--surface-color); border: 2px solid var(--input-border); display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s; }
-        .voice-container.active .ai-avatar { border-color: var(--success-color); box-shadow: 0 0 30px rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.1); }
-        .ai-avatar .material-symbols-outlined { font-size: 56px; color: var(--text-secondary); transition: 0.3s; }
-        .voice-container.active .ai-avatar .material-symbols-outlined { color: var(--success-color); }
+        .voice-container { 
+            width: 200px; 
+            height: 200px; 
+            border-radius: 50%; 
+            position: relative; 
+            margin-bottom: 34px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
         
-        .call-status { font-size: 1.1em; font-weight: 600; margin-bottom: 8px; color: white; }
-        .call-sub-status { font-size: 0.85em; color: var(--text-secondary); min-height: 40px; display: flex; align-items: center; justify-content: center; padding: 0 15px;}
+        /* Dynamic Hardware Visualizer Rings */
+        .ring { 
+            position: absolute; 
+            border-radius: 50%; 
+            border: 2px solid var(--success-color); 
+            opacity: 0; 
+            pointer-events: none;
+        }
+        .voice-container.active .ring:nth-child(1) { width: 100%; height: 100%; animation: ripple 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1); }
+        .voice-container.active .ring:nth-child(2) { width: 100%; height: 100%; animation: ripple 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1) 0.7s; }
+        .voice-container.active .ring:nth-child(3) { width: 100%; height: 100%; animation: ripple 2.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1) 1.4s; }
+        
+        @keyframes ripple { 
+            0% { transform: scale(0.75); opacity: 0.9; border-color: var(--success-color); } 
+            100% { transform: scale(1.85); opacity: 0; border-color: var(--accent-color); } 
+        }
 
-        /* Live Caption Box */
-        .live-caption-box { background: rgba(19, 27, 38, 0.8); border: 1px solid var(--input-border); padding: 15px 20px; border-radius: 16px; width: 100%; max-width: 400px; min-height: 80px; max-height: 120px; overflow-y: auto; font-size: 0.95em; line-height: 1.5; color: var(--text-main); margin-bottom: 20px; text-align: left; display: none; flex-direction: column; gap: 8px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);}
-        .live-caption-box.active { display: flex; }
-        .caption-ai { color: var(--emerald); font-weight: 500; }
-        .caption-error { color: var(--meena-red); font-weight: 500; font-family: monospace; font-size: 0.9em; }
+        .ai-avatar { 
+            width: 140px; 
+            height: 140px; 
+            border-radius: 50%; 
+            background: var(--surface-card); 
+            border: 2px solid var(--input-border); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 10; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); 
+        }
+        .voice-container.active .ai-avatar { 
+            border-color: var(--success-color); 
+            box-shadow: 0 0 35px var(--success-glow); 
+            background: rgba(16, 185, 129, 0.12); 
+            transform: scale(1.04);
+        }
+        .ai-avatar .material-symbols-outlined { 
+            font-size: 58px; 
+            color: var(--text-secondary); 
+            transition: color 0.3s; 
+        }
+        .voice-container.active .ai-avatar .material-symbols-outlined { 
+            color: var(--success-color); 
+        }
+        
+        .call-status { 
+            font-size: 1.25em; 
+            font-weight: 700; 
+            margin-bottom: 8px; 
+            color: #ffffff; 
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .call-sub-status { 
+            font-size: 0.9em; 
+            color: var(--text-secondary); 
+            min-height: 24px;
+            max-width: 320px;
+            line-height: 1.4;
+        }
 
-        .orb { width: 12px; height: 12px; border-radius: 50%; background: var(--success-color); display: inline-block; margin-right: 8px; box-shadow: 0 0 10px var(--success-color); animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
-        .orb.error { background: var(--meena-red); box-shadow: 0 0 10px var(--meena-red); animation: none; }
+        .orb { 
+            width: 10px; 
+            height: 10px; 
+            border-radius: 50%; 
+            background: var(--success-color); 
+            display: inline-block; 
+            box-shadow: 0 0 12px var(--success-color); 
+            animation: pulseOrb 1.6s infinite ease-in-out; 
+        }
+        @keyframes pulseOrb { 
+            0% { transform: scale(0.9); opacity: 0.8; } 
+            50% { transform: scale(1.2); opacity: 1; } 
+            100% { transform: scale(0.9); opacity: 0.8; } 
+        }
+        .orb.error { background: var(--meena-red); box-shadow: 0 0 12px var(--meena-red); animation: none; }
 
-        .call-controls { display: flex; gap: 20px; justify-content: center; width: 100%; padding-bottom: 20px; }
-        .btn-call { width: 64px; height: 64px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: none; cursor: pointer; transition: 0.3s; color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        .btn-call:active { transform: scale(0.9); }
-        .btn-call.start { background: linear-gradient(135deg, var(--success-color), #059669); }
-        .btn-call.end { background: linear-gradient(135deg, var(--meena-red), #b91c1c); display: none; }
-        .btn-call .material-symbols-outlined { font-size: 28px; }
+        .call-controls { 
+            display: flex; 
+            gap: 24px; 
+            justify-content: center; 
+            width: 100%; 
+            padding-bottom: 10px;
+        }
+        .btn-call { 
+            width: 68px; 
+            height: 68px; 
+            border-radius: 50%; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            border: none; 
+            cursor: pointer; 
+            transition: transform 0.15s, box-shadow 0.2s; 
+            color: #ffffff; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4); 
+        }
+        .btn-call:active { transform: scale(0.92); }
+        .btn-call.start { 
+            background: linear-gradient(135deg, var(--success-color), #059669); 
+            box-shadow: 0 8px 25px var(--success-glow); 
+        }
+        .btn-call.end { 
+            background: linear-gradient(135deg, var(--meena-red), #b91c1c); 
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4); 
+            display: none; 
+        }
+        .btn-call .material-symbols-outlined { font-size: 32px; }
 
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand-container" onclick="window.location.href='inventory_2.html'" style="cursor: pointer;">
+        <div class="brand-container" onclick="triggerHaptic([20]); window.location.href='inventory_2.html'">
             <img src="icon.png" alt="Icon" class="logo-img" onerror="this.style.display='none'">
             <div class="brand-text">
                 <span class="brand-title"><span class="meena">Meena</span> <span class="marketing">Marketing</span></span>
-                <span class="goorac">AI Voice Engine</span>
+                <span class="goorac">AI Voice & Stock Engine</span>
             </div>
         </div>
         <span class="material-symbols-outlined" style="color: var(--text-secondary); cursor: pointer; transition: 0.2s;" onclick="clearHistory()" onmouseover="this.style.color='var(--meena-red)'" onmouseout="this.style.color='var(--text-secondary)'">delete_sweep</span>
@@ -143,7 +382,7 @@
         </div>
         <div class="chat-input-area">
             <div class="chat-input-wrapper">
-                <textarea id="chatInput" rows="1" placeholder="Ask about inventory..." oninput="autoResize(this)"></textarea>
+                <textarea id="chatInput" rows="1" placeholder="Ask stock or product query..." oninput="autoResize(this)"></textarea>
             </div>
             <button class="btn-send" id="btnSend" onclick="sendChatMessage()">
                 <span class="material-symbols-outlined">send</span>
@@ -151,11 +390,10 @@
         </div>
     </div>
 
-    <!-- PURE VOICE CALL INTERFACE -->
+    <!-- PURE VOICE CALL INTERFACE (NO CAPTIONS) -->
     <div class="view-container" id="viewCall">
         <div class="call-wrapper">
-            
-            <div class="voice-top-section">
+            <div class="voice-top-stage">
                 <div class="voice-container" id="voiceContainer">
                     <div class="ring"></div>
                     <div class="ring"></div>
@@ -166,11 +404,7 @@
                 </div>
                 
                 <div class="call-status" id="callStatus">Ready to Connect</div>
-                <div class="call-sub-status" id="callSubStatus">Tap to start a voice call.</div>
-
-                <div class="live-caption-box" id="liveCaptionBox">
-                    <!-- Captions and errors append here during call -->
-                </div>
+                <div class="call-sub-status" id="callSubStatus">Tap the green button to start a voice call.</div>
             </div>
 
             <div class="call-controls">
@@ -185,11 +419,11 @@
     </div>
 
     <script>
-        // CONFIGURATION
+        // BACKEND CONFIGURATION
         const BACKEND_URL = 'https://shiva757-meenaai.hf.space';
         const WS_URL = 'wss://shiva757-meenaai.hf.space/voice';
         
-        // SHARED STATE
+        // SHARED CONVERSATION MEMORY
         let conversationHistory = [];
         const MAX_HISTORY = 100;
 
@@ -208,23 +442,35 @@
         const voiceContainer = document.getElementById('voiceContainer');
         const callStatus = document.getElementById('callStatus');
         const callSubStatus = document.getElementById('callSubStatus');
-        const liveCaptionBox = document.getElementById('liveCaptionBox');
         const btnStartCall = document.getElementById('btnStartCall');
         const btnEndCall = document.getElementById('btnEndCall');
 
-        // CALL STATE
+        // AUDIO CONTEXT & STREAM PIPELINE
         let ws;
         let localStream;
         let audioContext;
         let playbackContext;
         let processor;
+        let micMuteGain;
         let nextPlaybackTime = 0;
 
         // ==========================================
-        // 1. UI & SHARED LOGIC
+        // HAPTIC FEEDBACK (VIBRATE ENGINE)
+        // ==========================================
+        function triggerHaptic(pattern = [30]) {
+            if (navigator.vibrate) {
+                try {
+                    navigator.vibrate(pattern);
+                } catch(e) {}
+            }
+        }
+
+        // ==========================================
+        // 1. UI & SHARED STATE MANAGEMENT
         // ==========================================
 
         function switchMode(mode) {
+            triggerHaptic([25]);
             if (mode === 'chat') {
                 btnModeChat.classList.add('active');
                 btnModeCall.classList.remove('active');
@@ -259,19 +505,6 @@
             chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
         }
 
-        function appendCaption(text, type = "normal") {
-            const div = document.createElement('div');
-            if (type === "error") {
-                div.className = "caption-error";
-                div.innerText = `⚠️ ${text}`;
-            } else {
-                div.className = "caption-ai";
-                div.innerText = text;
-            }
-            liveCaptionBox.appendChild(div);
-            liveCaptionBox.scrollTop = liveCaptionBox.scrollHeight;
-        }
-
         function saveToHistory(role, text) {
             if(!text) return;
             conversationHistory.push({ role, parts: [{ text }] });
@@ -281,6 +514,7 @@
         }
 
         function clearHistory() {
+            triggerHaptic([40, 60, 40]);
             if(confirm("Clear conversation history?")) {
                 conversationHistory = [];
                 chatHistoryEl.innerHTML = '<div class="msg-bubble msg-ai">வணக்கம்! நான் மீனா மார்க்கெட்டிங் AI. கடையில என்ன ஸ்டாக் இருக்குன்னு பாக்கணுமா?</div>';
@@ -288,14 +522,15 @@
         }
 
         // ==========================================
-        // 2. TEXT CHAT MODE (REST API - FIXED ERROR PARSING)
+        // 2. TEXT CHAT MODE (REST API)
         // ==========================================
 
         async function sendChatMessage() {
             const text = chatInput.value.trim();
             if (!text) return;
 
-            // Update UI & State
+            triggerHaptic([35]);
+
             appendMessageToUI('user', text);
             saveToHistory('user', text);
             
@@ -304,9 +539,12 @@
             btnSend.disabled = true;
 
             try {
+                // Send strictly the last 15 messages of conversation history to keep latency low
+                const recentHistory = conversationHistory.slice(-16, -1);
+
                 const payload = {
                     message: text,
-                    history: conversationHistory.slice(0, -1) 
+                    history: recentHistory
                 };
 
                 const response = await fetch(`${BACKEND_URL}/chat`, {
@@ -317,38 +555,31 @@
 
                 const data = await response.json();
                 
-                // Advanced Error Catching
                 if (!response.ok || data.error) {
-                    let errorMessage = "Unknown API error.";
-                    
-                    if (data.error && data.error.message) {
-                        errorMessage = data.error.message;
-                    } else if (typeof data.error === 'string') {
-                        errorMessage = data.error;
-                    } else if (response.statusText) {
-                        errorMessage = `HTTP ${response.status}: ${response.statusText}`;
-                    }
-
+                    let errorMessage = "API error occurred.";
+                    if (data.error && data.error.message) errorMessage = data.error.message;
+                    else if (typeof data.error === 'string') errorMessage = data.error;
                     appendMessageToUI('model', `Server Error: ${errorMessage}`, true);
+                    triggerHaptic([60, 40, 60]);
                     return;
                 }
                 
-                // Successful Parsing
                 let aiText = "";
                 try {
                     aiText = data.candidates[0].content.parts[0].text;
                 } catch(parseError) {
-                    // Failsafe if structure changes but HTTP was 200 OK
-                    appendMessageToUI('model', `Format Error: Received malformed JSON from API.\nPayload: ${JSON.stringify(data).substring(0, 100)}...`, true);
+                    appendMessageToUI('model', `Format Error: Invalid structure from model.`, true);
                     return;
                 }
 
                 appendMessageToUI('model', aiText);
                 saveToHistory('model', aiText);
+                triggerHaptic([20]);
 
             } catch (err) {
                 console.error("Chat Request Failed:", err);
-                appendMessageToUI('model', `Network Error: ${err.message}. Backend might be asleep or unreachable.`, true);
+                appendMessageToUI('model', `Network Error: ${err.message}. Backend may be warming up.`, true);
+                triggerHaptic([80, 50, 80]);
             } finally {
                 btnSend.disabled = false;
             }
@@ -362,32 +593,50 @@
         });
 
         // ==========================================
-        // 3. PURE VOICE CALL MODE (NO WEBCAM)
+        // 3. MULTIMODAL LIVE VOICE CALL ENGINE
         // ==========================================
 
         async function startCall() {
+            triggerHaptic([40]);
             try {
-                callStatus.innerText = "Requesting microphone...";
-                callSubStatus.innerText = "";
-                liveCaptionBox.innerHTML = "";
-                liveCaptionBox.classList.remove('active');
+                callStatus.innerText = "Requesting mic...";
+                callSubStatus.innerText = "Please allow microphone permissions.";
                 
-                // Get Audio Only
-                localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                // 1. Direct synchronous AudioContext initialization on user gesture
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                audioContext = new AudioCtx({ sampleRate: 16000 });
+                playbackContext = new AudioCtx({ sampleRate: 24000 });
                 
+                await audioContext.resume();
+                await playbackContext.resume();
+
+                // 2. Hardware microphone acquisition
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    audio: {
+                        channelCount: 1,
+                        sampleRate: 16000,
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        autoGainControl: true
+                    },
+                    video: false
+                });
+
                 callStatus.innerText = "Connecting to Gateway...";
-                
+                callSubStatus.innerText = "Initializing live bidirectional stream...";
+
                 ws = new WebSocket(WS_URL);
 
                 ws.onopen = () => {
+                    triggerHaptic([30, 40, 30]);
                     callStatus.innerHTML = "<span class='orb'></span> Connection Live";
                     callSubStatus.innerText = "AI is listening. Speak naturally.";
                     voiceContainer.classList.add('active');
-                    liveCaptionBox.classList.add('active');
                     
                     btnStartCall.style.display = 'none';
                     btnEndCall.style.display = 'flex';
 
+                    // Send setup init with conversation history (last 15 messages)
                     ws.send(JSON.stringify({
                         type: 'init',
                         history: conversationHistory.slice(-15)
@@ -400,20 +649,17 @@
                     try {
                         const data = JSON.parse(event.data);
                         
-                        // 1. Catch Google API Errors sent over the WebSocket
+                        // Handle server capacity spikes or load errors
                         if (data.error) {
-                            console.error("Gemini WebSocket Error:", data.error);
-                            const errMsg = data.error.message || 'Server Overloaded';
+                            console.error("Gemini Live Error:", data.error);
                             callStatus.innerHTML = "<span class='orb error'></span> Server Overloaded";
-                            callSubStatus.innerText = "Google AI is at capacity. Try again.";
-                            appendCaption(`API Error: ${errMsg}`, "error");
-                            
-                            // Automatically cleanly close the connection after showing error
-                            setTimeout(() => { stopCall(); }, 2000);
+                            callSubStatus.innerText = "Google API capacity reached. Please retry in a moment.";
+                            triggerHaptic([100, 50, 100]);
+                            setTimeout(() => stopCall(), 2500);
                             return;
                         }
-                        
-                        // 2. Process Audio and Text Transcripts
+
+                        // Process incoming AI audio streams
                         if (data.serverContent?.modelTurn?.parts) {
                             for (const part of data.serverContent.modelTurn.parts) {
                                 if (part.inlineData && part.inlineData.mimeType.startsWith("audio/pcm")) {
@@ -421,50 +667,50 @@
                                 }
                                 if (part.text) {
                                     saveToHistory('model', part.text);
-                                    appendMessageToUI('model', part.text); // Sync to text chat
-                                    appendCaption(part.text, "normal"); // Show in live call view
                                 }
                             }
                         }
-                    } catch(e) { 
-                        // Ignore non-JSON wrapper frames 
-                    }
+                    } catch(e) {}
                 };
 
-                ws.onclose = (event) => {
-                    if (event.code !== 1000 && event.code !== 1005) {
-                        appendCaption(`Socket closed abruptly (Code: ${event.code})`, "error");
-                    }
-                    stopCall();
-                };
+                ws.onclose = () => stopCall();
                 
                 ws.onerror = (err) => {
-                    console.error("WebSocket network error:", err);
+                    console.error("Live WebSocket Error:", err);
                     callStatus.innerHTML = "<span class='orb error'></span> Connection Error";
-                    callSubStatus.innerText = "Failed to route to backend.";
-                    appendCaption("Network route to Hugging Face dropped.", "error");
+                    callSubStatus.innerText = "Could not maintain connection to server.";
+                    triggerHaptic([100, 50, 100]);
                     stopCall();
                 };
 
             } catch (err) {
-                console.error("Mic access denied or error:", err);
+                console.error("Mic Access Error:", err);
                 callStatus.innerHTML = "<span class='orb error'></span> Hardware Error";
-                callSubStatus.innerText = "Could not access microphone.";
-                liveCaptionBox.classList.add('active');
-                appendCaption(err.message, "error");
+                callSubStatus.innerText = err.message || "Could not access microphone.";
+                triggerHaptic([120, 80, 120]);
+                stopCall();
             }
         }
 
         function startAudioCapture() {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+            if (!audioContext || !localStream) return;
+
             const source = audioContext.createMediaStreamSource(localStream);
-            processor = audioContext.createScriptProcessor(4096, 1, 1);
+            
+            // Optimal micro-buffer (2048 samples = 128ms packets at 16kHz for responsive VAD)
+            processor = audioContext.createScriptProcessor(2048, 1, 1);
+
+            // CRITICAL FIX: Route processor to zero-gain node instead of speakers.
+            // This prevents microphone loopback into speakers that causes AEC to silence speech!
+            micMuteGain = audioContext.createGain();
+            micMuteGain.gain.value = 0.0;
 
             processor.onaudioprocess = (e) => {
                 if (!ws || ws.readyState !== WebSocket.OPEN) return;
 
                 const inputData = e.inputBuffer.getChannelData(0);
                 const pcm16 = new Int16Array(inputData.length);
+                
                 for (let i = 0; i < inputData.length; i++) {
                     let s = Math.max(-1, Math.min(1, inputData[i]));
                     pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
@@ -481,12 +727,16 @@
             };
 
             source.connect(processor);
-            processor.connect(audioContext.destination);
+            processor.connect(micMuteGain);
+            micMuteGain.connect(audioContext.destination);
         }
 
         function playAudio(base64Data) {
             if (!playbackContext) {
                 playbackContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+            }
+            if (playbackContext.state === 'suspended') {
+                playbackContext.resume();
             }
 
             const binaryString = atob(base64Data);
@@ -515,25 +765,46 @@
         }
 
         function stopCall() {
+            triggerHaptic([30, 30]);
+
             if (ws) {
-                if(ws.readyState === WebSocket.OPEN) {
+                if (ws.readyState === WebSocket.OPEN) {
                     try {
                         ws.send(JSON.stringify({ clientContent: { turnComplete: true } }));
                     } catch(e) {}
                     ws.close();
                 }
+                ws = null;
             }
-            if (processor) processor.disconnect();
-            if (audioContext) audioContext.close();
-            if (localStream) localStream.getTracks().forEach(track => track.stop());
+
+            if (processor) {
+                processor.disconnect();
+                processor = null;
+            }
+            if (micMuteGain) {
+                micMuteGain.disconnect();
+                micMuteGain = null;
+            }
+            if (audioContext) {
+                audioContext.close();
+                audioContext = null;
+            }
+            if (playbackContext) {
+                playbackContext.close();
+                playbackContext = null;
+            }
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localStream = null;
+            }
             
+            nextPlaybackTime = 0;
             btnStartCall.style.display = 'flex';
             btnEndCall.style.display = 'none';
             
-            // Only overwrite status if it wasn't an error state
             if (!callStatus.innerHTML.includes('error')) {
                 callStatus.innerText = "Call Ended";
-                callSubStatus.innerText = "Tap to reconnect.";
+                callSubStatus.innerText = "Tap the green button to reconnect.";
             }
             
             voiceContainer.classList.remove('active');
