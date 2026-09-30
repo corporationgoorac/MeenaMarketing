@@ -7,6 +7,9 @@
     
     <meta name="theme-color" content="#0b111a">
     
+    <!-- External Markdown Parser for beautiful text rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     
@@ -132,6 +135,60 @@
             font-family: 'JetBrains Mono', monospace; 
             font-size: 0.85em; 
         }
+
+        /* --- MARKDOWN & ACTIONS STYLING --- */
+        .msg-content { width: 100%; overflow-x: auto; }
+        .msg-content p { margin: 0 0 10px 0; }
+        .msg-content p:last-child { margin: 0; }
+        .msg-content strong { color: var(--accent-color); font-weight: 700; }
+        .msg-content ul, .msg-content ol { margin: 10px 0; padding-left: 20px; }
+        .msg-content code { font-family: 'JetBrains Mono', monospace; font-size: 0.85em; background: rgba(0, 0, 0, 0.2); padding: 2px 5px; border-radius: 4px; }
+        
+        /* Code Box Styling */
+        .msg-content pre { 
+            background: rgba(0, 0, 0, 0.3); 
+            padding: 14px; 
+            border-radius: 8px; 
+            position: relative; 
+            margin: 12px 0; 
+            border: 1px solid var(--input-border); 
+            overflow-x: auto; 
+        }
+        .msg-content pre code { background: transparent; padding: 0; color: #e2e8f0; font-size: 0.85em; }
+        .copy-code-btn { 
+            position: absolute; 
+            top: 8px; 
+            right: 8px; 
+            background: var(--surface-hover); 
+            border: 1px solid var(--input-border); 
+            color: var(--text-secondary); 
+            padding: 4px 8px; 
+            border-radius: 6px; 
+            font-size: 0.75em; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+        .copy-code-btn:hover { color: white; background: var(--accent-color); border-color: var(--accent-color); }
+
+        /* Gemini-style Bottom Action Buttons */
+        .msg-actions { 
+            display: flex; 
+            gap: 16px; 
+            margin-top: 10px; 
+            padding-top: 10px; 
+            border-top: 1px solid rgba(255,255,255,0.05); 
+        }
+        .action-icon { 
+            font-size: 18px; 
+            color: var(--text-secondary); 
+            cursor: pointer; 
+            transition: 0.2s; 
+            display: flex;
+            align-items: center;
+        }
+        .action-icon:hover { color: var(--marketing-white); transform: scale(1.1); }
 
         /* Thinking Animation Indicator */
         .thinking-bubble {
@@ -419,6 +476,7 @@
             </div>
         </div>
         
+        <!-- Dynamic Header Button: Headphone to call, Cross to close -->
         <div class="header-action-btn" id="headerBtn" onclick="toggleMode()">
             <span class="material-symbols-outlined" id="headerIcon" style="color: var(--accent-color);">headphones</span>
         </div>
@@ -427,7 +485,7 @@
     <!-- CHAT INTERFACE -->
     <div class="view-container active" id="viewChat">
         <div class="chat-history" id="chatHistory">
-            <div class="msg-bubble msg-ai">வணக்கம்! நான் மீனா மார்க்கெட்டிங் AI. கடையில என்ன ஸ்டாக் இருக்குன்னு பாக்கணுமா?</div>
+            <!-- Initial content will be generated dynamically on load to include Gemini Actions -->
         </div>
         <div class="chat-input-area">
             <div class="chat-input-wrapper">
@@ -596,11 +654,76 @@
             textarea.style.height = (textarea.scrollHeight < 100 ? textarea.scrollHeight : 100) + 'px';
         }
 
+        // Markdown Stripper for TTS (Removes *, #, _, ` but keeps ₹ and text)
+        function stripMarkdownForTTS(rawText) {
+            let cleanText = rawText;
+            cleanText = cleanText.replace(/[*_#`~>|-]/g, '');
+            return cleanText;
+        }
+
+        // Advanced Chat Rendering with Markdown & Gemini Actions
         function appendMessageToUI(role, text, isError = false) {
             if(!text) return;
             const div = document.createElement('div');
-            div.className = isError ? 'msg-bubble msg-error' : `msg-bubble ${role === 'user' ? 'msg-user' : 'msg-ai'}`;
-            div.innerText = text;
+            
+            if (isError) {
+                div.className = 'msg-bubble msg-error';
+                div.innerText = text;
+            } else if (role === 'user') {
+                div.className = 'msg-bubble msg-user';
+                div.innerText = text; // Raw text for user
+            } else {
+                div.className = 'msg-bubble msg-ai';
+                
+                // Content Wrapper for Markdown
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'msg-content';
+                contentDiv.innerHTML = marked.parse(text);
+                
+                // Add exact "Copy" overlay on all code blocks
+                contentDiv.querySelectorAll('pre').forEach(pre => {
+                    const btn = document.createElement('button');
+                    btn.className = 'copy-code-btn';
+                    btn.innerText = 'Copy';
+                    btn.onclick = () => {
+                        triggerHaptic([20]);
+                        const codeText = pre.querySelector('code').innerText;
+                        navigator.clipboard.writeText(codeText);
+                        btn.innerText = 'Copied!';
+                        setTimeout(() => btn.innerText = 'Copy', 2000);
+                    };
+                    pre.appendChild(btn);
+                });
+
+                div.appendChild(contentDiv);
+
+                // Bottom Actions (Gemini-Style: Copy & Speak)
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'msg-actions';
+                
+                const speakBtn = document.createElement('span');
+                speakBtn.className = 'material-symbols-outlined action-icon';
+                speakBtn.innerText = 'volume_up';
+                speakBtn.onclick = () => {
+                    triggerHaptic([20]);
+                    playTTSResponse(text, true); // Play manually
+                };
+
+                const copyBtn = document.createElement('span');
+                copyBtn.className = 'material-symbols-outlined action-icon';
+                copyBtn.innerText = 'content_copy';
+                copyBtn.onclick = () => {
+                    triggerHaptic([20]);
+                    navigator.clipboard.writeText(text);
+                    copyBtn.style.color = 'var(--success-color)';
+                    setTimeout(() => copyBtn.style.color = 'var(--text-secondary)', 2000);
+                };
+
+                actionsDiv.appendChild(speakBtn);
+                actionsDiv.appendChild(copyBtn);
+                div.appendChild(actionsDiv);
+            }
+            
             chatHistoryEl.appendChild(div);
             chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
         }
@@ -612,6 +735,13 @@
                 conversationHistory.shift();
             }
         }
+
+        // Initialize first message dynamically so it gets markdown & buttons
+        function initChat() {
+            chatHistoryEl.innerHTML = '';
+            appendMessageToUI('model', 'வணக்கம்! நான் மீனா மார்க்கெட்டிங் AI. கடையில என்ன ஸ்டாக் இருக்குன்னு பாக்கணுமா?');
+        }
+        window.onload = initChat;
 
         // ==========================================
         // 2. TEXT CHAT MODE (REST API & LOADING UI)
@@ -839,34 +969,42 @@
                 return;
             }
 
-            playTTSResponse(aiResponse);
+            playTTSResponse(aiResponse, false);
         }
 
-        function playTTSResponse(text) {
-            if(!isVoiceModeActive) return;
-            voiceState = 'speaking';
-            updateVoiceUI();
-            updateCaption("Meena", text, false);
+        function playTTSResponse(text, isManual = false) {
+            if(!isVoiceModeActive && !isManual) return;
+            
+            if(!isManual) {
+                voiceState = 'speaking';
+                updateVoiceUI();
+                updateCaption("Meena", text, false);
+            }
 
             synth.cancel(); // Clear any queued speech
 
-            const utterance = new SpeechSynthesisUtterance(text);
+            // Strip Markdown formatting (*, #, `) before speaking, keeping words and ₹
+            const cleanText = stripMarkdownForTTS(text);
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            
             utterance.lang = 'ta-IN'; // Ensure Tamil/Tanglish pronunciation
             utterance.rate = 1.0;
 
-            utterance.onend = () => {
-                if (isVoiceModeActive) {
-                    voiceState = 'listening';
-                    try { recognition.start(); } catch(e) {}
-                }
-            };
+            if(!isManual) {
+                utterance.onend = () => {
+                    if (isVoiceModeActive) {
+                        voiceState = 'listening';
+                        try { recognition.start(); } catch(e) {}
+                    }
+                };
 
-            utterance.onerror = () => {
-                if (isVoiceModeActive) {
-                    voiceState = 'listening';
-                    try { recognition.start(); } catch(e) {}
-                }
-            };
+                utterance.onerror = () => {
+                    if (isVoiceModeActive) {
+                        voiceState = 'listening';
+                        try { recognition.start(); } catch(e) {}
+                    }
+                };
+            }
 
             synth.speak(utterance);
         }
