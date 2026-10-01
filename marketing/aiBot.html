@@ -657,6 +657,44 @@
         }
         .btn-call .material-symbols-outlined { font-size: 36px; }
 
+        /* --- IMAGE LOADING UI STYLES --- */
+        .img-preview-container { 
+            position: relative; 
+            display: inline-block; 
+            max-width: 100%; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            margin-bottom: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+        }
+        .img-preview-container img { 
+            display: block; 
+            max-width: 100%; 
+            transition: filter 0.3s ease, transform 0.3s ease; 
+        }
+        .img-preview-container.loading img { 
+            filter: blur(6px) brightness(0.65); 
+            transform: scale(1.02);
+        }
+        .img-loading-spinner { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            width: 44px; 
+            height: 44px; 
+            border: 4px solid rgba(255,255,255,0.15); 
+            border-top-color: var(--accent-color); 
+            border-radius: 50%; 
+            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite; 
+            display: none; 
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+        .img-preview-container.loading .img-loading-spinner { 
+            display: block; 
+        }
+        @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
     </style>
 </head>
 <body>
@@ -691,9 +729,10 @@
             </div>
             <div class="chat-input-area">
                 <div class="chat-input-wrapper">
-                    <input type="file" id="imageUploadInput" accept="image/*" style="display: none;">
+                    <!-- ADDED: capture="environment" to force direct-to-camera on mobile -->
+                    <input type="file" id="imageUploadInput" accept="image/*" capture="environment" style="display: none;">
                     <textarea id="chatInput" rows="1" placeholder="Message Meena AI..." oninput="autoResize(this); toggleSendIcon(); if(window.trigger3dTypingColor) window.trigger3dTypingColor();"></textarea>
-                    <button class="btn-send" id="btnSend" onclick="handleSendClick()">
+                    <button class="btn-send camera-mode" id="btnSend" onclick="handleSendClick()">
                         <span class="material-symbols-outlined" id="sendIcon">photo_camera</span>
                     </button>
                 </div>
@@ -729,6 +768,17 @@
                         <span class="material-symbols-outlined">call_end</span>
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- NEW: VISION SCANNER INTERFACE -->
+        <div class="view-container" id="viewVision">
+            <div class="call-wrapper" style="justify-content: center; cursor: pointer;" onclick="triggerHaptic([20]); document.getElementById('imageUploadInput').click();">
+                <div class="ai-avatar" style="width: 180px; height: 180px; background: rgba(13, 148, 136, 0.15); border-color: var(--accent-color); animation: vPulse 2s infinite alternate;">
+                    <span class="material-symbols-outlined" style="font-size: 80px; color: var(--accent-color);">document_scanner</span>
+                </div>
+                <div class="call-status" style="margin-top: 30px;">Tap to Scan Product</div>
+                <div class="call-sub-status">Instantly search inventory using your camera</div>
             </div>
         </div>
     </div>
@@ -896,6 +946,7 @@
         const ambientBg = document.getElementById('ambientBg');
         const viewChat = document.getElementById('viewChat');
         const viewCall = document.getElementById('viewCall');
+        const viewVision = document.getElementById('viewVision');
         
         const chatHistoryEl = document.getElementById('chatHistory');
         const chatInput = document.getElementById('chatInput');
@@ -966,13 +1017,15 @@
                 triggerHaptic([40, 50, 40, 50, 40]); // Vibrate 3 times
                 enterVoiceMode();
             } else {
-                exitVoiceMode();
+                if(currentMode === 'voice') exitVoiceMode();
+                if(currentMode === 'vision') exitVisionMode();
             }
         }
 
         function enterVoiceMode() {
             currentMode = 'voice';
             viewChat.classList.remove('active');
+            viewVision.classList.remove('active');
             viewCall.classList.add('active');
             
             headerIcon.innerText = 'close';
@@ -1010,19 +1063,57 @@
             }
         }
 
+        function enterVisionMode() {
+            currentMode = 'vision';
+            viewChat.classList.remove('active');
+            viewCall.classList.remove('active');
+            viewVision.classList.add('active');
+            
+            headerIcon.innerText = 'close';
+            headerIcon.style.color = 'var(--meena-red)';
+            if (window.location.hash !== '#vision') {
+                history.pushState({ view: 'vision' }, '', '#vision');
+            }
+        }
+
+        function exitVisionMode() {
+            triggerHaptic([30, 40]);
+            currentMode = 'chat';
+            
+            viewVision.classList.remove('active');
+            viewChat.classList.add('active');
+            
+            headerIcon.innerText = 'headphones';
+            headerIcon.style.color = 'var(--accent-color)';
+            
+            if (window.location.hash === '#vision') {
+                if (history.length > 1) {
+                    history.back();
+                } else {
+                    history.replaceState(null, '', window.location.pathname + window.location.search);
+                }
+            }
+        }
+
         window.addEventListener('popstate', (e) => {
-            if (currentMode === 'voice' && window.location.hash !== '#voice') {
-                exitVoiceMode();
-            } else if (currentMode === 'chat' && window.location.hash === '#voice') {
+            if (window.location.hash === '#voice') {
                 enterVoiceMode();
+            } else if (window.location.hash === '#vision') {
+                enterVisionMode();
+            } else {
+                if(currentMode === 'voice') exitVoiceMode();
+                if(currentMode === 'vision') exitVisionMode();
             }
         });
 
         window.addEventListener('hashchange', () => {
             if (window.location.hash === '#voice' && currentMode !== 'voice') {
                 enterVoiceMode();
-            } else if (window.location.hash !== '#voice' && currentMode === 'voice') {
-                exitVoiceMode();
+            } else if (window.location.hash === '#vision' && currentMode !== 'vision') {
+                enterVisionMode();
+            } else if (window.location.hash !== '#voice' && window.location.hash !== '#vision' && currentMode !== 'chat') {
+                if(currentMode === 'voice') exitVoiceMode();
+                if(currentMode === 'vision') exitVisionMode();
             }
         });
 
@@ -1033,8 +1124,10 @@
 
         function toggleSendIcon() {
             if (chatInput.value.trim() === '') {
+                btnSend.classList.add('camera-mode');
                 sendIcon.innerText = 'photo_camera';
             } else {
+                btnSend.classList.remove('camera-mode');
                 sendIcon.innerText = 'arrow_upward';
             }
         }
@@ -1173,9 +1266,12 @@
             // Detect #voice hash or ?mode=voice URL parameter to auto launch voice mode on load
             const urlParams = new URLSearchParams(window.location.search);
             const isVoiceRequested = window.location.hash === '#voice' || urlParams.get('mode') === 'voice';
+            const isVisionRequested = window.location.hash === '#vision' || urlParams.get('mode') === 'vision';
 
             if (isVoiceRequested) {
                 enterVoiceMode();
+            } else if (isVisionRequested) {
+                enterVisionMode();
             }
         }
         window.onload = initChat;
@@ -1272,20 +1368,73 @@
         });
 
         // ==========================================
-        // VISION / IMAGE UPLOAD LOGIC
+        // VISION / IMAGE UPLOAD & COMPRESSION LOGIC
         // ==========================================
+        
+        // Lightweight Client-Side Image Compressor (Canvas)
+        function compressImage(file, maxWidth) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.src = URL.createObjectURL(file);
+                img.onload = () => {
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    if (width > maxWidth) {
+                        height = Math.round((height * maxWidth) / width);
+                        width = maxWidth;
+                    }
+                    
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Compress to WebP at 80% quality to generate a KB-sized blob
+                    canvas.toBlob((blob) => {
+                        resolve(blob);
+                    }, 'image/webp', 0.80);
+                };
+                img.onerror = (err) => reject(err);
+            });
+        }
+
         if (imageUploadInput) {
             imageUploadInput.addEventListener('change', async (event) => {
                 const file = event.target.files[0];
                 if (!file) return;
 
                 event.target.value = ''; // Reset input
+                
+                // If triggered via the #vision full-screen overlay, seamlessly return to chat mode
+                if (currentMode === 'vision') {
+                    if (history.length > 1) {
+                        history.back(); // Pops the hash, triggers event listener to return to chat
+                    } else {
+                        viewVision.classList.remove('active');
+                        viewChat.classList.add('active');
+                        currentMode = 'chat';
+                        history.replaceState(null, '', window.location.pathname + window.location.search);
+                    }
+                }
 
                 const objectUrl = URL.createObjectURL(file);
-                const imgHTML = `<img src="${objectUrl}" style="max-width: 100%; border-radius: 12px; margin-bottom: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">`;
+                const previewId = 'img-preview-' + Date.now();
+                
+                // Display the "blurred spinner" processing UI instantly
+                const imgHTML = `
+                    <div id="${previewId}" class="img-preview-container loading">
+                        <img src="${objectUrl}" alt="Upload preview">
+                        <div class="img-loading-spinner"></div>
+                    </div>
+                `;
                 
                 const div = document.createElement('div');
                 div.className = 'msg-bubble msg-user';
+                div.style.background = 'transparent';
+                div.style.padding = '0';
+                div.style.boxShadow = 'none';
                 div.innerHTML = imgHTML;
                 chatHistoryEl.appendChild(div);
                 chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
@@ -1294,8 +1443,11 @@
                 btnSend.disabled = true;
 
                 try {
+                    // Compress the file locally before sending to save bandwidth and server RAM
+                    const compressedBlob = await compressImage(file, 1024);
+                    
                     const formData = new FormData();
-                    formData.append('image', file);
+                    formData.append('image', compressedBlob, "capture.webp");
 
                     const response = await fetch(`${BACKEND_URL}/vision`, {
                         method: 'POST',
@@ -1303,6 +1455,11 @@
                     });
 
                     const data = await response.json();
+                    
+                    // Reveal the clear image by removing the loading state
+                    const previewElement = document.getElementById(previewId);
+                    if (previewElement) previewElement.classList.remove('loading');
+                    
                     hideThinkingBubble();
 
                     if (!response.ok || data.error) {
@@ -1316,6 +1473,8 @@
                     saveToHistory('model', aiText);
 
                 } catch (err) {
+                    const previewElement = document.getElementById(previewId);
+                    if (previewElement) previewElement.classList.remove('loading');
                     hideThinkingBubble();
                     appendMessageToUI('model', `Network Error: ${err.message}`, true);
                 } finally {
