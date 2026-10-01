@@ -472,6 +472,8 @@
         .btn-send:active { transform: scale(0.92); }
         .btn-send:disabled { background: var(--input-border); color: var(--text-secondary); cursor: not-allowed; box-shadow: none; }
         .btn-send .material-symbols-outlined { font-size: 20px; font-weight: 600; margin-left: 2px;}
+        .btn-send.camera-mode { background: var(--accent-color); color: #ffffff; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.4); }
+        .btn-send.camera-mode .material-symbols-outlined { margin-left: 0; font-size: 22px; font-weight: 400; }
 
         /* --- REDESIGNED PROFESSIONAL VOICE CALL VIEW --- */
         .call-wrapper { 
@@ -693,7 +695,102 @@
         .img-preview-container.loading .img-loading-spinner { 
             display: block; 
         }
-        @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        /* --- WEBRTC CUSTOM IN-APP CAMERA VIEW --- */
+        #viewVision {
+            background-color: #000;
+            z-index: 2000; /* Covers the entire app including the header */
+            justify-content: center;
+            align-items: center;
+            display: none; 
+        }
+        #viewVision.active {
+            display: flex;
+        }
+        .camera-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0; left: 0;
+            background: #000;
+        }
+        .camera-controls-top {
+            position: absolute;
+            top: env(safe-area-inset-top, 20px);
+            left: 0; right: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 2010;
+        }
+        .camera-controls-bottom {
+            position: absolute;
+            bottom: env(safe-area-inset-bottom, 30px);
+            left: 0; right: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2010;
+        }
+        .camera-btn {
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            color: white;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .camera-btn:active { transform: scale(0.9); }
+        .camera-btn.close-btn, .camera-btn.flip-btn { width: 48px; height: 48px; }
+        .camera-btn.capture-btn {
+            width: 80px; height: 80px;
+            background: rgba(255,255,255,0.2);
+            border: 4px solid white;
+        }
+        .camera-btn.capture-btn .inner-circle {
+            width: 60px; height: 60px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.1s;
+        }
+        .camera-btn.capture-btn:active .inner-circle { transform: scale(0.85); }
+        
+        .camera-error {
+            position: absolute;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            padding: 24px;
+            background: rgba(20, 31, 48, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid var(--meena-red);
+            display: none;
+            width: 85%;
+            max-width: 340px;
+            z-index: 2010;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+        .upload-fallback-btn {
+            margin-top: 16px; 
+            padding: 10px 20px; 
+            background: var(--accent-color); 
+            border: none; 
+            border-radius: 8px; 
+            color: white; 
+            font-family: 'Inter', sans-serif;
+            font-weight: 600; 
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .upload-fallback-btn:active { transform: scale(0.95); }
 
     </style>
 </head>
@@ -729,8 +826,8 @@
             </div>
             <div class="chat-input-area">
                 <div class="chat-input-wrapper">
-                    <!-- ADDED: capture="environment" to force direct-to-camera on mobile -->
-                    <input type="file" id="imageUploadInput" accept="image/*" capture="environment" style="display: none;">
+                    <!-- Hidden file picker kept strictly as an error fallback -->
+                    <input type="file" id="imageUploadInput" accept="image/*" style="display: none;">
                     <textarea id="chatInput" rows="1" placeholder="Message Meena AI..." oninput="autoResize(this); toggleSendIcon(); if(window.trigger3dTypingColor) window.trigger3dTypingColor();"></textarea>
                     <button class="btn-send camera-mode" id="btnSend" onclick="handleSendClick()">
                         <span class="material-symbols-outlined" id="sendIcon">photo_camera</span>
@@ -771,14 +868,30 @@
             </div>
         </div>
 
-        <!-- NEW: VISION SCANNER INTERFACE -->
+        <!-- NEW: ADVANCED IN-APP WEBRTC CAMERA INTERFACE -->
         <div class="view-container" id="viewVision">
-            <div class="call-wrapper" style="justify-content: center; cursor: pointer;" onclick="triggerHaptic([20]); document.getElementById('imageUploadInput').click();">
-                <div class="ai-avatar" style="width: 180px; height: 180px; background: rgba(13, 148, 136, 0.15); border-color: var(--accent-color); animation: vPulse 2s infinite alternate;">
-                    <span class="material-symbols-outlined" style="font-size: 80px; color: var(--accent-color);">document_scanner</span>
+            <video id="cameraVideo" class="camera-video" autoplay playsinline></video>
+            
+            <div class="camera-controls-top">
+                <div class="camera-btn close-btn" onclick="triggerHaptic([20]); history.back();">
+                    <span class="material-symbols-outlined">close</span>
                 </div>
-                <div class="call-status" style="margin-top: 30px;">Tap to Scan Product</div>
-                <div class="call-sub-status">Instantly search inventory using your camera</div>
+                <div class="camera-btn flip-btn" onclick="flipCamera()">
+                    <span class="material-symbols-outlined">cameraswitch</span>
+                </div>
+            </div>
+            
+            <div class="camera-controls-bottom">
+                <div class="camera-btn capture-btn" onclick="capturePhoto()">
+                    <div class="inner-circle"></div>
+                </div>
+            </div>
+            
+            <div class="camera-error" id="cameraError">
+                <span class="material-symbols-outlined" style="font-size: 48px; color: var(--meena-red); margin-bottom: 10px;">no_photography</span>
+                <h3 style="margin:0 0 10px 0; font-size:1.1em;">Camera Unavailable</h3>
+                <p style="margin:0; font-size:0.9em; color:var(--text-secondary);" id="cameraErrorMsg">Please enable camera access in your browser settings to scan products.</p>
+                <button class="upload-fallback-btn" onclick="triggerHaptic([20]); document.getElementById('imageUploadInput').click();">Upload Photo</button>
             </div>
         </div>
     </div>
@@ -1069,22 +1182,21 @@
             viewCall.classList.remove('active');
             viewVision.classList.add('active');
             
-            headerIcon.innerText = 'close';
-            headerIcon.style.color = 'var(--meena-red)';
             if (window.location.hash !== '#vision') {
                 history.pushState({ view: 'vision' }, '', '#vision');
             }
+            
+            startWebRTCCamera();
         }
 
         function exitVisionMode() {
             triggerHaptic([30, 40]);
             currentMode = 'chat';
             
+            stopWebRTCCamera();
+            
             viewVision.classList.remove('active');
             viewChat.classList.add('active');
-            
-            headerIcon.innerText = 'headphones';
-            headerIcon.style.color = 'var(--accent-color)';
             
             if (window.location.hash === '#vision') {
                 if (history.length > 1) {
@@ -1135,7 +1247,7 @@
         function handleSendClick() {
             triggerHaptic([20]);
             if (chatInput.value.trim() === '') {
-                imageUploadInput.click();
+                enterVisionMode(); // Open advanced custom WebRTC camera
             } else {
                 sendChatMessage();
             }
@@ -1368,10 +1480,149 @@
         });
 
         // ==========================================
-        // VISION / IMAGE UPLOAD & COMPRESSION LOGIC
+        // VISION / CUSTOM WEBRTC CAMERA LOGIC
         // ==========================================
-        
-        // Lightweight Client-Side Image Compressor (Canvas)
+        let currentStream = null;
+        let usingFrontCamera = false;
+        const cameraVideo = document.getElementById('cameraVideo');
+        const cameraErrorEl = document.getElementById('cameraError');
+        const cameraErrorMsg = document.getElementById('cameraErrorMsg');
+
+        async function startWebRTCCamera() {
+            cameraErrorEl.style.display = 'none';
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+            }
+            
+            const constraints = {
+                video: {
+                    facingMode: usingFrontCamera ? "user" : "environment",
+                    width: { ideal: 1920 }, // Enforce 1080p target resolution
+                    height: { ideal: 1080 }
+                },
+                audio: false
+            };
+            
+            try {
+                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+                cameraVideo.srcObject = currentStream;
+            } catch (err) {
+                console.error("Camera Error:", err);
+                cameraErrorEl.style.display = 'block';
+                if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+                    cameraErrorMsg.innerText = "Camera access denied. Please enable it in your browser settings.";
+                } else {
+                    cameraErrorMsg.innerText = "No camera detected or hardware error occurred.";
+                }
+            }
+        }
+
+        function stopWebRTCCamera() {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
+            cameraVideo.srcObject = null;
+        }
+
+        function flipCamera() {
+            triggerHaptic([20]);
+            usingFrontCamera = !usingFrontCamera;
+            startWebRTCCamera();
+        }
+
+        async function capturePhoto() {
+            if (!currentStream) return;
+            triggerHaptic([40]);
+            
+            // Create a temporary canvas to grab the 1080p frame exactly as the video sees it
+            const canvas = document.createElement('canvas');
+            canvas.width = cameraVideo.videoWidth;
+            canvas.height = cameraVideo.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
+            
+            // Instantly route back to text chat
+            if (history.length > 1 && window.location.hash === '#vision') {
+                history.back(); // Pops hash & correctly closes camera
+            } else {
+                exitVisionMode(); 
+            }
+
+            // Convert canvas frame to a JPEG file and trigger the upload flow
+            canvas.toBlob(async (blob) => {
+                if (!blob) return;
+                const file = new File([blob], "capture.jpg", { type: "image/jpeg" });
+                processCapturedImage(file);
+            }, 'image/jpeg', 1.0);
+        }
+
+        // Shared Image Processing Logic (Uploads the blob via REST)
+        async function processCapturedImage(file) {
+            const objectUrl = URL.createObjectURL(file);
+            const previewId = 'img-preview-' + Date.now();
+            
+            // Instantly inject the WhatsApp-style blurred preview into the chat history
+            const imgHTML = `
+                <div id="${previewId}" class="img-preview-container loading">
+                    <img src="${objectUrl}" alt="Upload preview">
+                    <div class="img-loading-spinner"></div>
+                </div>
+            `;
+            
+            const div = document.createElement('div');
+            div.className = 'msg-bubble msg-user';
+            div.style.background = 'transparent';
+            div.style.padding = '0';
+            div.style.boxShadow = 'none';
+            div.innerHTML = imgHTML;
+            chatHistoryEl.appendChild(div);
+            chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
+
+            showThinkingBubble();
+            btnSend.disabled = true;
+
+            try {
+                // Shrink the native 1080p capture to a highly optimized 1024px WebP Blob locally
+                const compressedBlob = await compressImage(file, 1024);
+                
+                const formData = new FormData();
+                formData.append('image', compressedBlob, "capture.webp");
+
+                const response = await fetch(`${BACKEND_URL}/vision`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                // Processing complete: Clear the blur and hide the spinner
+                const previewElement = document.getElementById(previewId);
+                if (previewElement) previewElement.classList.remove('loading');
+                
+                hideThinkingBubble();
+
+                if (!response.ok || data.error) {
+                    let errMsg = data.error?.message || data.error || "Vision API error occurred.";
+                    appendMessageToUI('model', `Server Error: ${errMsg}`, true);
+                    return;
+                }
+
+                const aiText = data.candidates[0].content.parts[0].text;
+                appendMessageToUI('model', aiText);
+                saveToHistory('model', aiText);
+
+            } catch (err) {
+                const previewElement = document.getElementById(previewId);
+                if (previewElement) previewElement.classList.remove('loading');
+                hideThinkingBubble();
+                appendMessageToUI('model', `Network Error: ${err.message}`, true);
+            } finally {
+                btnSend.disabled = false;
+            }
+        }
+
+        // Compression Engine: Resizes and converts to WebP
         function compressImage(file, maxWidth) {
             return new Promise((resolve, reject) => {
                 const img = new Image();
@@ -1391,7 +1642,6 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     
-                    // Compress to WebP at 80% quality to generate a KB-sized blob
                     canvas.toBlob((blob) => {
                         resolve(blob);
                     }, 'image/webp', 0.80);
@@ -1400,86 +1650,21 @@
             });
         }
 
+        // Fallback picker execution: Routes classic file uploads into the new workflow
         if (imageUploadInput) {
             imageUploadInput.addEventListener('change', async (event) => {
                 const file = event.target.files[0];
                 if (!file) return;
-
-                event.target.value = ''; // Reset input
+                event.target.value = ''; 
                 
-                // If triggered via the #vision full-screen overlay, seamlessly return to chat mode
                 if (currentMode === 'vision') {
                     if (history.length > 1) {
-                        history.back(); // Pops the hash, triggers event listener to return to chat
+                        history.back(); 
                     } else {
-                        viewVision.classList.remove('active');
-                        viewChat.classList.add('active');
-                        currentMode = 'chat';
-                        history.replaceState(null, '', window.location.pathname + window.location.search);
+                        exitVisionMode();
                     }
                 }
-
-                const objectUrl = URL.createObjectURL(file);
-                const previewId = 'img-preview-' + Date.now();
-                
-                // Display the "blurred spinner" processing UI instantly
-                const imgHTML = `
-                    <div id="${previewId}" class="img-preview-container loading">
-                        <img src="${objectUrl}" alt="Upload preview">
-                        <div class="img-loading-spinner"></div>
-                    </div>
-                `;
-                
-                const div = document.createElement('div');
-                div.className = 'msg-bubble msg-user';
-                div.style.background = 'transparent';
-                div.style.padding = '0';
-                div.style.boxShadow = 'none';
-                div.innerHTML = imgHTML;
-                chatHistoryEl.appendChild(div);
-                chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
-
-                showThinkingBubble();
-                btnSend.disabled = true;
-
-                try {
-                    // Compress the file locally before sending to save bandwidth and server RAM
-                    const compressedBlob = await compressImage(file, 1024);
-                    
-                    const formData = new FormData();
-                    formData.append('image', compressedBlob, "capture.webp");
-
-                    const response = await fetch(`${BACKEND_URL}/vision`, {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    const data = await response.json();
-                    
-                    // Reveal the clear image by removing the loading state
-                    const previewElement = document.getElementById(previewId);
-                    if (previewElement) previewElement.classList.remove('loading');
-                    
-                    hideThinkingBubble();
-
-                    if (!response.ok || data.error) {
-                        let errMsg = data.error?.message || data.error || "Vision API error occurred.";
-                        appendMessageToUI('model', `Server Error: ${errMsg}`, true);
-                        return;
-                    }
-
-                    const aiText = data.candidates[0].content.parts[0].text;
-                    appendMessageToUI('model', aiText);
-                    saveToHistory('model', aiText);
-
-                } catch (err) {
-                    const previewElement = document.getElementById(previewId);
-                    if (previewElement) previewElement.classList.remove('loading');
-                    hideThinkingBubble();
-                    appendMessageToUI('model', `Network Error: ${err.message}`, true);
-                } finally {
-                    btnSend.disabled = false;
-                }
+                processCapturedImage(file);
             });
         }
 
