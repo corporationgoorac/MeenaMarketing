@@ -102,8 +102,8 @@
         .inv-card.out-of-stock { opacity: 0.7; border-color: rgba(239, 68, 68, 0.4); }
         
         .inv-info { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; min-width: 0; pointer-events: none; } 
-        .inv-name { font-size: 1.05em; font-weight: 600; color: var(--marketing-white); white-space: normal; word-wrap: break-word; line-height: 1.35; letter-spacing: -0.01em; }
-        .inv-model { font-size: 0.75em; font-weight: 500; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 6px 10px; border-radius: 6px; display: inline-block; width: fit-content; max-width: 100%; white-space: normal; word-wrap: break-word; word-break: break-word; border: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; text-transform: uppercase; line-height: 1.4; }
+        .inv-name { font-size: 1.05em; font-weight: 600; color: var(--marketing-white); white-space: normal; overflow-wrap: anywhere; word-break: break-word; line-height: 1.35; letter-spacing: -0.01em; }
+        .inv-model { font-size: 0.75em; font-weight: 500; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 6px 10px; border-radius: 6px; display: inline-block; width: fit-content; max-width: 100%; white-space: normal; overflow-wrap: anywhere; word-break: break-word; border: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; text-transform: uppercase; line-height: 1.4; }
         .inv-price { color: var(--success-color); font-weight: 700; font-size: 1.1em; margin-top: 6px; display: flex; align-items: center; gap: 8px;}
         .inv-mrp { text-decoration: line-through; font-size: 0.75em; color: var(--text-secondary); font-weight: 500; }
         
@@ -120,17 +120,21 @@
         .nav-item:active { transform: scale(0.90); background: rgba(255, 255, 255, 0.15); }
         .nav-item .material-symbols-outlined { font-size: 24px; }
         .nav-item.active { color: var(--warning-color); background: rgba(245, 158, 11, 0.15); }
+        
+        /* Maintained for legacy compatibility if required by other scripts, unused in current clean UI */
+        .nav-fab-center { transform: translateY(-18px); background: linear-gradient(135deg, var(--success-color), #059669); width: 64px; height: 64px; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.2); border: 6px solid var(--bg-color); color: white; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); flex-shrink: 0;}
 
         .modal { position: fixed; top: 0; right: -100%; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 2000; transition: right 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); overflow-y: auto; padding-bottom: 80px; box-sizing: border-box; }
         .modal.active { right: 0; }
+        
+        /* Nested Full Height History Modal Rules */
+        .modal.nested-modal { z-index: 2100; right: auto; left: 0; top: auto; bottom: -100%; height: 95%; border-radius: 24px 24px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.8); transition: bottom 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); background: var(--bg-color); }
+        .modal.nested-modal.active { bottom: 0; }
+
         .modal-header { display: flex; align-items: center; gap: 15px; padding: 18px 20px; background: rgba(19, 27, 38, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .close-modal { background: none; border: none; color: white; cursor: pointer; display: flex; padding: 8px; border-radius: 50%; transition: background 0.2s; margin-left: -8px;}
         .close-modal:hover { background: rgba(255,255,255,0.1); }
         .modal-header h2 { margin: 0; font-size: 1.25em; font-weight: 600; letter-spacing: -0.01em;}
-
-        /* Nested 90% Height History Ledger Modal */
-        #modalHistoryLedger { z-index: 2100; top: 100%; right: 0; height: 90vh; border-top-left-radius: 20px; border-top-right-radius: 20px; box-shadow: 0 -5px 25px rgba(0,0,0,0.6); transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); background-color: #0d141e; }
-        #modalHistoryLedger.active { top: 10%; }
 
         .form-group { padding: 25px 20px; }
         
@@ -185,8 +189,8 @@
         #modalCardActions .modal-content-wrap { background: linear-gradient(180deg, #1b2636 0%, #131b26 100%); width: 100%; max-width: 350px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,0,0,0.5); transform: translateY(30px) scale(0.98); opacity: 0; clip-path: inset(100% 0 0 0 round 24px); transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); overflow: hidden; display: flex; flex-direction: column; padding: 25px; text-align: center;}
         #modalCardActions.active .modal-content-wrap { transform: translateY(0) scale(1); opacity: 1; clip-path: inset(0 0 0 0 round 24px); }
         
-        .action-modal-title { font-size: 1.35em; font-weight: 700; color: white; margin-bottom: 5px; line-height: 1.3; text-shadow: 0 2px 4px rgba(0,0,0,0.5);}
-        .action-modal-model { font-size: 0.75em; color: var(--accent-color); font-weight: 600; background: rgba(13,148,136,0.1); border: 1px solid rgba(13,148,136,0.2); padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 0; letter-spacing: 0.5px; max-width: 100%; word-break: break-all; white-space: normal; }
+        .action-modal-title { font-size: 1.35em; font-weight: 700; color: white; margin-bottom: 5px; line-height: 1.3; text-shadow: 0 2px 4px rgba(0,0,0,0.5); overflow-wrap: anywhere; word-break: break-word;}
+        .action-modal-model { font-size: 0.75em; color: var(--accent-color); font-weight: 600; background: rgba(13,148,136,0.1); border: 1px solid rgba(13,148,136,0.2); padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 0; letter-spacing: 0.5px; max-width: 100%; word-break: break-all; white-space: normal; overflow-wrap: anywhere; }
         .action-modal-type { font-size: 0.75em; color: var(--info-color); font-weight: 600; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 0; text-transform: uppercase; letter-spacing: 0.5px;}
         
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;}
@@ -236,12 +240,8 @@
         .type-item { padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); color: white; font-size: 1.05em; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: background 0.2s; border-radius: 8px;}
         .type-item:active { background: rgba(255,255,255,0.05); }
 
-        /* Timeline and AI Auditor Styling */
-        .ai-auditor-box { background: rgba(13, 148, 136, 0.05); border: 1px solid rgba(13, 148, 136, 0.2); padding: 16px; border-radius: 12px; margin-top: 15px; position: relative; overflow: hidden; }
-        .skeleton-line { height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; margin-bottom: 8px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 0.8; } 100% { opacity: 0.4; } }
-        .typewriter-text { font-size: 0.9em; line-height: 1.5; color: var(--marketing-white); white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; }
-        
+        /* --- NEW PROFESSIONAL AUDIT TIMELINE & BADGE CSS --- */
+        .wrap-text { overflow-wrap: anywhere; word-break: break-word; white-space: normal; }
         .timeline-container { position: relative; padding-bottom: 20px; }
         .timeline-container::before { content: ''; position: absolute; left: 15px; top: 10px; bottom: 0; width: 2px; background: rgba(255,255,255,0.1); }
         .timeline-item { position: relative; padding-left: 45px; margin-bottom: 24px; animation: fadeSlideUp 0.3s ease forwards; opacity: 0; }
@@ -251,6 +251,7 @@
         .icon-billed { border-color: var(--warning-color); color: var(--warning-color); background: rgba(245, 158, 11, 0.1); }
         .icon-add { border-color: var(--success-color); color: var(--success-color); background: rgba(16, 185, 129, 0.1); }
         .icon-remove { border-color: var(--meena-red); color: var(--meena-red); background: rgba(239, 68, 68, 0.1); }
+        .icon-edit { border-color: var(--info-color); color: var(--info-color); background: rgba(59, 130, 246, 0.1); }
 
         .timeline-content { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 14px; border-radius: 12px; }
         .timeline-meta { font-size: 0.75em; color: var(--text-secondary); margin-bottom: 6px; display: flex; justify-content: space-between; }
@@ -258,11 +259,13 @@
         .timeline-qty { font-weight: 700; padding: 2px 8px; border-radius: 4px; font-size: 0.9em; }
         .timeline-qty.positive { background: rgba(16, 185, 129, 0.15); color: var(--success-color); }
         .timeline-qty.negative { background: rgba(239, 68, 68, 0.15); color: var(--meena-red); }
-        .timeline-reason { font-size: 0.85em; color: var(--text-secondary); background: rgba(0,0,0,0.2); padding: 6px 10px; border-radius: 6px; margin-top: 8px; display: inline-block; border: 1px dashed rgba(255,255,255,0.1); }
-
-        .ledger-badge { background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); text-align: center; flex: 1; }
-        .ledger-badge-title { font-size: 0.7em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 4px; letter-spacing: 0.5px; font-weight: 600; }
-        .ledger-badge-val { font-size: 1.1em; font-weight: 700; color: white; }
+        .timeline-reason { font-size: 0.85em; color: var(--text-secondary); background: rgba(0,0,0,0.2); padding: 6px 10px; border-radius: 6px; margin-top: 8px; display: inline-block; border: 1px dashed rgba(255,255,255,0.1); overflow-wrap: anywhere; word-break: break-word;}
+        
+        .auditor-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 16px; border-radius: 12px; margin-top: 15px; position: relative; overflow: hidden; min-height: 80px;}
+        .skeleton-line { height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; margin-bottom: 10px; position: relative; overflow: hidden; }
+        .skeleton-line::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; transform: translateX(-100%); background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,0.05) 20%, rgba(255,255,255,0) 60%); animation: shimmer 2s infinite; }
+        .typing-cursor { display: inline-block; width: 6px; height: 14px; background-color: var(--accent-color); animation: blink 1s step-end infinite; margin-left: 2px; vertical-align: middle;}
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
     </style>
 </head>
@@ -514,68 +517,71 @@
             </div>
     </div>
 
-    <!-- MAIN PRODUCT INFO DASHBOARD (MODAL 1) -->
+    <!-- MAIN PRODUCT INFO MODAL (DASHBOARD) -->
     <div class="modal" id="modalProductInfo">
         <div class="modal-header">
             <button class="close-modal" onclick="vibrateApp(30); history.back()"><span class="material-symbols-outlined">arrow_back</span></button>
-            <h2>Product Details</h2>
+            <h2>Product Dashboard</h2>
         </div>
         <div class="form-group" style="padding: 20px;">
             
             <div style="background: linear-gradient(135deg, var(--surface-hover), var(--surface-color)); padding: 22px; border-radius: 16px; border: 1px solid var(--input-border); margin-bottom: 20px; box-shadow: var(--shadow-md);">
-                <h3 id="infoName" style="margin: 0 0 12px 0; color: white; font-size: 1.4em; font-weight: 700; letter-spacing: -0.5px; overflow-wrap: anywhere; word-break: break-word; line-height: 1.3;"></h3>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <span id="infoModel" style="color: var(--accent-color); font-weight: 600; font-size: 0.85em; background: rgba(13,148,136,0.1); padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(13,148,136,0.2); overflow-wrap: anywhere; word-break: break-word; max-width: 100%;"></span>
-                    <span style="color: white; font-weight: 600; font-size: 0.85em; background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 5px;"><span class="material-symbols-outlined" style="font-size: 16px;">inventory_2</span> <span id="infoStockText"></span></span>
+                <h3 id="infoName" class="wrap-text" style="margin: 0 0 12px 0; color: white; font-size: 1.4em; font-weight: 700; letter-spacing: -0.5px;"></h3>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                    <span id="infoModel" class="wrap-text" style="color: var(--accent-color); font-weight: 600; font-size: 0.85em; background: rgba(13,148,136,0.1); padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(13,148,136,0.2);"></span>
+                    <span id="infoStockCheckBadge" style="display: none; color: var(--success-color); font-weight: 600; font-size: 0.85em; background: rgba(16,185,129,0.1); padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(16,185,129,0.2); align-items: center; gap: 5px;"><span class="material-symbols-outlined" style="font-size: 16px;">verified</span> <span id="infoStockCheckText"></span></span>
+                    <span id="infoPendingCheckBadge" style="display: none; color: var(--warning-color); font-weight: 600; font-size: 0.85em; background: rgba(245,158,11,0.1); padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(245,158,11,0.2); align-items: center; gap: 5px;"><span class="material-symbols-outlined" style="font-size: 16px;">warning</span> Pending Audit</span>
+                </div>
+                <div style="color: white; font-weight: 700; font-size: 1.8em; display: flex; align-items: center; gap: 8px;">
+                    <span class="material-symbols-outlined" style="font-size: 28px; color: var(--accent-color);">inventory_2</span> 
+                    <span id="infoCurrentStockText"></span>
                 </div>
             </div>
 
-            <!-- AI Auditor Block -->
-            <div class="ai-auditor-box" id="aiAuditorContainer">
-                <div id="auditorSkeleton" style="display: flex; flex-direction: column;">
-                    <div class="skeleton-line" style="width: 100%;"></div>
+            <!-- AI Auditor Box -->
+            <div class="auditor-box">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                    <span class="material-symbols-outlined" style="color: var(--info-color); font-size: 18px;">smart_toy</span>
+                    <span style="font-size: 0.85em; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px;">AI Auditor</span>
+                </div>
+                <div id="aiSkeletonLoader">
                     <div class="skeleton-line" style="width: 85%;"></div>
                     <div class="skeleton-line" style="width: 60%;"></div>
-                    <div class="skeleton-line" style="width: 90%;"></div>
+                    <div class="skeleton-line" style="width: 40%;"></div>
                 </div>
-                <div id="auditorText" class="typewriter-text" style="display: none;"></div>
+                <div id="aiAuditorText" class="wrap-text" style="color: white; font-size: 0.95em; line-height: 1.5; font-weight: 500; display: none;"></div>
             </div>
 
-            <div id="infoLastActivity" style="font-size: 0.85em; color: var(--text-secondary); background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.1); margin-top: 15px; display: flex; align-items: center; gap: 8px;">
-                <span class="material-symbols-outlined" style="font-size: 16px;">history</span> <span id="lastActivityText">No recent activity found.</span>
-            </div>
+            <!-- Single Last Activity Line -->
+            <div id="lastActivityLine" class="wrap-text" style="margin-top: 20px; font-size: 0.85em; color: var(--text-secondary); padding: 12px; border-left: 3px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); border-radius: 0 8px 8px 0; display: none;"></div>
 
-            <button class="btn-primary" onclick="openHistoryLedger()" style="margin: 25px 0 0 0; width: 100%;">
-                <span class="material-symbols-outlined">manage_search</span> See All History & Audit
+            <button class="btn-primary" onclick="openFullHistoryModal()" style="width: 100%; margin: 25px 0 0 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); box-shadow: none;">
+                <span class="material-symbols-outlined">manage_search</span>
+                See All History & Audit
             </button>
         </div>
     </div>
 
-    <!-- NESTED 90% HISTORY LEDGER (MODAL 2) -->
-    <div class="modal" id="modalHistoryLedger">
-        <div class="modal-header" style="position: sticky; top: 0; z-index: 2110;">
-            <button class="close-modal" onclick="vibrateApp(30); history.back()"><span class="material-symbols-outlined">close</span></button>
-            <h2>Audit Ledger</h2>
-        </div>
-        
-        <!-- Sticky Ledger Dashboard -->
-        <div style="position: sticky; top: 60px; background: rgba(13, 20, 30, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 2105; display: flex; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
-            <div class="ledger-badge">
-                <div class="ledger-badge-title">Created</div>
-                <div class="ledger-badge-val" id="ledgerCreatedQty">--</div>
-            </div>
-            <div class="ledger-badge">
-                <div class="ledger-badge-title">Current</div>
-                <div class="ledger-badge-val" id="ledgerCurrentQty" style="color: var(--accent-color);">--</div>
-            </div>
-            <div class="ledger-badge" id="ledgerCheckBadge" style="display: none; align-items: center; justify-content: center; flex-direction: column;">
-                <div class="ledger-badge-title" style="color: var(--success-color); display: flex; align-items: center; gap: 4px; justify-content: center;"><span class="material-symbols-outlined" style="font-size: 12px;">verified</span> Verified</div>
-                <div class="ledger-badge-val" id="ledgerCheckDate" style="font-size: 0.85em; font-weight: 500;"></div>
+    <!-- NESTED 95% HEIGHT HISTORY MODAL -->
+    <div class="modal nested-modal" id="modalFullHistory">
+        <div class="modal-header" style="justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button class="close-modal" onclick="vibrateApp(30); history.back()"><span class="material-symbols-outlined">close</span></button>
+                <h2>Full Audit Ledger</h2>
             </div>
         </div>
-
-        <div class="form-group" style="padding-top: 20px;">
-            <div id="infoHistorySentence"></div>
+        <div style="position: sticky; top: 62px; background: rgba(11, 15, 20, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 5; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 0.75em; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Baseline Stock</span>
+                <span id="nestedBaselineStock" style="font-weight: 700; color: white; font-size: 1.1em;">--</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px; text-align: right;">
+                <span style="font-size: 0.75em; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Current Stock</span>
+                <span id="nestedCurrentStock" style="font-weight: 700; color: var(--accent-color); font-size: 1.1em;">--</span>
+            </div>
+        </div>
+        <div class="form-group" style="padding: 20px;">
+            <div id="fullHistoryContainer"></div>
         </div>
     </div>
 
@@ -633,7 +639,7 @@
                 <h2 id="confirmTitle">Confirm Action</h2>
             </div>
             <div class="form-group" style="padding: 25px;">
-                <p id="confirmMessage" style="font-size: 1.1em; line-height: 1.6; color: var(--marketing-white); text-align: center; margin-bottom: 5px; font-weight: 500;"></p>
+                <p id="confirmMessage" class="wrap-text" style="font-size: 1.1em; line-height: 1.6; color: var(--marketing-white); text-align: center; margin-bottom: 5px; font-weight: 500;"></p>
                 <input type="number" id="confirmInput" placeholder="Enter value..." class="input-wrapper">
                 
                 <select id="confirmReasonSelect" class="input-wrapper" style="display: none; width: 100%; margin-top: 20px; padding: 15px; border-radius: 12px; border: 1px solid var(--input-border); background: var(--input-bg); color: white; font-size: 1.05em; outline: none;"></select>
@@ -652,16 +658,16 @@
                 <button class="close-modal" onclick="vibrateApp(20); history.back()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div style="text-align: center; margin-bottom: 24px; padding-top: 5px;">
-                <div class="action-modal-title" id="actionModalName">Product Name</div>
+                <div class="action-modal-title wrap-text" id="actionModalName">Product Name</div>
                 <div style="display: flex; justify-content: center; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
                     <span class="action-modal-type" id="actionModalType">Product Type</span>
-                    <span class="action-modal-model" id="actionModalModel">Model ID</span>
+                    <span class="action-modal-model wrap-text" id="actionModalModel">Model ID</span>
                 </div>
             </div>
             
             <div class="action-grid">
                 <div class="big-action-btn btn-act-info" id="btnActionInfo">
-                    <span class="material-symbols-outlined">history</span> History
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
                 </div>
                 <div class="big-action-btn btn-act-edit" id="btnActionEdit">
                     <span class="material-symbols-outlined">edit</span> Edit Item
@@ -710,9 +716,10 @@
         document.getElementById('installBtn').addEventListener('click', async () => { vibrateApp(50); installPopup.style.display = 'none'; if (deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; } });
         document.getElementById('closeBtn').addEventListener('click', () => { vibrateApp(50); installPopup.style.display = 'none'; });
 
+        // UPGRADED IMPORTS: Included arrayUnion and runTransaction
         import { db } from './config.js';
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-        import { collection, getDocs, query, orderBy, limit, where, doc, writeBatch, serverTimestamp, increment, updateDoc, deleteDoc, startAfter, setDoc, getDoc, deleteField, arrayUnion } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { collection, getDocs, query, orderBy, limit, where, doc, writeBatch, serverTimestamp, increment, updateDoc, deleteDoc, startAfter, setDoc, getDoc, deleteField, arrayUnion, runTransaction } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
         const auth = getAuth();
         let currentUserName = "Staff";
@@ -1282,144 +1289,162 @@
             } 
         });
 
-        // ==========================================
-        // NEW PROFESSIONAL HISTORY & AUDIT LOGIC
-        // ==========================================
-        
+        // --- NEW PROFESSIONAL AI AUDITOR & PAGINATION LOGIC ---
         let currentHistoryLimit = 15;
         let currentHistoryArray = [];
-        let currentlyAuditedItem = null;
+        
+        const intros = ["Audit complete.", "Ledger analysis finished.", "Mathematical verification done.", "Stock history scanned."];
+        const middlesOk = ["All transactions align perfectly with the shelf stock.", "The timeline math matches the current inventory perfectly.", "Zero discrepancies found across all records."];
+        const outrosOk = ["No unauthorized changes detected.", "Data integrity is at 100%.", "Everything is correctly in place."];
+        
+        const middlesBad = ["Discrepancy detected between ledger history and physical count.", "Timeline math does not match current shelf stock."];
+        const outrosBad = ["Manual intervention or data corruption likely.", "Immediate physical audit recommended."];
+
+        function typeText(elementId, text, color, showTick) {
+            const el = document.getElementById(elementId);
+            el.innerHTML = '';
+            el.style.color = color;
+            el.style.display = 'block';
+            let i = 0;
+            function typeWriter() {
+                if (i < text.length) {
+                    el.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 25);
+                } else {
+                    let iconHtml = showTick 
+                        ? `<span class="material-symbols-outlined" style="color:var(--success-color); font-size:18px; vertical-align:middle; margin-left:5px;">verified</span>` 
+                        : `<span class="material-symbols-outlined" style="color:var(--meena-red); font-size:18px; vertical-align:middle; margin-left:5px;">warning</span>`;
+                    el.innerHTML += iconHtml + '<span class="typing-cursor"></span>';
+                }
+            }
+            typeWriter();
+        }
 
         window.openInfoModal = function(id) {
             vibrateApp(30);
             const item = inventoryCache.find(i => i.id === id);
             if (!item) return;
 
-            currentlyAuditedItem = item;
-
-            // Load Quick Glance Dashboard
+            // 1. Populate Main Dashboard
             document.getElementById('infoName').innerText = item.name;
-            document.getElementById('infoModel').innerText = item.model || 'No Model ID';
-            document.getElementById('infoStockText').innerText = `${item.qty || 0} in stock`;
+            document.getElementById('infoModel').innerText = item.model || 'No Model ID Assigned';
+            document.getElementById('infoCurrentStockText').innerText = `${item.qty || 0} in stock`;
             
-            const historyData = item.history || [];
-            currentHistoryArray = [...historyData].reverse();
-
-            // Preview Last Activity
-            if (currentHistoryArray.length > 0) {
-                const last = currentHistoryArray[0];
-                const dateStr = new Date(last.date).toLocaleString('en-IN', { day: '2-digit', month: 'short' });
-                document.getElementById('lastActivityText').innerText = `${last.action} (${last.qtyChange > 0 ? '+'+last.qtyChange : last.qtyChange}) on ${dateStr}`;
+            // Handle new physical stockCheck badge
+            const stockCheckBadge = document.getElementById('infoStockCheckBadge');
+            const pendingCheckBadge = document.getElementById('infoPendingCheckBadge');
+            
+            if (item.stockCheckDate) {
+                const dateObj = new Date(item.stockCheckDate);
+                const formatOpts = { day: '2-digit', month: 'short', year: 'numeric' };
+                document.getElementById('infoStockCheckText').innerText = `Physically Verified: ${dateObj.toLocaleDateString('en-IN', formatOpts)}`;
+                stockCheckBadge.style.display = 'flex';
+                pendingCheckBadge.style.display = 'none';
             } else {
-                document.getElementById('lastActivityText').innerText = `No recent activity found.`;
+                stockCheckBadge.style.display = 'none';
+                pendingCheckBadge.style.display = 'flex';
             }
 
-            // Trigger AI Auditor
-            runAIAuditor(item);
+            // 2. Setup History Array & Variables
+            const historyData = item.history || [];
+            currentHistoryArray = [...historyData].reverse();
+            currentHistoryLimit = 15;
+            
+            // Extract baseline stock for nested header
+            let baseline = "Legacy";
+            if (historyData.length > 0) {
+                const firstLog = historyData[0]; // oldest item
+                if (firstLog.action === "Opening Balance" || firstLog.action === "System Initialization") {
+                    baseline = firstLog.qtyChange;
+                }
+            }
+            document.getElementById('nestedBaselineStock').innerText = baseline;
+            document.getElementById('nestedCurrentStock').innerText = item.qty || 0;
+
+            // 3. Process Last Activity for Main Dashboard
+            const lastActivityEl = document.getElementById('lastActivityLine');
+            if (currentHistoryArray.length > 0) {
+                const lastLog = currentHistoryArray[0];
+                const dateStr = new Date(lastLog.date).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true });
+                const qtyStr = logQtyHtml(lastLog.qtyChange, true);
+                lastActivityEl.innerHTML = `<strong style="color:white;">Last Activity:</strong> ${lastLog.action} ${qtyStr} on ${dateStr}`;
+                lastActivityEl.style.display = 'block';
+            } else {
+                lastActivityEl.style.display = 'none';
+            }
+
+            // 4. Trigger AI Auditor Sequence
+            document.getElementById('aiSkeletonLoader').style.display = 'block';
+            document.getElementById('aiAuditorText').style.display = 'none';
+            document.getElementById('aiAuditorText').innerHTML = '';
+            
+            setTimeout(() => {
+                document.getElementById('aiSkeletonLoader').style.display = 'none';
+                
+                // Run background math
+                let mathMatches = true;
+                let hasBaseline = false;
+                
+                if (historyData.length > 0) {
+                    const firstAction = historyData[0].action;
+                    if (firstAction === "Opening Balance" || firstAction === "System Initialization") {
+                        hasBaseline = true;
+                        let calculatedStock = 0;
+                        historyData.forEach(log => calculatedStock += (log.qtyChange || 0));
+                        if (calculatedStock !== (item.qty || 0)) mathMatches = false;
+                    }
+                } else {
+                    hasBaseline = false;
+                }
+
+                let finalSentence = "";
+                const intro = intros[Math.floor(Math.random() * intros.length)];
+                
+                if (!hasBaseline && currentHistoryArray.length === 0) {
+                    finalSentence = "Legacy Product detected. Detailed timeline will begin generating upon the next stock adjustment or sale.";
+                    typeText('aiAuditorText', finalSentence, "var(--text-secondary)", false);
+                } else if (!hasBaseline) {
+                    finalSentence = "Verified active tracked movements. Full historical math audit requires a manual system initialization edit.";
+                    typeText('aiAuditorText', finalSentence, "var(--warning-color)", false);
+                } else if (mathMatches) {
+                    const mid = middlesOk[Math.floor(Math.random() * middlesOk.length)];
+                    const out = outrosOk[Math.floor(Math.random() * outrosOk.length)];
+                    finalSentence = `${intro} ${mid} ${out}`;
+                    typeText('aiAuditorText', finalSentence, "var(--success-color)", true);
+                } else {
+                    const mid = middlesBad[Math.floor(Math.random() * middlesBad.length)];
+                    const out = outrosBad[Math.floor(Math.random() * outrosBad.length)];
+                    finalSentence = `${intro} ${mid} ${out}`;
+                    typeText('aiAuditorText', finalSentence, "var(--meena-red)", false);
+                }
+
+            }, 1500);
 
             if(window.updateIcons) window.updateIcons();
             openModal('modalProductInfo');
         };
 
-        function runAIAuditor(item) {
-            const skeleton = document.getElementById('auditorSkeleton');
-            const textEl = document.getElementById('auditorText');
-            
-            skeleton.style.display = 'flex';
-            textEl.style.display = 'none';
-            textEl.innerHTML = '';
-            textEl.style.color = 'var(--marketing-white)';
-
-            // Simulate LLM read time
-            setTimeout(() => {
-                skeleton.style.display = 'none';
-                textEl.style.display = 'block';
-
-                const historyData = item.history || [];
-                
-                if (historyData.length === 0) {
-                    textEl.innerHTML = `<span class="material-symbols-outlined" style="font-size: 14px; vertical-align: middle;">info</span> Legacy Product detected. Detailed audit will begin upon next stock adjustment.`;
-                    textEl.style.color = 'var(--text-secondary)';
-                    return;
-                }
-
-                // Mathematical Verification
-                let calculatedStock = 0;
-                historyData.forEach(log => {
-                    if(log.action === "Opening Balance") {
-                        calculatedStock = log.qtyChange;
-                    } else if (log.qtyChange !== undefined) {
-                        calculatedStock += log.qtyChange;
-                    }
-                });
-
-                const isMatch = (calculatedStock === item.qty);
-                const hasOpeningBalance = historyData.some(log => log.action === "Opening Balance");
-
-                if (!hasOpeningBalance) {
-                     textEl.innerHTML = `<span class="material-symbols-outlined" style="font-size: 14px; vertical-align: middle; color: var(--info-color);">analytics</span> Tracking initialized. Full mathematical verification pending initial baseline setup.`;
-                     return;
-                }
-
-                // Dynamic Phrase Generation
-                const intros = ["Ledger analysis complete.", "Mathematical verification finished.", "Stock history scanned.", "Audit protocol executed."];
-                const middles = ["Timeline math perfectly matches shelf stock.", "All transactions align with current inventory.", "Zero discrepancies found across all records."];
-                const outros = ["Data integrity is at 100%.", "No unauthorized changes detected.", "Everything is mathematically secured."];
-                
-                const rand = (arr) => arr[Math.floor(Math.random() * arr.length)];
-                
-                if (isMatch) {
-                    const finalStr = `<span class="material-symbols-outlined" style="font-size: 16px; color: var(--success-color); vertical-align: middle;">verified</span> ${rand(intros)} ${rand(middles)} ${rand(outros)}`;
-                    typeWriterEffect(textEl, finalStr, 20);
-                } else {
-                    const errorStr = `<span class="material-symbols-outlined" style="font-size: 16px; color: var(--meena-red); vertical-align: middle;">warning</span> Audit Warning. Discrepancy detected in stock ledger. History math does not match current physical stock.`;
-                    typeWriterEffect(textEl, errorStr, 20);
-                    textEl.style.color = 'var(--warning-color)';
-                }
-
-            }, 1800);
-        }
-
-        function typeWriterEffect(element, htmlString, speed) {
-            element.innerHTML = htmlString;
-            element.style.opacity = 0;
-            element.style.animation = "fadeSlideUp 0.5s forwards";
-        }
-
-        window.openHistoryLedger = function() {
+        window.openFullHistoryModal = function() {
             vibrateApp(20);
-            if (!currentlyAuditedItem) return;
-            
-            // Populate Sticky Header Data
-            const historyData = currentlyAuditedItem.history || [];
-            let createdStock = "--";
-            const openLog = historyData.find(log => log.action === "Opening Balance");
-            if (openLog) createdStock = openLog.qtyChange;
-            
-            document.getElementById('ledgerCreatedQty').innerText = createdStock;
-            document.getElementById('ledgerCurrentQty').innerText = currentlyAuditedItem.qty || 0;
-
-            const checkBadge = document.getElementById('ledgerCheckBadge');
-            if (currentlyAuditedItem.stockCheck) {
-                checkBadge.style.display = 'flex';
-                document.getElementById('ledgerCheckDate').innerText = new Date(currentlyAuditedItem.stockCheck).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-            } else {
-                checkBadge.style.display = 'none';
-            }
-
-            currentHistoryLimit = 15;
             renderHistoryTimeline();
-            openModal('modalHistoryLedger');
+            openModal('modalFullHistory');
         };
 
+        function logQtyHtml(qtyChange, inline = false) {
+            if (qtyChange === undefined || qtyChange === 0) return '';
+            const isPos = qtyChange > 0;
+            return `<span class="timeline-qty ${isPos ? 'positive' : 'negative'}" style="${inline ? 'padding:1px 5px; font-size:0.9em; margin:0 4px;' : ''}">${isPos ? '+' : ''}${qtyChange}</span>`;
+        }
+
         window.renderHistoryTimeline = function() {
-            const container = document.getElementById('infoHistorySentence');
+            const container = document.getElementById('fullHistoryContainer');
 
             if (currentHistoryArray.length === 0) {
                 container.innerHTML = `
                     <div style="text-align:center; padding: 40px 20px; color: var(--text-secondary); border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px; margin-top: 20px;">
                         <span class="material-symbols-outlined" style="font-size: 32px; opacity: 0.5; margin-bottom: 10px; display: block;">history_toggle_off</span>
-                        Legacy Product: Detailed timeline will begin generating upon next stock adjustment.
+                        Legacy Product: No records found. Timeline will begin tracking on the next edit.
                     </div>`;
                 return;
             }
@@ -1436,17 +1461,14 @@
                 
                 const actionLower = actionText.toLowerCase();
                 if (actionLower.includes('bill') || actionLower.includes('sales')) { iconName = 'receipt_long'; iconClass = 'icon-billed'; }
-                else if (actionLower.includes('reduc')) { iconName = 'remove'; iconClass = 'icon-remove'; }
-                else if (actionLower.includes('increas') || actionLower.includes('creat') || actionLower.includes('inward') || actionLower.includes('opening')) { iconName = 'add'; iconClass = 'icon-add'; }
+                else if (actionLower.includes('reduc') || actionLower.includes('decrease')) { iconName = 'remove'; iconClass = 'icon-remove'; }
+                else if (actionLower.includes('increas') || actionLower.includes('balance') || actionLower.includes('stock')) { iconName = 'add'; iconClass = 'icon-add'; }
 
-                let qtyHtml = '';
-                if (log.qtyChange !== undefined && log.qtyChange !== 0) {
-                    const isPos = log.qtyChange > 0;
-                    qtyHtml = `<span class="timeline-qty ${isPos ? 'positive' : 'negative'}">${isPos ? '+' : ''}${log.qtyChange}</span>`;
-                }
+                const qtyHtml = logQtyHtml(log.qtyChange);
+                const animDelay = index * 0.03;
 
                 html += `
-                    <div class="timeline-item">
+                    <div class="timeline-item" style="animation-delay: ${animDelay}s;">
                         <div class="timeline-icon ${iconClass}">
                             <span class="material-symbols-outlined">${iconName}</span>
                         </div>
@@ -1455,9 +1477,9 @@
                                 <span>${dateStr}</span>
                                 <span style="color: var(--accent-color); font-weight: 600;">${log.by || 'System'}</span>
                             </div>
-                            <div class="timeline-title">${actionText} ${qtyHtml}</div>
-                            ${log.invoiceNo ? `<div style="font-size: 0.85em; color: var(--text-secondary); margin-top: 4px;"><strong style="color:white;">Inv:</strong> ${log.invoiceNo}</div>` : ''}
-                            ${log.reason ? `<div class="timeline-reason">${log.reason}</div>` : ''}
+                            <div class="timeline-title wrap-text">${actionText} ${qtyHtml}</div>
+                            ${log.invoiceNo ? `<div class="wrap-text" style="font-size: 0.85em; color: var(--text-secondary); margin-top: 4px;"><strong style="color:white;">Inv:</strong> ${log.invoiceNo}</div>` : ''}
+                            ${log.reason ? `<div class="timeline-reason wrap-text">${log.reason}</div>` : ''}
                         </div>
                     </div>
                 `;
@@ -1483,11 +1505,8 @@
             renderHistoryTimeline();   
             if(window.updateIcons) window.updateIcons();
         };
-
-        // ==========================================
-        // HISTORY INTEGRATION FOR QUANTITY CHANGES
-        // ==========================================
-
+        
+        // --- UPGRADED: editQty with STRICT FIREBASE TRANSACTIONS & ARRAY UNION ---
         window.editQty = async function(id, currentQty) {
             vibrateApp(30);
             const item = inventoryCache.find(i => i.id === id);
@@ -1501,6 +1520,7 @@
                 showToast("Please enter a valid number.", "error");
                 return;
             }
+
             if (parsedQty === currentQty) {
                 showToast("Quantity unchanged.", "success");
                 return;
@@ -1514,23 +1534,62 @@
             try {
                 const itemRef = doc(db, "inventory", id);
                 const realEditorName = await getFreshUserName();
-
-                const historyLog = {
-                    action: parsedQty < currentQty ? "Stock Adjustment (Reduced)" : "Stock Adjustment (Increased)",
-                    qtyChange: parsedQty - currentQty,
-                    reason: reason,
-                    date: new Date().toISOString(),
-                    by: realEditorName
-                };
-
-                const payload = { 
-                    qty: parsedQty,
-                    lastUpdated: new Date().toISOString(),
-                    history: arrayUnion(historyLog)
-                };
-
-                await updateDoc(itemRef, payload);
+                const qtyDiff = parsedQty - currentQty;
                 
+                // Bulletproof runTransaction to lock document, handle legacy init, and write safely
+                await runTransaction(db, async (transaction) => {
+                    const docSnap = await transaction.get(itemRef);
+                    if (!docSnap.exists()) throw "Document does not exist!";
+                    
+                    const data = docSnap.data();
+                    let currentHistory = data.history || [];
+                    
+                    // Legacy Intercept: If product has no history, inject the baseline starting point
+                    if (currentHistory.length === 0) {
+                        currentHistory.push({
+                            action: "System Initialization",
+                            qtyChange: currentQty,
+                            date: new Date().toISOString(),
+                            by: "System",
+                            reason: "Legacy tracking started"
+                        });
+                    }
+                    
+                    // Push the actual edit action
+                    currentHistory.push({
+                        action: qtyDiff > 0 ? "Stock Adjustment (Increase)" : "Stock Adjustment (Decrease)",
+                        qtyChange: qtyDiff,
+                        date: new Date().toISOString(),
+                        by: realEditorName,
+                        reason: reason
+                    });
+                    
+                    transaction.update(itemRef, {
+                        qty: parsedQty,
+                        lastUpdated: new Date().toISOString(),
+                        history: currentHistory
+                    });
+                });
+                
+                // Write reduction alert safely outside the main transaction
+                if (parsedQty < currentQty) {
+                    try {
+                        await setDoc(doc(db, "alerts", "stock_reduction"), {
+                            name: item.name || '',
+                            model: item.model || 'N/A',
+                            price: item.price || 0,
+                            mrp: item.mrp || 0,
+                            qty: parsedQty,
+                            previousQty: currentQty,
+                            lastEditBy: realEditorName, 
+                            lastEditReason: reason,
+                            lastUpdated: new Date().toISOString()
+                        });
+                    } catch (alertErr) {
+                        console.error("Failed to write alert document:", alertErr);
+                    }
+                }
+
                 showToast("Quantity updated successfully!", "success");
                 loadInventory(); 
             } catch (err) {
@@ -1539,6 +1598,62 @@
             }
         };
 
+        let currentEditOriginalQty = 0;
+        const editQtyInput = document.getElementById('editQty');
+        const editReasonContainer = document.getElementById('editReasonContainer');
+        const editReasonSelect = document.getElementById('editReasonSelect');
+        const btnSaveEditItem = document.getElementById('btnSaveEditItem');
+
+        function updateEditDropdownLogic() {
+            const newQty = parseInt(editQtyInput.value) || 0;
+            if (newQty < currentEditOriginalQty) {
+                editReasonSelect.innerHTML = `<option value="">Select reason...</option><option value="Sent to Meena Agency">Sent to Meena Agency</option><option value="Product Missing">Product Missing</option><option value="Damaged Product">Damaged Product</option><option value="Returned to Dealer">Returned to Dealer</option><option value="Gift to Customer">Gift to Customer</option>`;
+                editReasonContainer.style.display = 'block';
+                checkReasonSelection();
+            } else if (newQty > currentEditOriginalQty) {
+                editReasonSelect.innerHTML = `<option value="">Select reason...</option><option value="New Stock">New Stock</option><option value="Customer Return">Customer Return</option><option value="Counting Mistake">Counting Mistake</option>`;
+                editReasonContainer.style.display = 'block';
+                checkReasonSelection();
+            } else {
+                editReasonContainer.style.display = 'none';
+                editReasonSelect.value = "";
+                btnSaveEditItem.style.display = 'flex';
+            }
+        }
+
+        function checkReasonSelection() {
+            if (editReasonSelect.value === "") {
+                btnSaveEditItem.style.display = 'none';
+            } else {
+                btnSaveEditItem.style.display = 'flex';
+            }
+        }
+
+        editQtyInput.addEventListener('input', updateEditDropdownLogic);
+        editReasonSelect.addEventListener('change', checkReasonSelection);
+
+        window.editItemFull = async function(id) {
+            vibrateApp(30);
+            const item = inventoryCache.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('editId').value = id;
+            document.getElementById('editName').value = item.name || '';
+            document.getElementById('editModel').value = item.model || '';
+            document.getElementById('editType').value = item.type || ''; 
+            document.getElementById('editMrp').value = item.mrp || 0;
+            document.getElementById('editPrice').value = item.price || 0;
+            
+            currentEditOriginalQty = item.qty || 0;
+            document.getElementById('editQty').value = currentEditOriginalQty;
+            
+            updateEditDropdownLogic(); 
+
+            if(window.updateIcons) window.updateIcons();
+            openModal('modalEditInventory');
+        };
+
+        // Edit Item now ONLY processes changes without polluting the timeline with silent text edits
         document.getElementById('btnSaveEditItem').addEventListener('click', async () => {
             vibrateApp(40);
             const id = document.getElementById('editId').value;
@@ -1562,35 +1677,82 @@
             try {
                 const item = inventoryCache.find(i => i.id === id);
                 const oldQty = item ? (item.qty || 0) : 0;
-
-                const itemRef = doc(db, "inventory", id);
                 
-                const payload = { 
-                    name: newName,
-                    model: newModel,
-                    type: newType, 
-                    mrp: newMrp,
-                    price: newPrice,
-                    qty: newQty,
-                    searchTokens: generateSearchTokens(newName, newModel), 
-                    searchKeywords: deleteField(), 
-                    lastUpdated: new Date().toISOString()
-                };
-
-                // Only record history if quantity changes from this edit screen
+                const itemRef = doc(db, "inventory", id);
+                let realEditorName = currentUserName; 
+                
                 if (newQty !== oldQty) {
-                    const realEditorName = await getFreshUserName(); 
-                    const historyLog = {
-                        action: newQty < oldQty ? "Stock Adjustment (Reduced)" : "Stock Adjustment (Increased)",
-                        qtyChange: newQty - oldQty,
-                        reason: editReasonSelect.value || "General Edit",
-                        date: new Date().toISOString(),
-                        by: realEditorName
-                    };
-                    payload.history = arrayUnion(historyLog);
+                    realEditorName = await getFreshUserName(); 
+                    const qtyDiff = newQty - oldQty;
+                    
+                    // Transaction required to inject into history array if quantity changes via Full Edit
+                    await runTransaction(db, async (transaction) => {
+                        const docSnap = await transaction.get(itemRef);
+                        const data = docSnap.data();
+                        let currentHistory = data.history || [];
+                        
+                        if (currentHistory.length === 0) {
+                            currentHistory.push({
+                                action: "System Initialization",
+                                qtyChange: oldQty,
+                                date: new Date().toISOString(),
+                                by: "System",
+                                reason: "Legacy tracking started"
+                            });
+                        }
+                        
+                        currentHistory.push({
+                            action: qtyDiff > 0 ? "Stock Adjustment (Increase)" : "Stock Adjustment (Decrease)",
+                            qtyChange: qtyDiff,
+                            date: new Date().toISOString(),
+                            by: realEditorName,
+                            reason: editReasonSelect.value
+                        });
+                        
+                        transaction.update(itemRef, {
+                            name: newName,
+                            model: newModel,
+                            type: newType, 
+                            mrp: newMrp,
+                            price: newPrice,
+                            qty: newQty,
+                            searchTokens: generateSearchTokens(newName, newModel), 
+                            searchKeywords: deleteField(),
+                            lastUpdated: new Date().toISOString(),
+                            history: currentHistory
+                        });
+                    });
+                    
+                    if (newQty < oldQty) {
+                        try {
+                            await setDoc(doc(db, "alerts", "stock_reduction"), {
+                                name: newName || '',
+                                model: newModel || 'N/A',
+                                type: newType || 'N/A', 
+                                price: newPrice || 0,
+                                mrp: newMrp || 0,
+                                qty: newQty,
+                                previousQty: oldQty,
+                                lastEditBy: realEditorName, 
+                                lastEditReason: editReasonSelect.value || "N/A",
+                                lastUpdated: new Date().toISOString()
+                            });
+                        } catch (alertErr) { console.error("Failed to write alert document:", alertErr); }
+                    }
+                } else {
+                    // SILENT EDIT: No quantity change, just update text data directly without touching the history ledger
+                    await updateDoc(itemRef, {
+                        name: newName,
+                        model: newModel,
+                        type: newType, 
+                        mrp: newMrp,
+                        price: newPrice,
+                        searchTokens: generateSearchTokens(newName, newModel), 
+                        searchKeywords: deleteField(),
+                        lastUpdated: new Date().toISOString()
+                    });
                 }
 
-                await updateDoc(itemRef, payload);
                 showToast("Product updated successfully!", "success");
                 history.back(); 
                 loadInventory(); 
@@ -1604,6 +1766,428 @@
             }
         });
 
+        window.deleteItem = async function(id, name) {
+            vibrateApp(40);
+            const isConfirmed = await openConfirmModal("Delete Product", `Are you sure you want to completely delete "${name}"? This action cannot be undone.`, false, "", "var(--meena-red)", "Delete Product");
+            if (!isConfirmed) return;
+            
+            try {
+                const itemRef = doc(db, "inventory", id);
+                await deleteDoc(itemRef);
+                showToast("Item deleted successfully!", "success");
+                loadInventory(); 
+            } catch (err) {
+                console.error("Error deleting item:", err);
+                showToast(err.message || "Failed to delete item.", "error");
+            }
+        };
+
+        let inventoryCache = [];
+        let showingLowStock = false;
+        
+        let lastVisibleItem = null;
+        let isFetchingMore = false;
+        let hasMoreData = true;
+        let currentSearchTerm = ''; 
+
+        function renderSkeletons() {
+            const grid = document.getElementById('inventoryGrid');
+            let skeletonHtml = '';
+            for(let i=0; i<6; i++) {
+                skeletonHtml += `
+                <div class="inv-card" style="box-shadow: none; border-color: rgba(255,255,255,0.02); background: rgba(19, 27, 38, 0.4);">
+                    <div class="inv-info" style="width:100%; justify-content: center;">
+                        <div class="skeleton" style="height:24px; width:85%; margin-bottom:12px; border-radius:6px;"></div>
+                        <div class="skeleton" style="height:18px; width:45%; margin-bottom:14px; border-radius:6px;"></div>
+                        <div style="display: flex; gap: 8px;">
+                            <div class="skeleton" style="height:20px; width:25%; border-radius:6px;"></div>
+                            <div class="skeleton" style="height:20px; width:35%; border-radius:6px;"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton" style="height:65px; width:65px; border-radius:14px; margin-left:15px; flex-shrink:0;"></div>
+                </div>`;
+            }
+            grid.innerHTML = skeletonHtml;
+        }
+
+        async function loadInventory(isLoadMore = false) {
+            const grid = document.getElementById('inventoryGrid');
+            
+            if (isLoadMore) {
+                if (isFetchingMore || !hasMoreData) return;
+                isFetchingMore = true;
+                if(!document.getElementById('scrollLoader')) {
+                    const loader = document.createElement('div');
+                    loader.id = 'scrollLoader';
+                    loader.style.cssText = "text-align:center; color:var(--accent-color); width:100%; padding:20px; font-weight:600; font-size:0.9em; display:flex; justify-content:center; align-items:center; gap:8px;";
+                    loader.innerHTML = "<span class='skeleton' style='width:16px; height:16px; border-radius:50%; display:inline-block;'></span> Loading more products...";
+                    grid.parentNode.appendChild(loader);
+                } else {
+                    document.getElementById('scrollLoader').style.display = 'flex';
+                    document.getElementById('scrollLoader').innerHTML = "<span class='skeleton' style='width:16px; height:16px; border-radius:50%; display:inline-block;'></span> Loading more products...";
+                }
+            } else {
+                hasMoreData = true;
+                lastVisibleItem = null;
+                inventoryCache = [];
+                renderSkeletons();
+            }
+
+            try {
+                let q;
+                let typeFilter = currentTypeFilter ? [where("type", "==", currentTypeFilter)] : [];
+
+                if (showingLowStock) {
+                    if (isLoadMore && lastVisibleItem) {
+                        q = query(collection(db, "inventory"), where("qty", "<", 3), ...typeFilter, startAfter(lastVisibleItem), limit(10));
+                    } else {
+                        q = query(collection(db, "inventory"), where("qty", "<", 3), ...typeFilter, limit(10));
+                    }
+                } else if (currentSearchTerm !== '') {
+                    const searchWords = currentSearchTerm.toLowerCase().replace(/[.\/\\~*\[\]]/g, ' ').split(/[\s\-_]+/).filter(w => w.trim().length > 0);
+                    
+                    q = collection(db, "inventory");
+                    
+                    searchWords.forEach(word => {
+                        q = query(q, where(`searchTokens.${word}`, "==", true));
+                    });
+
+                    if (currentTypeFilter) {
+                        q = query(q, ...typeFilter);
+                    }
+
+                    if (isLoadMore && lastVisibleItem) {
+                        q = query(q, startAfter(lastVisibleItem), limit(10));
+                    } else {
+                        q = query(q, limit(10));
+                    }
+                } else {
+                    if (currentTypeFilter) {
+                        if (isLoadMore && lastVisibleItem) {
+                             q = query(collection(db, "inventory"), where("type", "==", currentTypeFilter), startAfter(lastVisibleItem), limit(10));
+                        } else {
+                             q = query(collection(db, "inventory"), where("type", "==", currentTypeFilter), limit(10));
+                        }
+                    } else {
+                        if (isLoadMore && lastVisibleItem) {
+                            q = query(collection(db, "inventory"), orderBy("createdAt", "desc"), startAfter(lastVisibleItem), limit(10));
+                        } else {
+                            q = query(collection(db, "inventory"), orderBy("createdAt", "desc"), limit(10));
+                        }
+                    }
+                }
+
+                const snap = await getDocs(q);
+                
+                if (snap.empty) {
+                    hasMoreData = false;
+                    if (isLoadMore && document.getElementById('scrollLoader')) {
+                        document.getElementById('scrollLoader').innerHTML = "<span class='material-symbols-outlined' style='font-size:18px;'>check_circle</span> End of inventory";
+                        setTimeout(() => { if(document.getElementById('scrollLoader')) document.getElementById('scrollLoader').style.display = 'none'; }, 2000);
+                        if(window.updateIcons) window.updateIcons();
+                    } else if (!isLoadMore) {
+                        grid.innerHTML = '<div style="text-align:center; color:var(--text-secondary); width:100%; padding:40px; display:flex; flex-direction:column; align-items:center; gap:10px;"><span class="material-symbols-outlined" style="font-size:40px; opacity:0.5;">inventory_2</span> No matching products found.</div>';
+                        if(window.updateIcons) window.updateIcons();
+                    }
+                    isFetchingMore = false;
+                    return;
+                }
+
+                lastVisibleItem = snap.docs[snap.docs.length - 1];
+
+                let newItems = [];
+                snap.forEach(doc => {
+                    if(!inventoryCache.find(i => i.id === doc.id)) {
+                        newItems.push({ id: doc.id, ...doc.data() });
+                    }
+                });
+                
+                newItems = advancedSort(newItems, currentSearchTerm);
+                inventoryCache = inventoryCache.concat(newItems);
+
+                if (isLoadMore) {
+                    renderInventoryAppend(newItems);
+                } else {
+                    renderInventory(inventoryCache);
+                }
+
+                if (isLoadMore && document.getElementById('scrollLoader')) {
+                    document.getElementById('scrollLoader').style.display = 'none';
+                }
+
+            } catch (err) {
+                console.error(err);
+                if (!isLoadMore) {
+                    grid.innerHTML = '<div style="color:var(--meena-red); text-align:center; width:100%; padding:20px; background:rgba(239,68,68,0.1); border-radius:12px; border:1px solid rgba(239,68,68,0.3); margin-top:20px;">Error loading inventory. Check permissions.</div>';
+                }
+                showToast(err.message || "Failed to load inventory data.", "error");
+            } finally {
+                isFetchingMore = false;
+            }
+        }
+
+        document.querySelector('.main-scroll-area').addEventListener('scroll', (e) => {
+            const element = e.target;
+            if (element.scrollHeight - element.scrollTop <= element.clientHeight + 100) {
+                loadInventory(true); 
+            }
+        });
+
+        function renderInventory(dataArray) {
+            const grid = document.getElementById('inventoryGrid');
+            if (dataArray.length === 0) {
+                grid.innerHTML = '<div style="text-align:center; color:var(--text-secondary); width:100%; padding:40px; display:flex; flex-direction:column; align-items:center; gap:10px;"><span class="material-symbols-outlined" style="font-size:40px; opacity:0.5;">inventory_2</span> No matching products found.</div>';
+                if(window.updateIcons) window.updateIcons();
+                return;
+            }
+
+            let htmlBuffer = '';
+            dataArray.forEach((item, index) => {
+                const q = item.qty || 0;
+                let qtyClass = "";
+                let oosBadge = "";
+                let cardClass = "inv-card";
+
+                if (q === 0) {
+                    qtyClass = "zero";
+                    cardClass += " out-of-stock";
+                    oosBadge = `<div class="oos-badge">Out of Stock</div>`;
+                } else if (q < 3) {
+                    qtyClass = "low";
+                }
+                
+                const typeLabel = item.type ? `<span style="display: none;">${item.type}</span>` : '';
+                const animDelay = index * 0.05;
+
+                htmlBuffer += `
+                    <div class="${cardClass}" onclick="openCardActionModal('${item.id}')" style="animation-delay: ${animDelay}s;">
+                        ${oosBadge}
+                        <div class="inv-info">
+                            <span class="inv-name">${item.name}</span>
+                            <span class="inv-model">${typeLabel}${item.model || 'No Model ID'}</span>
+                            <span class="inv-price"><span class="inv-mrp">₹${(item.mrp || 0).toLocaleString()}</span>₹${(item.price || 0).toLocaleString()}</span>
+                        </div>
+                        <div class="inv-qty ${qtyClass}">
+                            <div style="font-size: 0.45em; text-transform: uppercase; color: inherit; letter-spacing: 1px; margin-bottom: 2px; opacity: 0.8;">QTY</div>
+                            ${q === 0 ? '0' : q}
+                        </div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = htmlBuffer; 
+            if(window.updateIcons) window.updateIcons();
+        }
+
+        function renderInventoryAppend(dataArray) {
+            const grid = document.getElementById('inventoryGrid');
+            if (dataArray.length === 0) return;
+
+            let htmlBuffer = '';
+            dataArray.forEach((item, index) => {
+                const q = item.qty || 0;
+                let qtyClass = "";
+                let oosBadge = "";
+                let cardClass = "inv-card";
+
+                if (q === 0) {
+                    qtyClass = "zero";
+                    cardClass += " out-of-stock";
+                    oosBadge = `<div class="oos-badge">Out of Stock</div>`;
+                } else if (q < 3) {
+                    qtyClass = "low";
+                }
+                
+                const typeLabel = item.type ? `<span style="display: none;">${item.type}</span>` : '';
+                const animDelay = index * 0.05;
+
+                htmlBuffer += `
+                    <div class="${cardClass}" onclick="openCardActionModal('${item.id}')" style="animation-delay: ${animDelay}s;">
+                        ${oosBadge}
+                        <div class="inv-info">
+                            <span class="inv-name">${item.name}</span>
+                            <span class="inv-model">${typeLabel}${item.model || 'No Model ID'}</span>
+                            <span class="inv-price"><span class="inv-mrp">₹${(item.mrp || 0).toLocaleString()}</span>₹${(item.price || 0).toLocaleString()}</span>
+                        </div>
+                        <div class="inv-qty ${qtyClass}">
+                            <div style="font-size: 0.45em; text-transform: uppercase; color: inherit; letter-spacing: 1px; margin-bottom: 2px; opacity: 0.8;">QTY</div>
+                            ${q === 0 ? '0' : q}
+                        </div>
+                    </div>
+                `;
+            });
+            grid.insertAdjacentHTML('beforeend', htmlBuffer);
+            if(window.updateIcons) window.updateIcons();
+        }
+
+        window.filterLowStock = async function() {
+            vibrateApp(40);
+            const btn = document.getElementById('btnLowStock');
+            const searchBox = document.getElementById('searchInventory');
+            
+            if (showingLowStock) {
+                btn.style.color = "var(--text-secondary)";
+                btn.classList.remove('active');
+                searchBox.value = '';
+                showingLowStock = false;
+                currentSearchTerm = ''; 
+                loadInventory(); 
+            } else {
+                btn.style.color = "var(--warning-color)";
+                btn.classList.add('active');
+                
+                renderSkeletons();
+                
+                showingLowStock = true;
+                currentSearchTerm = ''; 
+                searchBox.value = '';
+                
+                loadInventory(false); 
+            }
+        };
+
+        let searchTimeout;
+        document.getElementById('searchInventory').addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(async () => {
+                const term = e.target.value.toLowerCase().trim();
+
+                currentSearchTerm = term;
+                if(term === '') {
+                    if (showingLowStock) {
+                        const btn = document.getElementById('btnLowStock');
+                        btn.style.color = "var(--text-secondary)";
+                        btn.classList.remove('active');
+                        showingLowStock = false;
+                    }
+                } else {
+                    renderSkeletons(); 
+                }
+                
+                loadInventory(false);
+
+            }, 400); 
+        });
+
+        let pendingCart = [];
+
+        document.getElementById('btnAddToList').addEventListener('click', async () => {
+            vibrateApp(40);
+            const name = document.getElementById('iName').value.trim();
+            const model = document.getElementById('iModel').value.trim();
+            const type = document.getElementById('iType').value.trim(); 
+            const mrp = parseFloat(document.getElementById('iMrp').value) || 0;
+            const price = parseFloat(document.getElementById('iPrice').value) || 0;
+            const qty = parseInt(document.getElementById('iQty').value) || 1;
+
+            if (!name || !type || mrp <= 0 || price <= 0 || qty < 1) {
+                showToast("Please enter a valid Name, Type, MRP, Price, and Quantity.", "error");
+                return;
+            }
+
+            const btnAdd = document.getElementById('btnAddToList');
+            const originalText = btnAdd.innerHTML;
+            btnAdd.disabled = true;
+            btnAdd.innerHTML = "Checking...";
+
+            try {
+                let isUpdate = false;
+                let existingId = null;
+                let existingQtyToSave = 0;
+
+                if (model !== "") {
+                    const q = query(collection(db, "inventory"), where("model", "==", model), limit(1));
+                    const snap = await getDocs(q);
+                    
+                    if (!snap.empty) {
+                        const existingDoc = snap.docs[0];
+                        const existingData = existingDoc.data();
+                        
+                        const confirmUpdate = await openConfirmModal("Duplicate Product", `Product with Model ID "${model}" already exists as "${existingData.name}" (Current Qty: ${existingData.qty}). Do you want to add +${qty} to this existing product instead of creating a new one?`, false, "", "var(--warning-color)", "Update Existing");
+                        
+                        if (confirmUpdate) {
+                            isUpdate = true;
+                            existingId = existingDoc.id;
+                            existingQtyToSave = existingData.qty || 0;
+                        } else {
+                            btnAdd.disabled = false;
+                            btnAdd.innerHTML = originalText;
+                            if(window.updateIcons) window.updateIcons();
+                            return; 
+                        }
+                    }
+                }
+
+                pendingCart.push({ 
+                    name: isUpdate ? (name || "Existing Product") : name, 
+                    model, 
+                    type, 
+                    mrp,
+                    price, 
+                    qty, 
+                    isUpdate, 
+                    existingId,
+                    existingQty: existingQtyToSave 
+                });
+                
+                document.getElementById('iName').value = '';
+                document.getElementById('iModel').value = '';
+                document.getElementById('iType').value = ''; 
+                document.getElementById('iMrp').value = '';
+                document.getElementById('iPrice').value = '';
+                document.getElementById('iQty').value = '1';
+                document.getElementById('iName').focus();
+
+                renderPendingList();
+            } catch (error) {
+                console.error("Error checking model:", error);
+                showToast(error.message || "Error verifying product model.", "error");
+            } finally {
+                btnAdd.disabled = false;
+                btnAdd.innerHTML = originalText;
+                if(window.updateIcons) window.updateIcons();
+            }
+        });
+
+        window.removePendingItem = function(index) {
+            vibrateApp(30);
+            pendingCart.splice(index, 1);
+            renderPendingList();
+        };
+
+        function renderPendingList() {
+            const list = document.getElementById('pendingList');
+            const btnSave = document.getElementById('btnSaveInventory');
+            
+            if (pendingCart.length === 0) {
+                list.innerHTML = '<div style="padding: 25px; text-align: center; color: var(--text-secondary); font-size: 0.9em; display:flex; flex-direction:column; align-items:center; gap:8px;"><span class="material-symbols-outlined" style="font-size: 2em; opacity: 0.5;">inventory_2</span>List is currently empty</div>';
+                btnSave.disabled = true;
+                btnSave.innerHTML = `<span class="material-symbols-outlined">save</span> Save All to Database`;
+                if(window.updateIcons) window.updateIcons();
+                return;
+            }
+
+            list.innerHTML = '';
+            pendingCart.forEach((item, index) => {
+                const actionBadge = item.isUpdate 
+                    ? `<span style="background:var(--warning-color); color:white; padding:3px 8px; border-radius:6px; font-size:0.7em; margin-left:8px; font-weight: 700;">UPDATE QTY</span>` 
+                    : `<span style="background:var(--success-color); color:white; padding:3px 8px; border-radius:6px; font-size:0.7em; margin-left:8px; font-weight: 700;">NEW</span>`;
+
+                list.innerHTML += `
+                    <div class="pending-item">
+                        <div>
+                            <div style="font-weight:600; color:var(--marketing-white); font-size: 1.05em;">${item.name} <span style="font-weight:700; color:var(--accent-color); font-size: 0.9em; margin-left: 5px;">+${item.qty}</span> ${actionBadge}</div>
+                            <div style="font-size:0.85em; color:var(--text-secondary); margin-top: 5px; font-weight: 500;">${item.type} • ${item.model || 'No ID'} • <strike>₹${(item.mrp || 0).toLocaleString()}</strike> <span style="color:var(--success-color);">₹${(item.price || 0).toLocaleString()}</span></div>
+                        </div>
+                        <div class="p-del" onclick="removePendingItem(${index})"><span class="material-symbols-outlined">delete</span></div>
+                    </div>`;
+            });
+
+            btnSave.disabled = false;
+            btnSave.innerHTML = `<span class="material-symbols-outlined">save</span> Save All ${pendingCart.length} Items`;
+            if(window.updateIcons) window.updateIcons();
+        }
+
+        // --- UPGRADED: New Item Creation Appends "Opening Balance" to History Array ---
         document.getElementById('btnSaveInventory').addEventListener('click', async () => {
             vibrateApp(40);
             if (pendingCart.length === 0) return;
@@ -1617,15 +2201,21 @@
                 let operations = 0;
                 
                 const realEditorName = await getFreshUserName();
-                const dateNow = new Date().toISOString();
 
                 for (const item of pendingCart) {
                     if (item.isUpdate && item.existingId) {
                         const itemRef = doc(db, "inventory", item.existingId);
                         batch.update(itemRef, {
                             qty: increment(item.qty),
-                            lastUpdated: dateNow,
-                            history: arrayUnion({ action: "Inward Stock", qtyChange: item.qty, date: dateNow, by: realEditorName })
+                            lastUpdated: new Date().toISOString(),
+                            createdAt: serverTimestamp(),
+                            history: arrayUnion({
+                                action: "Inward Stock / Restock",
+                                qtyChange: item.qty,
+                                date: new Date().toISOString(),
+                                by: realEditorName,
+                                reason: "New Stock Added via Cart"
+                            })
                         });
                     } else {
                        const newDocRef = doc(collection(db, "inventory"));
@@ -1638,7 +2228,13 @@
                             qty: item.qty,
                             searchTokens: generateSearchTokens(item.name, item.model),
                             createdAt: serverTimestamp(),
-                            history: [{ action: "Opening Balance", qtyChange: item.qty, date: dateNow, by: realEditorName }]
+                            history: [{
+                                action: "Opening Balance",
+                                qtyChange: item.qty,
+                                date: new Date().toISOString(),
+                                by: realEditorName,
+                                reason: "New Product Creation"
+                            }]
                         });
                     }
                     operations++;
