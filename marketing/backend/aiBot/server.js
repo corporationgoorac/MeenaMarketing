@@ -12,13 +12,45 @@
  * 8. Real-Time System Dashboard with Extended Day/Hour Uptime Tracking.
  * 9. Smart Key Pool: 1-Minute Cooldowns for Rate Limits & 10-Minute Cooldowns for 403/404.
  * 10. In-Band Notice Injection: Alerts users directly in chat if a failover occurred.
+ * 11. High-Speed Vision Processing: In-memory image compression (Sharp) to KB sizes.
  */
+
+// ============================================================================
+// 0. GLOBAL TIMESTAMP OVERRIDE (INDIAN STANDARD TIME - 12H FORMAT)
+// ============================================================================
+const originalLog = console.log;
+const originalWarn = console.warn;
+const originalError = console.error;
+
+function getISTTime() {
+    return new Date().toLocaleTimeString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+    }).toUpperCase();
+}
+
+console.log = function (...args) { originalLog(`[${getISTTime()}]`, ...args); };
+console.warn = function (...args) { originalWarn(`[${getISTTime()}]`, ...args); };
+console.error = function (...args) { originalError(`[${getISTTime()}]`, ...args); };
 
 require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const admin = require('firebase-admin');
 const cors = require('cors');
+
+// Note: Run `npm install multer sharp` for the image processing endpoint
+const multer = require('multer');
+const sharp = require('sharp');
+
+// Configure Multer for pure in-memory storage (up to 70MB payloads handled in RAM)
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 75 * 1024 * 1024 } // 75MB absolute max limit
+});
 
 // ============================================================================
 // CONFIGURATION: AI MODELS (Edit here to change models globally)
@@ -45,19 +77,32 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
-let inventoryMemory = [];
+const inventoryMap = new Map(); // High-speed Map for granular updates
+let inventoryMemory = []; // Array maintained for the AI prompt generator
 
 // Persistent zero-cost listener: Keeps backend RAM perfectly synced with Firestore
 db.collection('inventory').onSnapshot((snapshot) => {
-    inventoryMemory = snapshot.docs.map(doc => {
-        const d = doc.data();
-        return {
-            name: d.name || 'Unknown',
-            model: d.model || 'N/A',
-            qty: d.qty || 0,
-            price: d.price || 0 // Included price to ensure AI can answer pricing queries
-        };
+    // Highly optimized: Only process documents that have actually changed
+    snapshot.docChanges().forEach((change) => {
+        const d = change.doc.data();
+        const id = change.doc.id;
+        
+        if (change.type === 'added' || change.type === 'modified') {
+            inventoryMap.set(id, {
+                name: d.name || 'Unknown',
+                model: d.model || 'N/A',
+                qty: d.qty || 0,
+                price: d.price || 0 // Included price to ensure AI can answer pricing queries
+            });
+        }
+        
+        if (change.type === 'removed') {
+            inventoryMap.delete(id);
+        }
     });
+
+    // Quickly convert the Map back to the array format the AI prompt expects
+    inventoryMemory = Array.from(inventoryMap.values());
     console.log(`[Firestore Sync] Inventory memory refreshed: ${inventoryMemory.length} products loaded.`);
 }, (error) => {
     console.error("Firestore snapshot error:", error);
@@ -152,6 +197,26 @@ CURRENT STORE INVENTORY (Name | Model | Qty | Selling Price):
 ${inventoryText}`;
 }
 
+// New dedicated prompt for hyper-fast visual processing
+function getVisionSystemPrompt() {
+    const inventoryText = inventoryMemory
+        .map(item => `${item.name} | ${item.model} | Qty:${item.qty} | ₹${item.price}`)
+        .join('\n');
+
+    return `Role: Visual Sales Assistant for Meena Marketing.
+Task: Identify the product in the user's image and match it exactly to the CURRENT INVENTORY.
+
+STRICT RULES:
+1. Language: Tanglish (Spoken Tamil + English). Use "இருக்கு", "இல்லங்க", "பாருங்க". No formal ancient Tamil.
+2. Direct Match: If the exact item is found, immediately state the Brand, Model, Price, and Stock.
+3. No "Qty": Always use the word "Stock" (e.g., "Stock 2 இருக்கு"). 
+4. Alternatives: If the exact product is not in the image or out of stock, quickly suggest the closest alternative from the inventory.
+5. Brevity: Keep the response extremely short and direct.
+
+CURRENT INVENTORY:
+${inventoryText}`;
+}
+
 // ============================================================================
 // 3. SERVER SETUP & REST API (TEXT CHAT MODE)
 // ============================================================================
@@ -205,6 +270,7 @@ app.get('/', (req, res) => {
             --meena-red: #ef4444;
             --cyan: #06b6d4;
             --amber: #f59e0b;
+            --purple: #8b5cf6;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -405,6 +471,7 @@ app.get('/', (req, res) => {
         }
 
         .method.post { background: rgba(6, 182, 212, 0.15); color: var(--cyan); border: 1px solid rgba(6, 182, 212, 0.3); }
+        .method.vision { background: rgba(139, 92, 246, 0.15); color: var(--purple); border: 1px solid rgba(139, 92, 246, 0.3); }
 
         .endpoint-tag {
             color: var(--text-muted);
@@ -487,6 +554,14 @@ app.get('/', (req, res) => {
                     <span class="method post">POST</span>
                     <span>/chat</span>
                     <span class="endpoint-tag">(Text Typing via ${CHAT_MODEL})</span>
+                </div>
+                <div class="state-chip">HEALTHY</div>
+            </div>
+            <div class="endpoint-row">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <span class="method post vision">POST</span>
+                    <span>/vision</span>
+                    <span class="endpoint-tag">(Multimodal Image Match via ${CHAT_MODEL})</span>
                 </div>
                 <div class="state-chip">HEALTHY</div>
             </div>
@@ -628,6 +703,109 @@ app.post('/chat', async (req, res) => {
     } catch (error) {
         console.error("[REST Error]", error);
         res.status(500).json({ error: "Failed to generate text response" });
+    }
+});
+
+// REST Endpoint for Vision/Image Processing
+app.post('/vision', upload.single('image'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: "No image file uploaded." });
+        }
+
+        console.log(`[Vision Processor] Received image upload: ${(req.file.size / 1024 / 1024).toFixed(2)} MB`);
+
+        // Lightning Compression: Resize to max 1024px width and convert to highly compressed WebP
+        const compressedBuffer = await sharp(req.file.buffer)
+            .resize({ width: 1024, withoutEnlargement: true })
+            .webp({ quality: 75 })
+            .toBuffer();
+        
+        console.log(`[Vision Processor] Compressed to: ${(compressedBuffer.length / 1024).toFixed(2)} KB`);
+
+        // Convert the compressed, KB-sized image to Base64 for the Gemini API
+        const base64Data = compressedBuffer.toString('base64');
+        const payload = {
+            systemInstruction: { parts: [{ text: getVisionSystemPrompt() }] },
+            contents: [
+                {
+                    role: "user",
+                    parts: [
+                        { text: "Match this image to inventory. Tell price and stock." },
+                        { inlineData: { mimeType: "image/webp", data: base64Data } }
+                    ]
+                }
+            ]
+        };
+
+        const maxAttempts = keyPool.length;
+        let finalResponseData = null;
+        let finalStatus = 500;
+        const keyAlerts = [];
+
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+            const keyEntry = getNextKey();
+
+            if (!keyEntry) {
+                return res.status(503).json({ error: "All keys are temporarily rate-limited or deprecated." });
+            }
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${CHAT_MODEL}:generateContent?key=${keyEntry.key}`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    if (keyAlerts.length > 0 && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+                        const alertPrefix = keyAlerts.join("\n") + "\n\n---\n\n";
+                        data.candidates[0].content.parts[0].text = alertPrefix + data.candidates[0].content.parts[0].text;
+                    }
+                    return res.json(data);
+                }
+
+                if (response.status === 429) {
+                    markKeyRateLimited(keyEntry, 60000);
+                    finalResponseData = data;
+                    finalStatus = response.status;
+                    continue; 
+                }
+
+                if (response.status === 404 || response.status === 403) {
+                    const errorDesc = response.status === 404 
+                        ? `Key #${keyEntry.id} is deprecated or endpoint not found (HTTP 404)`
+                        : `Key #${keyEntry.id} has invalid credentials/permissions (HTTP 403)`;
+                    markKeyDeprecated(keyEntry, errorDesc);
+                    keyAlerts.push(`⚠️ [System Notice]: ${errorDesc}. Switched to backup key.`);
+                    finalResponseData = data;
+                    finalStatus = response.status;
+                    continue;
+                }
+
+                if (response.status >= 500) {
+                    finalResponseData = data;
+                    finalStatus = response.status;
+                    continue;
+                }
+
+                return res.status(response.status).json(data);
+
+            } catch (fetchError) {
+                console.error(`[Load Balancer] Network fetch error on Key #${keyEntry.id}:`, fetchError.message);
+                finalResponseData = { error: "Network fetch failed during generation" };
+                finalStatus = 500;
+            }
+        }
+        res.status(finalStatus).json(finalResponseData);
+
+    } catch (error) {
+        console.error("[Vision API Error]", error);
+        res.status(500).json({ error: "Failed to process image and generate response" });
     }
 });
 
