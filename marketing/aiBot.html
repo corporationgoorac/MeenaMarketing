@@ -691,9 +691,10 @@
             </div>
             <div class="chat-input-area">
                 <div class="chat-input-wrapper">
-                    <textarea id="chatInput" rows="1" placeholder="Message Meena AI..." oninput="autoResize(this); if(window.trigger3dTypingColor) window.trigger3dTypingColor();"></textarea>
-                    <button class="btn-send" id="btnSend" onclick="sendChatMessage()">
-                        <span class="material-symbols-outlined">arrow_upward</span>
+                    <input type="file" id="imageUploadInput" accept="image/*" style="display: none;">
+                    <textarea id="chatInput" rows="1" placeholder="Message Meena AI..." oninput="autoResize(this); toggleSendIcon(); if(window.trigger3dTypingColor) window.trigger3dTypingColor();"></textarea>
+                    <button class="btn-send" id="btnSend" onclick="handleSendClick()">
+                        <span class="material-symbols-outlined" id="sendIcon">photo_camera</span>
                     </button>
                 </div>
             </div>
@@ -910,6 +911,9 @@
         const btnEndCall = document.getElementById('btnEndCall');
         const headerIcon = document.getElementById('headerIcon');
 
+        const imageUploadInput = document.getElementById('imageUploadInput');
+        const sendIcon = document.getElementById('sendIcon');
+
         let currentMode = 'chat';
 
         // ==========================================
@@ -1025,6 +1029,23 @@
         function autoResize(textarea) {
             textarea.style.height = 'auto';
             textarea.style.height = (textarea.scrollHeight < 120 ? textarea.scrollHeight : 120) + 'px';
+        }
+
+        function toggleSendIcon() {
+            if (chatInput.value.trim() === '') {
+                sendIcon.innerText = 'photo_camera';
+            } else {
+                sendIcon.innerText = 'arrow_upward';
+            }
+        }
+
+        function handleSendClick() {
+            triggerHaptic([20]);
+            if (chatInput.value.trim() === '') {
+                imageUploadInput.click();
+            } else {
+                sendChatMessage();
+            }
         }
 
         chatInput.addEventListener('focus', () => {
@@ -1198,6 +1219,7 @@
             
             chatInput.value = '';
             chatInput.style.height = 'auto';
+            toggleSendIcon();
             btnSend.disabled = true;
 
             showThinkingBubble();
@@ -1243,9 +1265,64 @@
         chatInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                sendChatMessage();
+                if (chatInput.value.trim() !== '') {
+                    sendChatMessage();
+                }
             }
         });
+
+        // ==========================================
+        // VISION / IMAGE UPLOAD LOGIC
+        // ==========================================
+        if (imageUploadInput) {
+            imageUploadInput.addEventListener('change', async (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                event.target.value = ''; // Reset input
+
+                const objectUrl = URL.createObjectURL(file);
+                const imgHTML = `<img src="${objectUrl}" style="max-width: 100%; border-radius: 12px; margin-bottom: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">`;
+                
+                const div = document.createElement('div');
+                div.className = 'msg-bubble msg-user';
+                div.innerHTML = imgHTML;
+                chatHistoryEl.appendChild(div);
+                chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
+
+                showThinkingBubble();
+                btnSend.disabled = true;
+
+                try {
+                    const formData = new FormData();
+                    formData.append('image', file);
+
+                    const response = await fetch(`${BACKEND_URL}/vision`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+                    hideThinkingBubble();
+
+                    if (!response.ok || data.error) {
+                        let errMsg = data.error?.message || data.error || "Vision API error occurred.";
+                        appendMessageToUI('model', `Server Error: ${errMsg}`, true);
+                        return;
+                    }
+
+                    const aiText = data.candidates[0].content.parts[0].text;
+                    appendMessageToUI('model', aiText);
+                    saveToHistory('model', aiText);
+
+                } catch (err) {
+                    hideThinkingBubble();
+                    appendMessageToUI('model', `Network Error: ${err.message}`, true);
+                } finally {
+                    btnSend.disabled = false;
+                }
+            });
+        }
 
         // ==========================================
         // 3. VOICE CALL ENGINE (STT -> REST -> TTS Loop)
