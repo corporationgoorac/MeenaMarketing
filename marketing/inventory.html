@@ -45,14 +45,14 @@
         .material-symbols-outlined { display: inline-flex; align-items: center; justify-content: center; }
         .material-symbols-outlined svg { width: 1em; height: 1em; fill: currentColor; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-        header { background-color: #212121; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 500; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; width: 100%; box-sizing: border-box;}
-        .brand-container { display: flex; align-items: center; gap: 14px; }
-        .logo-img { width: 38px; height: 38px; border-radius: 10px; box-shadow: var(--shadow-md); }
+        header { background-color: #212121; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 500; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; width: 100%; box-sizing: border-box;}
+        .brand-container { display: flex; align-items: center; gap: 12px; }
+        .logo-img { width: 34px; height: 34px; border-radius: 8px; box-shadow: var(--shadow-md); }
         .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
-        .brand-title { font-size: 1em; font-weight: 700; letter-spacing: -0.02em;}
+        .brand-title { font-size: 1.1em; font-weight: 700; letter-spacing: -0.02em;}
         .meena { color: var(--meena-red); }
         .marketing { color: var(--marketing-white); }
-        .goorac { font-size: 0.75em; color: var(--text-secondary); font-weight: 500; }
+        .goorac { font-size: 0.7em; color: var(--text-secondary); font-weight: 500; }
 
         #installPopup { display: none; position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background-color: var(--surface-color); padding: 14px 18px; border-radius: 16px; box-shadow: var(--shadow-lg); z-index: 1001; align-items: center; gap: 15px; width: 90%; max-width: 380px; border: 1px solid var(--input-border); }
         .install-img { width: 44px; height: 44px; border-radius: 10px; }
@@ -102,22 +102,20 @@
         .inv-card.out-of-stock { opacity: 0.7; border-color: rgba(239, 68, 68, 0.4); }
         
         .inv-info { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; min-width: 0; pointer-events: none; } 
-        .inv-name { font-size: 1.05em; font-weight: 600; color: var(--marketing-white); white-space: normal; word-wrap: break-word; line-height: 1.35; letter-spacing: -0.01em; }
-        .inv-model { font-size: 0.75em; font-weight: 500; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 6px 10px; border-radius: 6px; display: inline-block; width: fit-content; max-width: 100%; white-space: normal; word-wrap: break-word; word-break: break-word; border: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; text-transform: uppercase; line-height: 1.4; }
+        .inv-name { font-size: 1.05em; font-weight: 600; color: var(--marketing-white); white-space: normal; overflow-wrap: anywhere; word-break: break-word; line-height: 1.35; letter-spacing: -0.01em; }
+        .inv-model { font-size: 0.75em; font-weight: 500; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 6px 10px; border-radius: 6px; display: inline-block; width: fit-content; max-width: 100%; white-space: normal; overflow-wrap: anywhere; word-break: break-word; border: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; text-transform: uppercase; line-height: 1.4; }
         .inv-price { color: var(--success-color); font-weight: 700; font-size: 1.1em; margin-top: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
         .inv-mrp { text-decoration: line-through; font-size: 0.75em; color: var(--text-secondary); font-weight: 500; }
-        /* UPGRADED: High Visibility My Rate Badge */
         .inv-myrate { font-size: 0.75em; color: #c084fc; background: rgba(147, 51, 234, 0.15); border: 1px solid rgba(147, 51, 234, 0.3); padding: 3px 10px; border-radius: 8px; font-weight: 700; letter-spacing: 0.5px; display: inline-block; margin-left: 4px;}
 
-        
         .inv-qty { background: rgba(13, 148, 136, 0.1); border: 1px solid rgba(13, 148, 136, 0.3); color: var(--accent-color); padding: 12px 16px; border-radius: 12px; font-weight: 700; font-size: 1.25em; text-align: center; min-width: 50px; flex-shrink: 0; margin-left: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;}
         .inv-qty.low { border-color: rgba(245, 158, 11, 0.4); color: var(--warning-color); background: rgba(245, 158, 11, 0.1); }
         .inv-qty.zero { border-color: rgba(239, 68, 68, 0.4); color: var(--meena-red); background: rgba(239, 68, 68, 0.1); font-size: 1em; padding: 12px 10px; }
 
         .oos-badge { position: absolute; top: 0; right: 0; background: linear-gradient(135deg, var(--meena-red), #b91c1c); color: white; font-size: 0.65em; padding: 4px 12px; border-bottom-left-radius: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: -2px 2px 8px rgba(0,0,0,0.2);}
 
-        /* UPGRADED: Smaller, Professional Floating Glass Pill Navigation Bar */
-        .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(19, 27, 38, 0.7); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.12); display: flex; justify-content: space-evenly; align-items: center; padding: 6px 14px; z-index: 1000; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1); border-radius: 50px; width: auto; min-width: 260px; max-width: 320px; gap: 8px;}
+        /* UPGRADED: Professional Floating Glass Pill Navigation Bar */
+        .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(19, 27, 38, 0.7); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.12); display: flex; justify-content: space-evenly; align-items: center; padding: 6px 14px; z-index: 1000; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1); border-radius: 50px; width: auto; min-width: 280px; max-width: 380px; gap: 8px;}
         .nav-item { display: flex; justify-content: center; align-items: center; color: var(--text-secondary); width: 44px; height: 44px; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 50%;}
         .nav-item:hover { color: white; background: rgba(255, 255, 255, 0.08); }
         .nav-item:active { transform: scale(0.90); background: rgba(255, 255, 255, 0.15); }
@@ -126,6 +124,11 @@
 
         .modal { position: fixed; top: 0; right: -100%; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 2000; transition: right 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); overflow-y: auto; padding-bottom: 80px; box-sizing: border-box; }
         .modal.active { right: 0; }
+        
+        /* Nested Full Height History Modal Rules */
+        .modal.nested-modal { z-index: 2100; right: auto; left: 0; top: auto; bottom: -100%; height: 95%; border-radius: 24px 24px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.8); transition: bottom 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); background: var(--bg-color); }
+        .modal.nested-modal.active { bottom: 0; }
+
         .modal-header { display: flex; align-items: center; gap: 15px; padding: 18px 20px; background: rgba(19, 27, 38, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .close-modal { background: none; border: none; color: white; cursor: pointer; display: flex; padding: 8px; border-radius: 50%; transition: background 0.2s; margin-left: -8px;}
         .close-modal:hover { background: rgba(255,255,255,0.1); }
@@ -165,14 +168,14 @@
         .pending-item > div > div:first-child { white-space: normal; word-break: break-word; line-height: 1.3; width: 100%; }
         .pending-item > div > div:last-child { white-space: normal; line-height: 1.4; width: 100%; }
 
-        /* UPGRADED: Action Modal with Fast Professional Wiping Reveal Animation */
+        /* Action Modal */
         #modalCardActions { right: 0; left: 0; top: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: rgba(11, 15, 20, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity 0.25s ease-in-out; padding: 20px; z-index: 2500; position: fixed; }
         #modalCardActions.active { opacity: 1; pointer-events: auto; }
         #modalCardActions .modal-content-wrap { background: linear-gradient(180deg, #1b2636 0%, #131b26 100%); width: 100%; max-width: 350px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,0,0,0.5); transform: translateY(30px) scale(0.98); opacity: 0; clip-path: inset(100% 0 0 0 round 24px); transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); overflow: hidden; display: flex; flex-direction: column; padding: 25px; text-align: center;}
         #modalCardActions.active .modal-content-wrap { transform: translateY(0) scale(1); opacity: 1; clip-path: inset(0 0 0 0 round 24px); }
         
-        .action-modal-title { font-size: 1.35em; font-weight: 700; color: white; margin-bottom: 5px; line-height: 1.3; text-shadow: 0 2px 4px rgba(0,0,0,0.5);}
-        .action-modal-model { font-size: 0.75em; color: var(--accent-color); font-weight: 600; background: rgba(13,148,136,0.1); border: 1px solid rgba(13,148,136,0.2); padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 0; letter-spacing: 0.5px; max-width: 100%; word-break: break-all; white-space: normal; }
+        .action-modal-title { font-size: 1.35em; font-weight: 700; color: white; margin-bottom: 5px; line-height: 1.3; text-shadow: 0 2px 4px rgba(0,0,0,0.5); overflow-wrap: anywhere; word-break: break-word;}
+        .action-modal-model { font-size: 0.75em; color: var(--accent-color); font-weight: 600; background: rgba(13,148,136,0.1); border: 1px solid rgba(13,148,136,0.2); padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 0; letter-spacing: 0.5px; max-width: 100%; word-break: break-all; white-space: normal; overflow-wrap: anywhere; }
         .action-modal-type { font-size: 0.75em; color: var(--info-color); font-weight: 600; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 0; text-transform: uppercase; letter-spacing: 0.5px;}
         
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;}
@@ -192,6 +195,8 @@
 
         #modalConfirm { right: 0; left: 0; top: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: rgba(11, 15, 20, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out; padding: 20px; z-index: 3000; position: fixed; }
         #modalConfirm.active { opacity: 1; pointer-events: auto; }
+        .modal-content-wrap { background: var(--surface-color); width: 100%; max-width: 400px; border-radius: 20px; border: 1px solid var(--input-border); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); transform: scale(0.95) translateY(10px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden; display: flex; flex-direction: column; }
+        #modalConfirm.active .modal-content-wrap { transform: scale(1) translateY(0); }
         #modalConfirm .modal-header { position: relative; border-bottom: 1px solid rgba(255,255,255,0.05); background: transparent; backdrop-filter: none; }
         #modalConfirm .modal-header h2 { color: var(--warning-color); font-size: 1.2em; }
         .confirm-actions { display: flex; gap: 15px; margin-top: 30px; }
@@ -220,6 +225,34 @@
         .type-list-container { padding: 10px 20px; }
         .type-item { padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); color: white; font-size: 1.05em; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: background 0.2s; border-radius: 8px;}
         .type-item:active { background: rgba(255,255,255,0.05); }
+
+        /* --- NEW PROFESSIONAL AUDIT TIMELINE & BADGE CSS --- */
+        .wrap-text { overflow-wrap: anywhere; word-break: break-word; white-space: normal; }
+        .timeline-container { position: relative; padding-bottom: 20px; }
+        .timeline-container::before { content: ''; position: absolute; left: 15px; top: 10px; bottom: 0; width: 2px; background: rgba(255,255,255,0.1); }
+        .timeline-item { position: relative; padding-left: 45px; margin-bottom: 24px; animation: fadeSlideUp 0.3s ease forwards; opacity: 0; }
+        .timeline-icon { position: absolute; left: 0; top: 0; width: 32px; height: 32px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background: var(--surface-color); border: 2px solid var(--input-border); box-shadow: 0 2px 8px rgba(0,0,0,0.3); z-index: 2; }
+        .timeline-icon .material-symbols-outlined { font-size: 18px; }
+
+        .icon-billed { border-color: var(--warning-color); color: var(--warning-color); background: rgba(245, 158, 11, 0.1); }
+        .icon-add { border-color: var(--success-color); color: var(--success-color); background: rgba(16, 185, 129, 0.1); }
+        .icon-remove { border-color: var(--meena-red); color: var(--meena-red); background: rgba(239, 68, 68, 0.1); }
+        .icon-edit { border-color: var(--info-color); color: var(--info-color); background: rgba(59, 130, 246, 0.1); }
+
+        .timeline-content { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 14px; border-radius: 12px; }
+        .timeline-meta { font-size: 0.75em; color: var(--text-secondary); margin-bottom: 6px; display: flex; justify-content: space-between; }
+        .timeline-title { font-size: 0.95em; color: white; font-weight: 600; margin-bottom: 4px; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;}
+        
+        /* STRICT BADGE WRAPPING FIX */
+        .timeline-qty { font-weight: 700; padding: 2px 8px; border-radius: 4px; font-size: 0.9em; white-space: nowrap; flex-shrink: 0; display: inline-block; }
+        
+        .timeline-qty.positive { background: rgba(16, 185, 129, 0.15); color: var(--success-color); }
+        .timeline-qty.negative { background: rgba(239, 68, 68, 0.15); color: var(--meena-red); }
+        .timeline-reason { font-size: 0.85em; color: var(--text-secondary); background: rgba(0,0,0,0.2); padding: 6px 10px; border-radius: 6px; margin-top: 8px; display: inline-block; border: 1px dashed rgba(255,255,255,0.1); overflow-wrap: anywhere; word-break: break-word;}
+        
+        .auditor-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 16px; border-radius: 12px; margin-top: 15px; position: relative; overflow: hidden; min-height: 80px;}
+        .skeleton-line { height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; margin-bottom: 10px; position: relative; overflow: hidden; }
+        .skeleton-line::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; transform: translateX(-100%); background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,0.05) 20%, rgba(255,255,255,0) 60%); animation: shimmer 2s infinite; }
 
     </style>
 </head>
@@ -275,12 +308,16 @@
         <span id="successToastText">Action Successful!</span>
     </div>
 
+    <!-- UPGRADED: Native iOS Header with Back Arrow on the Left -->
     <header>
-        <div class="brand-container">
-            <img src="icon.png" alt="Icon" class="logo-img">
-            <div class="brand-text">
-                <span class="brand-title"><span class="meena">Meena</span> <span class="marketing">Marketing</span></span>
-                <span class="goorac">Powered by Goorac</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined" style="cursor: pointer; font-size: 24px; color: var(--text-secondary); margin-right: 4px; transition: color 0.2s;" onclick="vibrateApp(30); history.back()" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-secondary)'">arrow_back_ios</span>
+            <div class="brand-container">
+                <img src="icon.png" alt="Icon" class="logo-img" style="width: 32px; height: 32px;">
+                <div class="brand-text">
+                    <span class="brand-title"><span class="meena">Meena</span> <span class="marketing">Marketing</span></span>
+                    <span class="goorac">Admin Console</span>
+                </div>
             </div>
         </div>
         <div class="header-actions" style="display: flex; align-items: center; gap: 12px;">
@@ -324,6 +361,10 @@
         </div>
         <div class="nav-item" onclick="vibrateApp(40); filterLowStock()" id="btnLowStock" title="Low Stock Alerts">
             <span class="material-symbols-outlined">warning</span>
+        </div>
+        <!-- UPGRADED: Restored AI Bot Navigation Link -->
+        <div class="nav-item" onclick="vibrateApp(40); window.location.href='aiBot.html'" title="AI Assistant">
+            <span class="material-symbols-outlined">auto_awesome</span>
         </div>
         <div class="nav-item" onclick="vibrateApp(40); window.location.href='today.html'" title="Today's View">
             <span class="material-symbols-outlined">calendar_today</span>
@@ -449,6 +490,13 @@
                 </div>
             </div>
 
+            <div class="input-wrapper" id="editReasonContainer" style="display: none; margin-top: 10px;">
+                <label>Reason for Quantity Change <span style="color:var(--meena-red);">*</span></label>
+                <select id="editReasonSelect">
+                    <option value="">Select a reason...</option>
+                </select>
+            </div>
+
             <button type="button" class="btn-primary" id="btnSaveEditItem" style="width: 100%; margin: 25px 0 0 0;">
                 <span class="material-symbols-outlined">save</span>
                 Update Product
@@ -473,44 +521,95 @@
             </div>
     </div>
 
+    <!-- MAIN PRODUCT INFO MODAL (DASHBOARD) -->
     <div class="modal" id="modalProductInfo">
         <div class="modal-header">
             <button class="close-modal" onclick="vibrateApp(30); history.back()"><span class="material-symbols-outlined">arrow_back</span></button>
-            <h2>Product History</h2>
+            <h2>Product Dashboard</h2>
         </div>
-        <div class="form-group">
-            <h3 id="infoName" style="margin-top: 0; color: var(--marketing-white); font-size: 1.35em; font-weight: 700; line-height: 1.3;"></h3>
-            <p id="infoModel" style="color: var(--accent-color); margin-bottom: 25px; margin-top: -10px; font-weight: 600; font-size: 0.9em; background: rgba(13,148,136,0.1); display: inline-block; padding: 4px 10px; border-radius: 6px;"></p>
+        <div class="form-group" style="padding: 20px;">
             
-            <div class="info-panel-card">
-                <div class="info-panel-header"><span class="material-symbols-outlined" style="font-size: 16px;">inventory</span> Stock History</div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 1.15em; font-weight: 600;" id="infoQty"></span>
-                    <span id="infoQtyBadge" style="padding: 6px 12px; border-radius: 8px; font-size: 0.85em; font-weight: 700; letter-spacing: 0.5px;"></span>
+            <div style="background: linear-gradient(135deg, var(--surface-hover), var(--surface-color)); padding: 22px; border-radius: 16px; border: 1px solid var(--input-border); margin-bottom: 20px; box-shadow: var(--shadow-md);">
+                <h3 id="infoName" class="wrap-text" style="margin: 0 0 12px 0; color: white; font-size: 1.4em; font-weight: 700; letter-spacing: -0.5px;"></h3>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                    <span id="infoModel" class="wrap-text" style="color: var(--accent-color); font-weight: 600; font-size: 0.85em; background: rgba(13,148,136,0.1); padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(13,148,136,0.2);"></span>
+                    <span id="infoStockCheckBadge" style="display: none; color: var(--success-color); font-weight: 600; font-size: 0.85em; background: rgba(16,185,129,0.1); padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(16,185,129,0.2); align-items: center; gap: 5px;"><span class="material-symbols-outlined" style="font-size: 16px;">verified</span> <span id="infoStockCheckText"></span></span>
+                    <span id="infoPendingCheckBadge" style="display: none; color: var(--warning-color); font-weight: 600; font-size: 0.85em; background: rgba(245,158,11,0.1); padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(245,158,11,0.2); align-items: center; gap: 5px;"><span class="material-symbols-outlined" style="font-size: 16px;">warning</span> Pending Audit</span>
+                </div>
+                <div style="color: white; font-weight: 700; font-size: 1.8em; display: flex; align-items: center; gap: 8px;">
+                    <span class="material-symbols-outlined" style="font-size: 28px; color: var(--accent-color);">inventory_2</span> 
+                    <span id="infoCurrentStockText"></span>
                 </div>
             </div>
 
-            <div class="info-panel-card">
-                <div class="info-panel-header"><span class="material-symbols-outlined" style="font-size: 16px;">payments</span> Price History</div>
+            <!-- Admin Financials Snapshot -->
+            <div class="info-panel-card" style="padding: 16px; margin-bottom: 20px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span style="font-size: 1.1em; font-weight: 600; color: var(--text-secondary);">MRP:</span>
-                    <span style="font-size: 1.15em; font-weight: 700; color: var(--text-secondary); text-decoration: line-through;" id="infoMrp"></span>
+                    <span style="font-size: 1em; font-weight: 600; color: var(--text-secondary);">MRP:</span>
+                    <span style="font-size: 1.1em; font-weight: 700; color: var(--text-secondary); text-decoration: line-through;" id="infoMrp"></span>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span style="font-size: 1.1em; font-weight: 600; color: var(--text-secondary);">Base Price:</span>
-                    <span style="font-size: 1.15em; font-weight: 700; color: var(--success-color);" id="infoPrice"></span>
+                    <span style="font-size: 1em; font-weight: 600; color: var(--text-secondary);">Base Price:</span>
+                    <span style="font-size: 1.1em; font-weight: 700; color: var(--success-color);" id="infoPrice"></span>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 1.1em; font-weight: 600; color: var(--text-secondary);">My Rate:</span>
-                    <span style="font-size: 1.15em; font-weight: 700; color: #8b5cf6;" id="infoMyRate"></span>
+                    <span style="font-size: 1em; font-weight: 600; color: var(--text-secondary);">My Rate:</span>
+                    <span style="font-size: 1.1em; font-weight: 700; color: #8b5cf6;" id="infoMyRate"></span>
                 </div>
             </div>
 
-            <div style="text-align: center; color: var(--text-secondary); font-size: 0.85em; margin-top: 35px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; gap: 8px;" id="infoTimestamp">
-                <span class="material-symbols-outlined" style="font-size: 16px;">schedule</span>
+            <!-- AI Auditor Box -->
+            <div class="auditor-box">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                    <span class="material-symbols-outlined" style="color: var(--info-color); font-size: 18px;">smart_toy</span>
+                    <span style="font-size: 0.85em; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px;">AI Auditor</span>
+                </div>
+                <div id="aiSkeletonLoader">
+                    <div class="skeleton-line" style="width: 85%;"></div>
+                    <div class="skeleton-line" style="width: 60%;"></div>
+                    <div class="skeleton-line" style="width: 40%;"></div>
+                </div>
+                <!-- Pre-rendered invisible text to lock height, with absolute typing text laid perfectly over it -->
+                <div id="aiAuditorContainer" style="position: relative; display: none;">
+                    <div id="aiAuditorHiddenText" class="wrap-text" style="visibility: hidden; font-size: 0.95em; line-height: 1.5; font-weight: 500;"></div>
+                    <div id="aiAuditorTypingText" class="wrap-text" style="position: absolute; top: 0; left: 0; right: 0; font-size: 0.95em; line-height: 1.5; font-weight: 500;"></div>
+                </div>
             </div>
 
-            <div id="infoHistorySentence" style="text-align: center; color: var(--marketing-white); font-size: 0.9em; margin-top: 15px; background: rgba(13, 148, 136, 0.1); padding: 15px; border-radius: 12px; border: 1px solid rgba(13, 148, 136, 0.3); display: none; line-height: 1.5;"></div>
+            <!-- Professional Mini-Card for Last Activity -->
+            <div id="lastActivityMiniCard" style="display: none; margin-top: 20px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 14px; position: relative; overflow: hidden; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);">
+                <!-- Content injected via JS -->
+            </div>
+
+            <button class="btn-primary" onclick="openFullHistoryModal()" style="width: 100%; margin: 25px 0 0 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); box-shadow: none;">
+                <span class="material-symbols-outlined">manage_search</span>
+                See All History & Audit
+            </button>
+        </div>
+    </div>
+
+    <!-- NESTED 95% HEIGHT HISTORY MODAL -->
+    <div class="modal nested-modal" id="modalFullHistory">
+        <div class="modal-header" style="justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button class="close-modal" onclick="vibrateApp(30); history.back()"><span class="material-symbols-outlined">close</span></button>
+                <h2>Full Audit Ledger</h2>
+            </div>
+            <!-- UPGRADED: Ledger Reset Trash Icon -->
+            <button class="close-modal" onclick="vibrateApp(40); confirmClearLedger()" style="color: var(--meena-red); background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2);"><span class="material-symbols-outlined">delete</span></button>
+        </div>
+        <div style="position: sticky; top: 62px; background: rgba(11, 15, 20, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 5; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 0.75em; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Baseline Stock</span>
+                <span id="nestedBaselineStock" style="font-weight: 700; color: white; font-size: 1.1em;">--</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px; text-align: right;">
+                <span style="font-size: 0.75em; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Current Stock</span>
+                <span id="nestedCurrentStock" style="font-weight: 700; color: var(--accent-color); font-size: 1.1em;">--</span>
+            </div>
+        </div>
+        <div class="form-group" style="padding: 20px;">
+            <div id="fullHistoryContainer"></div>
         </div>
     </div>
 
@@ -568,8 +667,11 @@
                 <h2 id="confirmTitle">Confirm Action</h2>
             </div>
             <div class="form-group" style="padding: 25px;">
-                <p id="confirmMessage" style="font-size: 1.1em; line-height: 1.6; color: var(--marketing-white); text-align: center; margin-bottom: 5px; font-weight: 500;"></p>
+                <p id="confirmMessage" class="wrap-text" style="font-size: 1.1em; line-height: 1.6; color: var(--marketing-white); text-align: center; margin-bottom: 5px; font-weight: 500;"></p>
                 <input type="number" id="confirmInput" placeholder="Enter value..." class="input-wrapper">
+                
+                <select id="confirmReasonSelect" class="input-wrapper" style="display: none; width: 100%; margin-top: 20px; padding: 15px; border-radius: 12px; border: 1px solid var(--input-border); background: var(--input-bg); color: white; font-size: 1.05em; outline: none;"></select>
+
                 <div class="confirm-actions">
                     <button class="btn-cancel" id="btnCancelConfirm">Cancel</button>
                     <button class="btn-confirm" id="btnAcceptConfirm">Confirm</button>
@@ -584,16 +686,16 @@
                 <button class="close-modal" onclick="vibrateApp(20); history.back()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div style="text-align: center; margin-bottom: 24px; padding-top: 5px;">
-                <div class="action-modal-title" id="actionModalName">Product Name</div>
+                <div class="action-modal-title wrap-text" id="actionModalName">Product Name</div>
                 <div style="display: flex; justify-content: center; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
                     <span class="action-modal-type" id="actionModalType">Product Type</span>
-                    <span class="action-modal-model" id="actionModalModel">Model ID</span>
+                    <span class="action-modal-model wrap-text" id="actionModalModel">Model ID</span>
                 </div>
             </div>
             
             <div class="action-grid">
                 <div class="big-action-btn btn-act-info" id="btnActionInfo">
-                    <span class="material-symbols-outlined">history</span> History
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
                 </div>
                 <div class="big-action-btn btn-act-edit" id="btnActionEdit">
                     <span class="material-symbols-outlined">edit</span> Edit Item
@@ -610,6 +712,23 @@
         </div>
     </div>
 
+    <div class="modal" id="modalProcessing">
+        <div class="processing-wrap">
+            <span class="material-symbols-outlined spin-anim" id="procIcon" style="font-size: 4em; color: var(--accent-color);">autorenew</span>
+            <h3 id="procTitle" style="margin: 0; font-size: 1.25em; font-weight: 600; color: var(--marketing-white); line-height: 1.4;">Your request is processing.</h3>
+            <button class="btn-secondary" id="procCloseBtn" style="margin-top: 10px; padding: 12px; display: none;" onclick="history.back()">Close Window</button>
+        </div>
+    </div>
+    
+    <div class="modal" id="modalPermissionDenied">
+        <div class="processing-wrap">
+            <span class="material-symbols-outlined" style="font-size: 4em; color: var(--warning-color);">lock</span>
+            <h3 style="margin: 0; font-size: 1.25em; font-weight: 600; color: var(--marketing-white); line-height: 1.4;">Access Denied</h3>
+            <p id="permissionDeniedMsg" style="color: var(--text-secondary); margin: 0; font-size: 0.9em;">Contact admin to get the permission.</p>
+            <button class="btn-secondary" style="margin-top: 10px; padding: 12px; width: 100%;" onclick="history.back()">Close</button>
+        </div>
+    </div>
+
     <script type="module">
         window.vibrateApp = function(pattern) {
             if (navigator.vibrate) {
@@ -623,13 +742,37 @@
         document.getElementById('installBtn').addEventListener('click', async () => { vibrateApp(50); installPopup.style.display = 'none'; if (deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; } });
         document.getElementById('closeBtn').addEventListener('click', () => { vibrateApp(50); installPopup.style.display = 'none'; });
 
+        // UPGRADED IMPORTS: Included arrayUnion and runTransaction
         import { db } from './config.js';
-        
-        import { collection, getDocs, query, orderBy, limit, where, doc, writeBatch, serverTimestamp, increment, updateDoc, deleteDoc, startAfter, deleteField } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+        import { collection, getDocs, query, orderBy, limit, where, doc, writeBatch, serverTimestamp, increment, updateDoc, deleteDoc, startAfter, setDoc, getDoc, deleteField, arrayUnion, runTransaction } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        const auth = getAuth();
+        let currentUserName = "Staff";
+        let currentUserPermissions = { admin: false, edit: false, delete: false };
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUserName = user.displayName || user.email?.split('@') || "Staff";
+                try {
+                    const userDocRef = doc(db, "users", user.uid);
+                    const userSnap = await getDoc(userDocRef);
+                    if (userSnap.exists()) {
+                        const data = userSnap.data();
+                        currentUserPermissions.admin = data.admin === true || data.role === 'admin';
+                        currentUserPermissions.edit = data.edit === true;
+                        currentUserPermissions.delete = data.delete === true;
+                        if (data.name) currentUserName = data.name;
+                    }
+                } catch (err) {
+                    console.error("Auth DB Error:", err);
+                }
+            }
+        });
 
         let cachedProductTypes = [];
         let currentTypeFilter = "";
         let currentTypeSelectMode = ""; 
+        let currentActiveProductId = null; // Tracks the ID for Ledger Wipe functionality
         
         async function fetchProductTypes() {
             try {
@@ -777,19 +920,29 @@
             }, 3000);
         };
 
+        // --- NEW LIFO MODAL STACK NAVIGATION ENGINE ---
+        let modalStack = [];
+        
         window.openModal = function(modalId) {
             vibrateApp(20);
             document.getElementById(modalId).classList.add('active');
+            modalStack.push(modalId);
             history.pushState({ modal: modalId }, '', `#${modalId}`);
         };
-        
-        window.addEventListener('popstate', (e) => {
-            document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
-            
-            if (e.state && e.state.modal) {
-                document.getElementById(e.state.modal).classList.add('active');
-            }
 
+        window.addEventListener('popstate', (e) => {
+            // Strictly pop only the topmost active modal from the stack to prevent double-closing
+            if (modalStack.length > 0) {
+                const topModal = modalStack.pop();
+                const modalEl = document.getElementById(topModal);
+                if (modalEl) {
+                    modalEl.classList.remove('active');
+                }
+            } else {
+                // Safety fallback for stray states
+                document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+            }
+            
             if (document.getElementById('adminUnlockedContent').style.display === 'block') {
                 resetAdminLock();
             }
@@ -816,11 +969,39 @@
             openModal('modalCardActions');
         };
 
+        // STRICT NAVIGATION FIX: Execution Lock and clean popstate swap
+        let isActionTriggered = false;
         function triggerActionSafely(callback) {
-            history.back(); 
+            if(isActionTriggered) return;
+            isActionTriggered = true;
+
+            // Remove visual instantly for crisp UX from the topmost modal
+            const topModal = modalStack[modalStack.length - 1];
+            if (topModal) {
+                document.getElementById(topModal).classList.remove('active');
+            }
+            
+            // Listen exactly once for the popstate that we are about to trigger
+            const onPop = () => {
+                window.removeEventListener('popstate', onPop);
+                setTimeout(() => {
+                    callback();
+                    isActionTriggered = false;
+                }, 10);
+            };
+            window.addEventListener('popstate', onPop);
+            
+            history.back(); // Triggers popstate, popping from the modalStack array
+            
+            // Safety fallback in case popstate is blocked or missing
             setTimeout(() => {
-                callback(); 
-            }, 200);
+                window.removeEventListener('popstate', onPop);
+                if(isActionTriggered) {
+                    if(modalStack.length > 0) modalStack.pop(); 
+                    callback();
+                    isActionTriggered = false;
+                }
+            }, 400);
         }
 
         let currentAdminPin = "";
@@ -969,23 +1150,45 @@
         };
 
         let confirmResolve = null;
-        window.openConfirmModal = function(title, message, isPrompt = false, defaultValue = "", confirmColor = "var(--meena-red)", confirmText = "Confirm") {
+        window.openConfirmModal = function(title, message, isPrompt = false, defaultValue = "", confirmColor = "var(--meena-red)", confirmText = "Confirm", isReasonMode = false, reasonModeType = "") {
             vibrateApp(40);
             return new Promise((resolve) => {
                 document.getElementById('confirmTitle').innerText = title;
                 document.getElementById('confirmMessage').innerText = message;
                 
                 const input = document.getElementById('confirmInput');
-                if (isPrompt) {
-                    input.style.display = 'block';
-                    input.value = defaultValue;
-                    setTimeout(() => input.focus(), 100);
-                } else {
+                const select = document.getElementById('confirmReasonSelect');
+                const btnAccept = document.getElementById('btnAcceptConfirm');
+
+                if (isReasonMode) {
                     input.style.display = 'none';
-                    input.value = '';
+                    select.style.display = 'block';
+                    btnAccept.style.display = 'none'; 
+                    
+                    if (reasonModeType === "reduce") {
+                        select.innerHTML = `<option value="">Select reason...</option><option value="Sent to Meena Agency">Sent to Meena Agency</option><option value="Product Missing">Product Missing</option><option value="Damaged Product">Damaged Product</option><option value="Returned to Dealer">Returned to Dealer</option><option value="Gift to Customer">Gift to Customer</option>`;
+                    } else {
+                        select.innerHTML = `<option value="">Select reason...</option><option value="New Stock">New Stock</option><option value="Customer Return">Customer Return</option><option value="Counting Mistake">Counting Mistake</option>`;
+                    }
+
+                    select.onchange = () => {
+                        if (select.value !== "") btnAccept.style.display = 'block';
+                        else btnAccept.style.display = 'none';
+                    };
+                } else {
+                    select.style.display = 'none';
+                    btnAccept.style.display = 'block';
+                    
+                    if (isPrompt) {
+                        input.style.display = 'block';
+                        input.value = defaultValue;
+                        setTimeout(() => input.focus(), 100);
+                    } else {
+                        input.style.display = 'none';
+                        input.value = '';
+                    }
                 }
 
-                const btnAccept = document.getElementById('btnAcceptConfirm');
                 btnAccept.style.backgroundColor = confirmColor;
                 if(confirmColor === "var(--meena-red)") {
                     btnAccept.style.boxShadow = "0 4px 15px rgba(239, 68, 68, 0.3)";
@@ -1021,11 +1224,16 @@
         };
         
         document.getElementById('btnCancelConfirm').addEventListener('click', () => { vibrateApp(20); if(confirmResolve) confirmResolve(null); });
+        
         document.getElementById('btnAcceptConfirm').addEventListener('click', () => { 
             vibrateApp(30);
             if(confirmResolve) {
                 const input = document.getElementById('confirmInput');
-                if(input.style.display !== 'none') {
+                const select = document.getElementById('confirmReasonSelect');
+                
+                if (select.style.display === 'block') {
+                    confirmResolve(select.value);
+                } else if (input.style.display !== 'none') {
                     confirmResolve(input.value);
                 } else {
                     confirmResolve(true);
@@ -1033,100 +1241,333 @@
             } 
         });
 
+        // --- NEW PROFESSIONAL AI AUDITOR & PAGINATION LOGIC ---
+        let currentHistoryLimit = 15;
+        let currentHistoryArray = [];
+        
+        const intros = ["Audit complete.", "Ledger analysis finished.", "Mathematical verification done.", "Stock history scanned."];
+        const middlesOk = ["All transactions align perfectly with the shelf stock.", "The timeline math matches the current inventory perfectly.", "Zero discrepancies found across all records."];
+        const outrosOk = ["No unauthorized changes detected.", "Data integrity is at 100%.", "Everything is correctly in place."];
+        
+        const middlesBad = ["Discrepancy detected between ledger history and physical count.", "Timeline math does not match current shelf stock."];
+        const outrosBad = ["Manual intervention or data corruption likely.", "Immediate physical audit recommended."];
+
+        function typeText(hiddenElementId, typingElementId, text, color, showTick) {
+            const hiddenEl = document.getElementById(hiddenElementId);
+            const typingEl = document.getElementById(typingElementId);
+            
+            // Instantly reserve height using invisible text to prevent jumping layout
+            let iconHtml = showTick 
+                ? `<span class="material-symbols-outlined" style="font-size:18px; vertical-align:middle; margin-left:5px;">verified</span>` 
+                : `<span class="material-symbols-outlined" style="font-size:18px; vertical-align:middle; margin-left:5px;">warning</span>`;
+            
+            hiddenEl.innerHTML = text + iconHtml;
+            document.getElementById('aiAuditorContainer').style.display = 'block';
+            
+            // Type the visible text over the reserved space without cursor
+            typingEl.innerHTML = '';
+            typingEl.style.color = color;
+            let i = 0;
+            function typeWriter() {
+                if (i < text.length) {
+                    typingEl.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 25);
+                } else {
+                    typingEl.innerHTML += `<span style="color:${color};">${iconHtml}</span>`;
+                }
+            }
+            typeWriter();
+        }
+
         window.openInfoModal = function(id) {
             vibrateApp(30);
             const item = inventoryCache.find(i => i.id === id);
             if (!item) return;
 
+            // Track active ID for Ledger Wipe Tool
+            window.currentActiveProductId = id;
+
+            // 1. Populate Main Dashboard
             document.getElementById('infoName').innerText = item.name;
             document.getElementById('infoModel').innerText = item.model || 'No Model ID Assigned';
-
-            const currQty = item.qty || 0;
-            const prevQty = item.previousQty !== undefined ? item.previousQty : currQty;
-            document.getElementById('infoQty').innerText = `Prev: ${prevQty} ➔ Curr: ${currQty}`;
-
-            const badge = document.getElementById('infoQtyBadge');
-            const diff = currQty - prevQty;
-            if (diff > 0) {
-                badge.innerText = `+${diff} (Stock Added)`;
-                badge.style.backgroundColor = 'rgba(16, 185, 129, 0.15)';
-                badge.style.color = 'var(--success-color)';
-                badge.style.border = '1px solid rgba(16, 185, 129, 0.3)';
-            } else if (diff < 0) {
-                badge.innerText = `${diff} (Stock Reduced)`;
-                badge.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
-                badge.style.color = 'var(--meena-red)';
-                badge.style.border = '1px solid rgba(239, 68, 68, 0.3)';
-            } else {
-                badge.innerText = `No Change`;
-                badge.style.backgroundColor = 'rgba(148, 163, 184, 0.15)';
-                badge.style.color = 'var(--text-secondary)';
-                badge.style.border = '1px solid rgba(148, 163, 184, 0.3)';
-            }
-
-            const currMrp = item.mrp || 0;
-            const prevMrp = item.previousMrp !== undefined ? item.previousMrp : currMrp;
-            document.getElementById('infoMrp').innerText = `₹${prevMrp.toLocaleString()} ➔ ₹${currMrp.toLocaleString()}`;
-
-            const currPrice = item.price || 0;
-            const prevPrice = item.previousPrice !== undefined ? item.previousPrice : currPrice;
-            document.getElementById('infoPrice').innerText = `₹${prevPrice.toLocaleString()} ➔ ₹${currPrice.toLocaleString()}`;
+            document.getElementById('infoCurrentStockText').innerText = `${item.qty || 0} in stock`;
             
-            const currMyRate = item.myRate || 0;
-            const prevMyRate = item.previousMyRate !== undefined ? item.previousMyRate : currMyRate;
-            document.getElementById('infoMyRate').innerText = `₹${prevMyRate.toLocaleString()} ➔ ₹${currMyRate.toLocaleString()}`;
+            document.getElementById('infoMrp').innerText = `₹${(item.mrp || 0).toLocaleString()}`;
+            document.getElementById('infoPrice').innerText = `₹${(item.price || 0).toLocaleString()}`;
+            document.getElementById('infoMyRate').innerText = `₹${(item.myRate || 0).toLocaleString()}`;
 
-            let dateStr = "<span class='material-symbols-outlined' style='font-size:16px;'>schedule</span> No recent updates recorded";
-            if (item.lastUpdated) {
-                const d = new Date(item.lastUpdated);
-                const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
-                dateStr = `<span class='material-symbols-outlined' style='font-size:16px;'>schedule</span> Last updated: ${d.toLocaleString('en-US', options)}`;
-            }
-            document.getElementById('infoTimestamp').innerHTML = dateStr;
-
-            const historySentenceDiv = document.getElementById('infoHistorySentence');
-            if (item.lastEditBy && item.previousQty !== undefined && item.qty !== item.previousQty) {
-                let action = item.qty > item.previousQty ? "increased" : "reduced";
-                historySentenceDiv.innerHTML = `<strong>${item.lastEditBy}</strong> ${action} the quantity from <strong>${item.previousQty}</strong> to <strong>${item.qty}</strong> for: <strong>${item.lastEditReason || "N/A"}</strong>.`;
-                historySentenceDiv.style.display = 'block';
+            // Handle new physical stockCheck badge
+            const stockCheckBadge = document.getElementById('infoStockCheckBadge');
+            const pendingCheckBadge = document.getElementById('infoPendingCheckBadge');
+            
+            if (item.stockCheckDate) {
+                const dateObj = new Date(item.stockCheckDate);
+                const formatOpts = { day: '2-digit', month: 'short', year: 'numeric' };
+                document.getElementById('infoStockCheckText').innerText = `Physically Verified: ${dateObj.toLocaleDateString('en-IN', formatOpts)}`;
+                stockCheckBadge.style.display = 'flex';
+                pendingCheckBadge.style.display = 'none';
             } else {
-                if (historySentenceDiv) historySentenceDiv.style.display = 'none';
+                stockCheckBadge.style.display = 'none';
+                pendingCheckBadge.style.display = 'flex';
             }
+
+            // 2. Setup History Array & Variables
+            const historyData = item.history || [];
+            currentHistoryArray = [...historyData].reverse();
+            currentHistoryLimit = 15;
+            
+            // Extract baseline stock for nested header
+            let baseline = "Legacy";
+            if (historyData.length > 0) {
+                const firstLog = historyData[0]; // oldest item
+                if (firstLog.action === "Opening Balance" || firstLog.action === "System Initialization" || firstLog.action === "Ledger Reset / Baseline Established") {
+                    baseline = firstLog.qtyChange;
+                }
+            }
+            document.getElementById('nestedBaselineStock').innerText = baseline;
+            document.getElementById('nestedCurrentStock').innerText = item.qty || 0;
+
+            // 3. Process Last Activity for Main Dashboard (Professional Mini-Card)
+            const lastActivityEl = document.getElementById('lastActivityMiniCard');
+            if (currentHistoryArray.length > 0) {
+                const lastLog = currentHistoryArray[0];
+                const dateStr = new Date(lastLog.date).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true });
+                
+                let iconName = 'edit';
+                let iconColor = 'var(--info-color)';
+                let iconBg = 'rgba(59, 130, 246, 0.1)';
+                let actionText = lastLog.action || "Updated";
+                const actionLower = actionText.toLowerCase();
+                
+                if (actionLower.includes('bill') || actionLower.includes('sales')) { iconName = 'receipt_long'; iconColor = 'var(--warning-color)'; iconBg = 'rgba(245, 158, 11, 0.1)'; }
+                else if (actionLower.includes('reduc') || actionLower.includes('decrease') || actionLower.includes('reset')) { iconName = 'remove'; iconColor = 'var(--meena-red)'; iconBg = 'rgba(239, 68, 68, 0.1)'; }
+                else if (actionLower.includes('increas') || actionLower.includes('balance') || actionLower.includes('stock')) { iconName = 'add'; iconColor = 'var(--success-color)'; iconBg = 'rgba(16, 185, 129, 0.1)'; }
+
+                const qtyHtml = logQtyHtml(lastLog.qtyChange, lastLog.prevQty, lastLog.newQty, false);
+
+                lastActivityEl.innerHTML = `
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: ${iconBg}; color: ${iconColor}; display: flex; justify-content: center; align-items: center; flex-shrink: 0; border: 1px solid ${iconColor}40;">
+                            <span class="material-symbols-outlined" style="font-size: 20px;">${iconName}</span>
+                        </div>
+                        <div style="flex-grow: 1; min-width: 0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                                <span style="font-size: 0.75em; color: var(--text-secondary);">${dateStr}</span>
+                                <span style="font-size: 0.75em; color: var(--text-secondary);">By ${lastLog.by || 'System'}</span>
+                            </div>
+                            <div class="wrap-text" style="font-size: 0.95em; color: white; font-weight: 600; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;">
+                                <span style="flex-grow: 1;">${actionText}</span>
+                                ${qtyHtml}
+                            </div>
+                            ${lastLog.invoiceNo ? `<div class="wrap-text" style="font-size: 0.8em; color: var(--text-secondary); margin-top: 4px;">Invoice: ${lastLog.invoiceNo}</div>` : ''}
+                            ${lastLog.reason ? `<div class="wrap-text" style="font-size: 0.8em; color: var(--text-secondary); margin-top: 4px;">${lastLog.reason}</div>` : ''}
+                        </div>
+                    </div>
+                    <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: ${iconColor};"></div>
+                `;
+                lastActivityEl.style.display = 'block';
+            } else {
+                lastActivityEl.style.display = 'none';
+            }
+
+            // 4. Trigger AI Auditor Sequence
+            document.getElementById('aiSkeletonLoader').style.display = 'block';
+            document.getElementById('aiAuditorContainer').style.display = 'none';
+            
+            setTimeout(() => {
+                document.getElementById('aiSkeletonLoader').style.display = 'none';
+                
+                // Run background math
+                let mathMatches = true;
+                let hasBaseline = false;
+                
+                if (historyData.length > 0) {
+                    const firstAction = historyData[0].action;
+                    if (firstAction === "Opening Balance" || firstAction === "System Initialization" || firstAction === "Ledger Reset / Baseline Established") {
+                        hasBaseline = true;
+                        let calculatedStock = 0;
+                        historyData.forEach(log => calculatedStock += (log.qtyChange || 0));
+                        if (calculatedStock !== (item.qty || 0)) mathMatches = false;
+                    }
+                } else {
+                    hasBaseline = false;
+                }
+
+                let finalSentence = "";
+                const intro = intros[Math.floor(Math.random() * intros.length)];
+                
+                if (!hasBaseline && currentHistoryArray.length === 0) {
+                    finalSentence = "Legacy Product detected. Detailed timeline will begin generating upon the next stock adjustment or sale.";
+                    typeText('aiAuditorHiddenText', 'aiAuditorTypingText', finalSentence, "var(--text-secondary)", false);
+                } else if (!hasBaseline) {
+                    finalSentence = "Verified active tracked movements. Full historical math audit requires a manual system initialization edit.";
+                    typeText('aiAuditorHiddenText', 'aiAuditorTypingText', finalSentence, "var(--warning-color)", false);
+                } else if (mathMatches) {
+                    const mid = middlesOk[Math.floor(Math.random() * middlesOk.length)];
+                    const out = outrosOk[Math.floor(Math.random() * outrosOk.length)];
+                    finalSentence = `${intro} ${mid} ${out}`;
+                    typeText('aiAuditorHiddenText', 'aiAuditorTypingText', finalSentence, "var(--success-color)", true);
+                } else {
+                    const mid = middlesBad[Math.floor(Math.random() * middlesBad.length)];
+                    const out = outrosBad[Math.floor(Math.random() * outrosBad.length)];
+                    finalSentence = `${intro} ${mid} ${out}`;
+                    typeText('aiAuditorHiddenText', 'aiAuditorTypingText', finalSentence, "var(--meena-red)", false);
+                }
+
+            }, 1500);
 
             if(window.updateIcons) window.updateIcons();
             openModal('modalProductInfo');
         };
 
-        window.editQty = async function(id, currentQty) {
-            vibrateApp(30);
-            const item = inventoryCache.find(i => i.id === id);
+        window.openFullHistoryModal = function() {
+            vibrateApp(20);
+            renderHistoryTimeline();
+            openModal('modalFullHistory');
+        };
+
+        // --- NEW ADMIN FEATURE: Wipe Ledger Transaction ---
+        window.confirmClearLedger = async function() {
+            vibrateApp(40);
+            if (!window.currentActiveProductId) return;
+            const item = inventoryCache.find(i => i.id === window.currentActiveProductId);
             if (!item) return;
 
-            const newQtyStr = await openConfirmModal("Quick Edit Quantity", `Enter new quantity for ${item.name}:`, true, currentQty, "var(--accent-color)", "Save Update");
-            if (newQtyStr === null || newQtyStr.trim() === "") return;
-            const parsedQty = parseInt(newQtyStr);
+            const isConfirmed = await openConfirmModal(
+                "Clear Audit Ledger?", 
+                `This will permanently wipe all history for "${item.name}" and set the current stock (${item.qty}) as the new baseline.`, 
+                false, "", "var(--meena-red)", "Wipe History"
+            );
             
-            if (isNaN(parsedQty) || parsedQty < 0) {
-                showToast("Please enter a valid number.", "error");
+            if (!isConfirmed) return;
+
+            try {
+                const itemRef = doc(db, "inventory", item.id);
+                const realEditorName = await getFreshUserName();
+                const currentQty = item.qty || 0;
+
+                await runTransaction(db, async (transaction) => {
+                    const docSnap = await transaction.get(itemRef);
+                    if (!docSnap.exists()) throw "Document does not exist!";
+                    
+                    const newHistory = [{
+                        action: "Ledger Reset / Baseline Established",
+                        qtyChange: currentQty,
+                        prevQty: 0,
+                        newQty: currentQty,
+                        date: new Date().toISOString(),
+                        by: realEditorName,
+                        reason: "Admin forced ledger wipe"
+                    }];
+                    
+                    transaction.update(itemRef, {
+                        history: newHistory,
+                        lastUpdated: new Date().toISOString()
+                    });
+                });
+
+                showToast("Ledger successfully wiped and reset.", "success");
+                loadInventory();
+                
+                // Refresh the modal UI silently without breaking the stack
+                openInfoModal(item.id);
+
+            } catch (err) {
+                console.error("Error wiping ledger:", err);
+                showToast("Failed to wipe ledger.", "error");
+            }
+        };
+
+        // UI RENDER FIX: Injecting Running Balance [ 10 -> 9 ] perfectly wrapped
+        function logQtyHtml(qtyChange, prevQty, newQty, inline = false) {
+            if (qtyChange === undefined || qtyChange === 0) return '';
+            const isPos = qtyChange > 0;
+            const changeStr = `<span class="timeline-qty ${isPos ? 'positive' : 'negative'}" style="display:inline-block;">${isPos ? '+' : ''}${qtyChange}</span>`;
+            
+            if (prevQty !== undefined && newQty !== undefined) {
+                if (inline) {
+                    return `<span style="white-space: nowrap; flex-shrink: 0; color: var(--text-secondary); margin-right: 6px; font-weight: 700;">[${prevQty} ➔ ${newQty}]</span>${changeStr}`;
+                } else {
+                    return `<div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; white-space: nowrap; flex-shrink: 0;">
+                        <span style="font-weight: 700; color: white; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.85em; white-space: nowrap; letter-spacing: 0.5px;">[ ${prevQty} ➔ ${newQty} ]</span>
+                        ${changeStr}
+                    </div>`;
+                }
+            }
+            return changeStr;
+        }
+
+        window.renderHistoryTimeline = function() {
+            const container = document.getElementById('fullHistoryContainer');
+
+            if (currentHistoryArray.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 40px 20px; color: var(--text-secondary); border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px; margin-top: 20px;">
+                        <span class="material-symbols-outlined" style="font-size: 32px; opacity: 0.5; margin-bottom: 10px; display: block;">history_toggle_off</span>
+                        Legacy Product: No records found. Timeline will begin tracking on the next edit.
+                    </div>`;
                 return;
             }
 
-            try {
-                const itemRef = doc(db, "inventory", id);
-                await updateDoc(itemRef, { 
-                    qty: parsedQty,
-                    previousQty: currentQty,
-                    lastEditBy: "Admin",
-                    lastEditReason: "N/A",
-                    lastUpdated: new Date().toISOString(),
-                    createdAt: serverTimestamp() 
-                });
-                showToast("Quantity updated successfully!", "success");
-                loadInventory(); 
-            } catch (err) {
-                console.error("Error updating quantity:", err);
-                showToast(err.message || "Failed to update quantity.", "error");
+            const itemsToShow = currentHistoryArray.slice(0, currentHistoryLimit);
+            let html = '<div class="timeline-container">';
+            
+            itemsToShow.forEach((log, index) => {
+                const dateStr = new Date(log.date).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
+                
+                let iconName = 'edit';
+                let iconClass = 'icon-edit';
+                let actionText = log.action || "Updated";
+                
+                const actionLower = actionText.toLowerCase();
+                if (actionLower.includes('bill') || actionLower.includes('sales')) { iconName = 'receipt_long'; iconClass = 'icon-billed'; }
+                else if (actionLower.includes('reduc') || actionLower.includes('decrease') || actionLower.includes('reset')) { iconName = 'remove'; iconClass = 'icon-remove'; }
+                else if (actionLower.includes('increas') || actionLower.includes('balance') || actionLower.includes('stock')) { iconName = 'add'; iconClass = 'icon-add'; }
+
+                const qtyHtml = logQtyHtml(log.qtyChange, log.prevQty, log.newQty, false);
+                const animDelay = index * 0.03;
+
+                html += `
+                    <div class="timeline-item" style="animation-delay: ${animDelay}s;">
+                        <div class="timeline-icon ${iconClass}">
+                            <span class="material-symbols-outlined">${iconName}</span>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-meta">
+                                <span>${dateStr}</span>
+                                <span style="color: var(--accent-color); font-weight: 600;">${log.by || 'System'}</span>
+                            </div>
+                            <div class="timeline-title wrap-text" style="align-items: flex-start; justify-content: space-between; gap: 10px; display: flex;">
+                                <span style="flex-grow: 1;">${actionText}</span>
+                                ${qtyHtml}
+                            </div>
+                            ${log.invoiceNo ? `<div class="wrap-text" style="font-size: 0.85em; color: var(--text-secondary); margin-top: 4px;"><strong style="color:white;">Inv:</strong> ${log.invoiceNo}</div>` : ''}
+                            ${log.reason ? `<div class="timeline-reason wrap-text">${log.reason}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+
+            if (currentHistoryLimit < currentHistoryArray.length) {
+                const remaining = currentHistoryArray.length - currentHistoryLimit;
+                html += `
+                    <button class="btn-secondary" onclick="loadMoreHistory()" style="width: 100%; margin-top: 10px; background: rgba(255,255,255,0.03);">
+                        Load Previous Edits (${remaining} older records)
+                    </button>
+                `;
             }
+
+            container.innerHTML = html;
+        };
+
+        window.loadMoreHistory = function() {
+            vibrateApp(20);
+            currentHistoryLimit += 15; 
+            renderHistoryTimeline();   
+            if(window.updateIcons) window.updateIcons();
         };
 
         window.editItemFull = async function(id) {
@@ -1141,8 +1582,13 @@
             document.getElementById('editMrp').value = item.mrp || 0;
             document.getElementById('editMyRate').value = item.myRate || 0;
             document.getElementById('editPrice').value = item.price || 0;
-            document.getElementById('editQty').value = item.qty || 0;
+            
+            currentEditOriginalQty = item.qty || 0;
+            document.getElementById('editQty').value = currentEditOriginalQty;
+            
+            updateEditDropdownLogic(); 
 
+            if(window.updateIcons) window.updateIcons();
             openModal('modalEditInventory');
         };
 
@@ -1175,31 +1621,85 @@
                 const oldMyRate = item ? (item.myRate || 0) : 0;
 
                 const itemRef = doc(db, "inventory", id);
+                let realEditorName = currentUserName; 
                 
-                const payload = { 
-                    name: newName,
-                    model: newModel,
-                    type: newType, 
-                    mrp: newMrp,
-                    myRate: newMyRate,
-                    price: newPrice,
-                    qty: newQty,
-                    searchTokens: generateSearchTokens(newName, newModel), 
-                    searchKeywords: deleteField(),
-                    previousQty: oldQty,
-                    previousMrp: oldMrp,
-                    previousPrice: oldPrice,
-                    previousMyRate: oldMyRate,
-                    lastUpdated: new Date().toISOString(),
-                    createdAt: serverTimestamp() 
-                };
-
                 if (newQty !== oldQty) {
-                    payload.lastEditBy = "Admin";
-                    payload.lastEditReason = "N/A";
+                    realEditorName = await getFreshUserName(); 
+                    const qtyDiff = newQty - oldQty;
+                    
+                    await runTransaction(db, async (transaction) => {
+                        const docSnap = await transaction.get(itemRef);
+                        const data = docSnap.data();
+                        let currentHistory = data.history || [];
+                        
+                        if (currentHistory.length === 0) {
+                            currentHistory.push({
+                                action: "System Initialization",
+                                qtyChange: oldQty,
+                                prevQty: 0,
+                                newQty: oldQty,
+                                date: new Date().toISOString(),
+                                by: "System",
+                                reason: "Legacy tracking started"
+                            });
+                        }
+                        
+                        currentHistory.push({
+                            action: qtyDiff > 0 ? "Stock Adjustment (Increase)" : "Stock Adjustment (Decrease)",
+                            qtyChange: qtyDiff,
+                            prevQty: oldQty,
+                            newQty: newQty,
+                            date: new Date().toISOString(),
+                            by: realEditorName,
+                            reason: editReasonSelect.value
+                        });
+                        
+                        transaction.update(itemRef, {
+                            name: newName,
+                            model: newModel,
+                            type: newType, 
+                            mrp: newMrp,
+                            myRate: newMyRate,
+                            price: newPrice,
+                            qty: newQty,
+                            searchTokens: generateSearchTokens(newName, newModel), 
+                            searchKeywords: deleteField(),
+                            lastUpdated: new Date().toISOString(),
+                            history: currentHistory
+                        });
+                    });
+                    
+                    if (newQty < oldQty) {
+                        try {
+                            await setDoc(doc(db, "alerts", "stock_reduction"), {
+                                name: newName || '',
+                                model: newModel || 'N/A',
+                                type: newType || 'N/A', 
+                                price: newPrice || 0,
+                                mrp: newMrp || 0,
+                                qty: newQty,
+                                previousQty: oldQty,
+                                lastEditBy: realEditorName, 
+                                lastEditReason: editReasonSelect.value || "N/A",
+                                lastUpdated: new Date().toISOString()
+                            });
+                        } catch (alertErr) { console.error("Failed to write alert document:", alertErr); }
+                    }
+                } else {
+                    // SILENT EDIT: No quantity change, just update text data directly without touching the history ledger
+                    await updateDoc(itemRef, {
+                        name: newName,
+                        model: newModel,
+                        type: newType, 
+                        mrp: newMrp,
+                        myRate: newMyRate,
+                        price: newPrice,
+                        searchTokens: generateSearchTokens(newName, newModel), 
+                        searchKeywords: deleteField(),
+                        lastUpdated: new Date().toISOString()
+                    });
                 }
 
-                await updateDoc(itemRef, payload);
                 showToast("Product updated successfully!", "success");
                 history.back(); 
                 loadInventory(); 
@@ -1317,9 +1817,9 @@
                         }
                     } else {
                         if (isLoadMore && lastVisibleItem) {
-                            q = query(collection(db, "inventory"), orderBy("createdAt", "desc"), startAfter(lastVisibleItem), limit(10));
+                            q = query(collection(db, "inventory"), orderBy("lastUpdated", "desc"), startAfter(lastVisibleItem), limit(10));
                         } else {
-                            q = query(collection(db, "inventory"), orderBy("createdAt", "desc"), limit(10));
+                            q = query(collection(db, "inventory"), orderBy("lastUpdated", "desc"), limit(10));
                         }
                     }
                 }
@@ -1659,15 +2159,23 @@
 
             try {
                 const batch = writeBatch(db);
+                const realEditorName = await getFreshUserName();
 
                 pendingCart.forEach(item => {
                     if (item.isUpdate && item.existingId) {
                         const existingRef = doc(db, "inventory", item.existingId);
                         batch.update(existingRef, {
                             qty: increment(item.qty),
-                            previousQty: item.existingQty,
                             lastUpdated: new Date().toISOString(),
-                            createdAt: serverTimestamp() 
+                            history: arrayUnion({
+                                action: "Inward Stock / Restock",
+                                qtyChange: item.qty,
+                                prevQty: item.existingQty,
+                                newQty: item.existingQty + item.qty,
+                                date: new Date().toISOString(),
+                                by: realEditorName,
+                                reason: "New Stock Added via Cart"
+                            })
                         });
                     } else {
                         const newRef = doc(collection(db, "inventory"));
@@ -1680,7 +2188,17 @@
                             price: item.price,
                             qty: item.qty,
                             searchTokens: generateSearchTokens(item.name, item.model), 
-                            createdAt: serverTimestamp()
+                            createdAt: serverTimestamp(),
+                            lastUpdated: new Date().toISOString(),
+                            history: [{
+                                action: "Opening Balance",
+                                qtyChange: item.qty,
+                                prevQty: 0,
+                                newQty: item.qty,
+                                date: new Date().toISOString(),
+                                by: realEditorName,
+                                reason: "New Product Creation"
+                            }]
                         });
                     }
                 });
@@ -1704,6 +2222,40 @@
                 renderPendingList(); 
             }
         });
+
+        let currentEditOriginalQty = 0;
+        const editQtyInput = document.getElementById('editQty');
+        const editReasonContainer = document.getElementById('editReasonContainer');
+        const editReasonSelect = document.getElementById('editReasonSelect');
+        const btnSaveEditItem = document.getElementById('btnSaveEditItem');
+
+        function updateEditDropdownLogic() {
+            const newQty = parseInt(editQtyInput.value) || 0;
+            if (newQty < currentEditOriginalQty) {
+                editReasonSelect.innerHTML = `<option value="">Select reason...</option><option value="Sent to Meena Agency">Sent to Meena Agency</option><option value="Product Missing">Product Missing</option><option value="Damaged Product">Damaged Product</option><option value="Returned to Dealer">Returned to Dealer</option><option value="Gift to Customer">Gift to Customer</option>`;
+                editReasonContainer.style.display = 'block';
+                checkReasonSelection();
+            } else if (newQty > currentEditOriginalQty) {
+                editReasonSelect.innerHTML = `<option value="">Select reason...</option><option value="New Stock">New Stock</option><option value="Customer Return">Customer Return</option><option value="Counting Mistake">Counting Mistake</option>`;
+                editReasonContainer.style.display = 'block';
+                checkReasonSelection();
+            } else {
+                editReasonContainer.style.display = 'none';
+                editReasonSelect.value = "";
+                btnSaveEditItem.style.display = 'flex';
+            }
+        }
+
+        function checkReasonSelection() {
+            if (editReasonSelect.value === "") {
+                btnSaveEditItem.style.display = 'none';
+            } else {
+                btnSaveEditItem.style.display = 'flex';
+            }
+        }
+
+        editQtyInput.addEventListener('input', updateEditDropdownLogic);
+        editReasonSelect.addEventListener('change', checkReasonSelection);
 
         document.addEventListener('contextmenu', event => event.preventDefault());
 
