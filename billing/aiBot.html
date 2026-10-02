@@ -1296,12 +1296,16 @@
         function openModeMenu() {
             triggerHaptic([20]);
             modeMenuModal.classList.add('active');
+            history.pushState({ modal: 'modeMenuModal' }, '');
         }
 
         function closeModeMenu(event) {
             if(event && event.target !== modeMenuModal) return; 
             triggerHaptic([15]);
             modeMenuModal.classList.remove('active');
+            if (history.state && history.state.modal === 'modeMenuModal') {
+                history.back();
+            }
         }
 
         function selectMode(targetMode, playHaptic = true) {
@@ -1338,6 +1342,9 @@
             }
             
             modeMenuModal.classList.remove('active');
+            if (history.state && history.state.modal === 'modeMenuModal') {
+                history.back();
+            }
         }
 
         // ==========================================
@@ -1468,6 +1475,9 @@
         }
 
         window.addEventListener('popstate', (e) => {
+            if (modeMenuModal.classList.contains('active')) {
+                modeMenuModal.classList.remove('active');
+            }
             if (window.location.hash === '#voice') {
                 enterVoiceMode();
             } else if (window.location.hash === '#vision') {
