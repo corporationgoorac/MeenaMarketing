@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>My Price - Meena Marketing</title>
+    <title>Hub - Meena Marketing</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#212121">
@@ -41,16 +41,111 @@
         header { background-color: #212121; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: 13px 20px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 500; border-bottom: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
         .back-btn { background: none; border: none; color: white; cursor: pointer; display: flex; padding: 8px; border-radius: 50%; transition: background 0.2s; margin-left: -8px;}
         .back-btn:hover { background: rgba(255,255,255,0.1); }
-        header h1 { margin: 0; margin-right: auto; font-size: 1.24em; font-weight: 600; letter-spacing: -0.01em; }
+        
+        /* ADDED: Metallic Text Effect */
+        header h1 { 
+            margin: 0; 
+            margin-right: auto; 
+            font-size: 1.24em; 
+            font-weight: 800; 
+            letter-spacing: 0.5px; 
+            text-transform: uppercase;
+        }
+        .metallic-text {
+            background: linear-gradient(
+                to right, 
+                #a8b1c2 0%, 
+                #d5dce4 10%, 
+                #ffffff 20%, 
+                #d5dce4 30%, 
+                #a8b1c2 40%, 
+                #ffffff 50%,
+                #a8b1c2 60%, 
+                #d5dce4 70%, 
+                #ffffff 80%, 
+                #d5dce4 90%, 
+                #a8b1c2 100%
+            );
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 3.5s linear infinite;
+            display: inline-block;
+            text-shadow: 0px 2px 4px rgba(0,0,0,0.3);
+        }
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
         
         /* Sleek Top-Right Add Button */
-        .action-btn { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: white; cursor: pointer; display: flex; padding: 6px; border-radius: 50%; transition: all 0.2s ease; margin-left: 0; margin-right: 0; }
+        .action-btn { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: white; cursor: pointer; display: flex; padding: 6px; border-radius: 50%; transition: all 0.2s ease; margin-left: 0; margin-right: 0; align-items: center; justify-content: center;}
         .action-btn:hover { background: rgba(255, 255, 255, 0.15); transform: scale(1.05); border-color: rgba(255, 255, 255, 0.2); }
         .action-btn:active { transform: scale(0.95); }
 
         /* Added to gracefully handle multiple action buttons dynamically */
         header .action-btn:not(:last-child) { margin-right: 0; margin-left: 0; }
         header .action-btn:last-child { margin-left: 0; margin-right: -8px; }
+
+        /* ADDED: Dropdown Menu Styles */
+        .dropdown-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: -10px; /* Align near the edge */
+            background: rgba(19, 27, 38, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-15px) scale(0.95);
+            transform-origin: top right;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: 1000;
+            overflow: hidden;
+        }
+        .dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            color: var(--marketing-white);
+            text-decoration: none;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: background 0.2s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+        }
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .dropdown-item .material-symbols-outlined {
+            font-size: 22px;
+            color: var(--accent-color);
+        }
+        .arrow-icon {
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .arrow-icon.up {
+            transform: rotate(-180deg);
+        }
 
         /* Main Container with Entrance Animation */
         .container { padding: 25px 20px; max-width: 600px; margin: 0 auto; width: 100%; animation: fadeInSlideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; transform: translateY(15px); }
@@ -192,17 +287,31 @@
         <button class="back-btn" onclick="if(navigator.vibrate) navigator.vibrate(30); history.back();">
             <svg class="material-symbols-outlined" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 -960 960 960" fill="currentColor"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
         </button>
-        <h1>My Price</h1>
         
-        <button class="action-btn" onclick="if(navigator.vibrate) navigator.vibrate(30); window.location.href='delete.html';">
+        <h1 class="metallic-text">Hub</h1>
+        
+        <button class="action-btn" onclick="if(navigator.vibrate) navigator.vibrate(30); window.location.href='delete.html';" title="Delete Data">
             <svg class="material-symbols-outlined" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 -960 960 960" fill="currentColor"><path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l80 80h160q33 0 56.5 23.5T880-720v560q0 33-23.5 56.5T800-80H240Zm280-400v-320H240v640h560v-560H520ZM240-800v640-640Z"/></svg>
         </button>
 
-        <button class="action-btn" onclick="if(navigator.vibrate) navigator.vibrate(30); window.location.href='custombill.html';">
-            <svg class="material-symbols-outlined" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 -960 960 960" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h357l-80 80H200v560h560v-278l80-80v358q0 33-23.5 56.5T760-120H200Zm280-360ZM360-360v-170l367-367q12-12 27-18t30-6q16 0 32 6t28 18l56 57q11 12 17 26.5t6 29.5q0 15-5.5 29.5T897-728L530-360H360Zm481-424-56-56 56 56ZM440-440h56l232-232-28-28-29-28-231 231v57Zm260-260-29-28 29 28 28 28-28-28Z"/></svg>
-        </button>
+        <!-- ADDED: The Arrow Trigger & Dropdown Menu -->
+        <div class="dropdown-container" id="menuContainer">
+            <button class="action-btn" id="dropdownBtn" onclick="toggleMenu()" title="Quick Actions">
+                <span class="material-symbols-outlined arrow-icon" id="menuArrow">keyboard_arrow_down</span>
+            </button>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="custombill.html" class="dropdown-item" onclick="if(navigator.vibrate) navigator.vibrate(20);">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    Add My rate
+                </a>
+                <a href="viewBill.html" class="dropdown-item" onclick="if(navigator.vibrate) navigator.vibrate(20);">
+                    <span class="material-symbols-outlined">receipt_long</span>
+                    View a Bill
+                </a>
+            </div>
+        </div>
 
-        <button class="action-btn" onclick="if(navigator.vibrate) navigator.vibrate(30); window.location.href='abc.html';">
+        <button class="action-btn" onclick="if(navigator.vibrate) navigator.vibrate(30); window.location.href='abc.html';" title="More Tools">
             <svg class="material-symbols-outlined" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 -960 960 960" fill="currentColor"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
         </button>
     </header>
@@ -282,9 +391,9 @@
 
     </div>
 
-    <!-- Floating AI Chat Button - Bottom Left -->
+    <!-- Floating AI Chat Button - Bottom Left UPDATED ICON -->
     <a href="aiBot.html" class="fab-ai" onclick="if(navigator.vibrate) navigator.vibrate(30);" title="AI Assistant">
-        <span class="material-symbols-outlined">smart_toy</span>
+        <span class="material-symbols-outlined">auto_awesome</span>
     </a>
 
     <!-- Floating Attendance Button - Bottom Right -->
@@ -293,6 +402,30 @@
             <path d="M684-136 492-328l56-56 136 136 292-292 56 56-348 348ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q32 0 63 3.5t61 10.5l-44 63q-39-11-79-17h-41v112H160Zm160-400q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Z"/>
         </svg>
     </a>
+    
+    <!-- ADDED: Script for Dropdown Interaction -->
+    <script>
+        const dropdownBtn = document.getElementById('dropdownBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const menuArrow = document.getElementById('menuArrow');
+        const menuContainer = document.getElementById('menuContainer');
+
+        window.toggleMenu = function() {
+            if (navigator.vibrate) navigator.vibrate(40);
+            dropdownMenu.classList.toggle('active');
+            menuArrow.classList.toggle('up');
+        };
+
+        // Close dropdown when clicking anywhere else on the screen
+        document.addEventListener('click', function(event) {
+            if (!menuContainer.contains(event.target)) {
+                if (dropdownMenu.classList.contains('active')) {
+                    dropdownMenu.classList.remove('active');
+                    menuArrow.classList.remove('up');
+                }
+            }
+        });
+    </script>
 
     <script type="module">
         import { db } from './config.js';
