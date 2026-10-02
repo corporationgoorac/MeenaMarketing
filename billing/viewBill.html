@@ -9,11 +9,13 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     
     <!-- Print Engine Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
         * { scrollbar-width: none; } *::-webkit-scrollbar { display: none; }
@@ -37,82 +39,97 @@
         html, body { height: 100%; margin: 0; padding: 0; width: 100%; overflow-x: hidden; }
         body { font-family: 'Segoe UI', 'Noto Sans Tamil', sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; }
 
-        /* Standard Header */
-        header { background-color: var(--surface-color); padding: 12px 10px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.5); flex-shrink: 0; width: 100%; }
-        .header-left { display: flex; align-items: center; gap: 5px; }
-        .back-btn { color: var(--text-color); cursor: pointer; display: flex; align-items: center; text-decoration: none; }
-        .brand-container { display: flex; align-items: center; gap: 6px; }
+        /* Standard Header - Fixed Mobile Spacing */
+        header { background-color: var(--surface-color); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.5); flex-shrink: 0; width: 100%; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .back-btn { color: var(--text-color); cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 5px; margin-left: -5px; transition: transform 0.2s;}
+        .back-btn:active { transform: scale(0.9); }
+        .brand-container { display: flex; align-items: center; gap: 8px; }
         .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
-        .brand-title { font-size: 1em; font-weight: bold; }
+        .brand-title { font-size: 1.1em; font-weight: bold; }
         .meena { color: var(--meena-red); }
         .marketing { color: var(--marketing-white); }
-        .page-title { font-size: 0.55em; color: var(--warning-color); text-transform: uppercase; letter-spacing: 1px;}
+        .page-title { font-size: 0.6em; color: var(--warning-color); text-transform: uppercase; letter-spacing: 1px;}
 
         /* Main Container */
         .container { padding: 20px; max-width: 900px; margin: 0 auto; width: 100%; flex-grow: 1; }
 
-        /* Sleek Search Controls */
-        .top-controls { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 15px;}
+        /* Sleek Search Controls - Fixed Mobile Overflow */
+        .top-controls { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 12px;}
         .search-row { display: flex; gap: 10px; align-items: stretch; width: 100%; }
         
-        .prefix-select { background: var(--input-bg); border: 1px solid #444; color: white; font-size: 1.1em; padding: 12px 10px; border-radius: 8px; outline: none; font-weight: bold; cursor: pointer; width: 30%; }
+        .prefix-select { background: var(--input-bg); border: 1px solid #444; color: white; font-size: 1.1em; padding: 12px 10px; border-radius: 8px; outline: none; font-weight: bold; cursor: pointer; width: auto; max-width: 90px; }
         .prefix-select option { background: var(--surface-color); color: white; }
         
-        .number-input { background: var(--input-bg); border: 1px solid #444; color: white; font-size: 1.2em; padding: 12px 15px; border-radius: 8px; outline: none; flex-grow: 1; font-weight: bold; letter-spacing: 1px;}
+        .number-input { background: var(--input-bg); border: 1px solid #444; color: white; font-size: 1.2em; padding: 12px 15px; border-radius: 8px; outline: none; flex: 1; min-width: 0; font-weight: bold; letter-spacing: 1px;}
         .number-input::placeholder { color: #666; font-weight: normal; letter-spacing: 0; font-size: 0.9em; }
         .number-input:focus { border-color: var(--accent-color); }
         
-        .btn-done { background: var(--accent-color); color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: bold; font-size: 1.1em; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.1s ease, background 0.2s; }
-        .btn-done:active { transform: scale(0.95); }
+        .btn-done { background: var(--accent-color); color: white; border: none; padding: 0 16px; border-radius: 8px; font-weight: bold; font-size: 1em; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.1s ease, background 0.2s; }
+        .btn-done:active { transform: scale(0.92); }
         .btn-done:hover { background: #004494; }
 
         /* Invoice Cards */
         .sales-list { display: flex; flex-direction: column; gap: 15px; }
-        .invoice-card { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; overflow: hidden; transition: all 0.3s ease; display: flex; flex-direction: column;}
+        .invoice-card { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; opacity: 0; animation: slideUpFade 0.4s ease forwards; }
         
-        .inv-header { background: #1a1a1a; padding: 15px 20px; display: flex; justify-content: space-between; border-bottom: 1px solid #333; align-items: center;}
-        .inv-meta h3 { margin: 0; color: var(--marketing-white); font-size: 1.1em; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
-        .inv-meta span { font-size: 0.75em; color: var(--text-secondary); font-weight: normal; background: #333; padding: 2px 6px; border-radius: 4px;}
-        .inv-meta span.pay-tag { background: var(--accent-color); color: white; font-weight: bold; letter-spacing: 0.5px; border: 1px solid #004494;}
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
 
-        .inv-time { font-size: 0.85em; color: var(--text-secondary); }
+        /* Fixed Mobile Header Layout for Invoice */
+        .inv-header { background: #1a1a1a; padding: 15px 20px; display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #333; }
+        .inv-header-left { display: flex; flex-direction: column; gap: 8px; }
+        .inv-header-left .title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .inv-header-left h3 { margin: 0; color: var(--marketing-white); font-size: 1.2em; font-weight: 900; }
+        .inv-header-left .billed-badge { font-size: 0.7em; color: var(--text-secondary); background: #333; padding: 3px 6px; border-radius: 4px; border: 1px solid #444; }
+        .inv-header-left .pay-tag { font-size: 0.75em; background: var(--accent-color); color: white; font-weight: bold; padding: 3px 8px; border-radius: 4px; display: inline-block; width: fit-content; }
+
+        .inv-header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+        .inv-header-right .date-badge { background: #2a2a2a; color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.85em; font-weight: bold; border: 1px solid #444; }
+        .inv-header-right .time-badge { background: #ff9800; color: #121212; padding: 4px 8px; border-radius: 6px; font-size: 0.85em; font-weight: bold; display: inline-block; }
 
         .inv-body { padding: 15px 20px; flex-grow: 1;}
-        .customer-info { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #444; }
-        .customer-info p { margin: 3px 0; font-size: 0.9em; color: var(--text-secondary); }
-        .customer-info strong { color: white; font-size: 1.05em; }
+        .customer-info { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #444; }
+        .customer-info p { margin: 4px 0; font-size: 0.9em; color: var(--text-secondary); }
+        .customer-info strong { color: white; font-size: 1.1em; display: inline-block; margin-bottom: 2px;}
 
-        .item-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;}
-        .item-row { display: flex; justify-content: space-between; font-size: 0.9em; align-items: flex-start;}
+        .item-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;}
+        .item-row { display: flex; justify-content: space-between; font-size: 0.95em; align-items: flex-start;}
         .item-desc { flex: 1; padding-right: 15px; }
-        .item-name { font-weight: bold; color: white; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;}
-        .item-sub { color: var(--text-secondary); font-size: 0.85em; margin-top: 2px;}
-        .item-price { text-align: right; font-weight: bold; white-space: nowrap; }
+        .item-name { font-weight: bold; color: white; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 3px;}
+        .item-sub { color: var(--text-secondary); font-size: 0.85em; }
+        .item-price { text-align: right; font-weight: bold; white-space: nowrap; font-size: 1.05em; }
         
         .tag-ns { background: rgba(255, 152, 0, 0.2); color: var(--warning-color); padding: 1px 6px; border-radius: 4px; font-size: 0.7em; border: 1px solid var(--warning-color); text-transform: uppercase;}
         .tag-gst { color: var(--accent-color); font-size: 0.8em; font-weight: bold; margin-left: 5px;}
 
         .inv-footer { background: rgba(0, 200, 83, 0.05); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #333; }
         
-        .footer-left { display: flex; flex-direction: column; gap: 4px; }
-        .inv-total-val { font-size: 1.3em; font-weight: bold; color: var(--success-color); }
-        .billed-by { font-size: 0.8em; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; }
+        .footer-left { display: flex; flex-direction: column; gap: 6px; }
+        .inv-total-val { font-size: 1.4em; font-weight: bold; color: var(--success-color); line-height: 1;}
+        .billed-by { font-size: 0.75em; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; }
+        .billed-by strong { color: #ccc; }
         
-        .btn-print-card { background: var(--accent-color); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; display: flex; align-items: center; gap: 5px; cursor: pointer; transition: 0.2s; font-size: 0.9em;}
+        .btn-print-card { background: var(--accent-color); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: bold; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: transform 0.1s ease, background 0.2s; font-size: 0.95em;}
+        .btn-print-card:active { transform: scale(0.92); }
         .btn-print-card:hover { background: #004494; }
 
-        .empty-state { text-align: center; padding: 50px 20px; color: var(--text-secondary); background: var(--surface-color); border-radius: 12px; border: 1px solid #333;}
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-secondary); background: var(--surface-color); border-radius: 12px; border: 1px solid #333; animation: slideUpFade 0.3s ease;}
         .empty-state .material-symbols-outlined { font-size: 48px; margin-bottom: 10px; opacity: 0.5; }
 
         /* Skeleton Loader */
-        .loader { display: none; margin-top: 20px; }
+        .loader { display: none; }
         .skeleton { background: #2a2a2a; background-image: linear-gradient(90deg, #2a2a2a 0px, #3a3a3a 40px, #2a2a2a 80px); background-size: 200% 100%; animation: shimmer 1.5s infinite linear; border-radius: 4px; }
         @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
         .skel-card { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; margin-bottom: 15px; }
         .skel-header { background: #1a1a1a; padding: 15px 20px; display: flex; justify-content: space-between; border-bottom: 1px solid #333; }
-        .skel-title { width: 35%; height: 22px; }
+        .skel-title { width: 40%; height: 24px; }
+        .skel-time { width: 25%; height: 24px; }
         .skel-body { padding: 15px 20px; }
-        .skel-cust-name { width: 45%; height: 18px; margin-bottom: 8px; }
+        .skel-cust-name { width: 50%; height: 20px; margin-bottom: 12px; }
+        .skel-item { width: 80%; height: 16px; margin-bottom: 8px;}
 
         /* Toasts */
         .toast-msg { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); color: white; padding: 12px 24px; border-radius: 8px; z-index: 9999; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.5); font-weight: bold; align-items: center; gap: 10px; opacity: 0; transition: opacity 0.3s;}
@@ -121,9 +138,9 @@
         .toast-msg.show { display: flex; opacity: 1; }
 
         /* Print Overlay Loader */
-        .print-loader-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        .print-loader-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 18, 18, 0.95); z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .print-loader-overlay.active { display: flex; }
-        .spinner { width: 50px; height: 50px; border: 5px solid rgba(255, 255, 255, 0.1); border-top-color: var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        .spinner { width: 50px; height: 50px; border: 4px solid rgba(255, 255, 255, 0.1); border-top-color: var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* Print Engine CSS */
@@ -149,11 +166,11 @@
             .print-invoice-to p strong { display: inline-block; width: 65px; font-size: 10px; text-transform: uppercase; color: #000;}
             .print-header-right { width: 40%; text-align: right; display: flex; flex-direction: column; align-items: flex-end; }
             .qr-box { border: 2px solid #000; background-color: #fff !important; padding: 5px; display: inline-block; margin-bottom: 15px; }
-            .qr-box span { font-size: 36px; color: #000; display: block; }
+            .qr-box span { font-size: 36px; color: #000; display: block; font-family: 'Material Symbols Outlined' !important; }
             .invoice-title-text { font-size: 38px; font-weight: 900; margin: 0; letter-spacing: 1px; text-transform: uppercase; line-height: 1; color: #d32f2f !important;} 
             .invoice-no-text { font-size: 14px; font-weight: bold; margin: 5px 0 15px 0; color: #000;}
             .invoice-date-box { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
-            .invoice-date-box span.material-symbols-outlined { font-size: 20px; color: #000;}
+            .invoice-date-box span.material-symbols-outlined { font-size: 20px; color: #000; font-family: 'Material Symbols Outlined' !important;}
             .invoice-date-box div { text-align: left; display: flex; flex-direction: column; }
             .invoice-date-box div span { font-size: 8px; font-weight: bold; text-transform: uppercase; color: #333;}
             .invoice-date-box div strong { font-size: 12px; font-weight: bold; color: #000;}
@@ -180,7 +197,7 @@
             .print-signature-area { display: flex; justify-content: flex-end; padding: 0 40px; margin-top: 25px; }
             .sign-box { text-align: center; width: 200px; }
             .sign-box div.sign-placeholder { border-bottom: 1px solid #000; height: 35px; margin-bottom: 5px; width: 100%; }
-            .sign-box h4 { margin: 0; font-size: 18px; font-family: 'Brush Script MT', cursive; font-weight: normal; color: #000;}
+            .sign-box h4 { margin: 0; font-size: 20px; font-family: 'Dancing Script', 'Brush Script MT', cursive !important; font-weight: bold; color: #000;}
             .sign-box p { margin: 0; font-size: 11px; font-weight: bold; color: #000;}
             .print-absolute-footer { background-color: #cccccc !important; padding: 12px 40px; display: flex; justify-content: center; align-items: center; margin-top: auto; }
             .print-absolute-footer p { margin: 0; font-size: 9px; font-weight: bold; color: #333; text-transform: uppercase; letter-spacing: 1px;}
@@ -221,7 +238,7 @@
     <div class="container">
         
         <div class="top-controls">
-            <label style="color: var(--text-secondary); font-size: 0.85em; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Search Exact Bill Number</label>
+            <label style="color: var(--text-secondary); font-size: 0.85em; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; margin-bottom: -5px;">Search Exact Bill Number</label>
             <div class="search-row">
                 <select class="prefix-select" id="billPrefix">
                     <option value="INV-">INV-</option>
@@ -235,8 +252,15 @@
         <div class="loader" id="loader">
             <div class="sales-list">
                 <div class="skel-card">
-                    <div class="skel-header"><div class="skeleton skel-title"></div></div>
-                    <div class="skel-body"><div class="skeleton skel-cust-name"></div></div>
+                    <div class="skel-header">
+                        <div class="skeleton skel-title"></div>
+                        <div class="skeleton skel-time"></div>
+                    </div>
+                    <div class="skel-body">
+                        <div class="skeleton skel-cust-name"></div>
+                        <div class="skeleton skel-item"></div>
+                        <div class="skeleton skel-item" style="width: 60%;"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -274,6 +298,7 @@
         document.getElementById('billNumber').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
+                document.getElementById('billNumber').blur();
                 executeSearch();
             }
         });
@@ -290,7 +315,7 @@
                 return;
             }
 
-            vibrate(15); // Light tap for button press
+            vibrate(15); 
             const exactBillStr = prefix + number;
             
             listEl.innerHTML = '';
@@ -307,13 +332,13 @@
                 const snap = await getDocs(q);
 
                 if (snap.empty) {
-                    vibrate([50]); // Error vibration
+                    vibrate([50]); 
                     loaderEl.style.display = 'none';
                     listEl.innerHTML = `
                         <div class="empty-state">
                             <span class="material-symbols-outlined" style="color: var(--meena-red);">search_off</span>
-                            <h3>Bill Not Found</h3>
-                            <p>No invoice exists matching <strong>${exactBillStr}</strong>.</p>
+                            <h3 style="margin: 10px 0 5px 0; color: white;">Bill Not Found</h3>
+                            <p style="margin: 0; font-size: 0.95em;">No invoice exists matching <strong>${exactBillStr}</strong>.</p>
                         </div>
                     `;
                     return;
@@ -322,15 +347,19 @@
                 vibrate([15, 30, 15]); // Success double-tap
 
                 const data = snap.docs[0].data();
-                window.fetchedSalesData[data.invoiceNo] = data; // Store for print engine
+                window.fetchedSalesData[data.invoiceNo] = data; 
 
                 const grandTotal = data.totals?.grand || 0;
                 const paymentMode = data.paymentMethod || data.paymentMode || 'Cash';
-                const billedByName = data.billedBy || 'Unknown User'; // The Staff Name Audit Trail
+                
+                // The staff audit tag (Defaults to Unknown User if legacy bill)
+                const billedByName = data.billedBy || 'Unknown User'; 
 
-                // Real Timestamp extraction (formatting without AM/PM text)
+                // Raw Time formatting (No AM/PM)
                 let timeString = "";
+                let dateString = "Unknown Date";
                 let d = null;
+                
                 if (data.createdAt && data.createdAt.toDate) {
                     d = data.createdAt.toDate();
                 } else if (data.date && data.date.toDate) {
@@ -338,7 +367,7 @@
                 }
 
                 if (d) {
-                    const localDate = `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
+                    dateString = `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
                     let hours = d.getHours();
                     let minutes = d.getMinutes();
                     let isPM = hours >= 12;
@@ -346,12 +375,7 @@
                     hours = hours ? hours : 12; 
                     minutes = minutes < 10 ? '0' + minutes : minutes;
                     
-                    let rawTime = `${hours}:${minutes}`;
-                    if (isPM) {
-                        timeString = `<span style="font-size: 0.9em; margin-right: 8px;">${localDate}</span> <span style="background: #2a2a2a; color: #ffffff; padding: 3px 8px; border-radius: 6px; font-size: 1em; font-weight: bold; border: 1px solid #444; display: inline-block;">${rawTime}</span>`;
-                    } else {
-                        timeString = `<span style="font-size: 0.9em; margin-right: 8px;">${localDate}</span> <span style="background: #ff9800; color: #121212; padding: 3px 8px; border-radius: 6px; font-size: 1em; font-weight: bold; display: inline-block;">${rawTime}</span>`;
-                    }
+                    timeString = `${hours}:${minutes}`;
                 }
 
                 // Build Items List
@@ -365,7 +389,7 @@
                         itemsHtml += `
                             <li class="item-row">
                                 <div class="item-desc">
-                                    <div class="item-name">${item.name} <span style="font-weight:normal;">x${item.qty}</span> ${nsTag}</div>
+                                    <div class="item-name">${item.name} <span style="font-weight:normal; color: var(--text-secondary);">x${item.qty}</span> ${nsTag}</div>
                                     <div class="item-sub">${modelText}₹${(item.price || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}/ea ${gstTag}</div>
                                 </div>
                                 <div class="item-price">₹${(item.finalTotal || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}</div>
@@ -374,7 +398,7 @@
                     });
                 }
 
-                // CUSTOMER BORDER LOGIC
+                // Customer Border Styling Logic based on purchase value
                 let cardStyle = "";
                 if (grandTotal >= 50000) { cardStyle = "border-color: #e5e4e2; border-style: double; border-width: 4px; box-shadow: 0 0 15px rgba(229, 228, 226, 0.8);"; }
                 else if (grandTotal >= 30000) { cardStyle = "border-color: #ffd700; border-style: dashed; border-width: 2px; box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);"; }
@@ -384,14 +408,21 @@
                 else if (grandTotal >= 5000) { cardStyle = "border-color: #4caf50; border-style: solid; border-width: 1px; box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);"; }
 
                 loaderEl.style.display = 'none';
+                
+                // Fixed Mobile Card Layout Injection
                 listEl.innerHTML = `
                     <div class="invoice-card" style="${cardStyle}">
                         <div class="inv-header">
-                            <div class="inv-meta">
-                                <h3>${data.invoiceNo} <span>BILLED</span> <span class="pay-tag">${paymentMode}</span></h3>
+                            <div class="inv-header-left">
+                                <div class="title-row">
+                                    <h3>${data.invoiceNo}</h3>
+                                    <span class="billed-badge">BILLED</span>
+                                </div>
+                                <span class="pay-tag">${paymentMode}</span>
                             </div>
-                            <div class="inv-time" style="display: flex; align-items: center; white-space: nowrap; font-size: 0.95em; color: var(--marketing-white); font-weight: bold;">
-                                ${timeString}
+                            <div class="inv-header-right">
+                                <div class="date-badge">${dateString}</div>
+                                <div class="time-badge">${timeString}</div>
                             </div>
                         </div>
                         
@@ -451,11 +482,11 @@
 
                     trItems += `
                         <tr>
-                            <td>${num}.</td>
-                            <td>${desc}</td>
-                            <td class="text-right">₹${uPrice.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</td>
-                            <td class="text-center">${item.qty.toString().padStart(2, '0')}</td>
-                            <td class="text-right" style="font-weight:bold; color:#000;">₹${(item.finalTotal || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}</td>
+                            <td style="border-bottom: 1px solid #ddd;">${num}.</td>
+                            <td style="border-bottom: 1px solid #ddd;">${desc}</td>
+                            <td class="text-right" style="border-bottom: 1px solid #ddd;">₹${uPrice.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</td>
+                            <td class="text-center" style="border-bottom: 1px solid #ddd;">${item.qty.toString().padStart(2, '0')}</td>
+                            <td class="text-right" style="font-weight:bold; color:#000; border-bottom: 1px solid #ddd;">₹${(item.finalTotal || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}</td>
                         </tr>
                     `;
                 });
@@ -580,7 +611,7 @@
         }
 
         window.reprintBill = function(invoiceNo) {
-            vibrate(50);
+            vibrate(50); // Haptic feedback on print press
             
             const data = window.fetchedSalesData[invoiceNo];
             if (!data) {
@@ -593,9 +624,12 @@
             const printAreaEl = document.getElementById('printArea');
             printAreaEl.innerHTML = generateSingleInvoiceHTMLTemplate(data);
             
+            // Allow CSS and fonts to render before calling system print
             setTimeout(() => {
                 document.getElementById('printLoaderOverlay').classList.remove('active');
                 window.print();
+                
+                // Backup removal just in case mobile browser suspends JS execution
                 setTimeout(() => {
                     document.getElementById('printLoaderOverlay').classList.remove('active');
                 }, 800); 
