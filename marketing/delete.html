@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Manage Sales - Meena Marketing</title>
+    <title>Cancel Invoice - Meena Marketing</title>
     
     <meta name="theme-color" content="#212121">
     
@@ -32,16 +32,29 @@
         html, body { height: 100%; margin: 0; padding: 0; width: 100%; overflow-x: hidden; }
         body { font-family: 'Segoe UI', 'Noto Sans Tamil', sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; }
 
-        /* Standard Header */
-        header { background-color: var(--surface-color); padding: 12px 10px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.5); flex-shrink: 0; width: 100%; }
-        .header-left { display: flex; align-items: center; gap: 5px; }
-        .back-btn { color: var(--text-color); cursor: pointer; display: flex; align-items: center; text-decoration: none; }
+        /* Standard Header - Adjusted for proper iOS alignment and gap */
+        header { background-color: var(--surface-color); padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.5); flex-shrink: 0; width: 100%; }
+        .header-left { display: flex; align-items: center; gap: 16px; } 
+        .back-btn { color: var(--text-color); cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 4px; margin-left: -4px; transition: opacity 0.2s; }
+        .back-btn:active { opacity: 0.6; }
+        .back-btn .material-symbols-outlined { font-size: 22px; font-weight: 600; }
+        
         .brand-container { display: flex; align-items: center; gap: 6px; }
-        .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
-        .brand-title { font-size: 1em; font-weight: bold; }
-        .meena { color: var(--meena-red); }
-        .marketing { color: var(--marketing-white); }
-        .page-title { font-size: 0.55em; color: var(--warning-color); text-transform: uppercase; letter-spacing: 1px;}
+        .brand-text { display: flex; flex-direction: column; line-height: 1.1; justify-content: center;}
+        
+        /* Metallic Text Styling */
+        .metallic-text { 
+            background: linear-gradient(to bottom, #f8f9fa 0%, #c3cbdc 40%, #9ba3b5 60%, #e2e6f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.15em; 
+            font-weight: 900; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.6));
+        }
+        
+        .page-title { font-size: 0.55em; color: var(--warning-color); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px;}
 
         /* Main Container */
         .container { padding: 20px; max-width: 900px; margin: 0 auto; width: 100%; }
@@ -154,10 +167,13 @@
 
     <header>
         <div class="header-left">
-            <a href="javascript:void(0)" onclick="window.history.back();" class="back-btn"><span class="material-symbols-outlined">arrow_back</span></a>
+            <a href="javascript:void(0)" onclick="if(navigator.vibrate) { navigator.vibrate(15); } window.history.back();" class="back-btn">
+                <!-- Using arrow_back_ios_new for the modern iOS style -->
+                <span class="material-symbols-outlined">arrow_back_ios_new</span>
+            </a>
             <div class="brand-container">
                 <div class="brand-text">
-                    <span class="brand-title"><span class="meena">Meena</span> <span class="marketing">Marketing</span></span>
+                    <span class="brand-title"><span class="metallic-text">Cancel Invoice</span></span>
                     <span class="page-title">Manage & Delete Bills</span>
                 </div>
             </div>
