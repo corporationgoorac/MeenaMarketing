@@ -160,7 +160,7 @@
             transform: translateZ(0);
             -webkit-transform: translateZ(0);
             flex-shrink: 0;
-            transition: box-shadow 0.8s ease;
+            transition: box-shadow 0.8s ease, border-color 0.8s ease;
         }
         .brand-container { display: flex; align-items: center; gap: 14px; }
         
@@ -176,8 +176,8 @@
         .brand-text { display: flex; flex-direction: column; line-height: 1.15; cursor: pointer; }
         .brand-title { font-size: 1.05em; font-weight: 800; letter-spacing: -0.02em; }
         .meena { color: var(--meena-red); }
-        .marketing { color: var(--marketing-white); }
-        .goorac { font-size: 0.72em; color: var(--accent-color); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+        .marketing { color: var(--marketing-white); transition: color 0.5s ease; }
+        .goorac { font-size: 0.72em; color: var(--accent-color); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; transition: color 0.5s ease; }
 
         .header-action-btn {
             background: rgba(255, 255, 255, 0.05);
@@ -235,6 +235,7 @@
             animation: fadeIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
             box-shadow: 0 4px 20px rgba(0,0,0,0.25);
             position: relative;
+            transition: background 0.5s ease;
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -267,7 +268,7 @@
         .msg-content { width: 100%; overflow-x: auto; }
         .msg-content p { margin: 0 0 10px 0; }
         .msg-content p:last-child { margin: 0; }
-        .msg-content strong { color: var(--accent-color); font-weight: 700; text-shadow: 0 0 10px rgba(13, 148, 136, 0.3); }
+        .msg-content strong { color: var(--accent-color); font-weight: 700; text-shadow: 0 0 10px rgba(13, 148, 136, 0.3); transition: color 0.5s ease; }
         .msg-content ul, .msg-content ol { margin: 10px 0; padding-left: 24px; }
         .msg-content li { margin-bottom: 6px; }
         
@@ -351,6 +352,7 @@
             border-radius: 0 8px 8px 0;
             color: var(--text-secondary);
             font-style: italic;
+            transition: border-color 0.5s ease, background 0.5s ease;
         }
 
         .msg-content table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9em; border-radius: 8px; overflow: hidden; }
@@ -390,10 +392,11 @@
         .sparkle-icon {
             color: var(--accent-color);
             animation: pulseGlow 1.5s infinite alternate;
+            transition: color 0.5s ease;
         }
         @keyframes pulseGlow {
             0% { transform: scale(0.9); opacity: 0.7; }
-            100% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 10px var(--accent-color); }
+            100% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 10px currentColor; }
         }
 
         /* --- PROFESSIONAL FROSTED INPUT CONTAINER (MATCHING INDEX) --- */
@@ -423,19 +426,49 @@
             -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--input-border); 
             border-radius: 24px; 
-            padding: 8px 12px 8px 18px; 
+            padding: 8px 12px 8px 10px; /* Reduced left padding to accommodate new button */
             display: flex; 
             align-items: flex-end; 
             gap: 10px;
-            margin-bottom: 1px; /* Updated gap from 15px to 5px */
+            margin-bottom: 1px;
             box-shadow: 0 0 20px var(--accent-glow), inset 0 0 10px rgba(255,255,255,0.02);
-            transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s; 
+            transition: border-color 0.5s ease, box-shadow 0.5s ease, transform 0.2s; 
         }
         .chat-input-wrapper:focus-within { 
             border-color: var(--accent-color); 
             box-shadow: 0 0 30px var(--accent-glow), inset 0 0 10px rgba(255,255,255,0.05); 
             transform: translateY(-2px);
         }
+
+        /* NEW: Expandable Mode Button inside Input */
+        .btn-mode {
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            margin-bottom: 2px;
+        }
+        .btn-mode:active { background: rgba(255,255,255,0.1); transform: scale(0.9); }
+        .btn-mode .material-symbols-outlined { font-size: 24px; transition: color 0.5s ease; }
+        
+        /* Auto-hide logic when typing */
+        .chat-input-wrapper.typing .btn-mode {
+            width: 0;
+            padding: 0;
+            margin: 0;
+            opacity: 0;
+            transform: scale(0);
+            pointer-events: none;
+        }
+
         .chat-input-wrapper textarea { 
             flex: 1; 
             background: transparent; 
@@ -446,12 +479,12 @@
             outline: none; 
             resize: none; 
             max-height: 120px; 
-            padding: 10px 0; 
+            padding: 10px 0 10px 4px; 
             line-height: 1.45;
             user-select: text;
             overscroll-behavior-y: contain;
         }
-        .chat-input-wrapper textarea::placeholder { color: var(--text-secondary); }
+        .chat-input-wrapper textarea::placeholder { color: var(--text-secondary); transition: color 0.5s ease; }
         
         .btn-send { 
             background: var(--marketing-white); 
@@ -464,7 +497,7 @@
             align-items: center; 
             border: none; 
             cursor: pointer; 
-            transition: transform 0.15s, background 0.2s; 
+            transition: transform 0.15s, background 0.5s ease, box-shadow 0.5s ease; 
             flex-shrink: 0; 
             box-shadow: 0 4px 12px rgba(255,255,255,0.15);
             margin-bottom: 2px;
@@ -472,8 +505,117 @@
         .btn-send:active { transform: scale(0.92); }
         .btn-send:disabled { background: var(--input-border); color: var(--text-secondary); cursor: not-allowed; box-shadow: none; }
         .btn-send .material-symbols-outlined { font-size: 20px; font-weight: 600; margin-left: 2px;}
-        .btn-send.camera-mode { background: var(--accent-color); color: #ffffff; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.4); }
+        .btn-send.camera-mode { background: var(--accent-color); color: #ffffff; box-shadow: 0 4px 12px var(--accent-glow); }
         .btn-send.camera-mode .material-symbols-outlined { margin-left: 0; font-size: 22px; font-weight: 400; }
+
+        /* ==========================================
+           NEW: PROFESSIONAL MODE MENU OVERLAY (BOTTOM SHEET)
+           ========================================== */
+        .mode-menu-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(7, 11, 17, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .mode-menu-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .mode-menu-content {
+            background: var(--surface-color);
+            border-top: 1px solid var(--input-border);
+            border-radius: 24px 24px 0 0;
+            padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .mode-menu-overlay.active .mode-menu-content {
+            transform: translateY(0);
+        }
+        .mode-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .mode-close-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+        }
+        .mode-header h3 {
+            margin: 0; font-size: 1.2em; font-weight: 700; color: white;
+        }
+        .mode-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .mode-card:active { transform: scale(0.98); }
+        .mode-card .icon-box {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex; justify-content: center; align-items: center;
+            flex-shrink: 0;
+        }
+        .mode-card.sales .icon-box { background: rgba(13, 148, 136, 0.15); color: var(--accent-color); }
+        .mode-card.audit .icon-box { background: rgba(16, 185, 129, 0.15); color: var(--success-color); }
+        .mode-card h4 { margin: 0 0 6px 0; font-size: 1.1em; color: white; }
+        .mode-card p { margin: 0; font-size: 0.85em; color: var(--text-secondary); line-height: 1.4; }
+        
+        .mode-card.active { border-color: currentColor; background: rgba(255,255,255,0.05); }
+        .mode-card.sales.active { border-color: var(--accent-color); box-shadow: 0 4px 20px var(--accent-glow); }
+        .mode-card.audit.active { border-color: var(--success-color); box-shadow: 0 4px 20px var(--success-glow); }
+        .mode-card.active::after {
+            content: 'check_circle';
+            font-family: 'Material Symbols Outlined';
+            position: absolute; top: 20px; right: 20px;
+            font-size: 24px;
+        }
+        .mode-card.sales.active::after { color: var(--accent-color); }
+        .mode-card.audit.active::after { color: var(--success-color); }
+
+        /* ==========================================
+           NEW: AUDIT MODE GLOBAL OVERRIDES
+           ========================================== */
+        body.audit-mode {
+            --accent-color: #10b981; /* Shift primary accent to Emerald */
+            --accent-glow: rgba(16, 185, 129, 0.35);
+        }
+        body.audit-mode .top-bar {
+            box-shadow: 0 4px 30px rgba(16, 185, 129, 0.2);
+            border-bottom-color: rgba(16, 185, 129, 0.2);
+        }
+        body.audit-mode .msg-user {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+        }
+        body.audit-mode .goorac {
+            color: var(--success-color);
+        }
 
         /* --- REDESIGNED PROFESSIONAL VOICE CALL VIEW --- */
         .call-wrapper { 
@@ -810,7 +952,7 @@
                 <span class="material-symbols-outlined back-btn" onclick="triggerHaptic([20]); history.back();">arrow_back</span>
                 <div class="brand-text" onclick="triggerHaptic([20]); window.location.href='inventory_2.html'">
                     <span class="brand-title"><span class="meena">Meena</span> <span class="marketing">Marketing</span></span>
-                    <span class="goorac">AI Voice & Stock Engine</span>
+                    <span class="goorac" id="headerSubtitle">AI Sales Engine</span>
                 </div>
             </div>
             
@@ -825,13 +967,47 @@
                 <!-- Initial content generated by JS -->
             </div>
             <div class="chat-input-area">
-                <div class="chat-input-wrapper">
+                <div class="chat-input-wrapper" id="chatInputWrapper">
+                    
+                    <!-- NEW: Dynamic Left Context Menu Button -->
+                    <button class="btn-mode" id="btnModeToggle" onclick="openModeMenu()">
+                        <span class="material-symbols-outlined" id="modeIcon">shield</span>
+                    </button>
+
                     <!-- Hidden file picker kept strictly as an error fallback -->
                     <input type="file" id="imageUploadInput" accept="image/*" style="display: none;">
+                    
                     <textarea id="chatInput" rows="1" placeholder="Message Meena AI..." oninput="autoResize(this); toggleSendIcon(); if(window.trigger3dTypingColor) window.trigger3dTypingColor();"></textarea>
+                    
                     <button class="btn-send camera-mode" id="btnSend" onclick="handleSendClick()">
                         <span class="material-symbols-outlined" id="sendIcon">photo_camera</span>
                     </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW: PROFESSIONAL MODE MENU OVERLAY -->
+        <div id="modeMenuModal" class="mode-menu-overlay" onclick="closeModeMenu(event)">
+            <div class="mode-menu-content" id="modeMenuContent" onclick="event.stopPropagation()">
+                <div class="mode-header">
+                    <button class="mode-close-btn" onclick="closeModeMenu()"><span class="material-symbols-outlined">close</span></button>
+                    <h3>Select AI Engine</h3>
+                </div>
+                
+                <div class="mode-card sales active" id="cardModeSales" onclick="selectMode('sales')">
+                    <div class="icon-box"><span class="material-symbols-outlined">support_agent</span></div>
+                    <div>
+                        <h4>Sales & Support AI</h4>
+                        <p>General inventory, pricing, cross-selling, and standard product queries.</p>
+                    </div>
+                </div>
+
+                <div class="mode-card audit" id="cardModeAudit" onclick="selectMode('audit')">
+                    <div class="icon-box"><span class="material-symbols-outlined">policy</span></div>
+                    <div>
+                        <h4>Forensic Audit AI</h4>
+                        <p>Mathematical timeline analysis, discrepancy checks, and history ledger audits.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -917,7 +1093,7 @@
         window.addEventListener('scroll', lockViewport);
 
         // ==========================================
-        // THREE.JS 3D RANDOM MORPHING BLOB ENGINE
+        // THREE.JS 3D RANDOM MORPHING BLOB ENGINE (UPGRADED WITH VIRUS SHIFT)
         // ==========================================
         (function init3D() {
             const canvas = document.getElementById('bg3dCanvas');
@@ -961,25 +1137,34 @@
             const ambientLight = new THREE.AmbientLight(0x141f30, 1.2);
             scene.add(ambientLight);
 
-            // Dynamic Color Palettes for Typing (Orange, Blue, Green, Yellow in gradients)
+            // Dynamic Color Palettes
             const colorPalettes = [
-                { main: new THREE.Color(0xf97316), l1: new THREE.Color(0x3b82f6), l2: new THREE.Color(0xeab308) }, // Orange base, Blue light, Yellow accent
-                { main: new THREE.Color(0x3b82f6), l1: new THREE.Color(0x10b981), l2: new THREE.Color(0xf97316) }, // Blue base, Green light, Orange accent
-                { main: new THREE.Color(0x10b981), l1: new THREE.Color(0xeab308), l2: new THREE.Color(0x3b82f6) }, // Green base, Yellow light, Blue accent
-                { main: new THREE.Color(0xeab308), l1: new THREE.Color(0xf97316), l2: new THREE.Color(0x10b981) }  // Yellow base, Orange light, Green accent
+                { main: new THREE.Color(0xf97316), l1: new THREE.Color(0x3b82f6), l2: new THREE.Color(0xeab308) },
+                { main: new THREE.Color(0x3b82f6), l1: new THREE.Color(0x10b981), l2: new THREE.Color(0xf97316) },
+                { main: new THREE.Color(0x10b981), l1: new THREE.Color(0xeab308), l2: new THREE.Color(0x3b82f6) },
+                { main: new THREE.Color(0xeab308), l1: new THREE.Color(0xf97316), l2: new THREE.Color(0x10b981) }
             ];
 
-            const defaultPalette = {
-                main: new THREE.Color(0x0d9488),
-                l1: new THREE.Color(0x06b6d4),
-                l2: new THREE.Color(0xef4444)
+            // Base Palettes (Sales vs Audit)
+            const basePalettes = {
+                sales: { main: new THREE.Color(0x0d9488), l1: new THREE.Color(0x06b6d4), l2: new THREE.Color(0xef4444) },
+                audit: { main: new THREE.Color(0x059669), l1: new THREE.Color(0x10b981), l2: new THREE.Color(0x022c22) }
             };
 
+            let currentBase = basePalettes.sales;
             let paletteIndex = 0;
-            let targetMain = defaultPalette.main.clone();
-            let targetL1 = defaultPalette.l1.clone();
-            let targetL2 = defaultPalette.l2.clone();
+            let targetMain = currentBase.main.clone();
+            let targetL1 = currentBase.l1.clone();
+            let targetL2 = currentBase.l2.clone();
             let typingTimer = null;
+
+            // Global access functions for Theme shifting
+            window.set3DBasePalette = function(mode) {
+                currentBase = basePalettes[mode] || basePalettes.sales;
+                targetMain.copy(currentBase.main);
+                targetL1.copy(currentBase.l1);
+                targetL2.copy(currentBase.l2);
+            };
 
             window.trigger3dTypingColor = function() {
                 paletteIndex = (paletteIndex + 1) % colorPalettes.length;
@@ -990,13 +1175,28 @@
 
                 clearTimeout(typingTimer);
                 typingTimer = setTimeout(() => {
-                    targetMain.copy(defaultPalette.main);
-                    targetL1.copy(defaultPalette.l1);
-                    targetL2.copy(defaultPalette.l2);
+                    targetMain.copy(currentBase.main);
+                    targetL1.copy(currentBase.l1);
+                    targetL2.copy(currentBase.l2);
                 }, 1500);
             };
 
-            // Smooth random procedural vertex morphing logic
+            // NEW: Shape-Shifting Variables (Smooth blob vs Forensic Virus)
+            let currentDistortion = 0.12;
+            let targetDistortion = 0.12;
+            let currentSpikiness = 2.5;
+            let targetSpikiness = 2.5;
+
+            window.set3DMode = function(mode) {
+                if (mode === 'audit') {
+                    targetDistortion = 0.35; // Spiky/Virus height
+                    targetSpikiness = 6.0;   // High frequency spikes
+                } else {
+                    targetDistortion = 0.12; // Smooth blob
+                    targetSpikiness = 2.5;   // Low frequency
+                }
+            };
+
             let time = 0;
             let speed = 0.006;
             const seedX = Math.random() * 100;
@@ -1009,10 +1209,14 @@
                 mesh.rotation.x += 0.002;
                 mesh.rotation.y += 0.004;
 
-                // Smoothly lerp colors when typing triggers changes
+                // Smoothly lerp colors
                 material.color.lerp(targetMain, 0.05);
                 light1.color.lerp(targetL1, 0.05);
                 light2.color.lerp(targetL2, 0.05);
+
+                // Smoothly lerp shape transformation parameters
+                currentDistortion += (targetDistortion - currentDistortion) * 0.05;
+                currentSpikiness += (targetSpikiness - currentSpikiness) * 0.05;
 
                 const count = pos.count;
                 for (let i = 0; i < count; i++) {
@@ -1020,10 +1224,10 @@
                     const v = originalPositions[i * 3 + 1];
                     const w = originalPositions[i * 3 + 2];
 
-                    // Smooth trigonometric noise distortion
-                    const dist = Math.sin(u * 2.5 + time + seedX) * 0.12 + 
-                                 Math.cos(v * 2.5 + time * 1.3 + seedY) * 0.12 +
-                                 Math.sin(w * 2.5 + time * 0.9) * 0.08;
+                    // Advanced trigonometric noise distortion using dynamic spikiness variables
+                    const dist = Math.sin(u * currentSpikiness + time + seedX) * currentDistortion + 
+                                 Math.cos(v * currentSpikiness + time * 1.3 + seedY) * currentDistortion +
+                                 Math.sin(w * currentSpikiness + time * 0.9) * (currentDistortion * 0.66);
 
                     const norm = Math.sqrt(u * u + v * v + w * w);
                     pos.setXYZ(i, u + (u / norm) * dist, v + (v / norm) * dist, w + (w / norm) * dist);
@@ -1048,8 +1252,10 @@
             });
         })();
 
-        // BACKEND CONFIGURATION
+        // BACKEND CONFIGURATION & NEW DYNAMIC ROUTING
         const BACKEND_URL = 'https://shiva757-meenaai.hf.space';
+        let currentChatEndpoint = '/chat';
+        let isAuditMode = false;
         
         // CONVERSATION MEMORY: Retain 100 max, but send only 20 to the backend
         let conversationHistory = [];
@@ -1063,6 +1269,7 @@
         
         const chatHistoryEl = document.getElementById('chatHistory');
         const chatInput = document.getElementById('chatInput');
+        const chatInputWrapper = document.getElementById('chatInputWrapper');
         const btnSend = document.getElementById('btnSend');
 
         const voiceContainer = document.getElementById('voiceContainer');
@@ -1074,11 +1281,71 @@
         const btnStartCall = document.getElementById('btnStartCall');
         const btnEndCall = document.getElementById('btnEndCall');
         const headerIcon = document.getElementById('headerIcon');
+        const headerSubtitle = document.getElementById('headerSubtitle');
 
         const imageUploadInput = document.getElementById('imageUploadInput');
         const sendIcon = document.getElementById('sendIcon');
 
         let currentMode = 'chat';
+
+        // ==========================================
+        // NEW: FORENSIC AUDIT MENU & DYNAMIC UI LOGIC
+        // ==========================================
+        const modeMenuModal = document.getElementById('modeMenuModal');
+        
+        function openModeMenu() {
+            triggerHaptic([20]);
+            modeMenuModal.classList.add('active');
+            history.pushState({ modal: 'modeMenuModal' }, '');
+        }
+
+        function closeModeMenu(event) {
+            if(event && event.target !== modeMenuModal) return; 
+            triggerHaptic([15]);
+            modeMenuModal.classList.remove('active');
+            if (history.state && history.state.modal === 'modeMenuModal') {
+                history.back();
+            }
+        }
+
+        function selectMode(targetMode, playHaptic = true) {
+            if(playHaptic) triggerHaptic([30, 40]);
+            
+            document.getElementById('cardModeSales').classList.remove('active');
+            document.getElementById('cardModeAudit').classList.remove('active');
+
+            if (targetMode === 'audit') {
+                document.getElementById('cardModeAudit').classList.add('active');
+                currentChatEndpoint = '/auditChat';
+                isAuditMode = true;
+                
+                // UI Visual Shifts
+                document.body.classList.add('audit-mode');
+                chatInput.placeholder = "Run forensic ledger audit...";
+                headerSubtitle.innerText = "Forensic Audit AI";
+                
+                if (window.set3DMode) window.set3DMode('audit');
+                if (window.set3DBasePalette) window.set3DBasePalette('audit');
+                
+            } else {
+                document.getElementById('cardModeSales').classList.add('active');
+                currentChatEndpoint = '/chat';
+                isAuditMode = false;
+                
+                // UI Visual Reverts
+                document.body.classList.remove('audit-mode');
+                chatInput.placeholder = "Message Meena AI...";
+                headerSubtitle.innerText = "AI Sales Engine";
+                
+                if (window.set3DMode) window.set3DMode('sales');
+                if (window.set3DBasePalette) window.set3DBasePalette('sales');
+            }
+            
+            modeMenuModal.classList.remove('active');
+            if (history.state && history.state.modal === 'modeMenuModal') {
+                history.back();
+            }
+        }
 
         // ==========================================
         // WEB SPEECH API (STT & TTS) STATE
@@ -1208,10 +1475,15 @@
         }
 
         window.addEventListener('popstate', (e) => {
+            if (modeMenuModal.classList.contains('active')) {
+                modeMenuModal.classList.remove('active');
+            }
             if (window.location.hash === '#voice') {
                 enterVoiceMode();
             } else if (window.location.hash === '#vision') {
                 enterVisionMode();
+            } else if (window.location.hash === '#audit') {
+                selectMode('audit', false);
             } else {
                 if(currentMode === 'voice') exitVoiceMode();
                 if(currentMode === 'vision') exitVisionMode();
@@ -1223,6 +1495,8 @@
                 enterVoiceMode();
             } else if (window.location.hash === '#vision' && currentMode !== 'vision') {
                 enterVisionMode();
+            } else if (window.location.hash === '#audit') {
+                selectMode('audit', false);
             } else if (window.location.hash !== '#voice' && window.location.hash !== '#vision' && currentMode !== 'chat') {
                 if(currentMode === 'voice') exitVoiceMode();
                 if(currentMode === 'vision') exitVisionMode();
@@ -1253,12 +1527,26 @@
             }
         }
 
+        // NEW: Auto-hide input menu icon on typing
+        function updateInputUIState() {
+            if (chatInput.value.trim().length > 0) {
+                chatInputWrapper.classList.add('typing');
+            } else {
+                chatInputWrapper.classList.remove('typing');
+            }
+        }
+        chatInput.addEventListener('input', updateInputUIState);
+
         chatInput.addEventListener('focus', () => {
+            chatInputWrapper.classList.add('typing');
             setTimeout(lockViewport, 100);
             setTimeout(lockViewport, 300);
         });
 
         chatInput.addEventListener('blur', () => {
+            if (chatInput.value.trim() === '') {
+                chatInputWrapper.classList.remove('typing');
+            }
             setTimeout(lockViewport, 100);
         });
 
@@ -1373,12 +1661,18 @@
         // Initialize first message dynamically and handle #voice / mode=voice auto-start
         function initChat() {
             chatHistoryEl.innerHTML = '';
-            appendMessageToUI('model', 'வணக்கம்! நான் **மீனா மார்க்கெட்டிங் AI**. கடையில என்ன ஸ்டாக் இருக்குன்னு பாக்கணுமா?');
-
-            // Detect #voice hash or ?mode=voice URL parameter to auto launch voice mode on load
+            
             const urlParams = new URLSearchParams(window.location.search);
             const isVoiceRequested = window.location.hash === '#voice' || urlParams.get('mode') === 'voice';
             const isVisionRequested = window.location.hash === '#vision' || urlParams.get('mode') === 'vision';
+            const isAuditRequested = window.location.hash === '#audit' || urlParams.get('mode') === 'audit';
+
+            if (isAuditRequested) {
+                selectMode('audit', false);
+                appendMessageToUI('model', 'Forensic Audit Engine Online. Which product timeline would you like me to analyze?');
+            } else {
+                appendMessageToUI('model', 'வணக்கம்! நான் **மீனா மார்க்கெட்டிங் AI**. கடையில என்ன ஸ்டாக் இருக்குன்னு பாக்கணுமா?');
+            }
 
             if (isVoiceRequested) {
                 enterVoiceMode();
@@ -1389,7 +1683,7 @@
         window.onload = initChat;
 
         // ==========================================
-        // 2. TEXT CHAT MODE (REST API & LOADING UI)
+        // 2. TEXT CHAT MODE (DYNAMIC REST API & LOADING UI)
         // ==========================================
         function showThinkingBubble() {
             ambientBg.classList.add('accelerated'); // Accelerate 3D background
@@ -1427,6 +1721,7 @@
             
             chatInput.value = '';
             chatInput.style.height = 'auto';
+            updateInputUIState();
             toggleSendIcon();
             btnSend.disabled = true;
 
@@ -1441,7 +1736,8 @@
                     history: recentHistory
                 };
 
-                const response = await fetch(`${BACKEND_URL}/chat`, {
+                // DYNAMIC ROUTING: Automatically uses '/auditChat' if in Forensic Mode
+                const response = await fetch(`${BACKEND_URL}${currentChatEndpoint}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
