@@ -125,7 +125,7 @@
         
         .live-qty-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; margin: 10px 0 25px 0; }
         .live-qty-box p { color: var(--text-secondary); font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 10px 0; font-weight: 600;}
-        .live-qty-number { font-size: 4em; font-weight: 700; color: var(--marketing-white); line-height: 1; display: flex; justify-content: center; align-items: center; min-height: 60px; }
+        .live-qty-number { font-size: 4em; font-weight: 700; color: var(--marketing-white); line-height: 1; display: flex; justify-content: center; align-items: center; min-height: 60px; text-align: center; flex-direction: column;}
 
         /* Empty States SVG styling */
         .empty-state { text-align: center; padding: 40px 20px; color: var(--text-secondary); display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; grid-column: 1 / -1;}
@@ -221,7 +221,7 @@
                     <button class="btn-full btn-primary" id="btnMarkOk" onclick="vibrateApp(25); executeMarkOk()">
                         <span class="material-symbols-outlined">verified</span> Stock is Perfect (Matches)
                     </button>
-                    <button class="btn-full btn-danger" style="background: transparent;" onclick="vibrateApp(15); toggleMissingInput()">
+                    <button class="btn-full btn-danger" id="btnReportIssue" style="background: transparent;" onclick="vibrateApp(15); toggleMissingInput()">
                         <span class="material-symbols-outlined">report_problem</span> Report Discrepancy
                     </button>
                 </div>
@@ -295,6 +295,7 @@
 
         // ADVANCED FIX: Secure JS Variable to prevent NaN Data Corruption
         let systemLiveQty = null;
+        window.isGhostItem = false; // Flag to handle missing collection documents
 
         // Toast Helper
         function showToast(msg, type = "error") {
@@ -643,6 +644,7 @@
 
         window.openAuditModal = function(id, name, model) {
             currentAuditId = id;
+            window.isGhostItem = false;
             document.getElementById('auditName').innerText = name;
             document.getElementById('auditModel').innerText = model || 'No Model ID';
             
@@ -661,14 +663,23 @@
             liveInventoryUnsub = onSnapshot(invRef, (snap) => {
                 const qtyBox = document.getElementById('auditLiveQty');
                 if (snap.exists()) {
+                    window.isGhostItem = false;
                     const liveQty = snap.data().qty || 0;
                     systemLiveQty = liveQty; // Securely saved in background var
                     qtyBox.innerHTML = liveQty;
                     if (liveQty === 0) qtyBox.style.color = 'var(--meena-red)';
                     else qtyBox.style.color = 'var(--marketing-white)';
+                    
+                    document.getElementById('btnMarkOk').innerHTML = '<span class="material-symbols-outlined">verified</span> Stock is Perfect (Matches)';
+                    document.getElementById('btnReportIssue').style.display = 'flex';
                 } else {
-                    systemLiveQty = 0; // FIXED: Changed from null to 0 to prevent ghost product trap
-                    qtyBox.innerHTML = '<span style="color:var(--meena-red); font-size: 0.5em;">Item not found in master database</span>';
+                    window.isGhostItem = true;
+                    systemLiveQty = 0;
+                    qtyBox.innerHTML = '0<br><span style="color:var(--meena-red); font-size: 0.3em; text-transform:uppercase; margin-top:5px; font-weight:600;">Item not found in master database</span>';
+                    
+                    // Show specialized Ghost Item OK button
+                    document.getElementById('btnMarkOk').innerHTML = '<span class="material-symbols-outlined">delete</span> OK (Clear Ghost Task)';
+                    document.getElementById('btnReportIssue').style.display = 'none';
                 }
             }, (err) => {
                 console.error(err);
@@ -689,17 +700,43 @@
             }
         };
 
-        window.executeMarkOk = function() {
+        window.executeMarkOk = async function() {
             const btn = document.getElementById('btnMarkOk');
             const ogText = btn.innerHTML;
             btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span>';
             
             try {
-                // Item is perfect. Evaporate it from daily_check. (Removed await for instant offline speed)
-                deleteDoc(doc(db, "daily_check", currentAuditId)).catch(e => console.log("Background sync pending"));
+                // Implementing Batched Writes for guaranteed atomic execution and low-data offline caching
+                const batch = writeBatch(db);
+                const dailyCheckRef = doc(db, "daily_check", currentAuditId);
+
+                if (window.isGhostItem) {
+                    // Scenario 3: Ghost Item. Bypass inventory master update and simply delete from daily_check queue.
+                    batch.delete(dailyCheckRef);
+                } else {
+                    // Scenario 1 & 2: Hard Reset Transaction. 
+                    const inventoryRef = doc(db, "inventory", currentAuditId);
+                    
+                    // Push the new baseline verification and wipe history array
+                    batch.update(inventoryRef, {
+                        last_audited: serverTimestamp(),
+                        history: [{
+                            action: "Verified via Daily Audit",
+                            user: currentUserName,
+                            timestamp: new Date().toISOString(), // Standardizing offline string generation for array consistency
+                            note: "Baseline confirmed and history reset"
+                        }]
+                    });
+                    
+                    // Automatically drop it from the agent queue
+                    batch.delete(dailyCheckRef);
+                }
+
+                await batch.commit();
                 showToast("Stock verified!", "success");
                 closeModal('modalAudit');
             } catch (e) {
+                console.error("Verification Error: ", e);
                 showToast("Failed to verify stock.", "error");
             } finally {
                 // FIXED: Button is instantly reset here so it works for the next product
