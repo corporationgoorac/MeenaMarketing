@@ -394,8 +394,8 @@
     </template>
 
     <script type="module">
-        // Added getDoc, increment, and serverTimestamp to the imports
         import { db } from './config.js';
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
         import { collection, query, where, limit, onSnapshot, doc, deleteDoc, getDocs, writeBatch, getCountFromServer, getDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
         // ADVANCED FIX: Global Vibration Engine
@@ -404,6 +404,23 @@
                 navigator.vibrate(pattern);
             }
         };
+
+        const auth = getAuth();
+        let currentUserName = "Admin";
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUserName = user.displayName || user.email?.split('@') || "Admin";
+                try {
+                    const userDocRef = doc(db, "users", user.uid);
+                    const userSnap = await getDoc(userDocRef);
+                    if (userSnap.exists() && userSnap.data().name) {
+                        currentUserName = userSnap.data().name;
+                    }
+                } catch (err) {
+                    console.error("Auth DB Error:", err);
+                }
+            }
+        });
 
         // Toast Helper
         function showToast(msg, type = "error") {
@@ -722,19 +739,34 @@
                     try {
                         const batch = writeBatch(db);
                         
-                        // Replaced createdAt with updatedAt and fully reset the history array with the new log[span_0](start_span)[span_0](end_span)
+                        // PUSH THE DISCREPANCY AND RESET TIMELINE (Forces Home Screen Jump)
                         batch.update(invRef, {
                             qty: increment(discrepancyQty),
-                            lastUpdated: new Date().toISOString(),
+                            lastUpdated: new Date().toISOString(), // Intentionally forces jump to top of inventory list
                             updatedAt: serverTimestamp(),
-                            updatedBy: "Admin",
-                            history: [{
-                                adminDetails: "Admin",
-                                action: "Audit Discrepancy Update",
-                                changedFrom: currentQty,
-                                changedTo: newQty,
-                                date: new Date().toISOString()
-                            }]
+                            stockCheckDate: new Date().toISOString(), // Activates the Green Verified Badge
+                            
+                            // Fully reset history array with pristine two-step initialization format
+                            history: [
+                                {
+                                    action: "System Initialization",
+                                    qtyChange: currentQty,
+                                    prevQty: 0,
+                                    newQty: currentQty,
+                                    date: new Date().toISOString(),
+                                    by: currentUserName,
+                                    reason: "Audit Baseline Reset"
+                                },
+                                {
+                                    action: discrepancyQty > 0 ? "Stock Adjustment (Increase)" : "Stock Adjustment (Decrease)",
+                                    qtyChange: discrepancyQty,
+                                    prevQty: currentQty,
+                                    newQty: newQty,
+                                    date: new Date().toISOString(),
+                                    by: currentUserName,
+                                    reason: "Admin Discrepancy Resolution"
+                                }
+                            ]
                         });
                         
                         const checkRef = doc(db, "daily_check", id);
