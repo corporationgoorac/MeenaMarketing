@@ -359,6 +359,7 @@
         <div class="nav-item" onclick="vibrateApp(40); filterLowStock()" id="btnLowStock" title="Low Stock Alerts">
             <span class="material-symbols-outlined">warning</span>
         </div>
+        <!-- UPGRADED: Restored AI Bot Navigation Link -->
         <div class="nav-item" onclick="vibrateApp(40); window.location.href='aiBot.html'" title="AI Assistant">
             <span class="material-symbols-outlined">auto_awesome</span>
         </div>
@@ -1454,12 +1455,16 @@
 
                 // FIX: Update local cache so the UI refreshes instantly without needing a hard reload
                 item.history = newHistory;
+                
+                // Update the active variables for the open modal
+                currentHistoryArray = [...newHistory].reverse();
+                document.getElementById('nestedBaselineStock').innerText = currentQty;
+                document.getElementById('nestedCurrentStock').innerText = currentQty;
 
                 showToast("Ledger successfully wiped and reset.", "success");
-                loadInventory();
                 
                 // Refresh the modal UI silently without breaking the stack
-                openInfoModal(item.id);
+                renderHistoryTimeline();
 
             } catch (err) {
                 console.error("Error wiping ledger:", err);
