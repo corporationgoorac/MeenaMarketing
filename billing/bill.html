@@ -1566,22 +1566,31 @@
                     
                     const stockItems = cartItems.filter(item => !item.isNonStock && item.invId);
                     const invDocs = {};
+                    const aggregatedRequest = {}; // RAM tracker for total requested qty
                     
+                    // Aggregate and Read
                     for (const item of stockItems) {
-                        const invRef = doc(db, "inventory", item.invId);
-                        const invSnap = await transaction.get(invRef);
-                        
-                        if (!invSnap.exists()) {
-                            throw new Error(`Product ${item.name} not found in database!`);
+                        if (!aggregatedRequest[item.invId]) aggregatedRequest[item.invId] = 0;
+                        aggregatedRequest[item.invId] += item.qty;
+
+                        if (!invDocs[item.invId]) {
+                            const invRef = doc(db, "inventory", item.invId);
+                            const invSnap = await transaction.get(invRef);
+                            
+                            if (!invSnap.exists()) {
+                                throw new Error(`Product ${item.name} not found in database!`);
+                            }
+                            
+                            invDocs[item.invId] = { ref: invRef, data: invSnap.data() };
                         }
-                        
-                        // Validate stock in realtime during transaction
-                        const liveStock = invSnap.data().qty || 0;
-                        if (liveStock < item.qty) {
-                            throw new Error(`Real-time stock check failed: Not enough stock for ${item.name}.`);
+                    }
+
+                    // Validate Aggregated Stock in Realtime
+                    for (const invId in aggregatedRequest) {
+                        const liveStock = invDocs[invId].data.qty || 0;
+                        if (liveStock < aggregatedRequest[invId]) {
+                            throw new Error(`Real-time stock check failed: Not enough stock.`);
                         }
-                        
-                        invDocs[item.invId] = { ref: invRef, data: invSnap.data() };
                     }
 
                     // 2. LOGIC PREPARATION
@@ -1625,18 +1634,27 @@
                         billedBy: realEditorName
                     });
 
-                    // B. Deduct Inventory & Update Arrays (Stealth Mode)
+                    // B. Deduct Inventory & Update Arrays (Stealth Mode + RAM Tracker)
+                    const runningTracker = {};
+
                     for (const item of stockItems) {
-                        const docData = invDocs[item.invId].data;
-                        const invRef = invDocs[item.invId].ref;
+                        const invId = item.invId;
                         
-                        let currentHistory = docData.history || [];
-                        let currentQty = docData.qty || 0;
+                        // Initialize local RAM tracker for this specific item
+                        if (!runningTracker[invId]) {
+                            runningTracker[invId] = {
+                                qty: invDocs[invId].data.qty || 0,
+                                history: invDocs[invId].data.history || [],
+                                ref: invDocs[invId].ref
+                            };
+                        }
+
+                        let currentQty = runningTracker[invId].qty;
                         let newQty = currentQty - item.qty;
 
                         // Legacy Initialization Injection
-                        if (currentHistory.length === 0) {
-                            currentHistory.push({
+                        if (runningTracker[invId].history.length === 0) {
+                            runningTracker[invId].history.push({
                                 action: "System Initialization",
                                 qtyChange: currentQty,
                                 prevQty: 0,
@@ -1648,7 +1666,7 @@
                         }
                         
                         // New Sale Footprint
-                        currentHistory.push({
+                        runningTracker[invId].history.push({
                             action: "Sale / Billed",
                             qtyChange: -item.qty,
                             prevQty: currentQty,
@@ -1659,10 +1677,15 @@
                             reason: "Stock deducted via billing"
                         });
 
-                        // STEALTH WRITE: Push qty and history without touching lastUpdated/createdAt
-                        transaction.update(invRef, {
-                            qty: newQty,
-                            history: currentHistory
+                        // Update RAM Tracker
+                        runningTracker[invId].qty = newQty;
+                    }
+
+                    // STEALTH WRITE: One single atomic write per unique product
+                    for (const invId in runningTracker) {
+                        transaction.update(runningTracker[invId].ref, {
+                            qty: runningTracker[invId].qty,
+                            history: runningTracker[invId].history
                         });
                     }
 
