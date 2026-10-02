@@ -915,15 +915,29 @@
             }, 3000);
         };
 
+        // --- NEW LIFO MODAL STACK NAVIGATION ENGINE ---
+        let modalStack = [];
+        
         window.openModal = function(modalId) {
             vibrateApp(20);
             document.getElementById(modalId).classList.add('active');
+            modalStack.push(modalId);
             history.pushState({ modal: modalId }, '', `#${modalId}`);
         };
 
         window.addEventListener('popstate', (e) => {
-            document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
-            // STRICT NAVIGATION FIX: Removed automatic re-opening of e.state.modal to kill the double-tap popstate bug.
+            // Strictly pop only the topmost active modal from the stack to prevent double-closing
+            if (modalStack.length > 0) {
+                const topModal = modalStack.pop();
+                const modalEl = document.getElementById(topModal);
+                if (modalEl) {
+                    modalEl.classList.remove('active');
+                }
+            } else {
+                // Safety fallback for stray states
+                document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+            }
+            
             if (document.getElementById('adminUnlockedContent').style.display === 'block') {
                 resetAdminLock();
             }
@@ -986,8 +1000,11 @@
             if(isActionTriggered) return;
             isActionTriggered = true;
 
-            // Remove visual instantly for crisp UX
-            document.getElementById('modalCardActions').classList.remove('active');
+            // Remove visual instantly for crisp UX from the topmost modal
+            const topModal = modalStack[modalStack.length - 1];
+            if (topModal) {
+                document.getElementById(topModal).classList.remove('active');
+            }
             
             // Listen exactly once for the popstate that we are about to trigger
             const onPop = () => {
@@ -999,12 +1016,13 @@
             };
             window.addEventListener('popstate', onPop);
             
-            history.back(); // Triggers popstate, clearing the active modal safely from stack
+            history.back(); // Triggers popstate, popping from the modalStack array
             
             // Safety fallback in case popstate is blocked or missing
             setTimeout(() => {
                 window.removeEventListener('popstate', onPop);
                 if(isActionTriggered) {
+                    if(modalStack.length > 0) modalStack.pop(); 
                     callback();
                     isActionTriggered = false;
                 }
@@ -1898,6 +1916,7 @@
             grid.innerHTML = skeletonHtml;
         }
 
+        // --- UPDATED SORTING ENGINE: Querying by lastUpdated instead of createdAt ---
         async function loadInventory(isLoadMore = false) {
             const grid = document.getElementById('inventoryGrid');
             
@@ -1957,10 +1976,11 @@
                              q = query(collection(db, "inventory"), where("type", "==", currentTypeFilter), limit(10));
                         }
                     } else {
+                        // REPLACED createdAt with lastUpdated sorting logic
                         if (isLoadMore && lastVisibleItem) {
-                            q = query(collection(db, "inventory"), orderBy("createdAt", "desc"), startAfter(lastVisibleItem), limit(10));
+                            q = query(collection(db, "inventory"), orderBy("lastUpdated", "desc"), startAfter(lastVisibleItem), limit(10));
                         } else {
-                            q = query(collection(db, "inventory"), orderBy("createdAt", "desc"), limit(10));
+                            q = query(collection(db, "inventory"), orderBy("lastUpdated", "desc"), limit(10));
                         }
                     }
                 }
@@ -2318,6 +2338,7 @@
                             qty: item.qty,
                             searchTokens: generateSearchTokens(item.name, item.model),
                             createdAt: serverTimestamp(),
+                            lastUpdated: new Date().toISOString(), // ADDED: Critical for real-time Sorting Engine bump
                             history: [{
                                 action: "Opening Balance",
                                 qtyChange: item.qty,
