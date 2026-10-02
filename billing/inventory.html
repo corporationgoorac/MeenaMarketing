@@ -1407,7 +1407,7 @@
             let baseline = "Legacy";
             if (historyData.length > 0) {
                 const firstLog = historyData[0]; // oldest item
-                if (firstLog.action === "Opening Balance" || firstLog.action === "System Initialization") {
+                if (firstLog.action === "Opening Balance" || firstLog.action === "System Initialization" || firstLog.action === "Ledger Reset / Baseline Established") {
                     baseline = firstLog.qtyChange;
                 }
             }
