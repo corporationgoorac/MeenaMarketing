@@ -38,22 +38,20 @@
         body { font-family: 'Inter', 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; -webkit-font-smoothing: antialiased; }
 
         /* UPGRADED: Added all modal and action elements to prevent accidental copy/highlighting */
-        header, .brand-container, .brand-text, .logo-img, .material-symbols-outlined, .fab-container, .fab, .action-btn, .header-actions, .bottom-nav, #modalCardActions, .modal-content-wrap, .big-action-btn {
+        header, .brand-container, .brand-text, .material-symbols-outlined, .fab-container, .fab, .action-btn, .header-actions, .bottom-nav, #modalCardActions, .modal-content-wrap, .big-action-btn {
             -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; -webkit-touch-callout: none;
         }
 
         .material-symbols-outlined { display: inline-flex; align-items: center; justify-content: center; }
         .material-symbols-outlined svg { width: 1em; height: 1em; fill: currentColor; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
+        /* Header Alignment & Strict Single-Line Truncation */
         header { background-color: #212121; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 500; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; width: 100%; box-sizing: border-box;}
-        .brand-container { display: flex; align-items: center; gap: 12px; min-width: 0;}
-        .logo-img { width: 34px; height: 34px; border-radius: 8px; box-shadow: var(--shadow-md); flex-shrink: 0;}
-        .brand-text { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
-        /* STRICT WRAPPING FIX FOR MOBILE: white-space nowrap */
-        .brand-title { font-size: 1em; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .brand-text { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; overflow: hidden; margin-left: 2px; }
+        .brand-title { font-size: 1.15em; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: block;}
         .meena { color: var(--meena-red); }
         .marketing { color: var(--marketing-white); }
-        .goorac { font-size: 0.7em; color: var(--text-secondary); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .goorac { font-size: 0.7em; color: var(--text-secondary); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: block;}
 
         #installPopup { display: none; position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background-color: var(--surface-color); padding: 14px 18px; border-radius: 16px; box-shadow: var(--shadow-lg); z-index: 1001; align-items: center; gap: 15px; width: 90%; max-width: 380px; border: 1px solid var(--input-border); }
         .install-img { width: 44px; height: 44px; border-radius: 10px; }
@@ -116,16 +114,13 @@
 
         .oos-badge { position: absolute; top: 0; right: 0; background: linear-gradient(135deg, var(--meena-red), #b91c1c); color: white; font-size: 0.65em; padding: 4px 12px; border-bottom-left-radius: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: -2px 2px 8px rgba(0,0,0,0.2);}
 
-        /* UPGRADED: Smaller, Professional Floating Glass Pill Navigation Bar */
+        /* UPGRADED: Professional Floating Glass Pill Navigation Bar */
         .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(19, 27, 38, 0.7); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.12); display: flex; justify-content: space-evenly; align-items: center; padding: 6px 14px; z-index: 1000; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1); border-radius: 50px; width: auto; min-width: 280px; max-width: 380px; gap: 8px;}
         .nav-item { display: flex; justify-content: center; align-items: center; color: var(--text-secondary); width: 44px; height: 44px; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 50%;}
         .nav-item:hover { color: white; background: rgba(255, 255, 255, 0.08); }
         .nav-item:active { transform: scale(0.90); background: rgba(255, 255, 255, 0.15); }
         .nav-item .material-symbols-outlined { font-size: 24px; }
         .nav-item.active { color: var(--warning-color); background: rgba(245, 158, 11, 0.15); }
-        
-        /* Maintained for legacy compatibility if required by other scripts, unused in current clean UI */
-        .nav-fab-center { transform: translateY(-18px); background: linear-gradient(135deg, var(--success-color), #059669); width: 64px; height: 64px; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.2); border: 6px solid var(--bg-color); color: white; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); flex-shrink: 0;}
 
         .modal { position: fixed; top: 0; right: -100%; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 2000; transition: right 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); overflow-y: auto; padding-bottom: 80px; box-sizing: border-box; }
         .modal.active { right: 0; }
@@ -313,19 +308,16 @@
         <span id="successToastText">Action Successful!</span>
     </div>
 
-    <!-- UPGRADED: Native iOS Header with Back Arrow on the Left -->
+    <!-- UPGRADED: Native iOS Header with Back Arrow and Single-Line Truncation -->
     <header>
-        <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
-            <span class="material-symbols-outlined" style="cursor: pointer; font-size: 24px; color: var(--text-secondary); margin-right: 4px; transition: color 0.2s;" onclick="vibrateApp(30); history.back()" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-secondary)'">arrow_back_ios</span>
-            <div class="brand-container">
-                <img src="icon.png" alt="Icon" class="logo-img">
-                <div class="brand-text">
-                    <span class="brand-title"><span class="meena">Meena</span> <span class="marketing">Marketing</span></span>
-                    <span class="goorac">Admin Console</span>
-                </div>
+        <div style="display: flex; align-items: center; gap: 4px; min-width: 0; flex-grow: 1; overflow: hidden;">
+            <span class="material-symbols-outlined" style="cursor: pointer; font-size: 22px; color: var(--text-secondary); padding: 4px; margin-left: -4px; flex-shrink: 0; transition: color 0.2s;" onclick="vibrateApp(30); history.back()" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-secondary)'">arrow_back_ios</span>
+            <div class="brand-text">
+                <span class="brand-title"><span class="meena">Meena</span> <span class="marketing">Marketing</span></span>
+                <span class="goorac">Admin Console</span>
             </div>
         </div>
-        <div class="header-actions" style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
+        <div class="header-actions" style="display: flex; align-items: center; gap: 12px; flex-shrink: 0; margin-left: 12px;">
             <span class="material-symbols-outlined" style="cursor: pointer; font-size: 28px; color: var(--info-color); transition: all 0.2s ease; filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));" onclick="vibrateApp(40); window.location.href='pending.html'" onmouseover="this.style.color='white'; this.style.transform='scale(1.1)'" onmouseout="this.style.color='var(--info-color)'; this.style.transform='scale(1)'">pending_actions</span>
             <span class="material-symbols-outlined" style="cursor: pointer; font-size: 28px; color: var(--warning-color); transition: all 0.2s ease; filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.5));" onclick="vibrateApp(40); window.location.href='offer.html'" onmouseover="this.style.color='white'; this.style.transform='scale(1.1)'" onmouseout="this.style.color='var(--warning-color)'; this.style.transform='scale(1)'">local_offer</span>
             <span class="material-symbols-outlined" style="cursor: pointer; font-size: 28px; color: var(--text-secondary); transition: color 0.2s;" onclick="vibrateApp(40); openAdminPanel()" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-secondary)'">admin_panel_settings</span>
@@ -866,6 +858,21 @@
             document.getElementById('searchInventory').placeholder = `Search inventory...`;
             history.back();
             loadInventory();
+        };
+
+        // FIXED AND GLOBALIZED: Safe async global lookup for editor name
+        window.getFreshUserName = async function() {
+            const user = auth.currentUser;
+            if (!user) return currentUserName;
+            try {
+                const userSnap = await getDoc(doc(db, "users", user.uid));
+                if (userSnap.exists() && userSnap.data().name) {
+                    return userSnap.data().name; 
+                }
+            } catch (error) {
+                console.error("Auth DB Error:", error);
+            }
+            return currentUserName; 
         };
 
         function generateSearchTokens(name, model) {
@@ -1423,7 +1430,7 @@
 
             try {
                 const itemRef = doc(db, "inventory", item.id);
-                const realEditorName = await getFreshUserName();
+                const realEditorName = await window.getFreshUserName();
                 const currentQty = item.qty || 0;
 
                 await runTransaction(db, async (transaction) => {
@@ -1574,7 +1581,7 @@
 
             try {
                 const itemRef = doc(db, "inventory", id);
-                const realEditorName = await getFreshUserName();
+                const realEditorName = await window.getFreshUserName();
                 const qtyDiff = parsedQty - currentQty;
                 
                 await runTransaction(db, async (transaction) => {
@@ -1705,10 +1712,9 @@
                 const oldMyRate = item ? (item.myRate || 0) : 0;
 
                 const itemRef = doc(db, "inventory", id);
-                let realEditorName = currentUserName; 
+                let realEditorName = await window.getFreshUserName(); 
                 
                 if (newQty !== oldQty) {
-                    realEditorName = await getFreshUserName(); 
                     const qtyDiff = newQty - oldQty;
                     
                     await runTransaction(db, async (transaction) => {
@@ -1900,6 +1906,7 @@
                              q = query(collection(db, "inventory"), where("type", "==", currentTypeFilter), limit(10));
                         }
                     } else {
+                        // LEGACY-SAFE SORTING: Reverted back to createdAt to preserve old products in feed
                         if (isLoadMore && lastVisibleItem) {
                             q = query(collection(db, "inventory"), orderBy("createdAt", "desc"), startAfter(lastVisibleItem), limit(10));
                         } else {
@@ -2243,7 +2250,7 @@
 
             try {
                 const batch = writeBatch(db);
-                const realEditorName = await getFreshUserName();
+                const realEditorName = await window.getFreshUserName();
 
                 pendingCart.forEach(item => {
                     if (item.isUpdate && item.existingId) {
