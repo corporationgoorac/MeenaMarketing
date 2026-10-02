@@ -197,6 +197,13 @@
         // Global state for deletion
         let currentTargetDocId = null;
 
+        // Professional Haptics Helper
+        const vibrate = (pattern) => {
+            if (navigator.vibrate) {
+                try { navigator.vibrate(pattern); } catch (e) {}
+            }
+        };
+
         // Toast Helper
         window.showToast = function(msg, type = "error") {
             const toast = document.getElementById(type === "error" ? 'errorToast' : 'successToast');
@@ -295,9 +302,9 @@
                         
                         let rawTime = `${hours}:${minutes}`;
                         if (isPM) {
-                            timeString = `<span style="background: #2a2a2a; color: #ffffff; padding: 3px 8px; border-radius: 6px; font-size: 1em; font-weight: bold; border: 1px solid #444; display: inline-block;">${rawTime} PM</span>`;
+                            timeString = `<span style="background: #2a2a2a; color: #ffffff; padding: 3px 8px; border-radius: 6px; font-size: 1em; font-weight: bold; border: 1px solid #444; display: inline-block;">${rawTime}</span>`;
                         } else {
-                            timeString = `<span style="background: #ff9800; color: #121212; padding: 3px 8px; border-radius: 6px; font-size: 1em; font-weight: bold; display: inline-block;">${rawTime} AM</span>`;
+                            timeString = `<span style="background: #ff9800; color: #121212; padding: 3px 8px; border-radius: 6px; font-size: 1em; font-weight: bold; display: inline-block;">${rawTime}</span>`;
                         }
                     }
 
@@ -381,15 +388,19 @@
         // --- Modal & History Logic ---
 
         window.openModal = function(docId, invoiceNo) {
+            vibrate(15); // Light tap for pressing button
             currentTargetDocId = docId;
             document.getElementById('deleteInvNoText').innerText = invoiceNo;
             document.getElementById('deleteModal').classList.add('active');
             
             // Push state for mobile back button to close modal instead of leaving page
             history.pushState({ deleteModalOpen: true }, "");
+            
+            setTimeout(() => vibrate([30, 50, 30]), 100); // Warning pulse when modal is fully visible
         };
 
         window.closeModalManual = function() {
+            vibrate(50); // Dull tap for cancellation
             // Triggering history.back() will inherently close it via popstate
             history.back(); 
         };
@@ -410,6 +421,7 @@
                 // Execute deletion in Firestore
                 await deleteDoc(doc(db, "sellings", currentTargetDocId));
                 
+                vibrate([15, 40, 15]); // Quick double tap for success
                 showToast("Invoice deleted successfully!", "success");
 
                 // LOW READ OPTIMIZATION: Remove from DOM instead of re-fetching the entire day
@@ -438,6 +450,7 @@
 
             } catch (err) {
                 console.error("Error deleting doc:", err);
+                vibrate(50); // Single longer tap for error
                 showToast("Failed to delete. Check permissions.");
             } finally {
                 // Reset Button UI
@@ -453,6 +466,7 @@
             if (modal.classList.contains('active')) {
                 modal.classList.remove('active');
                 currentTargetDocId = null;
+                vibrate(50); // Vibrate on hardware back dismissal
             }
         });
 
