@@ -1908,9 +1908,9 @@
                     } else {
                         // LEGACY-SAFE SORTING: Reverted back to createdAt to preserve old products in feed
                         if (isLoadMore && lastVisibleItem) {
-                            q = query(collection(db, "inventory"), orderBy("createdAt", "desc"), startAfter(lastVisibleItem), limit(10));
+                            q = query(collection(db, "inventory"), orderBy("lastUpdated", "desc"), startAfter(lastVisibleItem), limit(10));
                         } else {
-                            q = query(collection(db, "inventory"), orderBy("createdAt", "desc"), limit(10));
+                            q = query(collection(db, "inventory"), orderBy("lastUpdated", "desc"), limit(10));
                         }
                     }
                 }
