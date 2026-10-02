@@ -330,341 +330,6 @@
             /* Table Layout - Professional Alignment */
             .print-table-container { padding: 0 40px; display: block; width: 100%; box-sizing: border-box; z-index: 2; position: relative;}
             .print-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; } 
-            .print-table th { background-The following is the fully assembled code for bill (1)_2.html, incorporating all previous structure without removing a single line, and completing the truncated theme definitions to ensure professional functionality[span_1](start_span)[span_1](end_span).
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Billing & Invoicing - Meena Marketing</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#212121">
-    
-    <!-- Dynamic Fonts added to match Theme Engine -->
-    <link href="[https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200](https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200)" rel="stylesheet" />
-    <link href="[https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&family=Dancing+Script:wght@700&display=swap](https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&family=Dancing+Script:wght@700&display=swap)" rel="stylesheet">
-    
-    <script src="[https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js](https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js)"></script>
-    <script src="[https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js](https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js)"></script>
-    <script src="[https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js](https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js)"></script>
-    <!-- Added QR Code Library for Functional UPI Generation -->
-    <script src="[https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js](https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js)"></script>
-
-    <style>
-        /* Shared Core Theme (App UI) */
-        :root {
-            --bg-color: #121212;
-            --surface-color: #212121;
-            --text-color: #ffffff;
-            --text-secondary: #aaaaaa;
-            --meena-red: #ff3333;
-            --marketing-white: #ffffff;
-            --accent-color: #0056b3;
-            --success-color: #00c853;
-            --warning-color: #ff9800;
-            --nav-bg: #1a1a1a;
-            --input-bg: #2a2a2a;
-        }
-
-        *, *::before, *::after { box-sizing: border-box; }
-        html, body { height: 100%; margin: 0; padding: 0; width: 100%; overflow-x: hidden; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; }
-
-        /* Screen App Header */
-        header { background-color: var(--surface-color); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.5); flex-shrink: 0; width: 100%; }
-        .header-left { display: flex; align-items: center; gap: 15px; }
-        .back-btn { color: var(--text-color); cursor: pointer; display: flex; align-items: center; text-decoration: none; }
-        .brand-container { display: flex; align-items: center; gap: 10px; }
-        .logo-img { width: 32px; height: 32px; border-radius: 6px; }
-        .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
-        .brand-title { font-size: 1.1em; font-weight: bold; }
-        .meena { color: var(--meena-red); }
-        .marketing { color: var(--marketing-white); }
-        .page-title { font-size: 0.75em; color: var(--success-color); text-transform: uppercase; letter-spacing: 1px;}
-
-        /* Custom Install Popup */
-        #installPopup { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: var(--nav-bg); padding: 12px 16px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.9); z-index: 1001; align-items: center; gap: 15px; width: 90%; max-width: 380px; border: 1px solid var(--accent-color); }
-        .install-img { width: 40px; height: 40px; border-radius: 8px; }
-        .install-text { flex-grow: 1; }
-        .install-text h4 { margin: 0 0 4px 0; font-size: 0.95em; color: var(--success-color); }
-        .install-text p { margin: 0; font-size: 0.75em; color: var(--text-secondary); }
-        .install-btn { background: var(--success-color); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 0.85em;}
-        .close-btn { background: none; border: none; color: var(--text-secondary); font-size: 1.5em; cursor: pointer; padding: 0 5px; }
-
-        /* Main App Area */
-        .main-scroll-area { flex-grow: 1; overflow-y: auto; padding: 20px; width: 100%; max-width: 900px; margin: 0 auto; }
-        
-        .section-box { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-        .section-title { font-size: 1.1em; color: var(--marketing-white); border-bottom: 1px solid #444; padding-bottom: 10px; margin-top: 0; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;}
-        
-        .form-group { display: flex; flex-direction: column; gap: 12px; }
-        .input-row { display: flex; gap: 12px; flex-wrap: wrap; }
-        .input-row > div { flex: 1; min-width: 120px; }
-        label { display: block; font-size: 0.85em; color: var(--text-secondary); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;}
-        input, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: var(--input-bg); color: white; font-size: 1em; outline: none; transition: 0.3s; }
-        input:focus, select:focus { border-color: var(--accent-color); }
-
-        /* Autocomplete */
-        .search-wrapper { position: relative; }
-        .suggestions { position: absolute; top: 100%; left: 0; right: 0; background: var(--surface-color); border: 1px solid var(--accent-color); border-radius: 8px; max-height: 200px; overflow-y: auto; z-index: 100; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.8); }
-        .suggestion-item { padding: 12px 15px; border-bottom: 1px solid #333; cursor: pointer; display: flex; justify-content: space-between; align-items: center;}
-        .suggestion-item:hover { background: #2a2a2a; }
-        .suggestion-item > div:first-child { min-width: 0; flex: 1; padding-right: 10px; }
-        .suggestion-item > div:first-child > div:last-child { white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
-        .s-name { font-weight: bold; font-size: 1.05em; color: var(--marketing-white); white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
-        .s-stock { font-size: 0.85em; background: rgba(0, 200, 83, 0.2); color: var(--success-color); padding: 3px 8px; border-radius: 4px;}
-        .s-stock.zero { background: rgba(255, 51, 51, 0.2); color: var(--meena-red); }
-
-        /* Toggles */
-        .checkbox-row { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
-        .checkbox-row input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--warning-color); cursor: pointer; }
-        .checkbox-row label { margin: 0; cursor: pointer; color: var(--warning-color); font-weight: bold; text-transform: none;}
-
-        .btn-add { background: #333; border: 1px solid #555; color: white; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1.05em; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;}
-        .btn-add:hover { background: #444; border-color: var(--accent-color); }
-
-        /* Cart Table UI */
-        .cart-container { border: 1px solid #444; border-radius: 8px; overflow: hidden; margin-top: 15px; }
-        .cart-item { display: flex; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid #333; background: #1a1a1a; align-items: center;}
-        .cart-item:last-child { border-bottom: none; }
-        .c-details { flex: 1; min-width: 0; }
-        .c-title { font-weight: bold; color: var(--marketing-white); font-size: 1.05em; white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
-        .c-meta { font-size: 0.8em; color: var(--text-secondary); margin-top: 3px; white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
-        .c-meta span.gst-tag { color: var(--accent-color); background: rgba(0, 86, 179, 0.2); padding: 1px 5px; border-radius: 3px; }
-        .c-meta span.ns-tag { color: var(--warning-color); background: rgba(255, 152, 0, 0.2); padding: 1px 5px; border-radius: 3px; }
-        .c-price { text-align: right; font-weight: bold; color: white; font-size: 1.1em; margin-right: 15px;}
-        .c-del { color: var(--meena-red); background: none; border: none; cursor: pointer; padding: 5px; }
-
-        /* Totals */
-        .totals-box { margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 8px; }
-        .t-row { display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--text-secondary); font-size: 0.95em;}
-        .t-row.grand { font-size: 1.3em; font-weight: bold; color: var(--success-color); border-top: 1px dashed #555; padding-top: 10px; margin-top: 5px;}
-
-        /* Bottom Action Bar */
-        .bottom-actions { display: flex; gap: 15px; margin-top: 20px; }
-        .btn-main { flex: 1; padding: 16px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.1em; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.2s;}
-        .btn-save { background: var(--success-color); color: white; }
-        .btn-save:hover:not(:disabled) { background: #00a844; }
-        .btn-save:disabled { background: #444; color: #888; cursor: not-allowed; }
-        
-        .btn-print { background: var(--accent-color); color: white; display: none; }
-        .btn-print:hover { background: #004494; }
-
-        /* Loading Spinner CSS Fix */
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .spinner { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #fff; border-radius: 50%; width: 18px; height: 18px; animation: spin 1s linear infinite; display: inline-block; }
-
-        /* Toasts */
-        .toast-msg { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); color: white; padding: 12px 24px; border-radius: 8px; z-index: 9999; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.5); font-weight: bold; align-items: center; gap: 10px; opacity: 0; transition: opacity 0.3s;}
-        .toast-msg.error { background: var(--meena-red); }
-        .toast-msg.success { background: var(--success-color); }
-        .toast-msg.show { display: flex; opacity: 1; }
-
-        /* Live Sequence Hint Styling */
-        .sequence-hint {
-            margin-top: 8px;
-            padding: 8px 12px;
-            border-radius: 6px;
-            background: linear-gradient(135deg, rgba(0, 86, 179, 0.15) 0%, rgba(0, 200, 83, 0.15) 100%);
-            border-left: 3px solid var(--accent-color);
-            display: none; /* Hidden by default */
-            align-items: center;
-            gap: 8px;
-            font-size: 0.8em;
-            font-weight: bold;
-            color: var(--marketing-white);
-            transition: opacity 0.3s ease;
-        }
-        .sequence-hint span.material-symbols-outlined {
-            font-size: 16px;
-            color: var(--success-color);
-        }
-
-        /* ---------------------------------------------------- */
-        /* --- PROFESSIONAL PRINT INVOICE LAYOUT (THEMED REPLICA) --- */
-        /* ---------------------------------------------------- */
-        #printArea { display: none; }
-
-        @media print {
-            /* Safely hide app UI without relying on absolute positioning overlays */
-            header, #installPopup, .main-scroll-area, .toast-msg { display: none !important; }
-            #dpModal { display: none !important; }
-
-            /* Force 1 page and remove browser headers/footers */
-            @page {
-                size: A4 portrait;
-                margin: 0mm; 
-            }
-            
-            body * { visibility: hidden; }
-            body { 
-                background: white; color: black; 
-                margin: 0; padding: 0; 
-                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-                -webkit-print-color-adjust: exact !important; 
-                print-color-adjust: exact !important; 
-            }
-            
-            /* Show only the Print Area */
-            #printArea, #printArea * { visibility: visible; }
-            #printArea { 
-                display: block !important; 
-                position: relative; 
-                width: 100%; 
-                max-width: 210mm; 
-                min-height: 100vh;
-                margin: 0 auto; 
-                padding: 0; 
-                padding-bottom: 260px !important; /* CRITICAL FIX: Stops main content before fixed footers */
-                background: white; color: #000;
-                box-sizing: border-box;
-                -webkit-print-color-adjust: exact !important; 
-                print-color-adjust: exact !important;
-            }
-
-            /* --- THEME ENGINE CSS VARIABLES INJECTIONS --- */
-            /* Top Band Header (Dynamic Background) */
-            .print-top-band {
-                background-color: var(--pv-header-bg, #cccccc) !important; 
-                padding: 35px 40px 25px 40px;
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 25px;
-                border-bottom: var(--pv-border-style, 1px solid #999) !important;
-                position: relative;
-                overflow: hidden;
-                z-index: 2;
-            }
-            
-            .pv-header-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; opacity: 0; mix-blend-mode: normal; z-index: -1; }
-
-            /* TEXTURE FIX: Multi-blend Overlay added so browser prints it perfectly over elements */
-            .texture-overlay {
-                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                pointer-events: none; z-index: 9999; mix-blend-mode: multiply; opacity: 0; transition: opacity 0.3s;
-            }
-
-            /* Decorative Festival SVG Vectors - Z-INDEX FIXED SO IT PRINTS ON TOP */
-            /* BUG FIX 1: Removed opacity: 0.35 from parent container so nested opacities don't multiply into invisibility */
-            .pv-festival-gfx { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; opacity: 1; }
-            #printArea.show-fest-fx .pv-festival-gfx { display: block; }
-            .pv-festival-gfx > div { display: none; }
-            
-            /* SMART 8+ PATTERN LAYOUT OVERRIDES */
-            /* BUG FIX 1 Continued: Apply default opacity strictly to the individual children SVGs */
-            .pv-festival-gfx > div > svg { position: absolute !important; opacity: 0.35; }
-            /* Hide SVGs 5+ by default to keep standard layouts clean */
-            .pv-festival-gfx > div > svg:nth-child(n+5) { display: none !important; }
-            /* Hide SVG 3 and 4 by default for classic view */
-            .pv-festival-gfx > div > svg:nth-child(3), .pv-festival-gfx > div > svg:nth-child(4) { display: none !important; }
-            
-            /* 1. Default (TR & BL) */
-            .layout-default > div > svg:nth-child(1) { top: 10px !important; right: 10px !important; bottom: auto !important; left: auto !important; display: block !important; }
-            .layout-default > div > svg:nth-child(2) { bottom: 10px !important; left: 10px !important; top: auto !important; right: auto !important; display: block !important; }
-            /* 2. Corners All (TR, BL, TL, BR) */
-            .layout-corners-all > div > svg:nth-child(1) { top: 10px !important; right: 10px !important; bottom: auto !important; left: auto !important; display: block !important;}
-            .layout-corners-all > div > svg:nth-child(2) { bottom: 10px !important; left: 10px !important; top: auto !important; right: auto !important; display: block !important;}
-            .layout-corners-all > div > svg:nth-child(3) { top: 10px !important; left: 10px !important; bottom: auto !important; right: auto !important; display: block !important; transform: rotate(-90deg) !important; }
-            .layout-corners-all > div > svg:nth-child(4) { bottom: 10px !important; right: 10px !important; top: auto !important; left: auto !important; display: block !important; transform: rotate(90deg) !important; }
-            /* 3. Bottom Only */
-            .layout-bottom-only > div > svg:nth-child(1) { bottom: 10px !important; right: 10px !important; top: auto !important; left: auto !important; display: block !important; transform: rotate(90deg) !important;}
-            .layout-bottom-only > div > svg:nth-child(2) { bottom: 10px !important; left: 10px !important; top: auto !important; right: auto !important; display: block !important; }
-            /* 4. Top Only */
-            .layout-top-only > div > svg:nth-child(1) { top: 10px !important; right: 10px !important; bottom: auto !important; left: auto !important; display: block !important; }
-            .layout-top-only > div > svg:nth-child(2) { top: 10px !important; left: 10px !important; bottom: auto !important; right: auto !important; display: block !important; transform: rotate(-90deg) !important;}
-            
-            /* 5. Center Circle (FIXED EXACT CENTERING & OPACITY VISIBILITY) */
-            .layout-center-circle > div > svg:nth-child(1) { top: 50% !important; left: 50% !important; right: auto !important; bottom: auto !important; margin-top: -150px !important; margin-left: -150px !important; width: 300px !important; height: 300px !important; transform: scale(1.5) !important; transform-origin: center center !important; display: block !important; opacity: 0.15 !important;}
-            .layout-center-circle > div > svg:nth-child(2) { display: none !important; }
-            
-            /* 6. Watermark Focus (FIXED EXACT CENTERING & OPACITY VISIBILITY) */
-            .layout-watermark-style > div > svg:nth-child(1) { top: 50% !important; left: 50% !important; right: auto !important; bottom: auto !important; margin-top: -150px !important; margin-left: -150px !important; width: 300px !important; height: 300px !important; transform: scale(3) !important; transform-origin: center center !important; display: block !important; opacity: 0.08 !important;}
-            .layout-watermark-style > div > svg:nth-child(2) { display: none !important; }
-            
-            /* 7. Left Edge */
-            .layout-left-edge > div > svg:nth-child(1) { top: 10px !important; left: 10px !important; bottom: auto !important; right: auto !important; display: block !important; transform: rotate(-90deg) !important;}
-            .layout-left-edge > div > svg:nth-child(2) { bottom: 10px !important; left: 10px !important; top: auto !important; right: auto !important; display: block !important; }
-            /* 8. Right Edge */
-            .layout-right-edge > div > svg:nth-child(1) { top: 10px !important; right: 10px !important; bottom: auto !important; left: auto !important; display: block !important; }
-            .layout-right-edge > div > svg:nth-child(2) { bottom: 10px !important; right: 10px !important; top: auto !important; left: auto !important; display: block !important; transform: rotate(90deg) !important;}
-
-            /* Custom Festival Watermark - Z-INDEX FIXED SO IT PRINTS ON TOP */
-            .pv-watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 80px; font-weight: 900; color: var(--pv-accent, #d32f2f) !important; opacity: 0.15; text-transform: uppercase; white-space: nowrap; z-index: 5; pointer-events: none; letter-spacing: 5px; font-family: 'Playfair Display', serif; }
-
-            /* Font Theme Classes with Protection for Material Icons */
-            #printArea.pv-font-modern .print-brand h2, #printArea.pv-font-modern .invoice-title-text { font-family: 'Montserrat', sans-serif !important; font-weight: 900 !important; font-style: normal !important;}
-            #printArea.pv-font-modern, #printArea.pv-font-modern *:not(.material-symbols-outlined):not(.sign-box h4) { font-family: 'Roboto', sans-serif !important; }
-            
-            #printArea.pv-font-elegant .print-brand h2, #printArea.pv-font-elegant .invoice-title-text { font-family: 'Playfair Display', serif !important; font-weight: 700 !important; font-style: italic !important;}
-            #printArea.pv-font-elegant, #printArea.pv-font-elegant *:not(.material-symbols-outlined):not(.sign-box h4) { font-family: 'Open Sans', sans-serif !important; }
-            
-            #printArea.pv-font-helvetica, #printArea.pv-font-helvetica *:not(.material-symbols-outlined):not(.sign-box h4) { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important; }
-
-            /* Material Icon Protection Override */
-            #printArea .material-symbols-outlined,
-            .pv-font-modern .material-symbols-outlined,
-            .pv-font-elegant .material-symbols-outlined,
-            .pv-font-helvetica .material-symbols-outlined {
-                font-family: 'Material Symbols Outlined' !important;
-                font-weight: normal !important;
-                font-style: normal !important;
-            }
-
-            /* Reliable CSS Paper Texture Options Applied Safely to the Frame */
-            #printArea.texture-vintage, #prTextureOverlay.texture-vintage {
-                background-color: #fcf8ec !important; opacity: 1 !important; 
-                background-image: radial-gradient(#e4d5b7 1px, transparent 1px) !important;
-                background-size: 10px 10px !important;
-            }
-            #printArea.texture-canvas, #prTextureOverlay.texture-canvas {
-                background-color: #fdfdfd !important; opacity: 1 !important; 
-                background-image: linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px) !important;
-                background-size: 8px 8px !important;
-            }
-            #printArea.texture-dots, #prTextureOverlay.texture-dots {
-                background-color: transparent !important; opacity: 1 !important; 
-                background-image: radial-gradient(var(--pv-accent, #cccccc) 1px, transparent 1px) !important;
-                background-size: 15px 15px !important;
-            }
-            #printArea.texture-lines, #prTextureOverlay.texture-lines {
-                background-color: transparent !important; opacity: 1 !important; 
-                background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 10px) !important;
-            }
-
-            /* Header Left Side */
-            .print-header-left { width: 55%; }
-            .print-brand { display: flex; flex-direction: column; gap: 2px; margin-bottom: 25px; }
-            .print-brand h2 { margin: 0; font-size: 32px; font-weight: 900; letter-spacing: -1px; font-style: italic; color: var(--pv-invoice-title, #d32f2f) !important; line-height: 1;}
-            .print-brand p { margin: 0; font-size: 11px; font-weight: bold; color: var(--pv-header-text, #333) !important; }
-            .print-header-left p[style] { color: var(--pv-header-sub, #333) !important; } /* Dynamic Address Sub color */
-            
-            .print-invoice-to { margin-top: 10px; }
-            .section-label { font-size: 10px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; color: var(--pv-header-text, #555) !important; }
-            .print-invoice-to h3 { margin: 0 0 8px 0; font-size: 18px; font-weight: bold; color: var(--pv-header-text, #000) !important;}
-            .print-invoice-to p { margin: 3px 0; font-size: 12px; color: var(--pv-header-text, #222) !important;}
-            .print-invoice-to p strong { display: inline-block; width: 75px; font-size: 10px; text-transform: uppercase; color: var(--pv-header-text, #000) !important;}
-
-            /* Header Right Side */
-            .print-header-right { width: 40%; text-align: right; display: flex; flex-direction: column; align-items: flex-end; }
-            /* UPDATED QR BOX CSS */
-            .qr-box { border: 2px solid var(--pv-header-text, #000) !important; background-color: #fff !important; padding: 5px; display: inline-flex; justify-content:center; align-items:center; margin-bottom: 15px; min-width: 50px; min-height: 50px; }
-            .qr-box span { font-size: 36px; color: #000; display: block; }
-            
-            .invoice-title-text { font-size: 40px; font-weight: 900; margin: 0; letter-spacing: 1px; text-transform: uppercase; line-height: 1; color: var(--pv-invoice-title, #d32f2f) !important;}
-            .invoice-no-text { font-size: 14px; font-weight: bold; margin: 5px 0 15px 0; color: var(--pv-header-text, #000) !important;}
-            
-            .invoice-date-box { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
-            .invoice-date-box span.material-symbols-outlined { font-size: 20px; color: var(--pv-header-text, #000) !important;}
-            .invoice-date-box div { text-align: left; display: flex; flex-direction: column; }
-            .invoice-date-box div span { font-size: 9px; font-weight: bold; text-transform: uppercase; color: var(--pv-header-sub, #333) !important;}
-            .invoice-date-box div strong { font-size: 13px; font-weight: bold; color: var(--pv-header-text, #000) !important;}
-
-            /* Table Layout - Professional Alignment */
-            .print-table-container { padding: 0 40px; display: block; width: 100%; box-sizing: border-box; z-index: 2; position: relative;}
-            .print-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; } 
             .print-table th { background-color: var(--pv-th-bg, #cccccc) !important; padding: 12px 10px; font-size: 11px; text-transform: uppercase; text-align: left; color: var(--pv-th-text, #000) !important; font-weight: bold; border-top: var(--pv-border-style, 1px solid #000) !important; border-bottom: var(--pv-border-style, 1px solid #000) !important; }
             
             /* FIX: Allow Custom Borders to pass through to the Table Cells */
@@ -745,7 +410,7 @@
     <header>
         <div class="header-left">
             <a href="inventory.html" class="back-btn" onclick="vibrateApp(30)">
-                <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" height="24" viewBox="0 -960 960 960" width="24" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="currentColor">
                    <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
                 </svg>
             </a>
@@ -1177,8 +842,8 @@
 
         // --- IMPORT WITH PAGINATION SUPPORT & AUTH & TRANSACTIONS ---
         import { db, auth } from './config.js'; 
-        import { collection, getDocs, getDoc, query, limit, doc, writeBatch, runTransaction, serverTimestamp, increment, onSnapshot, where, startAfter, orderBy } from "[https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js](https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js)";
-        import { onAuthStateChanged, signOut } from "[https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js](https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js)"; 
+        import { collection, getDocs, getDoc, query, limit, doc, writeBatch, runTransaction, serverTimestamp, increment, onSnapshot, where, startAfter, orderBy } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js"; 
 
         // --- GLOBAL USER NAME FETCH FOR AUDIT LEDGER ---
         window.getFreshUserName = async function() {
@@ -1292,8 +957,966 @@
         // --- NEW THEME ENGINE INJECTION (RUNS ONCE ON LOAD) ---
         const themesDefinitions = {
             default: { accent: '#d32f2f', title: '#d32f2f', font: 'helvetica', border: '1px solid #999', hdrBg: '#cccccc', hdrText: '#000000', hdrSub: '#333333', thBg: '#cccccc', thText: '#000000' },
-            sleek:   { accent: '#212121', title: '#212121', font: 'helvetica', border: '1px solid #333', hdrBg: '#f0f0f0', hdrText: '#000000', hdrSub: '#555555', thBg: '#e0e0e0', thText: '#000000' }
+            sleek:   { accent: '#1a237e', title: '#ffffff', font: 'modern', border: '1px solid #1a237e', hdrBg: '#1a237e', hdrText: '#ffffff', hdrSub: '#cccccc', thBg: '#1a237e', thText: '#ffffff' },
+            pro:     { accent: '#00695c', title: '#ffffff', font: 'modern', border: '2px solid #000', hdrBg: '#004d40', hdrText: '#ffffff', hdrSub: '#b2dfdb', thBg: '#004d40', thText: '#ffffff' },
+            premium: { accent: '#b68d40', title: '#b68d40', font: 'elegant', border: '3px double #333', hdrBg: '#212121', hdrText: '#ffffff', hdrSub: '#b68d40', thBg: '#212121', thText: '#b68d40' },
+            classic: { accent: '#000000', title: '#000000', font: 'helvetica', border: '1px dashed #000', hdrBg: '#ffffff', hdrText: '#000000', hdrSub: '#555555', thBg: '#eeeeee', thText: '#000000' },
+            elegant: { accent: '#4a148c', title: '#ffffff', font: 'elegant', border: '1px solid #ccc', hdrBg: '#4a148c', hdrText: '#ffffff', hdrSub: '#e1bee7', thBg: '#f3e5f5', thText: '#4a148c' }
         };
+
+        function loadThemeConfiguration() {
+            try {
+                const docRef = doc(db, "settings", "customBill");
+                
+                // CRITICAL FIX: Replaced one-time getDoc with real-time onSnapshot listener
+                onSnapshot(docRef, (snap) => {
+                    const printArea = document.getElementById('printArea');
+                    const bgLayer = document.getElementById('prHeaderBg');
+                    const watermarkText = document.getElementById('prWatermarkText');
+                    const textureOverlay = document.getElementById('prTextureOverlay');
+                    const festivalContainer = document.getElementById('prFestivalContainer');
+
+                    if (snap.exists()) {
+                        const data = snap.data();
+                        const mode = data.selectedTheme || 'default';
+                        let cfg = {};
+
+                        // Store global config for delayed QR generation
+                        globalThemeConfig.upiId = data.customUpiId || '';
+                        globalThemeConfig.mode = mode;
+
+                        // Handle Global Editable Greetings & Signature
+                        document.getElementById('prGreetTitle').innerText = data.customTitle || 'Thank you for your business!';
+                        document.getElementById('prGreetMsg').innerText = data.customMsg || 'We appreciate your trust in Meena Marketing. If you have any questions about this invoice, please contact us.';
+                        document.getElementById('prSignNameText').innerText = data.signName || 'Authorized Signatory';
+
+                        if (mode === 'custom') {
+                            cfg = {
+                                accent: data.customColor || '#d32f2f',
+                                title: data.customColor || '#d32f2f',
+                                font: data.customFont || 'standard',
+                                border: data.customBorder || '1px solid #999',
+                                hdrBg: data.customBgColor || '#f9f9f9',
+                                hdrText: data.customTextColor || '#000000',
+                                hdrSub: data.customTextColor || '#333333',
+                                thBg: data.customBgColor || '#f9f9f9',
+                                thText: data.customTextColor || '#000000'
+                            };
+
+                            // Apply Festival Vectors & Texts dynamically
+                            printArea.classList.add('show-fest-fx');
+                            const patternType = data.customPatternType || 'layout-default';
+                            festivalContainer.className = `pv-festival-gfx ${patternType}`;
+                            
+                            festivalContainer.querySelectorAll('div').forEach(el => el.style.display = 'none');
+                            
+                            if (data.customPattern && data.customPattern !== 'none') {
+                                const activePattern = festivalContainer.querySelector(`.pattern-${data.customPattern}`);
+                                if (activePattern) {
+                                    activePattern.style.display = 'block';
+                                    
+                                    // Dynamically clone up to 30 SVGs if an advanced layout is selected
+                                    const currentSvgs = activePattern.querySelectorAll('svg');
+                                    if (currentSvgs.length < 30) {
+                                        const baseSvg = currentSvgs[0];
+                                        const needed = 30 - currentSvgs.length;
+                                        for (let i = 0; i < needed; i++) {
+                                            activePattern.appendChild(baseSvg.cloneNode(true));
+                                        }
+                                    }
+                                    
+                                    const allSvgs = activePattern.querySelectorAll('svg');
+                                    const pseudoRand = (i) => Math.abs(Math.sin(i * 1234.56)); // Seeded generator for perfect stability
+                                    
+                                    // Cache and Reset original styles so standard layouts aren't corrupted
+                                    allSvgs.forEach(svg => {
+                                        if (!svg.hasAttribute('data-orig-style')) {
+                                            svg.setAttribute('data-orig-style', svg.style.cssText);
+                                        }
+                                        svg.style.cssText = svg.getAttribute('data-orig-style'); 
+                                    });
+                                    
+                                    // Apply programmatic 30-item layouts bypassing CSS limitations
+                                    if (patternType === 'layout-scattered-mini') {
+                                        let index = 0;
+                                        for(let r=0; r<6; r++) {
+                                            for(let c=0; c<5; c++) {
+                                                if(index >= 30) break;
+                                                const svg = allSvgs[index];
+                                                const top = (10 + r*16) + (pseudoRand(index)*6 - 3); 
+                                                const left = (10 + c*20) + (pseudoRand(index+100)*6 - 3);
+                                                const scale = 0.2 + pseudoRand(index+200)*0.2;
+                                                const rot = pseudoRand(index+300) * 360;
+                                                const op = 0.15 + pseudoRand(index+400)*0.15; // Opacity 0.15 to 0.30 range
+                                                
+                                                svg.style.cssText = `position:absolute !important; top:${top}% !important; left:${left}% !important; transform:scale(${scale}) rotate(${rot}deg) !important; opacity:${op} !important; display:block !important; width:300px !important; height:300px !important; margin-top:-150px !important; margin-left:-150px !important; transform-origin:center center !important; right:auto !important; bottom:auto !important;`;
+                                                index++;
+                                            }
+                                        }
+                                    } else if (patternType === 'layout-bordered') {
+                                        let index = 0;
+                                        const applyBorderSvg = (svg, t, l, scale, rot) => {
+                                            svg.style.cssText = `position:absolute !important; top:${t} !important; left:${l} !important; transform:scale(${scale}) rotate(${rot}deg) !important; opacity:0.35 !important; display:block !important; width:300px !important; height:300px !important; margin-top:-150px !important; margin-left:-150px !important; transform-origin:center center !important; right:auto !important; bottom:auto !important;`;
+                                        };
+                                        for(let i=0; i<8; i++) { applyBorderSvg(allSvgs[index++], '0%', `${5 + i*13}%`, 0.35, i*15); }
+                                        for(let i=0; i<8; i++) { applyBorderSvg(allSvgs[index++], '100%', `${5 + i*13}%`, 0.35, i*15 + 180); }
+                                        for(let i=0; i<7; i++) { applyBorderSvg(allSvgs[index++], `${15 + i*11}%`, '0%', 0.35, i*25); }
+                                        for(let i=0; i<7; i++) { applyBorderSvg(allSvgs[index++], `${15 + i*11}%`, '100%', 0.35, i*25 + 90); }
+                                    }
+                                }
+                            }
+                            
+                            watermarkText.innerText = data.customWatermark || '';
+
+                            // Apply Textures dynamically securely
+                            printArea.classList.remove('texture-vintage', 'texture-canvas', 'texture-dots', 'texture-lines');
+                            textureOverlay.className = 'texture-overlay';
+                            if (data.customTexture && data.customTexture !== 'none') {
+                                printArea.classList.add(`texture-${data.customTexture}`);
+                                // FIXED: Do not apply the same texture class to overlay to prevent double-darkening multiply bug
+                                // textureOverlay.classList.add(`texture-${data.customTexture}`);
+                            }
+
+                            // Apply Dynamic Image Overlays for Header
+                            if (data.customImgUrl && data.customImgUrl.trim()) {
+                                bgLayer.style.backgroundImage = `linear-gradient(to right, ${cfg.hdrBg} 30%, transparent 100%), url(${data.customImgUrl.trim()})`;
+                                bgLayer.style.opacity = (data.customOpacity !== undefined ? data.customOpacity : 30) / 100;
+                            } else {
+                                bgLayer.style.backgroundImage = 'none';
+                                bgLayer.style.opacity = 0;
+                            }
+
+                        } else {
+                            cfg = themesDefinitions[mode] || themesDefinitions['default'];
+                            
+                            // Disable specific festival elements for preset themes
+                            printArea.classList.remove('show-fest-fx', 'texture-vintage', 'texture-canvas', 'texture-dots', 'texture-lines');
+                            festivalContainer.className = 'pv-festival-gfx';
+                            textureOverlay.className = 'texture-overlay';
+                            festivalContainer.querySelectorAll('div').forEach(el => el.style.display = 'none');
+                            bgLayer.style.backgroundImage = 'none';
+                            bgLayer.style.opacity = 0;
+                            watermarkText.innerText = '';
+                        }
+
+                        globalThemeConfig.accent = cfg.accent;
+
+                        // Map all configuration colors mathematically into CSS Variables for @media print translation
+                        printArea.style.setProperty('--pv-accent', cfg.accent);
+                        printArea.style.setProperty('--pv-invoice-title', cfg.title);
+                        printArea.style.setProperty('--pv-header-bg', cfg.hdrBg);
+                        printArea.style.setProperty('--pv-header-text', cfg.hdrText);
+                        printArea.style.setProperty('--pv-header-sub', cfg.hdrSub);
+                        printArea.style.setProperty('--pv-th-bg', cfg.thBg);
+                        printArea.style.setProperty('--pv-th-text', cfg.thText);
+                        printArea.style.setProperty('--pv-border-style', cfg.border === 'none' ? 'none' : cfg.border);
+
+                        // Map Custom Print Typography
+                        printArea.classList.remove('pv-font-modern', 'pv-font-elegant', 'pv-font-helvetica');
+                        if (cfg.font === 'modern') printArea.classList.add('pv-font-modern');
+                        else if (cfg.font === 'elegant') printArea.classList.add('pv-font-elegant');
+                        else printArea.classList.add('pv-font-helvetica');
+                    }
+                });
+            } catch(e) {
+                console.error("Error loading print theme configuration", e);
+            }
+        }
+
+        // Trigger Configuration Build Immediately on page load
+        loadThemeConfiguration();
+
+        // --- INJECTED: LISTEN FOR LATEST INVOICE COUNTERS FOR GST/NORMAL ---
+        let nextGstNo = 1;
+        let nextNormalNo = 1;
+        function listenInvoiceCounters() {
+            try {
+                const counterRef = doc(db, "settings", "invoiceCounters");
+                onSnapshot(counterRef, (snap) => {
+                    if (snap.exists()) {
+                        nextGstNo = snap.data().nextGst || 1;
+                        nextNormalNo = snap.data().nextNormal || 1;
+                    }
+                    // FIX: Prevent the background UI from jumping to the next number while saving/printing
+                    if(cartItems && cartItems.length > 0 && !isSavingBill) renderCart(); 
+                });
+            } catch(e) { console.error("Counter listener error", e); }
+        }
+        listenInvoiceCounters();
+
+        // --- MANUAL INVOICE INPUT TRACKER ---
+        document.getElementById('customInvNo').addEventListener('input', function(e) {
+            vibrateApp(10);
+            // Check if the user completely cleared the box out
+            if (e.target.value.trim() === '') {
+                this.dataset.manual = "false";
+            } else {
+                this.dataset.manual = "true";
+            }
+            // Trigger UI update to show or hide the hint
+            renderCart(); 
+        });
+
+        // --- ADVANCED SMART SORTING ALGORITHM ---
+        function advancedSort(items, searchTerm = '') {
+            const term = searchTerm.toLowerCase().trim();
+            return items.sort((a, b) => {
+                const aName = (a.name || '').toLowerCase();
+                const bName = (b.name || '').toLowerCase();
+                
+                const isAOutOfStock = (a.qty || 0) === 0;
+                const isBOutOfStock = (b.qty || 0) === 0;
+
+                const isAExact = term && (aName === term || (a.model || '').toLowerCase() === term);
+                const isBExact = term && (bName === term || (b.model || '').toLowerCase() === term);
+
+                if (isAOutOfStock && !isBOutOfStock) return 1;
+                if (!isAOutOfStock && isBOutOfStock) return -1;
+                
+                if (isAExact && !isBExact) return -1;
+                if (!isAExact && isBExact) return 1;
+
+                if (term) {
+                    const aStarts = aName.startsWith(term);
+                    const bStarts = bName.startsWith(term);
+                    if (aStarts && !bStarts) return -1;
+                    if (!aStarts && bStarts) return 1;
+                }
+
+                return 0; 
+            });
+        }
+
+        // --- NEW SERVER-SIDE INVENTORY SEARCH LOGIC WITH PAGINATION ---
+        const searchInput = document.getElementById('pSearch');
+        const suggestionsBox = document.getElementById('pSuggestions');
+        let searchTimeout;
+
+        // --- NEW PAGINATION VARIABLES FOR SUGGESTIONS ---
+        let suggLastVisible = null;
+        let suggIsFetching = false;
+        let suggHasMore = true;
+        let suggCurrentTerm = '';
+        let suggCache = [];
+
+        async function loadSuggestions(isLoadMore = false) {
+            if (isLoadMore) {
+                if (suggIsFetching || !suggHasMore) return;
+                suggIsFetching = true;
+                const loader = document.createElement('div');
+                loader.id = 'suggScrollLoader';
+                loader.style.cssText = "padding:10px; text-align:center; color:var(--accent-color); font-size:0.85em; font-weight:bold;";
+                loader.innerText = "Loading more...";
+                suggestionsBox.appendChild(loader);
+            } else {
+                suggHasMore = true;
+                suggLastVisible = null;
+                suggCache = [];
+                suggIsFetching = true;
+                suggestionsBox.style.display = 'block';
+                suggestionsBox.innerHTML = '<div style="padding:10px; color:var(--text-secondary);">Searching...</div>';
+            }
+
+            try {
+                const searchWords = suggCurrentTerm.toLowerCase().replace(/[.\/\\~*\[\]]/g, ' ').split(/[\s\-_]+/).filter(w => w.trim().length > 0);
+                if (searchWords.length === 0) {
+                    suggestionsBox.style.display = 'none';
+                    suggIsFetching = false;
+                    return;
+                }
+
+                let q = collection(db, "inventory");
+                searchWords.forEach(word => {
+                    q = query(q, where(`searchTokens.${word}`, "==", true));
+                });
+
+                if (isLoadMore && suggLastVisible) {
+                    q = query(q, startAfter(suggLastVisible), limit(15));
+                } else {
+                    q = query(q, limit(15));
+                }
+
+                const snap = await getDocs(q);
+
+                if (snap.empty) {
+                    suggHasMore = false;
+                    if (isLoadMore && document.getElementById('suggScrollLoader')) {
+                        document.getElementById('suggScrollLoader').innerText = "End of results";
+                        setTimeout(() => { if(document.getElementById('suggScrollLoader')) document.getElementById('suggScrollLoader').style.display = 'none'; }, 1000);
+                    } else if (!isLoadMore) {
+                        suggestionsBox.innerHTML = '<div style="padding:10px; color:var(--text-secondary);">No items found. Check "Non-Stock" to add manually.</div>';
+                    }
+                    suggIsFetching = false;
+                    return;
+                }
+
+                suggLastVisible = snap.docs[snap.docs.length - 1];
+
+                let newItems = [];
+                snap.forEach(doc => {
+                    if(!suggCache.find(i => i.id === doc.id)) {
+                        newItems.push({ id: doc.id, ...doc.data() });
+                    }
+                });
+
+                newItems = advancedSort(newItems, suggCurrentTerm);
+                suggCache = suggCache.concat(newItems);
+
+                if (isLoadMore) {
+                    if (document.getElementById('suggScrollLoader')) document.getElementById('suggScrollLoader').remove();
+                    renderSuggestionsAppend(newItems);
+                } else {
+                    suggestionsBox.innerHTML = '';
+                    renderSuggestionsAppend(newItems);
+                }
+            } catch (error) {
+                console.error("Search error:", error);
+                if (!isLoadMore) suggestionsBox.innerHTML = '<div style="padding:10px; color:var(--meena-red);">Error searching database.</div>';
+            } finally {
+                suggIsFetching = false;
+            }
+        }
+
+        function renderSuggestionsAppend(dataArray) {
+            dataArray.forEach(d => {
+                const stockClass = d.qty <= 0 ? 'zero' : '';
+                const stockText = d.qty <= 0 ? 'Out of Stock' : `${d.qty} in stock`;
+                
+                const div = document.createElement('div'); 
+                div.className = 'suggestion-item';
+                div.innerHTML = `
+                    <div>
+                        <div class="s-name">${d.name}</div>
+                        <div style="font-size:0.8em; color:var(--text-secondary);">${d.model || 'No ID'} • Price: ₹${d.price}</div>
+                    </div>
+                    <div class="s-stock ${stockClass}">${stockText}</div>
+                `;
+                div.onclick = () => {
+                    vibrateApp(15);
+                    document.getElementById('pInvId').value = d.id;
+                    document.getElementById('pCurrentStock').value = d.qty || 0;
+                    document.getElementById('pName').value = d.name;
+                    document.getElementById('pModel').value = d.model || '';
+                    document.getElementById('pPrice').value = d.price || '';
+                    document.getElementById('pQty').value = 1;
+                    document.getElementById('pDiscount').value = '0'; 
+                    document.getElementById('pNonStock').checked = false; 
+                    
+                    searchInput.value = '';
+                    suggestionsBox.style.display = 'none';
+                };
+                suggestionsBox.appendChild(div);
+            });
+        }
+
+        // Infinite scroll for suggestions box
+        suggestionsBox.addEventListener('scroll', (e) => {
+            const element = e.target;
+            if (element.scrollHeight - element.scrollTop <= element.clientHeight + 20) {
+                loadSuggestions(true);
+            }
+        });
+
+        // --- NEW PAGINATED SEARCH LISTENER ---
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            const val = e.target.value.trim().toLowerCase();
+            
+            if(val.length < 2) {
+                suggestionsBox.style.display = 'none';
+                return;
+            }
+
+            searchTimeout = setTimeout(() => {
+                suggCurrentTerm = val;
+                loadSuggestions(false);
+            }, 400);
+        });
+
+        // Hide suggestions on outside click
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                suggestionsBox.style.display = 'none';
+            }
+        });
+
+        // --- CART LOGIC ---
+        let cartItems = [];
+        let billTotals = { sub: 0, gst: 0, discount: 0, grand: 0 }; 
+
+        document.getElementById('btnAddCart').addEventListener('click', () => {
+            vibrateApp(30);
+            const name = document.getElementById('pName').value.trim();
+            const model = document.getElementById('pModel').value.trim();
+            const price = parseFloat(document.getElementById('pPrice').value) || 0;
+            const qty = parseInt(document.getElementById('pQty').value) || 1;
+            const discount = parseFloat(document.getElementById('pDiscount').value) || 0; 
+            const gstPercent = parseFloat(document.getElementById('pGst').value) || 0;
+            const isNonStock = document.getElementById('pNonStock').checked;
+            
+            const invId = document.getElementById('pInvId').value;
+            const currentStock = parseInt(document.getElementById('pCurrentStock').value) || 0;
+
+            if (!name || price <= 0 || qty < 1) {
+                showToast("Enter valid product details (Name, Price > 0, Qty > 0)."); return;
+            }
+
+            // --- REALTIME DUPLICATE & STOCK VALIDATION LOGIC ---
+            // Using the stock count captured securely at the exact moment of search
+            let realtimeStock = currentStock; 
+            let existingItemIndex = -1;
+
+            if (!isNonStock) {
+                if (!invId) {
+                    showToast("Please select a product from the search dropdown, or mark as 'Non-Stock'."); return;
+                }
+                
+                // Check if this exact item is already in the cart so we don't duplicate rows
+                existingItemIndex = cartItems.findIndex(item => item.invId === invId && item.gstPercent === gstPercent);
+                let existingCartQty = existingItemIndex > -1 ? cartItems[existingItemIndex].qty : 0;
+                
+                // Validate against the realtime DB stock limit
+                if ((qty + existingCartQty) > realtimeStock) {
+                    showToast(`Not enough stock! Only ${realtimeStock} available in inventory.`); return;
+                }
+            } else {
+                // Check if non-stock item matches an existing row to merge quantities
+                existingItemIndex = cartItems.findIndex(item => item.name === name && item.isNonStock && item.price === price && item.gstPercent === gstPercent);
+            }
+
+            // Calculate amounts (Price is considered INCLUSIVE of GST, but discount is reduced first)
+            // Fix applied: Using strict rounding Number(.toFixed(2)) to prevent float errors on GST breakdown
+            const grossTotal = price * qty;
+            const finalTotal = Math.max(0, grossTotal - discount); 
+            const baseTotal = Number((finalTotal / (1 + (gstPercent / 100))).toFixed(2));
+            const gstAmount = Number((finalTotal - baseTotal).toFixed(2));
+            const originalUnitPriceBase = Number((price / (1 + (gstPercent / 100))).toFixed(2));
+
+            if (existingItemIndex > -1) {
+                // If the product is already in the cart, merge quantities (No Duplicates)
+                let item = cartItems[existingItemIndex];
+                item.qty += qty;
+                item.discount += discount; 
+                item.finalTotal = Math.max(0, (item.price * item.qty) - item.discount); 
+                item.baseTotal = Number((item.finalTotal / (1 + (item.gstPercent / 100))).toFixed(2));
+                item.gstAmount = Number((item.finalTotal - item.baseTotal).toFixed(2));
+            } else {
+                // Pushes securely into the cart items mapping
+                cartItems.push({
+                    invId: isNonStock ? null : invId,
+                    name, model, price, qty, discount, gstPercent, gstAmount, baseTotal, finalTotal, isNonStock, originalUnitPriceBase
+                });
+            }
+
+            // Clear Form
+            document.getElementById('pInvId').value = '';
+            document.getElementById('pCurrentStock').value = '0';
+            document.getElementById('pName').value = '';
+            document.getElementById('pModel').value = '';
+            document.getElementById('pPrice').value = '';
+            document.getElementById('pQty').value = '1';
+            document.getElementById('pDiscount').value = '0'; 
+            document.getElementById('pGst').value = '0';
+            document.getElementById('pNonStock').checked = false;
+
+            renderCart();
+        });
+
+        window.removeCartItem = function(index) {
+            vibrateApp(20);
+            // When deleted from the UI, the item is dropped from the array. 
+            // Because stock is only *actually* deducted from the DB on 'Save Bill', 
+            // dropping it from the local cart automatically puts the held local stock back into availability!
+            cartItems.splice(index, 1);
+            renderCart();
+        };
+
+        function renderCart() {
+            const list = document.getElementById('cartList');
+            const btnSave = document.getElementById('btnSaveBill');
+            
+            billTotals = { sub: 0, gst: 0, discount: 0, grand: 0 }; 
+
+            if (cartItems.length === 0) {
+                list.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-secondary);">Bill is empty</div>';
+                document.getElementById('uiSub').innerText = '₹0.00';
+                document.getElementById('uiGst').innerText = '₹0.00';
+                document.getElementById('uiDiscountRow').style.display = 'none'; 
+                document.getElementById('uiGrand').innerText = '₹0.00';
+                btnSave.disabled = true;
+                
+                document.getElementById('invoiceNoContainer').style.display = 'none';
+                document.getElementById('customInvNo').value = '';
+                document.getElementById('customInvNo').dataset.type = '';
+                document.getElementById('customInvNo').dataset.manual = "false";
+                document.getElementById('liveSequenceHint').style.display = 'none';
+                
+                return;
+            }
+
+            list.innerHTML = '';
+            cartItems.forEach((item, i) => {
+                billTotals.sub += item.baseTotal;
+                billTotals.gst += item.gstAmount;
+                billTotals.discount += (item.discount || 0); 
+                billTotals.grand += item.finalTotal;
+
+                const tags = `
+                    ${item.isNonStock ? '<span class="ns-tag">NON-STOCK</span>' : ''}
+                    ${item.gstPercent > 0 ? `<span class="gst-tag">GST ${item.gstPercent}%</span>` : ''}
+                    ${(item.discount || 0) > 0 ? `<span class="ns-tag" style="background:rgba(255,51,51,0.2);color:var(--meena-red);">DISC ₹${item.discount}</span>` : ''}
+                `;
+
+                list.innerHTML += `
+                    <div class="cart-item">
+                        <div class="c-details">
+                            <div class="c-title">${item.name} x${item.qty}</div>
+                            <div class="c-meta">${item.model ? item.model + ' • ' : ''}₹${formatCurrency(item.price)} / unit ${tags}</div>
+                        </div>
+                        <div class="c-price">₹${formatCurrency(item.finalTotal)}</div>
+                        <button class="c-del" onclick="removeCartItem(${i})"><span class="material-symbols-outlined">delete</span></button>
+                    </div>
+                `;
+            });
+
+            // REALTIME GST DETECTION & INVOICE NUMBER ALLOCATION
+            const hasGst = cartItems.some(item => item.gstPercent > 0);
+            const invNoContainer = document.getElementById('invoiceNoContainer');
+            const customInvNo = document.getElementById('customInvNo');
+            const invTypeBadge = document.getElementById('invTypeBadge');
+            const sequenceHint = document.getElementById('liveSequenceHint');
+            const sequenceHintText = document.getElementById('sequenceHintText');
+
+            invNoContainer.style.display = 'block';
+            
+            const liveGstNo = `GST-${nextGstNo.toString().padStart(4, '0')}`;
+            const liveNormalNo = `INV-${nextNormalNo.toString().padStart(4, '0')}`;
+            const isManualOverride = customInvNo.dataset.manual === "true";
+            const targetLiveNo = hasGst ? liveGstNo : liveNormalNo;
+
+            if (hasGst) {
+                invTypeBadge.innerText = 'GST BILL DETECTED';
+                invTypeBadge.style.color = 'var(--success-color)';
+                invTypeBadge.style.background = 'rgba(0, 200, 83, 0.2)';
+            } else {
+                invTypeBadge.innerText = 'NORMAL BILL';
+                invTypeBadge.style.color = 'var(--warning-color)';
+                invTypeBadge.style.background = 'rgba(255, 152, 0, 0.2)';
+            }
+
+            if (isManualOverride) {
+                // Cashier is typing: Show the beautiful gradient hint below
+                sequenceHint.style.display = 'flex';
+                sequenceHintText.innerText = `Next Available Sequence: ${targetLiveNo}`;
+            } else {
+                // Auto-mode: Hide hint and update input automatically
+                sequenceHint.style.display = 'none';
+                customInvNo.value = targetLiveNo;
+                customInvNo.dataset.type = hasGst ? 'GST' : 'NORMAL';
+            }
+
+            document.getElementById('uiSub').innerText = `₹${formatCurrency(billTotals.sub)}`;
+            document.getElementById('uiGst').innerText = `₹${formatCurrency(billTotals.gst)}`;
+            
+            const uiDiscRow = document.getElementById('uiDiscountRow');
+            if (billTotals.discount > 0) {
+                uiDiscRow.style.display = 'flex';
+                document.getElementById('uiDiscount').innerText = `-₹${formatCurrency(billTotals.discount)}`;
+            } else {
+                uiDiscRow.style.display = 'none';
+            }
+
+            document.getElementById('uiGrand').innerText = `₹${formatCurrency(billTotals.grand)}`;
+            btnSave.disabled = false;
+        }
+
+        // --- SAVE BILL & BULLETPROOF STEALTH INVENTORY DEDUCTION ---
+        let isSavingBill = false; 
+        
+        document.getElementById('btnSaveBill').addEventListener('click', async () => {
+            if (isSavingBill) return; 
+
+            vibrateApp(40);
+
+            const cName = document.getElementById('cName').value.trim();
+            const cPhone = document.getElementById('cPhone').value.trim();
+            const cAddress = document.getElementById('cAddress').value.trim();
+            const cDate = document.getElementById('cDate').value;
+            const cPaymentMode = document.getElementById('cPaymentMode').value;
+
+            if (!cName) { showToast("Customer Name is required."); return; }
+            if (cartItems.length === 0) return;
+
+            isSavingBill = true;
+            const btnSave = document.getElementById('btnSaveBill');
+            btnSave.disabled = true;
+            btnSave.style.pointerEvents = 'none';
+            btnSave.innerHTML = '<span class="spinner"></span> Saving...';
+
+            try {
+                // Grab the fresh user name before locking the transaction
+                const realEditorName = await window.getFreshUserName();
+
+                // Start the strict all-or-nothing Transaction
+                const finalInvNo = await runTransaction(db, async (transaction) => {
+                    
+                    // 1. PERFORM ALL READS FIRST (Strict Firebase Requirement)
+                    const counterRef = doc(db, "settings", "invoiceCounters");
+                    const counterDoc = await transaction.get(counterRef);
+                    
+                    const stockItems = cartItems.filter(item => !item.isNonStock && item.invId);
+                    const invDocs = {};
+                    
+                    for (const item of stockItems) {
+                        const invRef = doc(db, "inventory", item.invId);
+                        const invSnap = await transaction.get(invRef);
+                        
+                        if (!invSnap.exists()) {
+                            throw new Error(`Product ${item.name} not found in database!`);
+                        }
+                        
+                        // Validate stock in realtime during transaction
+                        const liveStock = invSnap.data().qty || 0;
+                        if (liveStock < item.qty) {
+                            throw new Error(`Real-time stock check failed: Not enough stock for ${item.name}.`);
+                        }
+                        
+                        invDocs[item.invId] = { ref: invRef, data: invSnap.data() };
+                    }
+
+                    // 2. LOGIC PREPARATION
+                    let currentGst = 1, currentNormal = 1;
+                    if (counterDoc.exists()) {
+                        currentGst = counterDoc.data().nextGst || 1;
+                        currentNormal = counterDoc.data().nextNormal || 1;
+                    }
+
+                    const hasGst = cartItems.some(item => item.gstPercent > 0);
+                    const liveGstNo = `GST-${currentGst.toString().padStart(4, '0')}`;
+                    const liveNormalNo = `INV-${currentNormal.toString().padStart(4, '0')}`;
+                    const targetLiveNo = hasGst ? liveGstNo : liveNormalNo;
+
+                    let customVal = document.getElementById('customInvNo').value.trim();
+                    let invNo = targetLiveNo;
+                    let shouldIncrement = true;
+
+                    // Manual Invoice Catch
+                    if (customVal && customVal !== targetLiveNo) {
+                        invNo = customVal;
+                        shouldIncrement = false; 
+                    }
+
+                    // 3. PERFORM ALL WRITES
+                    
+                    // A. Record the Sellings Document
+                    const sellRef = doc(collection(db, "sellings"));
+                    const purchasedProductNames = cartItems.map(item => item.name);
+                    
+                    transaction.set(sellRef, {
+                        invoiceNo: invNo,
+                        invoiceType: hasGst ? 'GST' : 'NORMAL',
+                        customer: { name: cName, phone: cPhone, address: cAddress },
+                        paymentMode: cPaymentMode,
+                        date: cDate ? new Date(cDate) : serverTimestamp(),
+                        items: cartItems,
+                        purchasedProductNames: purchasedProductNames,
+                        totals: billTotals,
+                        createdAt: serverTimestamp(),
+                        billedBy: realEditorName
+                    });
+
+                    // B. Deduct Inventory & Update Arrays (Stealth Mode)
+                    for (const item of stockItems) {
+                        const docData = invDocs[item.invId].data;
+                        const invRef = invDocs[item.invId].ref;
+                        
+                        let currentHistory = docData.history || [];
+                        let currentQty = docData.qty || 0;
+                        let newQty = currentQty - item.qty;
+
+                        // Legacy Initialization Injection
+                        if (currentHistory.length === 0) {
+                            currentHistory.push({
+                                action: "System Initialization",
+                                qtyChange: currentQty,
+                                prevQty: 0,
+                                newQty: currentQty,
+                                date: new Date().toISOString(),
+                                by: "System",
+                                reason: "Legacy tracking started"
+                            });
+                        }
+                        
+                        // New Sale Footprint
+                        currentHistory.push({
+                            action: "Sale / Billed",
+                            qtyChange: -item.qty,
+                            prevQty: currentQty,
+                            newQty: newQty,
+                            invoiceNo: invNo,
+                            date: new Date().toISOString(),
+                            by: realEditorName,
+                            reason: "Stock deducted via billing"
+                        });
+
+                        // STEALTH WRITE: Push qty and history without touching lastUpdated/createdAt
+                        transaction.update(invRef, {
+                            qty: newQty,
+                            history: currentHistory
+                        });
+                    }
+
+                    // C. Update System Invoice Counters (ONLY if not skipped)
+                    if (shouldIncrement) {
+                        let counterUpdates = {};
+                        if (hasGst) {
+                            counterUpdates.nextGst = currentGst + 1;
+                            counterUpdates.nextNormal = currentNormal; 
+                        } else {
+                            counterUpdates.nextGst = currentGst; 
+                            counterUpdates.nextNormal = currentNormal + 1;
+                        }
+                        transaction.set(counterRef, counterUpdates, { merge: true });
+                    }
+
+                    return invNo; 
+                });
+
+                showToast("Bill Saved Successfully!", "success");
+                vibrateApp([30, 50, 30]); // Heavy success vibration
+                
+                // Hide Save, Show Print button, and build print layout
+                btnSave.style.display = "none";
+                document.getElementById('btnPrintBill').style.display = "flex";
+                
+                buildPrintLayout(finalInvNo, cName, cPhone, cAddress, cDate, cPaymentMode);
+
+            } catch (err) {
+                console.error("Billing Error", err);
+                showToast(err.message || "Error processing bill. Check connection and try again.");
+                
+                // Release Lock On Error
+                isSavingBill = false;
+                btnSave.disabled = false;
+                btnSave.style.pointerEvents = 'auto';
+                btnSave.innerHTML = `<span class="material-symbols-outlined">save</span> Save Bill`;
+            }
+        });
+
+        // --- UPDATED JS FOR 5-COLUMN PRINT LAYOUT WITH FIXED PAGINATION ---
+        function buildPrintLayout(invNo, cName, cPhone, cAddress, cDate, cPaymentMode) {
+            // Fill Customer & Meta
+            document.getElementById('prName').innerText = cName;
+            document.getElementById('prPhone').innerText = cPhone || 'N/A';
+            document.getElementById('prAddress').innerText = cAddress || 'N/A';
+            
+            if(document.getElementById('prPaymentMode')) {
+                document.getElementById('prPaymentMode').innerText = cPaymentMode || 'Cash / UPI / Bank Transfer';
+            }
+
+            document.getElementById('prInvNo').innerText = invNo;
+            
+            // Format Date nicely
+            let dObj = cDate ? new Date(cDate) : new Date();
+            document.getElementById('prDate').innerText = `${dObj.getDate().toString().padStart(2, '0')}-${(dObj.getMonth()+1).toString().padStart(2, '0')}-${dObj.getFullYear()}`;
+
+            // Fill Table
+            const tbody = document.getElementById('prTableBody');
+            tbody.innerHTML = '';
+            
+            // --- SMART ALGORITHM: Pad items to strictly force 5 items per chunk ---
+            // This guarantees the printed middle height is ALWAYS identical, flawlessly pushing 
+            // the footer securely to the bottom of the last page, regardless of whether you print 2 or 6 items.
+            let printItems = [...cartItems];
+            const maxRowsPerPage = 5;
+            const remainder = printItems.length % maxRowsPerPage;
+            
+            if (remainder !== 0 || printItems.length === 0) {
+                const padCount = printItems.length === 0 ? maxRowsPerPage : (maxRowsPerPage - remainder);
+                for(let i = 0; i < padCount; i++) {
+                    printItems.push({ isEmptyRow: true });
+                }
+            }
+
+            printItems.forEach((item, index) => {
+                if (item.isEmptyRow) {
+                    // Inject invisible spacing row to maintain physical space for pagination structure
+                    // FIXED: Removed borders for empty padding rows so they appear as completely blank space
+                    tbody.innerHTML += `
+                        <tr style="height: 25mm; max-height: 25mm;">
+                            <td style="border-bottom: none !important;"></td>
+                            <td style="border-bottom: none !important;"></td>
+                            <td style="border-bottom: none !important;"></td>
+                            <td style="border-bottom: none !important;"></td>
+                            <td style="border-bottom: none !important;"></td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                const num = (index + 1).toString().padStart(2, '0');
+                
+                const gstText = item.gstPercent > 0 ? ` • GST: ${item.gstPercent}%` : '';
+                const discText = (item.discount || 0) > 0 ? ` • Discount: -₹${item.discount}` : ''; 
+                
+                const desc = `
+                    <strong style="font-size:13px; display:block; color:var(--pv-header-text, #000); padding-bottom: 3px;">${item.name}</strong>
+                    <span style="font-size:11px; color:var(--pv-header-sub, #555);">${item.model ? 'Model: '+item.model : 'Standard Item'}${gstText}${discText}</span>
+                `;
+                
+                // NEW LOGIC: Check if this is the last actual product in the cart
+                const isLastProduct = (index === cartItems.length - 1);
+                
+                // Applies the Theme Engine's '--pv-border-style' to all items EXCEPT the last one
+                const dynamicBorder = isLastProduct ? 'none !important' : 'var(--pv-border-style, 1px solid #ddd) !important';
+                
+                tbody.innerHTML += `
+                    <tr style="height: 25mm; max-height: 25mm;">
+                        <td style="white-space: nowrap; border-bottom: ${dynamicBorder};">${num}.</td>
+                        <td style="border-bottom: ${dynamicBorder};">${desc}</td>
+                        <td class="text-right" style="white-space: nowrap; border-bottom: ${dynamicBorder};">₹${item.originalUnitPriceBase.toFixed(2)}</td>
+                        <td class="text-center" style="white-space: nowrap; border-bottom: ${dynamicBorder};">${item.qty.toString().padStart(2, '0')}</td>
+                        <td class="text-right" style="white-space: nowrap; font-weight:bold; color:var(--pv-header-text, #000); border-bottom: ${dynamicBorder};">₹${item.finalTotal.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+
+            // Fill Totals
+            document.getElementById('prSubTotal').innerText = `₹${billTotals.sub.toFixed(2)}`;
+            
+            // CGST and SGST precision split math trick to ensure exact match of total GST
+            const halfGst = Number((billTotals.gst / 2).toFixed(2));
+            const sgst = Number((billTotals.gst - halfGst).toFixed(2));
+            document.getElementById('prCgstTotal').innerText = `₹${halfGst.toFixed(2)}`;
+            document.getElementById('prSgstTotal').innerText = `₹${sgst.toFixed(2)}`;
+            
+            document.getElementById('prGstTotal').innerText = `₹${billTotals.gst.toFixed(2)}`;
+
+            const prDiscRow = document.getElementById('prDiscountRow');
+            if (billTotals.discount > 0) {
+                prDiscRow.style.display = 'table-row';
+                document.getElementById('prDiscountTotal').innerText = `-₹${billTotals.discount.toFixed(2)}`;
+            } else {
+                prDiscRow.style.display = 'none';
+            }
+
+            document.getElementById('prGrandTotal').innerText = `₹${billTotals.grand.toFixed(2)}`;
+
+            // Render Dynamic QR Code Engine using the stored global config
+            const qrContainer = document.getElementById('prQrCodeContainer');
+            const qrPlaceholder = document.getElementById('prQrPlaceholder');
+            qrContainer.innerHTML = ''; 
+
+            if(globalThemeConfig.upiId && globalThemeConfig.upiId.trim() !== '') {
+                qrPlaceholder.style.display = 'none';
+                qrContainer.style.display = 'block';
+                new QRCode(qrContainer, {
+                    text: `upi://pay?pa=${globalThemeConfig.upiId.trim()}&pn=Meena%20Marketing&am=${billTotals.grand.toFixed(2)}`, 
+                    width: 60,
+                    height: 60,
+                    colorDark : "#000000", // FIXED: Forced to black to ensure scannability regardless of user accent choice
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+            } else {
+                qrPlaceholder.style.display = 'block';
+                qrContainer.style.display = 'none';
+            }
+        }
+
+        // --- RESET FORM AUTOMATICALLY AFTER PRINTING ---
+        window.addEventListener('afterprint', () => {
+            const btnPrint = document.getElementById('btnPrintBill');
+            const btnSave = document.getElementById('btnSaveBill');
+            
+            // Check if we just printed a generated bill (Print button is visible)
+            if (btnPrint.style.display === "flex" || window.getComputedStyle(btnPrint).display !== "none") {
+                
+                // 1. Reset Customer Details
+                document.getElementById('cName').value = '';
+                document.getElementById('cPhone').value = '';
+                document.getElementById('cAddress').value = '';
+                document.getElementById('cPaymentMode').value = 'Cash';
+                
+                // 2. Clear Cart & Re-render (This automatically resets totals & disables the Save button)
+                cartItems.splice(0, cartItems.length);
+                renderCart();
+
+                // 3. Swap buttons back to default state and release locks
+                btnPrint.style.display = "none";
+                btnSave.style.display = "flex";
+                
+                btnSave.disabled = true; // Disabled because cart is completely empty now
+                btnSave.style.pointerEvents = 'auto';
+                btnSave.innerHTML = '<span class="material-symbols-outlined">save</span> Save Bill';
+                isSavingBill = false;
+                
+                // 4. Reset Manual Overrides & Hints safely for the next customer
+                const customInvNo = document.getElementById('customInvNo');
+                customInvNo.dataset.manual = "false";
+                document.getElementById('liveSequenceHint').style.display = 'none';
+            }
+        });
+
+        // --- ENTER & ARROW KEYS FIELD NAVIGATION LOGIC ---
+        document.getElementById('appUI').addEventListener('keydown', function (e) {
+            const navKeys = ['Enter', 'ArrowDown', 'ArrowUp'];
+            if (!navKeys.includes(e.key)) return;
+
+            const target = e.target;
+
+            // 1. Allow buttons to be activated naturally with Enter
+            if (target.tagName === 'BUTTON' && e.key === 'Enter') {
+                return; 
+            }
+
+            // 2. Safeguards for Arrow Keys: 
+            // Do NOT intercept Up/Down arrows if the user is interacting with dropdowns, 
+            // number inputs, or the product search autocomplete box.
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                if (target.tagName === 'SELECT') return; 
+                if (target.tagName === 'INPUT' && target.type === 'number') return;
+                if (target.id === 'pSearch' && document.getElementById('pSuggestions').style.display === 'block') return;
+            }
+
+            // 3. Gather all currently visible, non-disabled interactive elements inside the form
+            const fields = Array.from(
+                document.querySelectorAll('#appUI input:not([type="hidden"]):not([disabled]), #appUI select:not([disabled]), #appUI button:not([disabled]):not(.c-del)')
+            ).filter(el => {
+                // Ensure elements are physically visible on the screen (handles conditional elements like invoice number)
+                return el.offsetWidth > 0 || el.offsetHeight > 0;
+            });
+
+            const currentIndex = fields.indexOf(target);
+            if (currentIndex === -1) return;
+
+            // 4. Perform Navigation
+            if (e.key === 'Enter' || e.key === 'ArrowDown') {
+                // Move Forward
+                if (currentIndex < fields.length - 1) {
+                    e.preventDefault(); // Stop default form submissions or screen scrolling
+                    const nextField = fields[currentIndex + 1];
+                    nextField.focus();
+                    
+                    // Auto-highlight existing text for faster replacement typing
+                    if (nextField.tagName === 'INPUT' && typeof nextField.select === 'function') {
+                        nextField.select();
+                    }
+                }
+            } else if (e.key === 'ArrowUp') {
+                // Move Backward
+                if (currentIndex > 0) {
+                    e.preventDefault();
+                    const prevField = fields[currentIndex - 1];
+                    prevField.focus();
+                    
+                    if (prevField.tagName === 'INPUT' && typeof prevField.select === 'function') {
+                        prevField.select();
+                    }
+                }
+            }
+        });
+
     </script>
 </body>
 </html>
