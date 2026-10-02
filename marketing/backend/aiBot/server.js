@@ -13,6 +13,7 @@
  * 9. Smart Key Pool: 1-Minute Cooldowns for Rate Limits & 10-Minute Cooldowns for 403/404.
  * 10. In-Band Notice Injection: Alerts users directly in chat if a failover occurred.
  * 11. High-Speed Vision Processing: In-memory image compression (Sharp) to KB sizes.
+ * 12. Forensic Audit Engine: Dedicated `/auditChat` endpoint for timeline math and discrepancy checks.
  */
 
 // ============================================================================
@@ -92,7 +93,8 @@ db.collection('inventory').onSnapshot((snapshot) => {
                 name: d.name || 'Unknown',
                 model: d.model || 'N/A',
                 qty: d.qty || 0,
-                price: d.price || 0 // Included price to ensure AI can answer pricing queries
+                price: d.price || 0, // Included price to ensure AI can answer pricing queries
+                history: d.history || [] // Appended full ledger history for /auditChat endpoint
             });
         }
         
@@ -197,6 +199,36 @@ CURRENT STORE INVENTORY (Name | Model | Qty | Selling Price):
 ${inventoryText}`;
 }
 
+// New dedicated prompt for highly specialized Forensic Auditing (History Array included, Price Excluded)
+function getAuditSystemPrompt() {
+    // Formats name, model, qty, and tightly compressed history array to save tokens
+    const inventoryText = inventoryMemory
+        .map(item => {
+            let historyLog = "No History";
+            if (item.history && item.history.length > 0) {
+                historyLog = item.history.map(h => 
+                    `[Act:${h.action}|Chg:${h.qtyChange}|Prev:${h.prevQty}|New:${h.newQty}|By:${h.by}]`
+                ).join(' -> ');
+            }
+            return `${item.name} | ${item.model} | Qty:${item.qty} | Ledger: ${historyLog}`;
+        })
+        .join('\n');
+
+    return `Role: Forensic Inventory Auditor for Meena Marketing.
+Task: Verify mathematical timelines, spot discrepancies, and explain stock history.
+Audience: Store Owner / Admin.
+
+STRICT OPERATING RULES:
+1. Language: Tanglish (Spoken Tamil + English). Use "இருக்கு", "மாத்தியிருக்காங்க", "செக் பண்ணுங்க".
+2. Banned Formal Tamil: Strictly avoid ancient/formal words.
+3. Analysis: Recalculate running balances based on the provided history. If math doesn't match current stock, flag it immediately.
+4. Explanations: Keep it short, sharp, and highly professional. State if the stock is accurate or tampered with.
+5. No "Qty": Always use the word "Stock".
+
+CURRENT STORE INVENTORY & AUDIT LEDGERS:
+${inventoryText}`;
+}
+
 // New dedicated prompt for hyper-fast visual processing
 function getVisionSystemPrompt() {
     const inventoryText = inventoryMemory
@@ -223,6 +255,15 @@ ${inventoryText}`;
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Gracefully catch malformed JSON from bots/scanners so it doesn't spam the logs
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        console.warn(`[Security] Blocked malformed bot ping (Invalid JSON).`);
+        return res.status(400).json({ error: "Invalid JSON payload" });
+    }
+    next();
+});
 
 const server = http.createServer(app);
 
@@ -472,6 +513,7 @@ app.get('/', (req, res) => {
 
         .method.post { background: rgba(6, 182, 212, 0.15); color: var(--cyan); border: 1px solid rgba(6, 182, 212, 0.3); }
         .method.vision { background: rgba(139, 92, 246, 0.15); color: var(--purple); border: 1px solid rgba(139, 92, 246, 0.3); }
+        .method.audit { background: rgba(16, 185, 129, 0.15); color: var(--emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
 
         .endpoint-tag {
             color: var(--text-muted);
@@ -559,6 +601,14 @@ app.get('/', (req, res) => {
             </div>
             <div class="endpoint-row">
                 <div style="display: flex; align-items: center; gap: 14px;">
+                    <span class="method post audit">POST</span>
+                    <span>/auditChat</span>
+                    <span class="endpoint-tag">(Forensic Audit Logic via ${CHAT_MODEL})</span>
+                </div>
+                <div class="state-chip">HEALTHY</div>
+            </div>
+            <div class="endpoint-row">
+                <div style="display: flex; align-items: center; gap: 14px;">
                     <span class="method post vision">POST</span>
                     <span>/vision</span>
                     <span class="endpoint-tag">(Multimodal Image Match via ${CHAT_MODEL})</span>
@@ -613,6 +663,109 @@ app.post('/chat', async (req, res) => {
         
         const payload = {
             systemInstruction: { parts: [{ text: getSystemPrompt() }] },
+            contents: [
+                ...safeHistory, 
+                { role: "user", parts: [{ text: message }] }
+            ]
+        };
+
+        const maxAttempts = keyPool.length;
+        let finalResponseData = null;
+        let finalStatus = 500;
+        const keyAlerts = []; // Collects deprecation/error notices during failover
+
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+            const keyEntry = getNextKey();
+
+            if (!keyEntry) {
+                console.error("[Load Balancer] No active keys available.");
+                return res.status(503).json({ 
+                    error: "All keys are temporarily rate-limited or deprecated. Please check server configuration." 
+                });
+            }
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${CHAT_MODEL}:generateContent?key=${keyEntry.key}`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                
+                // --- SUCCESS ---
+                if (response.ok) {
+                    // Prepend any collected failover alerts to the final generated text
+                    if (keyAlerts.length > 0 && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+                        const alertPrefix = keyAlerts.join("\n") + "\n\n---\n\n";
+                        data.candidates[0].content.parts[0].text = alertPrefix + data.candidates[0].content.parts[0].text;
+                    }
+                    return res.json(data);
+                }
+
+                // --- 429: TEMPORARY RATE LIMIT ---
+                if (response.status === 429) {
+                    markKeyRateLimited(keyEntry, 60000);
+                    finalResponseData = data;
+                    finalStatus = response.status;
+                    continue; 
+                }
+
+                // --- 404 / 403: DEPRECATED / INVALID KEY (10 MINUTE LOCK) ---
+                if (response.status === 404 || response.status === 403) {
+                    const errorDesc = response.status === 404 
+                        ? `Key #${keyEntry.id} is deprecated or endpoint not found (HTTP 404)`
+                        : `Key #${keyEntry.id} has invalid credentials/permissions (HTTP 403)`;
+
+                    markKeyDeprecated(keyEntry, errorDesc);
+                    
+                    // Add notice to display with the final answer
+                    keyAlerts.push(`⚠️ [System Notice]: ${errorDesc}. Switched to backup key.`);
+                    
+                    finalResponseData = data;
+                    finalStatus = response.status;
+                    continue;
+                }
+
+                // --- 500+: TRANSIENT SERVER ERROR ---
+                if (response.status >= 500) {
+                    console.warn(`[Load Balancer] Google 5xx error on Key #${keyEntry.id}. Retrying next key...`);
+                    finalResponseData = data;
+                    finalStatus = response.status;
+                    continue;
+                }
+
+                // Client error (e.g. 400 Bad Request) - return without retry
+                return res.status(response.status).json(data);
+
+            } catch (fetchError) {
+                console.error(`[Load Balancer] Network fetch error on Key #${keyEntry.id}:`, fetchError.message);
+                finalResponseData = { error: "Network fetch failed during generation" };
+                finalStatus = 500;
+            }
+        }
+
+        // If loop completes without returning, all configured keys failed
+        res.status(finalStatus).json(finalResponseData);
+
+    } catch (error) {
+        console.error("[REST Error]", error);
+        res.status(500).json({ error: "Failed to generate text response" });
+    }
+});
+
+// REST Endpoint for Forensic Auditing (Text Chat Mode with History Ledger)
+app.post('/auditChat', async (req, res) => {
+    try {
+        const { history = [], message } = req.body;
+        
+        // Advanced Context Management: Enforce strict 20-message memory limit on the backend
+        const safeHistory = history.slice(-20);
+        
+        const payload = {
+            systemInstruction: { parts: [{ text: getAuditSystemPrompt() }] },
             contents: [
                 ...safeHistory, 
                 { role: "user", parts: [{ text: message }] }
