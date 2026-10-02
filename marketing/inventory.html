@@ -46,13 +46,14 @@
         .material-symbols-outlined svg { width: 1em; height: 1em; fill: currentColor; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
         header { background-color: #212121; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 500; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; width: 100%; box-sizing: border-box;}
-        .brand-container { display: flex; align-items: center; gap: 12px; }
-        .logo-img { width: 34px; height: 34px; border-radius: 8px; box-shadow: var(--shadow-md); }
-        .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
-        .brand-title { font-size: 1.1em; font-weight: 700; letter-spacing: -0.02em;}
+        .brand-container { display: flex; align-items: center; gap: 12px; min-width: 0;}
+        .logo-img { width: 34px; height: 34px; border-radius: 8px; box-shadow: var(--shadow-md); flex-shrink: 0;}
+        .brand-text { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+        /* STRICT WRAPPING FIX FOR MOBILE: white-space nowrap */
+        .brand-title { font-size: 1em; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         .meena { color: var(--meena-red); }
         .marketing { color: var(--marketing-white); }
-        .goorac { font-size: 0.7em; color: var(--text-secondary); font-weight: 500; }
+        .goorac { font-size: 0.7em; color: var(--text-secondary); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 
         #installPopup { display: none; position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background-color: var(--surface-color); padding: 14px 18px; border-radius: 16px; box-shadow: var(--shadow-lg); z-index: 1001; align-items: center; gap: 15px; width: 90%; max-width: 380px; border: 1px solid var(--input-border); }
         .install-img { width: 44px; height: 44px; border-radius: 10px; }
@@ -108,19 +109,23 @@
         .inv-mrp { text-decoration: line-through; font-size: 0.75em; color: var(--text-secondary); font-weight: 500; }
         .inv-myrate { font-size: 0.75em; color: #c084fc; background: rgba(147, 51, 234, 0.15); border: 1px solid rgba(147, 51, 234, 0.3); padding: 3px 10px; border-radius: 8px; font-weight: 700; letter-spacing: 0.5px; display: inline-block; margin-left: 4px;}
 
+        
         .inv-qty { background: rgba(13, 148, 136, 0.1); border: 1px solid rgba(13, 148, 136, 0.3); color: var(--accent-color); padding: 12px 16px; border-radius: 12px; font-weight: 700; font-size: 1.25em; text-align: center; min-width: 50px; flex-shrink: 0; margin-left: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;}
         .inv-qty.low { border-color: rgba(245, 158, 11, 0.4); color: var(--warning-color); background: rgba(245, 158, 11, 0.1); }
         .inv-qty.zero { border-color: rgba(239, 68, 68, 0.4); color: var(--meena-red); background: rgba(239, 68, 68, 0.1); font-size: 1em; padding: 12px 10px; }
 
         .oos-badge { position: absolute; top: 0; right: 0; background: linear-gradient(135deg, var(--meena-red), #b91c1c); color: white; font-size: 0.65em; padding: 4px 12px; border-bottom-left-radius: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: -2px 2px 8px rgba(0,0,0,0.2);}
 
-        /* UPGRADED: Professional Floating Glass Pill Navigation Bar */
+        /* UPGRADED: Smaller, Professional Floating Glass Pill Navigation Bar */
         .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(19, 27, 38, 0.7); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.12); display: flex; justify-content: space-evenly; align-items: center; padding: 6px 14px; z-index: 1000; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1); border-radius: 50px; width: auto; min-width: 280px; max-width: 380px; gap: 8px;}
         .nav-item { display: flex; justify-content: center; align-items: center; color: var(--text-secondary); width: 44px; height: 44px; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 50%;}
         .nav-item:hover { color: white; background: rgba(255, 255, 255, 0.08); }
         .nav-item:active { transform: scale(0.90); background: rgba(255, 255, 255, 0.15); }
         .nav-item .material-symbols-outlined { font-size: 24px; }
         .nav-item.active { color: var(--warning-color); background: rgba(245, 158, 11, 0.15); }
+        
+        /* Maintained for legacy compatibility if required by other scripts, unused in current clean UI */
+        .nav-fab-center { transform: translateY(-18px); background: linear-gradient(135deg, var(--success-color), #059669); width: 64px; height: 64px; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.2); border: 6px solid var(--bg-color); color: white; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); flex-shrink: 0;}
 
         .modal { position: fixed; top: 0; right: -100%; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 2000; transition: right 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); overflow-y: auto; padding-bottom: 80px; box-sizing: border-box; }
         .modal.active { right: 0; }
@@ -310,17 +315,17 @@
 
     <!-- UPGRADED: Native iOS Header with Back Arrow on the Left -->
     <header>
-        <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
             <span class="material-symbols-outlined" style="cursor: pointer; font-size: 24px; color: var(--text-secondary); margin-right: 4px; transition: color 0.2s;" onclick="vibrateApp(30); history.back()" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-secondary)'">arrow_back_ios</span>
             <div class="brand-container">
-                <img src="icon.png" alt="Icon" class="logo-img" style="width: 32px; height: 32px;">
+                <img src="icon.png" alt="Icon" class="logo-img">
                 <div class="brand-text">
                     <span class="brand-title"><span class="meena">Meena</span> <span class="marketing">Marketing</span></span>
                     <span class="goorac">Admin Console</span>
                 </div>
             </div>
         </div>
-        <div class="header-actions" style="display: flex; align-items: center; gap: 12px;">
+        <div class="header-actions" style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
             <span class="material-symbols-outlined" style="cursor: pointer; font-size: 28px; color: var(--info-color); transition: all 0.2s ease; filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));" onclick="vibrateApp(40); window.location.href='pending.html'" onmouseover="this.style.color='white'; this.style.transform='scale(1.1)'" onmouseout="this.style.color='var(--info-color)'; this.style.transform='scale(1)'">pending_actions</span>
             <span class="material-symbols-outlined" style="cursor: pointer; font-size: 28px; color: var(--warning-color); transition: all 0.2s ease; filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.5));" onclick="vibrateApp(40); window.location.href='offer.html'" onmouseover="this.style.color='white'; this.style.transform='scale(1.1)'" onmouseout="this.style.color='var(--warning-color)'; this.style.transform='scale(1)'">local_offer</span>
             <span class="material-symbols-outlined" style="cursor: pointer; font-size: 28px; color: var(--text-secondary); transition: color 0.2s;" onclick="vibrateApp(40); openAdminPanel()" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-secondary)'">admin_panel_settings</span>
@@ -1150,45 +1155,23 @@
         };
 
         let confirmResolve = null;
-        window.openConfirmModal = function(title, message, isPrompt = false, defaultValue = "", confirmColor = "var(--meena-red)", confirmText = "Confirm", isReasonMode = false, reasonModeType = "") {
+        window.openConfirmModal = function(title, message, isPrompt = false, defaultValue = "", confirmColor = "var(--meena-red)", confirmText = "Confirm") {
             vibrateApp(40);
             return new Promise((resolve) => {
                 document.getElementById('confirmTitle').innerText = title;
                 document.getElementById('confirmMessage').innerText = message;
                 
                 const input = document.getElementById('confirmInput');
-                const select = document.getElementById('confirmReasonSelect');
-                const btnAccept = document.getElementById('btnAcceptConfirm');
-
-                if (isReasonMode) {
-                    input.style.display = 'none';
-                    select.style.display = 'block';
-                    btnAccept.style.display = 'none'; 
-                    
-                    if (reasonModeType === "reduce") {
-                        select.innerHTML = `<option value="">Select reason...</option><option value="Sent to Meena Agency">Sent to Meena Agency</option><option value="Product Missing">Product Missing</option><option value="Damaged Product">Damaged Product</option><option value="Returned to Dealer">Returned to Dealer</option><option value="Gift to Customer">Gift to Customer</option>`;
-                    } else {
-                        select.innerHTML = `<option value="">Select reason...</option><option value="New Stock">New Stock</option><option value="Customer Return">Customer Return</option><option value="Counting Mistake">Counting Mistake</option>`;
-                    }
-
-                    select.onchange = () => {
-                        if (select.value !== "") btnAccept.style.display = 'block';
-                        else btnAccept.style.display = 'none';
-                    };
+                if (isPrompt) {
+                    input.style.display = 'block';
+                    input.value = defaultValue;
+                    setTimeout(() => input.focus(), 100);
                 } else {
-                    select.style.display = 'none';
-                    btnAccept.style.display = 'block';
-                    
-                    if (isPrompt) {
-                        input.style.display = 'block';
-                        input.value = defaultValue;
-                        setTimeout(() => input.focus(), 100);
-                    } else {
-                        input.style.display = 'none';
-                        input.value = '';
-                    }
+                    input.style.display = 'none';
+                    input.value = '';
                 }
 
+                const btnAccept = document.getElementById('btnAcceptConfirm');
                 btnAccept.style.backgroundColor = confirmColor;
                 if(confirmColor === "var(--meena-red)") {
                     btnAccept.style.boxShadow = "0 4px 15px rgba(239, 68, 68, 0.3)";
@@ -1229,11 +1212,7 @@
             vibrateApp(30);
             if(confirmResolve) {
                 const input = document.getElementById('confirmInput');
-                const select = document.getElementById('confirmReasonSelect');
-                
-                if (select.style.display === 'block') {
-                    confirmResolve(select.value);
-                } else if (input.style.display !== 'none') {
+                if (input.style.display !== 'none') {
                     confirmResolve(input.value);
                 } else {
                     confirmResolve(true);
@@ -1463,7 +1442,7 @@
                     
                     transaction.update(itemRef, {
                         history: newHistory,
-                        lastUpdated: new Date().toISOString()
+                        createdAt: serverTimestamp() // Admin forces top-of-feed bump
                     });
                 });
 
@@ -1570,6 +1549,111 @@
             if(window.updateIcons) window.updateIcons();
         };
 
+        // --- UPGRADED ADMIN EDIT: No Reason Required for Speed Edit ---
+        window.editQty = async function(id, currentQty) {
+            vibrateApp(30);
+            const item = inventoryCache.find(i => i.id === id);
+            if (!item) return;
+
+            const newQtyStr = await openConfirmModal("Quick Edit Quantity", `Enter new quantity for ${item.name}:`, true, currentQty, "var(--accent-color)", "Save Update");
+            if (newQtyStr === null || newQtyStr.trim() === "") return;
+            const parsedQty = parseInt(newQtyStr);
+            
+            if (isNaN(parsedQty) || parsedQty < 0) {
+                showToast("Please enter a valid number.", "error");
+                return;
+            }
+
+            if (parsedQty === currentQty) {
+                showToast("Quantity unchanged.", "success");
+                return;
+            }
+
+            // ADMIN BYPASS: No prompt needed, assume manual override
+            const reason = "Admin Quick Adjust";
+
+            try {
+                const itemRef = doc(db, "inventory", id);
+                const realEditorName = await getFreshUserName();
+                const qtyDiff = parsedQty - currentQty;
+                
+                await runTransaction(db, async (transaction) => {
+                    const docSnap = await transaction.get(itemRef);
+                    if (!docSnap.exists()) throw "Document does not exist!";
+                    
+                    const data = docSnap.data();
+                    let currentHistory = data.history || [];
+                    
+                    if (currentHistory.length === 0) {
+                        currentHistory.push({
+                            action: "System Initialization",
+                            qtyChange: currentQty,
+                            prevQty: 0,
+                            newQty: currentQty,
+                            date: new Date().toISOString(),
+                            by: "System",
+                            reason: "Legacy tracking started"
+                        });
+                    }
+                    
+                    currentHistory.push({
+                        action: qtyDiff > 0 ? "Stock Adjustment (Increase)" : "Stock Adjustment (Decrease)",
+                        qtyChange: qtyDiff,
+                        prevQty: currentQty,
+                        newQty: parsedQty,
+                        date: new Date().toISOString(),
+                        by: realEditorName,
+                        reason: reason
+                    });
+                    
+                    transaction.update(itemRef, {
+                        qty: parsedQty,
+                        createdAt: serverTimestamp(),
+                        history: currentHistory
+                    });
+                });
+                
+                if (parsedQty < currentQty) {
+                    try {
+                        await setDoc(doc(db, "alerts", "stock_reduction"), {
+                            name: item.name || '',
+                            model: item.model || 'N/A',
+                            price: item.price || 0,
+                            mrp: item.mrp || 0,
+                            qty: parsedQty,
+                            previousQty: currentQty,
+                            lastEditBy: realEditorName, 
+                            lastEditReason: reason,
+                            lastUpdated: new Date().toISOString()
+                        });
+                    } catch (alertErr) {
+                        console.error("Failed to write alert document:", alertErr);
+                    }
+                }
+
+                showToast("Quantity updated successfully!", "success");
+                loadInventory(); 
+            } catch (err) {
+                console.error("Error updating quantity:", err);
+                showToast(err.message || "Failed to update quantity.", "error");
+            }
+        };
+
+        let currentEditOriginalQty = 0;
+        const editQtyInput = document.getElementById('editQty');
+        const editReasonContainer = document.getElementById('editReasonContainer');
+        const editReasonSelect = document.getElementById('editReasonSelect');
+        const btnSaveEditItem = document.getElementById('btnSaveEditItem');
+
+        // ADMIN BYPASS: Always hide reason dropdown for Full Edit speed
+        function updateEditDropdownLogic() {
+            editReasonContainer.style.display = 'none';
+            editReasonSelect.value = "";
+            btnSaveEditItem.style.display = 'flex';
+        }
+
+        editQtyInput.addEventListener('input', updateEditDropdownLogic);
+
         window.editItemFull = async function(id) {
             vibrateApp(30);
             const item = inventoryCache.find(i => i.id === id);
@@ -1651,7 +1735,7 @@
                             newQty: newQty,
                             date: new Date().toISOString(),
                             by: realEditorName,
-                            reason: editReasonSelect.value
+                            reason: "Admin Override"
                         });
                         
                         transaction.update(itemRef, {
@@ -1664,7 +1748,7 @@
                             qty: newQty,
                             searchTokens: generateSearchTokens(newName, newModel), 
                             searchKeywords: deleteField(),
-                            lastUpdated: new Date().toISOString(),
+                            createdAt: serverTimestamp(),
                             history: currentHistory
                         });
                     });
@@ -1680,7 +1764,7 @@
                                 qty: newQty,
                                 previousQty: oldQty,
                                 lastEditBy: realEditorName, 
-                                lastEditReason: editReasonSelect.value || "N/A",
+                                lastEditReason: "Admin Override",
                                 lastUpdated: new Date().toISOString()
                             });
                         } catch (alertErr) { console.error("Failed to write alert document:", alertErr); }
@@ -1696,7 +1780,7 @@
                         price: newPrice,
                         searchTokens: generateSearchTokens(newName, newModel), 
                         searchKeywords: deleteField(),
-                        lastUpdated: new Date().toISOString()
+                        createdAt: serverTimestamp() // Admin edit forces top-of-feed bump
                     });
                 }
 
@@ -1817,9 +1901,9 @@
                         }
                     } else {
                         if (isLoadMore && lastVisibleItem) {
-                            q = query(collection(db, "inventory"), orderBy("lastUpdated", "desc"), startAfter(lastVisibleItem), limit(10));
+                            q = query(collection(db, "inventory"), orderBy("createdAt", "desc"), startAfter(lastVisibleItem), limit(10));
                         } else {
-                            q = query(collection(db, "inventory"), orderBy("lastUpdated", "desc"), limit(10));
+                            q = query(collection(db, "inventory"), orderBy("createdAt", "desc"), limit(10));
                         }
                     }
                 }
@@ -2166,7 +2250,7 @@
                         const existingRef = doc(db, "inventory", item.existingId);
                         batch.update(existingRef, {
                             qty: increment(item.qty),
-                            lastUpdated: new Date().toISOString(),
+                            createdAt: serverTimestamp(), // Ensure bumping to top on restock
                             history: arrayUnion({
                                 action: "Inward Stock / Restock",
                                 qtyChange: item.qty,
@@ -2189,7 +2273,6 @@
                             qty: item.qty,
                             searchTokens: generateSearchTokens(item.name, item.model), 
                             createdAt: serverTimestamp(),
-                            lastUpdated: new Date().toISOString(),
                             history: [{
                                 action: "Opening Balance",
                                 qtyChange: item.qty,
@@ -2222,40 +2305,6 @@
                 renderPendingList(); 
             }
         });
-
-        let currentEditOriginalQty = 0;
-        const editQtyInput = document.getElementById('editQty');
-        const editReasonContainer = document.getElementById('editReasonContainer');
-        const editReasonSelect = document.getElementById('editReasonSelect');
-        const btnSaveEditItem = document.getElementById('btnSaveEditItem');
-
-        function updateEditDropdownLogic() {
-            const newQty = parseInt(editQtyInput.value) || 0;
-            if (newQty < currentEditOriginalQty) {
-                editReasonSelect.innerHTML = `<option value="">Select reason...</option><option value="Sent to Meena Agency">Sent to Meena Agency</option><option value="Product Missing">Product Missing</option><option value="Damaged Product">Damaged Product</option><option value="Returned to Dealer">Returned to Dealer</option><option value="Gift to Customer">Gift to Customer</option>`;
-                editReasonContainer.style.display = 'block';
-                checkReasonSelection();
-            } else if (newQty > currentEditOriginalQty) {
-                editReasonSelect.innerHTML = `<option value="">Select reason...</option><option value="New Stock">New Stock</option><option value="Customer Return">Customer Return</option><option value="Counting Mistake">Counting Mistake</option>`;
-                editReasonContainer.style.display = 'block';
-                checkReasonSelection();
-            } else {
-                editReasonContainer.style.display = 'none';
-                editReasonSelect.value = "";
-                btnSaveEditItem.style.display = 'flex';
-            }
-        }
-
-        function checkReasonSelection() {
-            if (editReasonSelect.value === "") {
-                btnSaveEditItem.style.display = 'none';
-            } else {
-                btnSaveEditItem.style.display = 'flex';
-            }
-        }
-
-        editQtyInput.addEventListener('input', updateEditDropdownLogic);
-        editReasonSelect.addEventListener('change', checkReasonSelection);
 
         document.addEventListener('contextmenu', event => event.preventDefault());
 
