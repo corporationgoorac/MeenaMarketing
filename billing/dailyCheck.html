@@ -719,12 +719,15 @@
                     
                     // Push the new baseline verification and wipe history array
                     batch.update(inventoryRef, {
-                        last_audited: serverTimestamp(),
+                        stockCheckDate: new Date().toISOString(),
                         history: [{
-                            action: "Verified via Daily Audit",
-                            user: currentUserName,
-                            timestamp: new Date().toISOString(), // Standardizing offline string generation for array consistency
-                            note: "Baseline confirmed and history reset"
+                            action: "System Initialization",
+                            qtyChange: systemLiveQty,
+                            prevQty: 0,
+                            newQty: systemLiveQty,
+                            date: new Date().toISOString(),
+                            by: currentUserName,
+                            reason: "Stock verified perfectly during daily audit"
                         }]
                     });
                     
