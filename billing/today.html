@@ -50,7 +50,7 @@
         .page-title { font-size: 0.55em; color: var(--success-color); text-transform: uppercase; letter-spacing: 1px;}
         
         /* ADDED: Header Right for Search Icon */
-        .header-right { display: flex; align-items: center; }
+        .header-right { display: flex; align-items: center; gap: 15px; }
 
         /* Main Container */
         .container { padding: 20px; max-width: 900px; margin: 0 auto; width: 100%; }
@@ -364,7 +364,8 @@
             </div>
         </div>
         <div class="header-right">
-            <span class="material-symbols-outlined" style="cursor:pointer; font-size: 26px;" onclick="if(navigator.vibrate) navigator.vibrate(40); openSearchModal()">search</span>
+            <span class="material-symbols-outlined" style="cursor:pointer; font-size: 26px;" onclick="if(navigator.vibrate) navigator.vibrate(40); window.location.href='viewBill.html';" title="View Bills">receipt</span>
+            <span class="material-symbols-outlined" style="cursor:pointer; font-size: 26px;" onclick="if(navigator.vibrate) navigator.vibrate(40); openSearchModal()" title="Search">search</span>
         </div>
     </header>
 
