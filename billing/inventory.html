@@ -1470,7 +1470,7 @@
                 
                 if (historyData.length > 0) {
                     const firstAction = historyData[0].action;
-                    if (firstAction === "Opening Balance" || firstAction === "System Initialization") {
+                    if (firstAction === "Opening Balance" || firstAction === "System Initialization" || firstAction === "Ledger Reset / Baseline Established") {
                         hasBaseline = true;
                         let calculatedStock = 0;
                         historyData.forEach(log => calculatedStock += (log.qtyChange || 0));
