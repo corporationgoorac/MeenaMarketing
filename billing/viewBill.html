@@ -55,26 +55,27 @@
         .container { padding: 20px; max-width: 900px; margin: 0 auto; width: 100%; flex-grow: 1; }
 
         /* Sleek Search Controls - Fixed Mobile Overflow */
-        .top-controls { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 12px;}
+        .top-controls { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
         .search-row { display: flex; gap: 10px; align-items: stretch; width: 100%; }
         
-        .prefix-select { background: var(--input-bg); border: 1px solid #444; color: white; font-size: 1.1em; padding: 12px 10px; border-radius: 8px; outline: none; font-weight: bold; cursor: pointer; width: auto; max-width: 90px; }
+        .prefix-select { background: var(--input-bg); border: 1px solid #444; color: white; font-size: 1.1em; padding: 12px 10px; border-radius: 8px; outline: none; font-weight: bold; cursor: pointer; width: auto; max-width: 90px; transition: border-color 0.2s;}
+        .prefix-select:focus { border-color: var(--accent-color); }
         .prefix-select option { background: var(--surface-color); color: white; }
         
-        .number-input { background: var(--input-bg); border: 1px solid #444; color: white; font-size: 1.2em; padding: 12px 15px; border-radius: 8px; outline: none; flex: 1; min-width: 0; font-weight: bold; letter-spacing: 1px;}
+        .number-input { background: var(--input-bg); border: 1px solid #444; color: white; font-size: 1.2em; padding: 12px 15px; border-radius: 8px; outline: none; flex: 1; min-width: 0; font-weight: bold; letter-spacing: 1px; transition: border-color 0.2s, box-shadow 0.2s;}
         .number-input::placeholder { color: #666; font-weight: normal; letter-spacing: 0; font-size: 0.9em; }
-        .number-input:focus { border-color: var(--accent-color); }
+        .number-input:focus { border-color: var(--accent-color); box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2); }
         
-        .btn-done { background: var(--accent-color); color: white; border: none; padding: 0 16px; border-radius: 8px; font-weight: bold; font-size: 1em; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.1s ease, background 0.2s; }
-        .btn-done:active { transform: scale(0.92); }
+        .btn-done { background: var(--accent-color); color: white; border: none; padding: 0 16px; border-radius: 8px; font-weight: bold; font-size: 1em; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.1s ease, background 0.2s, box-shadow 0.2s; box-shadow: 0 4px 10px rgba(0, 86, 179, 0.3);}
+        .btn-done:active { transform: scale(0.92); box-shadow: 0 2px 5px rgba(0, 86, 179, 0.3); }
         .btn-done:hover { background: #004494; }
 
         /* Invoice Cards */
         .sales-list { display: flex; flex-direction: column; gap: 15px; }
-        .invoice-card { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; opacity: 0; animation: slideUpFade 0.4s ease forwards; }
+        .invoice-card { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; opacity: 0; animation: slideUpFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
         
         @keyframes slideUpFade {
-            0% { opacity: 0; transform: translateY(20px); }
+            0% { opacity: 0; transform: translateY(30px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
@@ -96,7 +97,12 @@
         .customer-info strong { color: white; font-size: 1.1em; display: inline-block; margin-bottom: 2px;}
 
         .item-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;}
-        .item-row { display: flex; justify-content: space-between; font-size: 0.95em; align-items: flex-start;}
+        .item-row { display: flex; justify-content: space-between; font-size: 0.95em; align-items: flex-start; opacity: 0; animation: fadeIn 0.4s ease forwards 0.2s; }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
         .item-desc { flex: 1; padding-right: 15px; }
         .item-name { font-weight: bold; color: white; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 3px;}
         .item-sub { color: var(--text-secondary); font-size: 0.85em; }
@@ -112,24 +118,62 @@
         .billed-by { font-size: 0.75em; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; }
         .billed-by strong { color: #ccc; }
         
-        .btn-print-card { background: var(--accent-color); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: bold; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: transform 0.1s ease, background 0.2s; font-size: 0.95em;}
-        .btn-print-card:active { transform: scale(0.92); }
+        .btn-print-card { background: var(--accent-color); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: bold; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: transform 0.1s ease, background 0.2s, box-shadow 0.2s; font-size: 0.95em; box-shadow: 0 4px 10px rgba(0, 86, 179, 0.3);}
+        .btn-print-card:active { transform: scale(0.92); box-shadow: 0 2px 5px rgba(0, 86, 179, 0.3); }
         .btn-print-card:hover { background: #004494; }
 
-        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-secondary); background: var(--surface-color); border-radius: 12px; border: 1px solid #333; animation: slideUpFade 0.3s ease;}
-        .empty-state .material-symbols-outlined { font-size: 48px; margin-bottom: 10px; opacity: 0.5; }
+        /* ==================================================== */
+        /* --- PROFESSIONAL INITIAL STATE & ANIMATED EMPTY UI --- */
+        /* ==================================================== */
+        
+        .initial-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; animation: fadeIn 0.5s ease forwards; }
+        
+        .svg-container { margin-bottom: 25px; animation: floatIcon 3s ease-in-out infinite; filter: drop-shadow(0 10px 15px rgba(0, 86, 179, 0.3)); }
+        
+        @keyframes floatIcon {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
 
-        /* Skeleton Loader */
+        .shimmer-text {
+            margin: 0 0 10px 0;
+            font-size: 1.4em;
+            font-weight: 900;
+            background: linear-gradient(90deg, #666 0%, #ffffff 50%, #666 100%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: textShimmer 2.5s linear infinite;
+        }
+
+        @keyframes textShimmer {
+            to { background-position: 200% center; }
+        }
+
+        .initial-state p { color: var(--text-secondary); font-size: 0.95em; margin: 0; max-width: 250px; line-height: 1.4; }
+
+        .empty-state { text-align: center; padding: 50px 20px; color: var(--text-secondary); background: var(--surface-color); border-radius: 12px; border: 1px solid #333; animation: slideUpFade 0.3s ease; box-shadow: 0 10px 25px rgba(0,0,0,0.2);}
+        .empty-state .material-symbols-outlined { font-size: 48px; margin-bottom: 10px; opacity: 0.5; color: var(--meena-red); }
+
+        /* ==================================================== */
+        /* --- ADVANCED SKELETON LOADER (MATCHING CARD LAYOUT)--- */
+        /* ==================================================== */
         .loader { display: none; }
         .skeleton { background: #2a2a2a; background-image: linear-gradient(90deg, #2a2a2a 0px, #3a3a3a 40px, #2a2a2a 80px); background-size: 200% 100%; animation: shimmer 1.5s infinite linear; border-radius: 4px; }
         @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-        .skel-card { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; margin-bottom: 15px; }
-        .skel-header { background: #1a1a1a; padding: 15px 20px; display: flex; justify-content: space-between; border-bottom: 1px solid #333; }
-        .skel-title { width: 40%; height: 24px; }
-        .skel-time { width: 25%; height: 24px; }
-        .skel-body { padding: 15px 20px; }
-        .skel-cust-name { width: 50%; height: 20px; margin-bottom: 12px; }
-        .skel-item { width: 80%; height: 16px; margin-bottom: 8px;}
+        
+        .skel-card { background: var(--surface-color); border: 1px solid #333; border-radius: 12px; margin-bottom: 15px; overflow: hidden; }
+        .skel-header { background: #1a1a1a; padding: 15px 20px; display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #333; }
+        .skel-header-left { display: flex; flex-direction: column; gap: 8px; width: 50%; }
+        .skel-header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; width: 40%; }
+        
+        .skel-body { padding: 15px 20px; border-bottom: 1px solid #333; }
+        .skel-customer { border-bottom: 1px dashed #444; padding-bottom: 15px; margin-bottom: 15px; }
+        .skel-item-row { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        
+        .skel-footer { background: rgba(0, 200, 83, 0.05); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
 
         /* Toasts */
         .toast-msg { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); color: white; padding: 12px 24px; border-radius: 8px; z-index: 9999; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.5); font-weight: bold; align-items: center; gap: 10px; opacity: 0; transition: opacity 0.3s;}
@@ -253,20 +297,54 @@
             <div class="sales-list">
                 <div class="skel-card">
                     <div class="skel-header">
-                        <div class="skeleton skel-title"></div>
-                        <div class="skeleton skel-time"></div>
+                        <div class="skel-header-left">
+                            <div class="skeleton" style="width: 80%; height: 22px; border-radius: 4px;"></div>
+                            <div class="skeleton" style="width: 40%; height: 16px; border-radius: 4px;"></div>
+                        </div>
+                        <div class="skel-header-right">
+                            <div class="skeleton" style="width: 90px; height: 22px; border-radius: 6px;"></div>
+                            <div class="skeleton" style="width: 60px; height: 22px; border-radius: 6px;"></div>
+                        </div>
                     </div>
                     <div class="skel-body">
-                        <div class="skeleton skel-cust-name"></div>
-                        <div class="skeleton skel-item"></div>
-                        <div class="skeleton skel-item" style="width: 60%;"></div>
+                        <div class="skel-customer">
+                            <div class="skeleton" style="width: 40%; height: 20px; border-radius: 4px; margin-bottom: 6px;"></div>
+                            <div class="skeleton" style="width: 60%; height: 14px; border-radius: 4px;"></div>
+                        </div>
+                        <div class="skel-item-row">
+                            <div class="skeleton" style="width: 50%; height: 16px; border-radius: 4px;"></div>
+                            <div class="skeleton" style="width: 20%; height: 16px; border-radius: 4px;"></div>
+                        </div>
+                        <div class="skel-item-row">
+                            <div class="skeleton" style="width: 65%; height: 16px; border-radius: 4px;"></div>
+                            <div class="skeleton" style="width: 25%; height: 16px; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    <div class="skel-footer">
+                        <div style="width: 50%; display: flex; flex-direction: column; gap: 8px;">
+                            <div class="skeleton" style="width: 60%; height: 24px; border-radius: 4px;"></div>
+                            <div class="skeleton" style="width: 80%; height: 12px; border-radius: 4px;"></div>
+                        </div>
+                        <div class="skeleton" style="width: 85px; height: 35px; border-radius: 8px;"></div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="sales-list" id="salesList">
-            <!-- Results injected here -->
+            <!-- Initial Animated Search State -->
+            <div class="initial-state">
+                <div class="svg-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <circle cx="10" cy="13" r="2"></circle>
+                        <line x1="11.4" y1="14.4" x2="15" y2="18"></line>
+                    </svg>
+                </div>
+                <h3 class="shimmer-text">Search an invoice number</h3>
+                <p>Type the exact bill number above to instantly retrieve and reprint.</p>
+            </div>
         </div>
 
     </div>
@@ -336,7 +414,7 @@
                     loaderEl.style.display = 'none';
                     listEl.innerHTML = `
                         <div class="empty-state">
-                            <span class="material-symbols-outlined" style="color: var(--meena-red);">search_off</span>
+                            <span class="material-symbols-outlined">search_off</span>
                             <h3 style="margin: 10px 0 5px 0; color: white;">Bill Not Found</h3>
                             <p style="margin: 0; font-size: 0.95em;">No invoice exists matching <strong>${exactBillStr}</strong>.</p>
                         </div>
