@@ -359,7 +359,6 @@
         <div class="nav-item" onclick="vibrateApp(40); filterLowStock()" id="btnLowStock" title="Low Stock Alerts">
             <span class="material-symbols-outlined">warning</span>
         </div>
-        <!-- UPGRADED: Restored AI Bot Navigation Link -->
         <div class="nav-item" onclick="vibrateApp(40); window.location.href='aiBot.html'" title="AI Assistant">
             <span class="material-symbols-outlined">auto_awesome</span>
         </div>
@@ -1432,26 +1431,29 @@
                 const itemRef = doc(db, "inventory", item.id);
                 const realEditorName = await window.getFreshUserName();
                 const currentQty = item.qty || 0;
+                
+                const newHistory = [{
+                    action: "Ledger Reset / Baseline Established",
+                    qtyChange: currentQty,
+                    prevQty: 0,
+                    newQty: currentQty,
+                    date: new Date().toISOString(),
+                    by: realEditorName,
+                    reason: "Admin forced ledger wipe"
+                }];
 
                 await runTransaction(db, async (transaction) => {
                     const docSnap = await transaction.get(itemRef);
                     if (!docSnap.exists()) throw "Document does not exist!";
                     
-                    const newHistory = [{
-                        action: "Ledger Reset / Baseline Established",
-                        qtyChange: currentQty,
-                        prevQty: 0,
-                        newQty: currentQty,
-                        date: new Date().toISOString(),
-                        by: realEditorName,
-                        reason: "Admin forced ledger wipe"
-                    }];
-                    
                     transaction.update(itemRef, {
                         history: newHistory,
-                        createdAt: serverTimestamp() // Admin forces top-of-feed bump
+                        lastUpdated: new Date().toISOString() // Admin forces top-of-feed bump
                     });
                 });
+
+                // FIX: Update local cache so the UI refreshes instantly without needing a hard reload
+                item.history = newHistory;
 
                 showToast("Ledger successfully wiped and reset.", "success");
                 loadInventory();
@@ -1615,7 +1617,7 @@
                     
                     transaction.update(itemRef, {
                         qty: parsedQty,
-                        createdAt: serverTimestamp(),
+                        lastUpdated: new Date().toISOString(),
                         history: currentHistory
                     });
                 });
@@ -1754,7 +1756,7 @@
                             qty: newQty,
                             searchTokens: generateSearchTokens(newName, newModel), 
                             searchKeywords: deleteField(),
-                            createdAt: serverTimestamp(),
+                            lastUpdated: new Date().toISOString(),
                             history: currentHistory
                         });
                     });
@@ -1786,7 +1788,7 @@
                         price: newPrice,
                         searchTokens: generateSearchTokens(newName, newModel), 
                         searchKeywords: deleteField(),
-                        createdAt: serverTimestamp() // Admin edit forces top-of-feed bump
+                        lastUpdated: new Date().toISOString() // Admin edit forces top-of-feed bump
                     });
                 }
 
@@ -1906,7 +1908,6 @@
                              q = query(collection(db, "inventory"), where("type", "==", currentTypeFilter), limit(10));
                         }
                     } else {
-                        // LEGACY-SAFE SORTING: Reverted back to createdAt to preserve old products in feed
                         if (isLoadMore && lastVisibleItem) {
                             q = query(collection(db, "inventory"), orderBy("lastUpdated", "desc"), startAfter(lastVisibleItem), limit(10));
                         } else {
@@ -2257,7 +2258,7 @@
                         const existingRef = doc(db, "inventory", item.existingId);
                         batch.update(existingRef, {
                             qty: increment(item.qty),
-                            createdAt: serverTimestamp(), // Ensure bumping to top on restock
+                            lastUpdated: new Date().toISOString(), // Ensure bumping to top on restock
                             history: arrayUnion({
                                 action: "Inward Stock / Restock",
                                 qtyChange: item.qty,
@@ -2280,6 +2281,7 @@
                             qty: item.qty,
                             searchTokens: generateSearchTokens(item.name, item.model), 
                             createdAt: serverTimestamp(),
+                            lastUpdated: new Date().toISOString(),
                             history: [{
                                 action: "Opening Balance",
                                 qtyChange: item.qty,
