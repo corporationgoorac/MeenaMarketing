@@ -293,6 +293,28 @@
             if (user) currentUserName = user.displayName || user.email?.split('@') || "Employee";
         });
 
+        // --- NEW IMPLEMENTATION: Lazy Loading RAM Storage for Custom Username ---
+        let cachedCustomName = null;
+        async function getLazyUserName() {
+            if (cachedCustomName) return cachedCustomName;
+            
+            const user = auth.currentUser;
+            if (!user) return currentUserName;
+            
+            try {
+                const userSnap = await getDoc(doc(db, "users", user.uid));
+                if (userSnap.exists() && userSnap.data().name) {
+                    cachedCustomName = userSnap.data().name;
+                    return cachedCustomName;
+                }
+            } catch (error) {
+                console.error("Failed to fetch custom name from Firestore:", error);
+            }
+            
+            cachedCustomName = currentUserName; 
+            return cachedCustomName;
+        }
+
         // ADVANCED FIX: Secure JS Variable to prevent NaN Data Corruption
         let systemLiveQty = null;
         window.isGhostItem = false; // Flag to handle missing collection documents
@@ -700,11 +722,14 @@
             }
         };
 
+        // --- NEW IMPLEMENTATION: Converted to Async to properly await Lazy Loading RAM Storage ---
         window.executeMarkOk = async function() {
             const btn = document.getElementById('btnMarkOk');
             const ogText = btn.innerHTML;
             btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span>';
             
+            const realEditorName = await getLazyUserName(); // Added Lazy Loading integration
+
             try {
                 // Implementing Batched Writes for guaranteed atomic execution and low-data offline caching
                 const batch = writeBatch(db);
@@ -726,7 +751,7 @@
                             prevQty: 0,
                             newQty: systemLiveQty,
                             date: new Date().toISOString(),
-                            by: currentUserName,
+                            by: realEditorName, // Updated to use the secure cached name
                             reason: "Stock verified perfectly during daily audit"
                         }]
                     });
@@ -748,8 +773,8 @@
             }
         };
 
-        // ADVANCED REPORTING: Over and Under Stock Handled
-        window.executeReportMissing = function() {
+        // --- NEW IMPLEMENTATION: Converted to Async to properly await Lazy Loading RAM Storage ---
+        window.executeReportMissing = async function() {
             const physicalCount = parseInt(document.getElementById('inputMissingQty').value);
             
             // Secured against NaN corruption by using the hidden JS variable instead of DOM text
@@ -771,6 +796,8 @@
             const ogText = btn.innerHTML;
             btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span>';
 
+            const realEditorName = await getLazyUserName(); // Added Lazy Loading integration
+
             try {
                 // Update status to missing and shift to admin dashboard with math (Removed await for instant offline speed)
                 updateDoc(doc(db, "daily_check", currentAuditId), {
@@ -778,7 +805,7 @@
                     physicalCount: physicalCount,
                     expectedCount: expectedCount,
                     discrepancy: discrepancyDiff,
-                    reportedBy: currentUserName,
+                    reportedBy: realEditorName, // Updated to use the secure cached name
                     updatedAt: serverTimestamp()
                 }).catch(e => console.log("Background sync pending"));
                 showToast("Discrepancy reported.", "success");
