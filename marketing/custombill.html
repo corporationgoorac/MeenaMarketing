@@ -38,7 +38,11 @@
         /* Screen App Header */
         header { background-color: var(--surface-color); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.5); flex-shrink: 0; width: 100%; }
         .header-left { display: flex; align-items: center; gap: 15px; }
-        .back-btn { color: var(--text-color); cursor: pointer; display: flex; align-items: center; text-decoration: none; }
+        
+        /* iOS Style Back Button Upgrades */
+        .back-btn { color: var(--marketing-white); cursor: pointer; display: flex; align-items: center; text-decoration: none; gap: 4px; padding: 6px 10px 6px 0; transition: opacity 0.15s ease-in-out; margin-left: -5px; user-select: none; -webkit-tap-highlight-color: transparent;}
+        .back-btn:active { opacity: 0.4; }
+        
         .brand-container { display: flex; align-items: center; gap: 10px; }
         .logo-img { width: 32px; height: 32px; border-radius: 6px; }
         .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
@@ -62,7 +66,7 @@
         .input-row { display: flex; gap: 12px; flex-wrap: wrap; }
         .input-row > div { flex: 1; min-width: 140px; }
         label { display: block; font-size: 0.85em; color: var(--text-secondary); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;}
-        input[type="text"], input[type="tel"], input[type="number"], textarea, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: var(--input-bg); color: white; font-size: 1em; outline: none; transition: 0.3s; }
+        input[type="text"], input[type="tel"], input[type="number"], textarea, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: var(--input-bg); color: white; font-size: 1em; outline: none; transition: 0.3s; -webkit-tap-highlight-color: transparent;}
         input:focus, textarea:focus, select:focus { border-color: var(--accent-color); }
         textarea { resize: vertical; min-height: 80px; }
         
@@ -74,8 +78,9 @@
         #customThemeSettings { display: none; margin-top: 15px; border-top: 1px dashed #444; padding-top: 15px; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .btn-save { background: var(--success-color); color: white; width: 100%; padding: 16px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.1em; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.2s;}
+        .btn-save { background: var(--success-color); color: white; width: 100%; padding: 16px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.1em; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.2s; -webkit-tap-highlight-color: transparent;}
         .btn-save:hover { background: #00a844; }
+        .btn-save:active { transform: scale(0.98); opacity: 0.9; }
 
         .btn-danger { background: rgba(255, 51, 51, 0.1); color: var(--meena-red); border: 1px solid var(--meena-red); }
         .btn-danger:hover { background: rgba(255, 51, 51, 0.2); }
@@ -94,6 +99,10 @@
         .app-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; padding: 20px; box-sizing: border-box; }
         .modal-content { background: var(--surface-color); padding: 30px; border-radius: 12px; text-align: left; border: 1px solid #444; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.9); }
         .modal-content h3 { margin: 0 0 15px 0; color: white; border-bottom: 1px solid #444; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+
+        /* Modal specific button touch states */
+        .modal-content button { transition: 0.2s; -webkit-tap-highlight-color: transparent;}
+        .modal-content button:active { transform: scale(0.97); opacity: 0.8; }
 
         /* ---------------------------------------------------- */
         /* --- LIVE PREVIEW (A4 STRICT DIMENSIONS) --- */
@@ -349,7 +358,8 @@
 
     <header>
         <div class="header-left">
-            <a href="javascript:void(0)" onclick="history.back()" class="back-btn"><span class="material-symbols-outlined">arrow_back</span></a>
+            <!-- iOS Style Back Button Updated with Icon, Text, and ID -->
+            <a href="javascript:void(0)" id="globalBackBtn" class="back-btn"><span class="material-symbols-outlined" style="font-size: 22px;">arrow_back_ios_new</span><span style="font-size: 16px; font-weight: 500;">Back</span></a>
             <div class="brand-container">
                 <img src="icon.png" alt="Icon" class="logo-img">
                 <div class="brand-text">
@@ -858,6 +868,20 @@
         import { db } from './config.js'; 
         import { doc, getDoc, setDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
+        // --- ADVANCED HAPTIC ENGINE ---
+        const hapticEngine = {
+            tick: () => { if (navigator.vibrate) navigator.vibrate(15); },
+            thump: () => { if (navigator.vibrate) navigator.vibrate([30, 50, 30]); },
+            buzz: () => { if (navigator.vibrate) navigator.vibrate([50, 50, 50, 50, 50]); }
+        };
+
+        // iOS Style Back Button Haptic Hook
+        document.getElementById('globalBackBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            hapticEngine.tick();
+            setTimeout(() => history.back(), 50); 
+        });
+
         // Toast Helper
         let activeToastTimeout;
         let hideToastTimeout;
@@ -927,6 +951,7 @@
         }
 
         function closeModal(modal, stateName) {
+            hapticEngine.tick();
             modal.style.display = 'none';
             if (history.state && history.state[stateName]) {
                 history.back(); // This triggers popstate listener
@@ -937,19 +962,25 @@
         }
 
         openSettingsModalBtn.addEventListener('click', () => {
+            hapticEngine.tick();
             openModal(settingsModal, 'settingsModalOpen');
             startCountersListener(); // Connect to Firebase ONLY when settings modal opens
         });
         
-        openQrModalBtn.addEventListener('click', () => openModal(qrModal, 'qrModalOpen'));
+        openQrModalBtn.addEventListener('click', () => {
+            hapticEngine.tick();
+            openModal(qrModal, 'qrModalOpen');
+        });
         
         btnOpenResetModal.addEventListener('click', () => {
+            hapticEngine.tick();
             openModal(resetModal, 'resetModalOpen');
             // resetModal opens on top of settingsModal, settingsModal remains flex
         });
 
         // Smart Stacked Mobile Back Button Logic
         window.addEventListener('popstate', (e) => {
+            hapticEngine.tick();
             resetModal.style.display = 'none';
             qrModal.style.display = 'none';
             
@@ -999,6 +1030,7 @@
         }
 
         applySignBtn.addEventListener('click', async () => {
+            hapticEngine.thump();
             applySignBtn.innerHTML = '<span class="spinner"></span>';
             await directSaveModalData({ signName: signNameInput.value.trim(), updatedAt: serverTimestamp() }, "Signature Saved!");
             applySignBtn.innerHTML = 'Apply Signature & Save';
@@ -1006,6 +1038,7 @@
         });
 
         applyQrBtn.addEventListener('click', async () => {
+            hapticEngine.thump();
             applyQrBtn.innerHTML = '<span class="spinner"></span>';
             await directSaveModalData({ customUpiId: upiIdInput.value.trim(), updatedAt: serverTimestamp() }, "UPI QR Code Saved!");
             applyQrBtn.innerHTML = 'Apply & Save';
@@ -1027,6 +1060,7 @@
                 return;
             }
 
+            hapticEngine.thump();
             btnUpdateCounters.innerHTML = '<span class="spinner"></span> Updating...';
             btnUpdateCounters.style.pointerEvents = 'none';
 
@@ -1048,6 +1082,7 @@
 
         // Reset Counters to 1 Confirmation
         confirmResetBtn.addEventListener('click', async () => {
+            hapticEngine.buzz();
             confirmResetBtn.innerHTML = '<span class="spinner"></span> Resetting...';
             confirmResetBtn.style.pointerEvents = 'none';
 
@@ -1135,6 +1170,7 @@
 
         // UI Listeners
         inputs.themeSelect.addEventListener('change', (e) => {
+            hapticEngine.tick();
             if (e.target.value === 'custom') customPanel.style.display = 'block';
             else customPanel.style.display = 'none';
             updateLivePreview();
@@ -1162,8 +1198,11 @@
 
         Object.values(inputs).forEach(input => {
             if(input.id !== 'mainThemeSelect' && input.type !== 'color') {
+                input.addEventListener('change', (e) => {
+                    if(e.target.tagName === 'SELECT') hapticEngine.tick();
+                    updateLivePreview();
+                }); 
                 input.addEventListener('input', updateLivePreview);
-                input.addEventListener('change', updateLivePreview); 
             }
         });
 
@@ -1386,6 +1425,7 @@
         document.getElementById('btnSaveSettings').addEventListener('click', async () => {
             if(isMainSaving) return;
             isMainSaving = true;
+            hapticEngine.thump();
             
             const btn = document.getElementById('btnSaveSettings');
             btn.innerHTML = '<span class="spinner"></span> Saving...';
