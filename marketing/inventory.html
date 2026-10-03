@@ -1228,7 +1228,8 @@
         });
 
         // --- NEW PROFESSIONAL AI AUDITOR & PAGINATION LOGIC ---
-        let currentHistoryLimit = 15;
+        let currentHistoryIndex = 0;
+        const HISTORY_CHUNK_SIZE = 15;
         let currentHistoryArray = [];
         
         const intros = ["Audit complete.", "Ledger analysis finished.", "Mathematical verification done.", "Stock history scanned."];
@@ -1301,7 +1302,7 @@
             // 2. Setup History Array & Variables
             const historyData = item.history || [];
             currentHistoryArray = [...historyData].reverse();
-            currentHistoryLimit = 15;
+            currentHistoryIndex = 0;
             
             // Extract baseline stock for nested header
             let baseline = "Legacy";
@@ -1409,7 +1410,27 @@
 
         window.openFullHistoryModal = function() {
             vibrateApp(20);
-            renderHistoryTimeline();
+            
+            // Reset state and build the static scaffolding once
+            currentHistoryIndex = 0;
+            const container = document.getElementById('fullHistoryContainer');
+            
+            // Check for empty legacy state before processing
+            if (currentHistoryArray.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 40px 20px; color: var(--text-secondary); border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px; margin-top: 20px;">
+                        <span class="material-symbols-outlined" style="font-size: 32px; opacity: 0.5; margin-bottom: 10px; display: block;">history_toggle_off</span>
+                        Legacy Product: No records found. Timeline will begin tracking on the next edit.
+                    </div>`;
+            } else {
+                container.innerHTML = `
+                    <div id="timelineWrapper" class="timeline-container"></div>
+                    <button class="btn-secondary" id="historyLoadBtn" onclick="loadNextHistoryBatch()" style="width: 100%; margin-top: 10px; background: rgba(255,255,255,0.03); display: none;">
+                    </button>
+                `;
+                loadNextHistoryBatch();
+            }
+            
             openModal('modalFullHistory');
         };
 
@@ -1464,7 +1485,14 @@
                 showToast("Ledger successfully wiped and reset.", "success");
                 
                 // Refresh the modal UI silently without breaking the stack
-                renderHistoryTimeline();
+                currentHistoryIndex = 0;
+                const container = document.getElementById('fullHistoryContainer');
+                container.innerHTML = `
+                    <div id="timelineWrapper" class="timeline-container"></div>
+                    <button class="btn-secondary" id="historyLoadBtn" onclick="loadNextHistoryBatch()" style="width: 100%; margin-top: 10px; background: rgba(255,255,255,0.03); display: none;">
+                    </button>
+                `;
+                loadNextHistoryBatch();
 
             } catch (err) {
                 console.error("Error wiping ledger:", err);
@@ -1491,22 +1519,17 @@
             return changeStr;
         }
 
-        window.renderHistoryTimeline = function() {
-            const container = document.getElementById('fullHistoryContainer');
+        // 3. The Pure Injection Engine
+        window.loadNextHistoryBatch = function() {
+            if (currentHistoryIndex > 0) vibrateApp(20); // Only vibrate on manual loads, not initial open
 
-            if (currentHistoryArray.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align:center; padding: 40px 20px; color: var(--text-secondary); border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px; margin-top: 20px;">
-                        <span class="material-symbols-outlined" style="font-size: 32px; opacity: 0.5; margin-bottom: 10px; display: block;">history_toggle_off</span>
-                        Legacy Product: No records found. Timeline will begin tracking on the next edit.
-                    </div>`;
-                return;
-            }
-
-            const itemsToShow = currentHistoryArray.slice(0, currentHistoryLimit);
-            let html = '<div class="timeline-container">';
+            const wrapper = document.getElementById('timelineWrapper');
+            const nextIndex = currentHistoryIndex + HISTORY_CHUNK_SIZE;
+            const itemsToProcess = currentHistoryArray.slice(currentHistoryIndex, nextIndex);
             
-            itemsToShow.forEach((log, index) => {
+            let htmlBuffer = '';
+            
+            itemsToProcess.forEach((log, index) => {
                 const dateStr = new Date(log.date).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
                 
                 let iconName = 'edit';
@@ -1521,7 +1544,7 @@
                 const qtyHtml = logQtyHtml(log.qtyChange, log.prevQty, log.newQty, false);
                 const animDelay = index * 0.03;
 
-                html += `
+                htmlBuffer += `
                     <div class="timeline-item" style="animation-delay: ${animDelay}s;">
                         <div class="timeline-icon ${iconClass}">
                             <span class="material-symbols-outlined">${iconName}</span>
@@ -1542,26 +1565,30 @@
                 `;
             });
             
-            html += '</div>';
-
-            if (currentHistoryLimit < currentHistoryArray.length) {
-                const remaining = currentHistoryArray.length - currentHistoryLimit;
-                html += `
-                    <button class="btn-secondary" onclick="loadMoreHistory()" style="width: 100%; margin-top: 10px; background: rgba(255,255,255,0.03);">
-                        Load Previous Edits (${remaining} older records)
-                    </button>
-                `;
-            }
-
-            container.innerHTML = html;
-        };
-
-        window.loadMoreHistory = function() {
-            vibrateApp(20);
-            currentHistoryLimit += 15; 
-            renderHistoryTimeline();   
+            // Safely drop the new elements at the bottom
+            if(wrapper) wrapper.insertAdjacentHTML('beforeend', htmlBuffer);
+            
+            // Advance the pointer
+            currentHistoryIndex = nextIndex;
+            
+            // Update the decoupled UI button
+            updateHistoryLoadButton();
             if(window.updateIcons) window.updateIcons();
         };
+
+        // 4. Decoupled Control UI
+        function updateHistoryLoadButton() {
+            const btn = document.getElementById('historyLoadBtn');
+            if (!btn) return;
+
+            if (currentHistoryIndex < currentHistoryArray.length) {
+                const remaining = currentHistoryArray.length - currentHistoryIndex;
+                btn.innerText = `Load Previous Edits (${remaining} older records)`;
+                btn.style.display = 'block';
+            } else {
+                btn.style.display = 'none';
+            }
+        }
 
         // --- UPGRADED ADMIN EDIT: No Reason Required for Speed Edit ---
         window.editQty = async function(id, currentQty) {
