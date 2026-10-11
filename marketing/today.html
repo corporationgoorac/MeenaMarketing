@@ -1036,9 +1036,17 @@
                                 customerAddress,
                                 invoiceNo,
                                 dateFmt,
-                                products: matchingItems.map(i => {
+                                products: matchingItems.map((i, index, arr) => {
                                     const nsTag = i.isNonStock ? '<span class="tag-ns" style="font-size: 0.65em; padding: 2px 4px; margin-left: 4px; display: inline-block;">NON-STOCK</span>' : '';
-                                    return `<div style="padding: 2px 0;">- ${i.name} (Qty: ${i.qty}) ${nsTag}</div>`;
+                                    const modelText = i.model ? `<div class="item-sub" style="color: var(--text-secondary); font-size: 0.85em; margin-top: 2px;">Model: ${i.model}</div>` : '';
+                                    const isLast = index === arr.length - 1;
+                                    const borderStyle = isLast ? '' : 'border-bottom: 1px dashed #444;';
+                                    return `
+                                        <div style="padding: 6px 0; ${borderStyle}">
+                                            <div class="item-name" style="font-weight: bold; color: white; line-height: 1.3;">${i.name} <span style="color: var(--text-secondary); font-weight:normal; margin-left: 4px;">x${i.qty}</span> ${nsTag}</div>
+                                            ${modelText}
+                                        </div>
+                                    `;
                                 }).join('')
                             });
                         }
