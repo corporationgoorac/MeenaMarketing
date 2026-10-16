@@ -5,74 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Meena Ecosystem | Goorac Corporation</title>
     <style>
-        /* Light Mode (Meta AI Style - Default) */
+        /* Light Mode (Executive Slate & Sapphire Style - Default) */
         :root {
-            /* Clean, airy backgrounds */
-            --bg-color: #f0f2f5; 
+            /* Clean, professional enterprise backgrounds */
+            --bg-color: #f8fafc; 
             --surface-color: #ffffff;
-            --surface-hover: #ffffff;
-            --border-color: #e4e6eb;
+            --surface-hover: #f8fafc;
+            --border-color: #e2e8f0;
             
-            /* High contrast typography */
-            --text-primary: #050505;
-            --text-secondary: #65676b;
+            /* High contrast corporate typography */
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
             
-            /* Iconic Meta AI Gradient (Blue -> Purple -> Pink) */
-            --brand-gradient: linear-gradient(115deg, #0064e0, #c92bb8, #ff2a7e);
-            --brand-gradient-hover: linear-gradient(115deg, #005ac9, #b527a5, #e62671);
+            /* Professional Enterprise Gradient (Deep Navy -> Royal Blue -> Sky Blue) */
+            --brand-gradient: linear-gradient(135deg, #0f172a 0%, #1d4ed8 55%, #0284c7 100%);
+            --brand-gradient-hover: linear-gradient(135deg, #1e293b 0%, #2563eb 55%, #0369a1 100%);
             
             /* Secondary Elements */
-            --btn-secondary-bg: #e4e6eb;
-            --btn-secondary-text: #050505;
-            --btn-secondary-hover: #d8dadf;
+            --btn-secondary-bg: #f1f5f9;
+            --btn-secondary-text: #0f172a;
+            --btn-secondary-hover: #e2e8f0;
             
             /* Shadows and Assets */
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
-            --shadow-glow: 0 4px 15px rgba(201, 43, 184, 0.25);
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+            --shadow-md: 0 12px 28px -4px rgba(15, 23, 42, 0.1), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+            --shadow-glow: 0 4px 14px rgba(29, 78, 216, 0.25);
             
-            --icon-bg: #f0f2f5;
-            --icon-border: rgba(0,0,0,0.04);
+            --icon-bg: #f8fafc;
+            --icon-border: #e2e8f0;
             
-            --toast-bg: #050505;
+            --toast-bg: #0f172a;
             --toast-text: #ffffff;
 
             --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        /* Dark Mode (Instagram Style Pattern) */
+        /* Dark Mode (Enterprise Obsidian & Cobalt Pattern) */
         @media (prefers-color-scheme: dark) {
             :root {
-                /* Pitch black backgrounds & dark gray borders (Instagram standard) */
-                --bg-color: #000000; 
-                --surface-color: #000000;
-                --surface-hover: #121212;
-                --border-color: #262626; 
+                /* Deep obsidian backgrounds & refined slate borders */
+                --bg-color: #090d16; 
+                --surface-color: #111827;
+                --surface-hover: #1e293b;
+                --border-color: #1f2937; 
                 
-                /* High contrast white/gray text */
-                --text-primary: #fafafa;
-                --text-secondary: #a8a8a8;
+                /* High contrast crisp white/slate text */
+                --text-primary: #f8fafc;
+                --text-secondary: #94a3b8;
                 
-                /* Iconic Instagram Sunset Gradient */
-                --brand-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-                --brand-gradient-hover: linear-gradient(45deg, #f09433 0%, #e6683c 20%, #dc2743 45%, #cc2366 70%, #bc1888 100%);
+                /* Luminous Sapphire & Cyan Enterprise Gradient */
+                --brand-gradient: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #0ea5e9 100%);
+                --brand-gradient-hover: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #38bdf8 100%);
                 
                 /* Dark secondary buttons */
-                --btn-secondary-bg: #262626;
-                --btn-secondary-text: #fafafa;
-                --btn-secondary-hover: #363636;
+                --btn-secondary-bg: #1e293b;
+                --btn-secondary-text: #f8fafc;
+                --btn-secondary-hover: #334155;
                 
-                /* Flat UI in dark mode (no harsh drop shadows) */
-                --shadow-sm: none;
-                --shadow-md: none;
-                --shadow-glow: 0 4px 15px rgba(220, 39, 67, 0.3);
+                /* Subtle depth shadows in dark mode */
+                --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+                --shadow-md: 0 12px 28px -4px rgba(0, 0, 0, 0.6);
+                --shadow-glow: 0 4px 16px rgba(37, 99, 235, 0.35);
                 
-                --icon-bg: #121212;
-                --icon-border: #262626;
+                --icon-bg: #1e293b;
+                --icon-border: #334155;
                 
                 /* Inverted toast for visibility */
-                --toast-bg: #fafafa;
-                --toast-text: #000000;
+                --toast-bg: #f8fafc;
+                --toast-text: #0f172a;
             }
         }
 
@@ -100,8 +100,8 @@
             display: flex;
             justify-content: center;
             transition: background-color 0.3s ease, color 0.3s ease;
-            background-image: radial-gradient(at 0% 0%, rgba(0, 100, 224, 0.03) 0px, transparent 50%),
-                              radial-gradient(at 100% 0%, rgba(201, 43, 184, 0.05) 0px, transparent 50%);
+            background-image: radial-gradient(at 0% 0%, rgba(29, 78, 216, 0.05) 0px, transparent 50%),
+                              radial-gradient(at 100% 0%, rgba(2, 132, 199, 0.05) 0px, transparent 50%);
             -webkit-overflow-scrolling: touch;
             overscroll-behavior-y: auto; 
             overflow-x: hidden; 
@@ -136,7 +136,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             display: inline-block;
-            filter: drop-shadow(0 2px 10px rgba(201, 43, 184, 0.1));
+            filter: drop-shadow(0 2px 10px rgba(29, 78, 216, 0.12));
             transform: translateZ(0);
         }
 
@@ -176,7 +176,7 @@
         .app-card {
             background-color: var(--surface-color);
             border: 1px solid var(--border-color);
-            border-radius: 24px;
+            border-radius: 16px;
             padding: 24px;
             display: flex;
             flex-direction: column;
@@ -215,7 +215,7 @@
             box-shadow: var(--shadow-md);
             transform: translateY(-6px) translateZ(0); 
             background-color: var(--surface-hover);
-            border-color: var(--text-secondary);
+            border-color: #3b82f6;
         }
 
         .app-header {
@@ -227,17 +227,17 @@
         .app-icon {
             width: 56px;
             height: 56px;
-            border-radius: 16px;
+            border-radius: 14px;
             object-fit: cover;
             background-color: var(--icon-bg);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid var(--icon-border);
             transform: translateZ(0);
         }
 
         .app-card:hover .app-icon {
-            transform: scale(1.12) rotate(-3deg) translateZ(0);
+            transform: scale(1.08) rotate(-2deg) translateZ(0);
         }
 
         .app-title {
@@ -267,7 +267,7 @@
             justify-content: center;
             font-size: 15px;
             font-weight: 600;
-            border-radius: 50px;
+            border-radius: 10px;
             padding: 0 20px;
             height: 44px;
             cursor: pointer;
@@ -299,7 +299,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+            background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0) 100%);
             transform: rotate(45deg);
             transition: all 0.5s;
             opacity: 0;
@@ -314,19 +314,19 @@
 
         .btn-primary:hover {
             background: var(--brand-gradient-hover);
-            transform: scale(1.03) translateZ(0); 
+            transform: translateY(-2px) translateZ(0); 
             box-shadow: 0 6px 20px var(--shadow-glow);
         }
 
         .btn-secondary {
             background-color: var(--btn-secondary-bg);
             color: var(--btn-secondary-text);
-            border: none;
+            border: 1px solid var(--border-color);
         }
 
         .btn-secondary:hover {
             background-color: var(--btn-secondary-hover);
-            transform: scale(1.03) translateZ(0); 
+            transform: translateY(-2px) translateZ(0); 
         }
 
         .monitor-footer {
@@ -357,13 +357,14 @@
 
         .btn-monitor:hover {
             background-color: var(--surface-hover);
-            border-color: var(--text-secondary);
+            border-color: #3b82f6;
+            transform: translateY(-2px) translateZ(0);
         }
 
         .pulse-dot {
             width: 8px;
             height: 8px;
-            background-color: #22c55e;
+            background-color: #10b981;
             border-radius: 50%;
             position: relative;
         }
@@ -373,7 +374,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background-color: #22c55e;
+            background-color: #10b981;
             border-radius: 50%;
             animation: pulse-ring 1.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
             will-change: transform, opacity; 
@@ -542,13 +543,13 @@
         <div class="monitor-footer">
             <h2 class="section-title" style="justify-content: center; margin-top: 0;">Infrastructure Status</h2>
             <div class="monitor-grid">
-                <a href="https://Shiva757-MeenaMarketing.hf.space" class="btn btn-monitor" target="_blank" rel="noopener noreferrer">
+                <a href="https://meenamarketing.onrender.com/" class="btn btn-monitor" target="_blank" rel="noopener noreferrer">
                     <div class="pulse-dot"></div> Marketing Server
                 </a>
-                <a href="https://Shiva757-MeenaGroups.hf.space/" class="btn btn-monitor" target="_blank" rel="noopener noreferrer">
-                    <div class="pulse-dot"></div> Groups Server
+                <a href="https://upgrow.onrender.com/" class="btn btn-monitor" target="_blank" rel="noopener noreferrer">
+                    <div class="pulse-dot"></div> UpGrow Server
                 </a>
-                <a href="https://meena-chitfunds.onrender.com/" class="btn btn-monitor" target="_blank" rel="noopener noreferrer">
+                <a href="https://meenagroupschit.onrender.com/" class="btn btn-monitor" target="_blank" rel="noopener noreferrer">
                     <div class="pulse-dot"></div> ChitFunds Server
                 </a>
             </div>
@@ -590,10 +591,10 @@
             toast.style.color = 'var(--toast-text)';
             
             toast.style.padding = '14px 28px';
-            toast.style.borderRadius = '50px';
+            toast.style.borderRadius = '10px';
             toast.style.fontWeight = '600';
             toast.style.fontSize = '15px';
-            toast.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)';
+            toast.style.boxShadow = '0 8px 24px rgba(15, 23, 42, 0.2)';
             toast.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)';
             toast.style.zIndex = '1000';
             toast.style.willChange = 'transform';
