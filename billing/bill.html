@@ -158,22 +158,24 @@
             header, #installPopup, .main-scroll-area, .toast-msg { display: none !important; }
             #dpModal { display: none !important; }
 
-            /* Force 1 page and remove browser headers/footers */
+            /* MASTER FIX 1: Unlock height and flexbox globally so browser can paginate infinite sheets */
             @page {
                 size: A4 portrait;
                 margin: 0mm; 
             }
             
-            body * { visibility: hidden; }
-            body { 
-                background: white; color: black; 
-                margin: 0; padding: 0; 
-                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-                -webkit-print-color-adjust: exact !important; 
-                print-color-adjust: exact !important; 
+            html, body {
+                height: auto !important; /* UNLOCK HEIGHT */
+                overflow: visible !important;
+                display: block !important; /* KILL FLEXBOX BUG IN CHROME */
+                background: white !important; 
+                color: black !important; 
+                margin: 0 !important; 
+                padding: 0 !important;
             }
             
-            /* Show only the Print Area */
+            body * { visibility: hidden; }
+            
             #printArea, #printArea * { visibility: visible; }
             #printArea { 
                 display: block !important; 
@@ -181,22 +183,22 @@
                 width: 100%; 
                 max-width: 210mm; 
                 margin: 0 auto; 
-                padding: 0 !important; /* CRITICAL FIX: Removed large padding to allow master page logic */
-                background: white; color: #000;
+                padding: 0 !important; 
+                background: white; 
+                color: #000;
                 box-sizing: border-box;
                 -webkit-print-color-adjust: exact !important; 
                 print-color-adjust: exact !important;
             }
 
-            /* --- MASTER PAGE PAGINATION ARCHITECTURE --- */
+            /* --- MASTER PAGE PAGINATION ARCHITECTURE (FIX 2) --- */
             .print-page {
                 page-break-inside: avoid;
                 page-break-after: always;
                 break-after: page;
-                position: relative;
-                min-height: 296mm; /* Strict A4 Height Box */
-                display: flex;
-                flex-direction: column;
+                position: relative !important; /* CRITICAL for absolute footer positioning */
+                display: block !important; /* MUST BE BLOCK to prevent Flexbox page-break failure */
+                height: 297mm; /* Strict physical A4 Height Box */
                 width: 100%;
                 background: white;
                 overflow: hidden;
@@ -206,15 +208,17 @@
                 page-break-after: auto;
                 break-after: auto;
             }
+            
+            /* The scoped footer wrapper - strictly bound to the final page's bottom */
             .print-footer-wrapper {
-                margin-top: auto; /* Force footer strictly to the bottom of the last page */
+                position: absolute; /* Pinned to bottom of the .print-page block */
+                bottom: 0;
+                left: 0;
                 width: 100%;
-                display: flex;
-                flex-direction: column;
+                display: block;
             }
 
             /* --- THEME ENGINE CSS VARIABLES INJECTIONS --- */
-            /* Top Band Header (Dynamic Background) */
             .print-top-band {
                 background-color: var(--pv-header-bg, #cccccc) !important; 
                 padding: 35px 40px 25px 40px;
@@ -229,56 +233,43 @@
             
             .pv-header-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; opacity: 0; mix-blend-mode: normal; z-index: -1; }
 
-            /* TEXTURE FIX: Multi-blend Overlay added so browser prints it perfectly over elements */
             .texture-overlay {
                 position: fixed; top: 0; left: 0; width: 100%; height: 100%;
                 pointer-events: none; z-index: 9999; mix-blend-mode: multiply; opacity: 0; transition: opacity 0.3s;
             }
 
-            /* Decorative Festival SVG Vectors - Z-INDEX FIXED SO IT PRINTS ON TOP */
             .pv-festival-gfx { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; opacity: 1; }
             #printArea.show-fest-fx .pv-festival-gfx { display: block; }
             .pv-festival-gfx > div { display: none; }
             
-            /* SMART 8+ PATTERN LAYOUT OVERRIDES */
             .pv-festival-gfx > div > svg { position: absolute !important; opacity: 0.35; }
             .pv-festival-gfx > div > svg:nth-child(n+5) { display: none !important; }
             .pv-festival-gfx > div > svg:nth-child(3), .pv-festival-gfx > div > svg:nth-child(4) { display: none !important; }
             
-            /* 1. Default (TR & BL) */
             .layout-default > div > svg:nth-child(1) { top: 10px !important; right: 10px !important; bottom: auto !important; left: auto !important; display: block !important; }
             .layout-default > div > svg:nth-child(2) { bottom: 10px !important; left: 10px !important; top: auto !important; right: auto !important; display: block !important; }
-            /* 2. Corners All (TR, BL, TL, BR) */
             .layout-corners-all > div > svg:nth-child(1) { top: 10px !important; right: 10px !important; bottom: auto !important; left: auto !important; display: block !important;}
             .layout-corners-all > div > svg:nth-child(2) { bottom: 10px !important; left: 10px !important; top: auto !important; right: auto !important; display: block !important;}
             .layout-corners-all > div > svg:nth-child(3) { top: 10px !important; left: 10px !important; bottom: auto !important; right: auto !important; display: block !important; transform: rotate(-90deg) !important; }
             .layout-corners-all > div > svg:nth-child(4) { bottom: 10px !important; right: 10px !important; top: auto !important; left: auto !important; display: block !important; transform: rotate(90deg) !important; }
-            /* 3. Bottom Only */
             .layout-bottom-only > div > svg:nth-child(1) { bottom: 10px !important; right: 10px !important; top: auto !important; left: auto !important; display: block !important; transform: rotate(90deg) !important;}
             .layout-bottom-only > div > svg:nth-child(2) { bottom: 10px !important; left: 10px !important; top: auto !important; right: auto !important; display: block !important; }
-            /* 4. Top Only */
             .layout-top-only > div > svg:nth-child(1) { top: 10px !important; right: 10px !important; bottom: auto !important; left: auto !important; display: block !important; }
             .layout-top-only > div > svg:nth-child(2) { top: 10px !important; left: 10px !important; bottom: auto !important; right: auto !important; display: block !important; transform: rotate(-90deg) !important;}
             
-            /* 5. Center Circle */
             .layout-center-circle > div > svg:nth-child(1) { top: 50% !important; left: 50% !important; right: auto !important; bottom: auto !important; margin-top: -150px !important; margin-left: -150px !important; width: 300px !important; height: 300px !important; transform: scale(1.5) !important; transform-origin: center center !important; display: block !important; opacity: 0.15 !important;}
             .layout-center-circle > div > svg:nth-child(2) { display: none !important; }
             
-            /* 6. Watermark Focus */
             .layout-watermark-style > div > svg:nth-child(1) { top: 50% !important; left: 50% !important; right: auto !important; bottom: auto !important; margin-top: -150px !important; margin-left: -150px !important; width: 300px !important; height: 300px !important; transform: scale(3) !important; transform-origin: center center !important; display: block !important; opacity: 0.08 !important;}
             .layout-watermark-style > div > svg:nth-child(2) { display: none !important; }
             
-            /* 7. Left Edge */
             .layout-left-edge > div > svg:nth-child(1) { top: 10px !important; left: 10px !important; bottom: auto !important; right: auto !important; display: block !important; transform: rotate(-90deg) !important;}
             .layout-left-edge > div > svg:nth-child(2) { bottom: 10px !important; left: 10px !important; top: auto !important; right: auto !important; display: block !important; }
-            /* 8. Right Edge */
             .layout-right-edge > div > svg:nth-child(1) { top: 10px !important; right: 10px !important; bottom: auto !important; left: auto !important; display: block !important; }
             .layout-right-edge > div > svg:nth-child(2) { bottom: 10px !important; right: 10px !important; top: auto !important; left: auto !important; display: block !important; transform: rotate(90deg) !important;}
 
-            /* Custom Festival Watermark */
             .pv-watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 80px; font-weight: 900; color: var(--pv-accent, #d32f2f) !important; opacity: 0.15; text-transform: uppercase; white-space: nowrap; z-index: 5; pointer-events: none; letter-spacing: 5px; font-family: 'Playfair Display', serif; }
 
-            /* Font Theme Classes with Protection for Material Icons */
             #printArea.pv-font-modern .print-brand h2, #printArea.pv-font-modern .invoice-title-text { font-family: 'Montserrat', sans-serif !important; font-weight: 900 !important; font-style: normal !important;}
             #printArea.pv-font-modern, #printArea.pv-font-modern *:not(.material-symbols-outlined):not(.sign-box h4) { font-family: 'Roboto', sans-serif !important; }
             
@@ -287,7 +278,6 @@
             
             #printArea.pv-font-helvetica, #printArea.pv-font-helvetica *:not(.material-symbols-outlined):not(.sign-box h4) { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important; }
 
-            /* Material Icon Protection Override */
             #printArea .material-symbols-outlined,
             .pv-font-modern .material-symbols-outlined,
             .pv-font-elegant .material-symbols-outlined,
@@ -297,7 +287,6 @@
                 font-style: normal !important;
             }
 
-            /* Reliable CSS Paper Texture Options Applied Safely to the Frame */
             #printArea.texture-vintage, #prTextureOverlay.texture-vintage {
                 background-color: #fcf8ec !important; opacity: 1 !important; 
                 background-image: radial-gradient(#e4d5b7 1px, transparent 1px) !important;
@@ -318,7 +307,6 @@
                 background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 10px) !important;
             }
 
-            /* Header Left Side */
             .print-header-left { width: 55%; }
             .print-brand { display: flex; flex-direction: column; gap: 2px; margin-bottom: 25px; }
             .print-brand h2 { margin: 0; font-size: 32px; font-weight: 900; letter-spacing: -1px; font-style: italic; color: var(--pv-invoice-title, #d32f2f) !important; line-height: 1;}
@@ -331,7 +319,6 @@
             .print-invoice-to p { margin: 3px 0; font-size: 12px; color: var(--pv-header-text, #222) !important;}
             .print-invoice-to p strong { display: inline-block; width: 75px; font-size: 10px; text-transform: uppercase; color: var(--pv-header-text, #000) !important;}
 
-            /* Header Right Side */
             .print-header-right { width: 40%; text-align: right; display: flex; flex-direction: column; align-items: flex-end; }
             .qr-box { border: 2px solid var(--pv-header-text, #000) !important; background-color: #fff !important; padding: 5px; display: inline-flex; justify-content:center; align-items:center; margin-bottom: 15px; min-width: 50px; min-height: 50px; }
             .qr-box span { font-size: 36px; color: #000; display: block; }
@@ -345,7 +332,6 @@
             .invoice-date-box div span { font-size: 9px; font-weight: bold; text-transform: uppercase; color: var(--pv-header-sub, #333) !important;}
             .invoice-date-box div strong { font-size: 13px; font-weight: bold; color: var(--pv-header-text, #000) !important;}
 
-            /* Table Layout - Professional Alignment */
             .print-table-container { padding: 0 40px; display: block; width: 100%; box-sizing: border-box; z-index: 2; position: relative;}
             .print-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; } 
             .print-table th { background-color: var(--pv-th-bg, #cccccc) !important; padding: 12px 10px; font-size: 11px; text-transform: uppercase; text-align: left; color: var(--pv-th-text, #000) !important; font-weight: bold; border-top: var(--pv-border-style, 1px solid #000) !important; border-bottom: var(--pv-border-style, 1px solid #000) !important; }
@@ -354,7 +340,6 @@
             .print-table th.text-right, .print-table td.text-right { text-align: right; padding-right: 15px; }
             .print-table th.text-center, .print-table td.text-center { text-align: center; }
 
-            /* Strict Row Formatting to support exact 5 items space */
             .print-table tbody tr {
                 page-break-inside: avoid;
                 break-inside: avoid;
@@ -363,10 +348,11 @@
                 overflow: hidden;
             }
 
-            /* --- RELATIVE FLEX FLOW FOOTERS (NO MORE OVERLAP BUG) --- */
+            /* --- BLOCK FLOW FOOTERS FOR MASTER PAGE (FIX 2 CONTINUED) --- */
+            /* Displayed as normal blocks so they stack correctly inside the absolute wrapper */
             .print-middle-section { 
                 display: flex; justify-content: space-between; padding: 15px 40px; margin-top: 0; margin-bottom: 20px;
-                position: relative !important; bottom: auto; left: auto; right: auto; width: 100%; box-sizing: border-box; background-color: transparent; z-index: 999;
+                width: 100%; box-sizing: border-box; background-color: transparent; z-index: 999;
             }
             
             .print-left-footer-info { width: 45%; }
@@ -387,7 +373,7 @@
 
             .print-signature-area { 
                 display: flex; justify-content: flex-end; padding: 0 40px; margin-top: 0; margin-bottom: 20px;
-                position: relative !important; bottom: auto; left: auto; right: auto; width: 100%; box-sizing: border-box; background-color: transparent; z-index: 999;
+                width: 100%; box-sizing: border-box; background-color: transparent; z-index: 999;
             }
             .sign-box { text-align: center; width: 220px; }
             .sign-box div.sign-placeholder { border-bottom: 1px solid #000; height: 35px; margin-bottom: 8px; width: 100%; }
@@ -396,7 +382,7 @@
             
             .print-absolute-footer { 
                 background-color: var(--pv-header-bg, #cccccc) !important; padding: 10px 40px; display: flex; justify-content: center; align-items: center; margin-top: 0; 
-                position: relative !important; bottom: auto; left: auto; right: auto; width: 100%; box-sizing: border-box; border-bottom: 6px solid var(--pv-accent, transparent) !important; z-index: 999;
+                width: 100%; box-sizing: border-box; border-bottom: 6px solid var(--pv-accent, transparent) !important; z-index: 999;
             }
             .print-absolute-footer p { margin: 0; font-size: 9px; font-weight: bold; color: var(--pv-header-sub, #333) !important; text-transform: uppercase; letter-spacing: 1px;}
         }
@@ -1087,13 +1073,13 @@
                             if (data.customImgUrl && data.customImgUrl.trim()) {
                                 headerImg.src = data.customImgUrl.trim();
                                 headerImg.style.display = 'block';
-                                headerImg.onerror = function() { this.style.display = 'none'; }; // Prevents broken file icon natively
+                                headerImg.onerror = function() { this.style.display = 'none'; }; 
                                 headerImg.style.opacity = (data.customOpacity !== undefined ? data.customOpacity : 30) / 100;
                                 headerGrad.style.background = `linear-gradient(to right, ${cfg.hdrBg} 30%, transparent 100%)`;
                                 bgLayer.style.opacity = 1; 
                             } else {
                                 headerImg.style.display = 'none';
-                                headerImg.removeAttribute('src'); // Cleanly removes source to prevent icon rendering
+                                headerImg.removeAttribute('src'); 
                                 headerGrad.style.background = 'none';
                                 bgLayer.style.opacity = 0;
                             }
