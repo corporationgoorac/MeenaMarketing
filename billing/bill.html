@@ -204,7 +204,22 @@
                 z-index: 2;
             }
             
-            .pv-header-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; opacity: 0; mix-blend-mode: normal; z-index: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .pv-header-bg { 
+                position: absolute; 
+                top: 0; 
+                left: 0; 
+                width: 100%; 
+                height: 100%; 
+                z-index: 0 !important; /* Sits ABOVE .print-top-band background-color */
+                pointer-events: none;
+                overflow: hidden;
+            }
+
+            /* Ensure header text & QR sit ABOVE the image */
+            .print-header-left, .print-header-right {
+                position: relative;
+                z-index: 2 !important; 
+            }
 
             /* TEXTURE FIX: Multi-blend Overlay added so browser prints it perfectly over elements */
             .texture-overlay {
@@ -1171,9 +1186,19 @@
 
                             // Apply Dynamic Image Overlays for Header
                             if (data.customImgUrl && data.customImgUrl.trim()) {
-                                bgLayer.style.backgroundImage = `linear-gradient(to right, ${cfg.hdrBg} 30%, transparent 100%), url(${data.customImgUrl.trim()})`;
-                                bgLayer.style.opacity = (data.customOpacity !== undefined ? data.customOpacity : 30) / 100;
+                                const imgUrl = data.customImgUrl.trim();
+                                const op = (data.customOpacity !== undefined ? data.customOpacity : 30) / 100;
+                                
+                                bgLayer.style.opacity = '1';
+                                bgLayer.style.backgroundImage = 'none';
+                                
+                                // Inject a real <img> tag so Print Preview is forced to render it immediately
+                                bgLayer.innerHTML = `
+                                    <img src="${imgUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: ${op}; z-index: 0;">
+                                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, ${cfg.hdrBg} 30%, transparent 100%); opacity: ${op}; z-index: 1;"></div>
+                                `;
                             } else {
+                                bgLayer.innerHTML = '';
                                 bgLayer.style.backgroundImage = 'none';
                                 bgLayer.style.opacity = 0;
                             }
@@ -1186,6 +1211,7 @@
                             festivalContainer.className = 'pv-festival-gfx';
                             textureOverlay.className = 'texture-overlay';
                             festivalContainer.querySelectorAll('div').forEach(el => el.style.display = 'none');
+                            bgLayer.innerHTML = '';
                             bgLayer.style.backgroundImage = 'none';
                             bgLayer.style.opacity = 0;
                             watermarkText.innerText = '';
