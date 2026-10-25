@@ -183,7 +183,7 @@
                 min-height: 100vh;
                 margin: 0 auto; 
                 padding: 0; 
-                padding-bottom: 0 !important; /* CRITICAL FIX: Stops main content before fixed footers */
+                padding-bottom: 260px !important; /* CRITICAL FIX: Stops main content before fixed footers */
                 background: white; color: #000;
                 box-sizing: border-box;
                 -webkit-print-color-adjust: exact !important; 
@@ -339,10 +339,6 @@
             .print-table th.text-center, .print-table td.text-center { text-align: center; }
 
             /* --- Strict Row Formatting for Pagination Safety --- */
-            .print-table tbody tr:nth-child(5n):not(:last-child) {
-                page-break-after: always;
-                break-after: page;
-            }
             .print-table tbody tr {
                 page-break-inside: avoid;
                 break-inside: avoid;
@@ -808,7 +804,11 @@
         <div class="pv-watermark" id="prWatermarkText"></div>
 
         <div class="print-top-band">
-            <div class="pv-header-bg" id="prHeaderBg"></div>
+            <div class="pv-header-bg" id="prHeaderBg">
+                <!-- Using an img tag bypasses the browser's background print restrictions -->
+                <img id="prHeaderImg" src="" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:none; z-index:1;" crossorigin="anonymous" />
+                <div id="prHeaderGradient" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:2;"></div>
+            </div>
             <div class="print-header-left">
                 <div class="print-brand">
                     <h2>Meena Marketing</h2>
@@ -845,20 +845,8 @@
             </div>
         </div>
 
-        <div class="print-table-container">
-            <table class="print-table">
-                <thead>
-                    <tr>
-                        <th style="width: 6%;">No.</th>
-                        <th style="width: 49%;">Descriptions</th>
-                        <th style="width: 15%;" class="text-right">Unit Price</th>
-                        <th style="width: 10%;" class="text-center">Unit</th>
-                        <th style="width: 20%;" class="text-right">Price</th>
-                    </tr>
-                </thead>
-                <tbody id="prTableBody">
-                    </tbody>
-            </table>
+        <div class="print-table-container" id="prTableContainer">
+            <!-- Table chunks injected by JS for exact pagination -->
         </div>
 
         <div class="print-middle-section">
@@ -1064,6 +1052,8 @@
                 onSnapshot(docRef, (snap) => {
                     const printArea = document.getElementById('printArea');
                     const bgLayer = document.getElementById('prHeaderBg');
+                    const headerImg = document.getElementById('prHeaderImg');
+                    const headerGrad = document.getElementById('prHeaderGradient');
                     const watermarkText = document.getElementById('prWatermarkText');
                     const textureOverlay = document.getElementById('prTextureOverlay');
                     const festivalContainer = document.getElementById('prFestivalContainer');
@@ -1165,16 +1155,19 @@
                             textureOverlay.className = 'texture-overlay';
                             if (data.customTexture && data.customTexture !== 'none') {
                                 printArea.classList.add(`texture-${data.customTexture}`);
-                                // FIXED: Do not apply the same texture class to overlay to prevent double-darkening multiply bug
-                                // textureOverlay.classList.add(`texture-${data.customTexture}`);
                             }
 
-                            // Apply Dynamic Image Overlays for Header
+                            // Apply Dynamic Image Overlays for Header using img tag for print safety
                             if (data.customImgUrl && data.customImgUrl.trim()) {
-                                bgLayer.style.backgroundImage = `linear-gradient(to right, ${cfg.hdrBg} 30%, transparent 100%), url(${data.customImgUrl.trim()})`;
-                                bgLayer.style.opacity = (data.customOpacity !== undefined ? data.customOpacity : 30) / 100;
+                                headerImg.src = data.customImgUrl.trim();
+                                headerImg.style.display = 'block';
+                                headerImg.style.opacity = (data.customOpacity !== undefined ? data.customOpacity : 30) / 100;
+                                headerGrad.style.background = `linear-gradient(to right, ${cfg.hdrBg} 30%, transparent 100%)`;
+                                bgLayer.style.opacity = 1; 
                             } else {
-                                bgLayer.style.backgroundImage = 'none';
+                                headerImg.style.display = 'none';
+                                headerImg.src = '';
+                                headerGrad.style.background = 'none';
                                 bgLayer.style.opacity = 0;
                             }
 
@@ -1186,8 +1179,12 @@
                             festivalContainer.className = 'pv-festival-gfx';
                             textureOverlay.className = 'texture-overlay';
                             festivalContainer.querySelectorAll('div').forEach(el => el.style.display = 'none');
+                            
                             bgLayer.style.backgroundImage = 'none';
                             bgLayer.style.opacity = 0;
+                            if(headerImg) headerImg.style.display = 'none';
+                            if(headerGrad) headerGrad.style.background = 'none';
+                            
                             watermarkText.innerText = '';
                         }
 
@@ -1835,13 +1832,10 @@
             let dObj = cDate ? new Date(cDate) : new Date();
             document.getElementById('prDate').innerText = `${dObj.getDate().toString().padStart(2, '0')}-${(dObj.getMonth()+1).toString().padStart(2, '0')}-${dObj.getFullYear()}`;
 
-            // Fill Table
-            const tbody = document.getElementById('prTableBody');
-            tbody.innerHTML = '';
-            
-            // --- SMART ALGORITHM: Pad items to strictly force 5 items per chunk ---
-            // This guarantees the printed middle height is ALWAYS identical, flawlessly pushing 
-            // the footer securely to the bottom of the last page, regardless of whether you print 2 or 6 items.
+            // Fill Table using Chunking Algorithm for flawless page breaks
+            const tableContainer = document.getElementById('prTableContainer');
+            tableContainer.innerHTML = '';
+
             let printItems = [...cartItems];
             const maxRowsPerPage = 5;
             const remainder = printItems.length % maxRowsPerPage;
@@ -1853,46 +1847,75 @@
                 }
             }
 
-            printItems.forEach((item, index) => {
-                if (item.isEmptyRow) {
-                    // Inject invisible spacing row to maintain physical space for pagination structure
-                    // FIXED: Removed borders for empty padding rows so they appear as completely blank space
-                    tbody.innerHTML += `
+            // Split into 5-item chunks
+            const chunks = [];
+            for (let i = 0; i < printItems.length; i += maxRowsPerPage) {
+                chunks.push(printItems.slice(i, i + maxRowsPerPage));
+            }
+
+            chunks.forEach((chunk, chunkIndex) => {
+                const isLastChunk = chunkIndex === chunks.length - 1;
+                
+                let tbodyContent = '';
+                chunk.forEach((item, itemIdx) => {
+                    if (item.isEmptyRow) {
+                        tbodyContent += `
+                            <tr style="height: 25mm; max-height: 25mm;">
+                                <td style="border-bottom: none !important;"></td>
+                                <td style="border-bottom: none !important;"></td>
+                                <td style="border-bottom: none !important;"></td>
+                                <td style="border-bottom: none !important;"></td>
+                                <td style="border-bottom: none !important;"></td>
+                            </tr>
+                        `;
+                        return;
+                    }
+                    
+                    const overallIndex = (chunkIndex * maxRowsPerPage) + itemIdx;
+                    const num = (overallIndex + 1).toString().padStart(2, '0');
+                    
+                    const gstText = item.gstPercent > 0 ? ` • GST: ${item.gstPercent}%` : '';
+                    const discText = (item.discount || 0) > 0 ? ` • Discount: -₹${item.discount}` : ''; 
+                    
+                    const desc = `
+                        <strong style="font-size:13px; display:block; color:var(--pv-header-text, #000); padding-bottom: 3px;">${item.name}</strong>
+                        <span style="font-size:11px; color:var(--pv-header-sub, #555);">${item.model ? 'Model: '+item.model : 'Standard Item'}${gstText}${discText}</span>
+                    `;
+                    
+                    const isLastProduct = (overallIndex === cartItems.length - 1);
+                    const dynamicBorder = isLastProduct ? 'none !important' : 'var(--pv-border-style, 1px solid #ddd) !important';
+                    
+                    tbodyContent += `
                         <tr style="height: 25mm; max-height: 25mm;">
-                            <td style="border-bottom: none !important;"></td>
-                            <td style="border-bottom: none !important;"></td>
-                            <td style="border-bottom: none !important;"></td>
-                            <td style="border-bottom: none !important;"></td>
-                            <td style="border-bottom: none !important;"></td>
+                            <td style="white-space: nowrap; border-bottom: ${dynamicBorder};">${num}.</td>
+                            <td style="border-bottom: ${dynamicBorder};">${desc}</td>
+                            <td class="text-right" style="white-space: nowrap; border-bottom: ${dynamicBorder};">₹${item.originalUnitPriceBase.toFixed(2)}</td>
+                            <td class="text-center" style="white-space: nowrap; border-bottom: ${dynamicBorder};">${item.qty.toString().padStart(2, '0')}</td>
+                            <td class="text-right" style="white-space: nowrap; font-weight:bold; color:var(--pv-header-text, #000); border-bottom: ${dynamicBorder};">₹${item.finalTotal.toFixed(2)}</td>
                         </tr>
                     `;
-                    return;
-                }
+                });
+
+                const breakStyle = !isLastChunk ? 'page-break-after: always; break-after: page;' : '';
+                const marginStyle = chunkIndex > 0 ? 'margin-top: 40px;' : '';
                 
-                const num = (index + 1).toString().padStart(2, '0');
-                
-                const gstText = item.gstPercent > 0 ? ` • GST: ${item.gstPercent}%` : '';
-                const discText = (item.discount || 0) > 0 ? ` • Discount: -₹${item.discount}` : ''; 
-                
-                const desc = `
-                    <strong style="font-size:13px; display:block; color:var(--pv-header-text, #000); padding-bottom: 3px;">${item.name}</strong>
-                    <span style="font-size:11px; color:var(--pv-header-sub, #555);">${item.model ? 'Model: '+item.model : 'Standard Item'}${gstText}${discText}</span>
-                `;
-                
-                // NEW LOGIC: Check if this is the last actual product in the cart
-                const isLastProduct = (index === cartItems.length - 1);
-                
-                // Applies the Theme Engine's '--pv-border-style' to all items EXCEPT the last one
-                const dynamicBorder = isLastProduct ? 'none !important' : 'var(--pv-border-style, 1px solid #ddd) !important';
-                
-                tbody.innerHTML += `
-                    <tr style="height: 25mm; max-height: 25mm;">
-                        <td style="white-space: nowrap; border-bottom: ${dynamicBorder};">${num}.</td>
-                        <td style="border-bottom: ${dynamicBorder};">${desc}</td>
-                        <td class="text-right" style="white-space: nowrap; border-bottom: ${dynamicBorder};">₹${item.originalUnitPriceBase.toFixed(2)}</td>
-                        <td class="text-center" style="white-space: nowrap; border-bottom: ${dynamicBorder};">${item.qty.toString().padStart(2, '0')}</td>
-                        <td class="text-right" style="white-space: nowrap; font-weight:bold; color:var(--pv-header-text, #000); border-bottom: ${dynamicBorder};">₹${item.finalTotal.toFixed(2)}</td>
-                    </tr>
+                tableContainer.innerHTML += `
+                    <div style="${breakStyle} ${marginStyle}">
+                        <table class="print-table" style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                            <thead>
+                                <tr>
+                                    <th style="width: 6%;">No.</th>
+                                    <th style="width: 49%;">Descriptions</th>
+                                    <th style="width: 15%;" class="text-right">Unit Price</th>
+                                    <th style="width: 10%;" class="text-center">Unit</th>
+                                    <th style="width: 20%;" class="text-right">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tbodyContent}
+                            </tbody>
+                        </table>
+                    </div>
                 `;
             });
 
