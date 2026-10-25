@@ -646,7 +646,7 @@
             </div>
             <div class="pattern-sparkles">
                 <svg style="position:absolute; top: 20px; right: 20px; width: 200px; height: 200px; fill: var(--pv-accent, #000);" viewBox="0 0 100 100"><path d="M50 0 Q50 50 100 50 Q50 50 50 100 Q50 50 0 50 Q50 50 50 0 Z" opacity="0.6"/><path d="M20 20 Q20 30 30 30 Q20 30 20 40 Q20 30 10 30 Q20 30 20 20 Z" opacity="0.5"/><path d="M80 70 Q80 80 90 80 Q80 80 80 90 Q80 80 70 80 Q80 80 80 70 Z" opacity="0.4"/></svg>
-                <svg style="position:absolute; bottom: 20px; left: 20px; width: 200px; height: 200px; fill: var(--pv-accent, #000);" viewBox="0 0 100 100"><path d="M50 0 Q50 50 100 50 Q50 50 50 100 Q50 50 0 50 Q50 50 50 0 Z" opacity="0.6"/><path d="M20 20 Q20 30 30 30 Q20 30 20 40 Q20 30 10 30 Q20 30 20 20 Z" opacity="0.5"/><path d="M80 70 Q80 80 90 80 Q80 80 80 90 Q80 80 70 80 Q80 80 80 70 Z" opacity="0.4"/></svg>
+                <svg style="position:absolute; bottom: 20px; left: 20px; width: 200px; height: 200px; fill: var(--pv-accent, #000);" viewBox="0 0 100 100"><path d="M50 0 Q50 50 100 50 Q50 50 50 100 Q50 50 0 50 Q50 50 50 0 Z" opacity="0.6"/><path d="M20 20 Q20 30 30 30 30 Q20 30 20 40 Q20 30 10 30 Q20 30 20 20 Z" opacity="0.5"/><path d="M80 70 Q80 80 90 80 Q80 80 80 90 Q80 80 70 80 Q80 80 80 70 Z" opacity="0.4"/></svg>
                 <svg style="position:absolute; top: 20px; right: 20px; width: 200px; height: 200px; fill: var(--pv-accent, #000);" viewBox="0 0 100 100"><path d="M50 0 Q50 50 100 50 Q50 50 50 100 Q50 50 0 50 Q50 50 50 0 Z" opacity="0.6"/><path d="M20 20 Q20 30 30 30 Q20 30 20 40 Q20 30 10 30 Q20 30 20 20 Z" opacity="0.5"/><path d="M80 70 Q80 80 90 80 Q80 80 80 90 Q80 80 70 80 Q80 80 80 70 Z" opacity="0.4"/></svg>
                 <svg style="position:absolute; bottom: 20px; left: 20px; width: 200px; height: 200px; fill: var(--pv-accent, #000);" viewBox="0 0 100 100"><path d="M50 0 Q50 50 100 50 Q50 50 50 100 Q50 50 0 50 Q50 50 50 0 Z" opacity="0.6"/><path d="M20 20 Q20 30 30 30 Q20 30 20 40 Q20 30 10 30 Q20 30 20 20 Z" opacity="0.5"/><path d="M80 70 Q80 80 90 80 Q80 80 80 90 Q80 80 70 80 Q80 80 80 70 Z" opacity="0.4"/></svg>
             </div>
@@ -1610,23 +1610,6 @@
             }
             document.getElementById('prGrandTotal').innerText = `₹${billTotals.grand.toFixed(2)}`;
 
-            // Generate the QR Code safely inside the template container
-            const qrContainer = document.getElementById('prQrCodeContainer');
-            const qrPlaceholder = document.getElementById('prQrPlaceholder');
-            qrContainer.innerHTML = ''; 
-
-            if(globalThemeConfig.upiId && globalThemeConfig.upiId.trim() !== '') {
-                qrPlaceholder.style.display = 'none';
-                qrContainer.style.display = 'block';
-                new QRCode(qrContainer, {
-                    text: `upi://pay?pa=${globalThemeConfig.upiId.trim()}&pn=Meena%20Marketing&am=${billTotals.grand.toFixed(2)}`, 
-                    width: 60, height: 60, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H
-                });
-            } else {
-                qrPlaceholder.style.display = 'block';
-                qrContainer.style.display = 'none';
-            }
-
             // 2. BEGIN GENERATING PERFECT MASTER PAGES
             const pagesContainer = document.getElementById('printPagesContainer');
             pagesContainer.innerHTML = ''; 
@@ -1723,6 +1706,29 @@
 
                 pageDiv.innerHTML = pageHTML;
                 pagesContainer.appendChild(pageDiv);
+            });
+            
+            // 3. QR CODE BUG FIX: Generate QR Codes AFTER the pages are appended to the DOM.
+            // Canvas elements lose their drawing context when serialized via outerHTML.
+            // We now loop over all generated pages and draw the QR code directly onto the live DOM nodes.
+            const printedQrContainers = pagesContainer.querySelectorAll('#prQrCodeContainer');
+            const printedQrPlaceholders = pagesContainer.querySelectorAll('#prQrPlaceholder');
+            
+            printedQrContainers.forEach((qrContainer, index) => {
+                const qrPlaceholder = printedQrPlaceholders[index];
+                qrContainer.innerHTML = ''; 
+
+                if(globalThemeConfig.upiId && globalThemeConfig.upiId.trim() !== '') {
+                    qrPlaceholder.style.display = 'none';
+                    qrContainer.style.display = 'block';
+                    new QRCode(qrContainer, {
+                        text: `upi://pay?pa=${globalThemeConfig.upiId.trim()}&pn=Meena%20Marketing&am=${billTotals.grand.toFixed(2)}`, 
+                        width: 60, height: 60, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H
+                    });
+                } else {
+                    qrPlaceholder.style.display = 'block';
+                    qrContainer.style.display = 'none';
+                }
             });
         }
 
