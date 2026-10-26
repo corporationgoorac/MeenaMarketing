@@ -1,8 +1,8 @@
 // sw.js (Inside /billing/)
 
 // 1. CACHE CONFIGURATION
-const CACHE_NAME = 'billing-app-v4'; // Bumped to v4 to trigger immediate cache refresh for offline.html
-const DYNAMIC_CACHE_NAME = 'billing-app-dynamic-v4';
+const CACHE_NAME = 'billing-app-v7'; // Bumped to v7 to trigger immediate cache refresh for the new offline logic
+const DYNAMIC_CACHE_NAME = 'billing-app-dynamic-v7';
 
 // 2. APP SHELL (Core assets located directly inside the 'billing' directory)
 const ASSETS_TO_CACHE = [
@@ -54,11 +54,22 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 5. FETCH EVENT: Pure Stale-While-Revalidate with Cache Segregation & Offline Fallback
+// 5. FETCH EVENT: 0ms Load + Hardware Offline Check & Cache Segregation
 self.addEventListener('fetch', (event) => {
   // Intercept only standard GET requests (allows external CDNs to cache, ignores Firebase API calls)
   if (event.request.method !== 'GET' || !event.request.url.startsWith('http')) return;
 
+  const isHTML = event.request.headers.get('accept')?.includes('text/html');
+
+  // STRICT HARDWARE OFFLINE CHECK
+  // If the device knows it has no internet right now, instantly show offline.html
+  if (isHTML && !navigator.onLine) {
+    console.warn('[Billing Service Worker] Device is offline. Forcing offline.html');
+    event.respondWith(caches.match('./offline.html'));
+    return;
+  }
+
+  // IF ONLINE: Proceed with 0ms Instant Load (Stale-While-Revalidate)
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       
@@ -92,7 +103,7 @@ self.addEventListener('fetch', (event) => {
       // 2. If it's NOT in the cache yet, wait for the network fetch
       return fetchPromise.catch(() => {
         // 3. ULTIMATE FAILSAFE: If offline and a requested HTML page isn't in cache, serve offline.html
-        if (event.request.headers.get('accept')?.includes('text/html')) {
+        if (isHTML) {
           console.log('[Billing Service Worker] Offline HTML fallback triggered. Serving offline.html');
           return caches.match('./offline.html');
         }
