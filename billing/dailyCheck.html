@@ -294,7 +294,8 @@
                 <!-- Missing Input State -->
                 <div id="actionStateMissing" style="display: none; flex-direction: column;">
                     <p style="color: var(--warning-color); font-weight: 600; margin-bottom: 10px;">Enter Actual Physical Count:</p>
-                    <input type="number" id="inputMissingQty" placeholder="e.g. 18 or 22" min="0">
+                    <!-- UPDATED: Mobile Keyboard Fix -->
+                    <input type="number" id="inputMissingQty" placeholder="e.g. 18 or 22" min="0" inputmode="numeric" pattern="[0-9]*">
                     <div style="display: flex; gap: 10px;">
                         <button class="btn-full" style="background: var(--input-bg); color: white; border: 1px solid var(--input-border);" onclick="vibrateApp(15); toggleMissingInput()">Cancel</button>
                         <button class="btn-full btn-danger" style="background: var(--meena-red); color: white;" id="btnSubmitMissing" onclick="vibrateApp(35); executeReportMissing()">
@@ -307,12 +308,16 @@
         </div>
     </div>
 
-    <!-- SVGs for Empty States -->
+    <!-- Google Material: All Daily Tasks Done SVG -->
     <template id="svgPendingEmpty">
-        <svg class="empty-svg" viewBox="0 0 24 24" fill="none" stroke="var(--success-color)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-        </svg>
+        <div class="google-anim-container" id="matPendingEmpty">
+            <svg class="empty-svg" viewBox="0 0 24 24" fill="none" stroke="var(--success-color)" stroke-linecap="round" stroke-linejoin="round" style="overflow: visible;">
+                <!-- Spinning Circle Outline -->
+                <path class="mat-path" d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke-width="1.5"></path>
+                <!-- Snapping Checkmark -->
+                <polyline class="mat-path mat-check" points="22 4 12 14.01 9 11.01" stroke-width="2.5"></polyline>
+            </svg>
+        </div>
     </template>
     
     <!-- Google Material: Audit Complete SVG -->
@@ -607,12 +612,26 @@
                 // document.querySelectorAll('.pagination-spinner').forEach(spinner => spinner.remove());
 
                 if (snap.empty) {
-                    pendingGrid.innerHTML = `
-                        <div class="empty-state">
-                            ${svgPendingEmpty}
-                            <h3 style="margin:0; color:white;">All Tasks Finished!</h3>
-                            <p style="margin:0;">Great job. No active assignments left in the queue.</p>
-                        </div>`;
+                    // UPDATED: Quick background check to see if the entire cycle is actually done
+                    getDocs(query(collection(db, "daily_check"), where("status", "==", "unassigned"), limit(1))).then(unassignedSnap => {
+                        if (unassignedSnap.empty) {
+                            // Entire 500-cycle is completely finished!
+                            pendingGrid.innerHTML = `
+                                <div class="empty-state">
+                                    ${svgAllChecked}
+                                    <h3 style="margin:0; color:white;">Audit Cycle Complete!</h3>
+                                    <p style="margin:0;">All inventory has been checked. Waiting for Admin to restart the cycle.</p>
+                                </div>`;
+                        } else {
+                            // Just today's batch is finished
+                            pendingGrid.innerHTML = `
+                                <div class="empty-state">
+                                    ${svgPendingEmpty}
+                                    <h3 style="margin:0; color:white;">All Tasks Finished!</h3>
+                                    <p style="margin:0;">Great job. No active assignments left in the queue.</p>
+                                </div>`;
+                        }
+                    }).catch(e => console.log("Check failed", e));
                     return;
                 }
 
@@ -960,7 +979,8 @@
                 });
 
                 // 3. Trigger specific element animations based on the SVG type
-                if (containerId === 'matAuditSuccess') {
+                // UPDATED: Added matPendingEmpty so its checkmark pops correctly
+                if (containerId === 'matAuditSuccess' || containerId === 'matPendingEmpty') {
                     setTimeout(() => {
                         const fill = container.querySelector('.mat-tv-fill');
                         const check = container.querySelector('.mat-check');
@@ -985,6 +1005,8 @@
                         if (node.nodeType === 1) { // If it's an HTML Element
                             if (node.querySelector('#matAuditSuccess')) animateMaterialSVG('matAuditSuccess');
                             if (node.querySelector('#matSundayRest')) animateMaterialSVG('matSundayRest');
+                            // UPDATED: Added observer for Pending Empty state
+                            if (node.querySelector('#matPendingEmpty')) animateMaterialSVG('matPendingEmpty');
                         }
                     });
                 });
