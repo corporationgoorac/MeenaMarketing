@@ -1,18 +1,16 @@
 // sw.js
 
 // 1. CACHE CONFIGURATION
-// Main shell cache (bump version to force updates)
 const CACHE_NAME = 'goorac-meena-v2';
-// Dynamic cache for assets discovered at runtime
 const DYNAMIC_CACHE_NAME = 'goorac-meena-dynamic-v2';
 
-// 2. APP SHELL
-// Using relative paths (./) since the app is hosted inside a subfolder (marketing)
+// 2. APP SHELL (Core Files)
 const APP_SHELL = [
   './',
   './index.html',
   './abc.html',
   './add.html',
+  './aiBot.html',
   './ask.html',
   './attandance.html',
   './companies.html',
@@ -39,15 +37,9 @@ self.addEventListener('install', (event) => {
   console.log('[Service Worker] Installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('[Service Worker] Pre-caching App Shell');
-        return cache.addAll(APP_SHELL);
-      })
-      .catch((error) => {
-        console.error('[Service Worker] Pre-caching failed:', error);
-      })
+      .then((cache) => cache.addAll(APP_SHELL))
+      .catch((error) => console.error('[Service Worker] Pre-caching failed:', error))
   );
-  // Force active immediately
   self.skipWaiting();
 });
 
@@ -58,7 +50,6 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cache) => {
-          // Clear old caches that don't match the current standard or dynamic names
           if (cache !== CACHE_NAME && cache !== DYNAMIC_CACHE_NAME) {
             console.log('[Service Worker] Clearing Old Cache:', cache);
             return caches.delete(cache);
@@ -67,50 +58,41 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
-  // Take control of uncontrolled clients immediately
   self.clients.claim();
 });
 
-// 5. FETCH EVENT - Cache First Strategy with Dynamic Caching
+// 5. FETCH EVENT - Pure Stale-While-Revalidate with Cache Segregation
 self.addEventListener('fetch', (event) => {
-  // Only intercept standard GET requests
-  if (event.request.method !== 'GET') return;
-
-  // Prevent errors from browser extensions or unsupported schemas (e.g., chrome-extension://)
-  if (!event.request.url.startsWith('http')) return;
+  // Only intercept standard GET requests from http/https
+  if (event.request.method !== 'GET' || !event.request.url.startsWith('http')) return;
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      // 1. Return the cached file if we have it
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      
-      // 2. Otherwise, fetch from the network
-      return fetch(event.request).then((networkResponse) => {
-        // Ensure we only dynamically cache valid, successful responses
-        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+      // The background network fetch
+      const fetchPromise = fetch(event.request)
+        .then((networkResponse) => {
+          // If valid response, silently update the cache for the NEXT visit
+          if (networkResponse && (networkResponse.status === 200 || networkResponse.type === 'opaque')) {
+            const clone = networkResponse.clone();
+            
+            // PROFESSIONAL TWEAK: Segregate core files vs dynamic external assets
+            const requestUrl = new URL(event.request.url);
+            // Check if the requested file is one of our core APP_SHELL files
+            const isCoreFile = APP_SHELL.some(route => 
+              requestUrl.pathname.endsWith(route.replace('./', '')) && route !== './'
+            );
+            
+            // Route the file to the correct organized cache folder
+            const targetCache = isCoreFile ? CACHE_NAME : DYNAMIC_CACHE_NAME;
+
+            caches.open(targetCache).then((cache) => cache.put(event.request, clone));
+          }
           return networkResponse;
-        }
+        })
+        .catch(() => console.warn('[Service Worker] Background update failed (Offline).'));
 
-        // Clone the response because streams can only be consumed once
-        const responseToCache = networkResponse.clone();
-
-        // 3. Dynamically cache the new file for next time
-        caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
-
-        return networkResponse;
-      }).catch((error) => {
-        // User is fully offline and the file isn't cached
-        console.warn('[Service Worker] Fetch failed, user offline:', error);
-        
-        // Optional: If you ever create an 'offline.html', you can serve it here:
-        // if (event.request.headers.get('accept').includes('text/html')) {
-        //   return caches.match('./offline.html');
-        // }
-      });
+      // Instantly return the cached version if it exists (0ms load), otherwise wait for the network
+      return cachedResponse || fetchPromise;
     })
   );
 });
