@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Offline - Meena Marketing</title>
+    
+    <!-- Matches the mobile status bar seamlessly to the app background -->
+    <meta name="theme-color" content="#121212">
+    
+    <style>
+        :root {
+            --bg-color: #121212;
+            --surface-soft: #1a1a20;
+            --stroke-main: #e5e5ea;
+            --stroke-muted: #52525e;
+            --text-primary: #ffffff;
+            --text-secondary: #8e8e98;
+            --meena-red: #ff3b30;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .offline-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            max-width: 460px;
+            padding: 20px 28px;
+        }
+
+        /* =========================================================
+           STAGE & SELF-DRAWING VECTOR ENGINE
+        ========================================================== */
+        .canvas-stage {
+            width: 100%;
+            max-width: 380px;
+            height: 310px;
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .scene-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Step 1: Draw the Cloud First (0.1s -> 1.4s) */
+        .draw-cloud {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: traceLine 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+        }
+
+        /* Step 2: Draw the Hand & Phone Second (0.85s -> 2.3s) */
+        .draw-hand-phone {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: traceLine 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.85s forwards;
+        }
+
+        /* Step 3: Draw Internal UI Details (1.5s -> 2.6s) */
+        .draw-detail {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: traceLine 1.1s cubic-bezier(0.22, 1, 0.36, 1) 1.5s forwards;
+        }
+
+        /* Step 4: Softly Fade in Surfaces After Lines Finish Drawing */
+        .fill-fade {
+            opacity: 0;
+            animation: fadeInSurface 1.2s ease-out 1.8s forwards;
+        }
+
+        @keyframes traceLine {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes fadeInSurface {
+            to { opacity: 1; }
+        }
+
+        /* =========================================================
+           ORGANIC MULTI-AXIS PHYSICS (NON-REPEATING TIMINGS)
+           Layered prime durations (6.8s, 8.5s, 11.2s) create slow,
+           natural, randomized drift & pendulum physics.
+        ========================================================== */
+        .cloud-drift-x {
+            animation: cloudPhysicsX 11.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) 2.2s infinite;
+        }
+
+        .cloud-drift-y {
+            animation: cloudPhysicsY 6.8s cubic-bezier(0.37, 0, 0.63, 1) 2.2s infinite;
+            transform-origin: 210px 68px;
+        }
+
+        /* Hand & Phone Pendulum Physics */
+        .hand-sway-outer {
+            animation: handDriftX 8.5s cubic-bezier(0.42, 0, 0.58, 1) 2.3s infinite;
+        }
+
+        .hand-tilt-inner {
+            transform-origin: 210px 350px; /* Pivots naturally from lower forearm */
+            animation: handSearchPhysics 6.4s cubic-bezier(0.37, 0, 0.63, 1) 2.3s infinite;
+        }
+
+        /* Faster physics when user taps "Try Again" */
+        .scanning .hand-tilt-inner {
+            animation: handSearchPhysics 1.8s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+        }
+
+        /* Signal Pulses Travelling from Phone Toward Cloud */
+        .signal-arc {
+            fill: none;
+            stroke-linecap: round;
+            opacity: 0;
+        }
+
+        .arc-1 { animation: emitSignalArc 3.6s cubic-bezier(0.16, 1, 0.3, 1) 2.5s infinite; }
+        .arc-2 { animation: emitSignalArc 3.6s cubic-bezier(0.16, 1, 0.3, 1) 3.3s infinite; }
+        .arc-3 { animation: emitSignalArc 3.6s cubic-bezier(0.16, 1, 0.3, 1) 4.1s infinite; }
+
+        /* Disconnected Core Node inside Cloud */
+        .cloud-node-ring {
+            transform-origin: 210px 72px;
+            opacity: 0;
+            animation: nodeRipple 3.6s ease-out 2.6s infinite;
+        }
+
+        /* Searching dot inside phone screen */
+        .screen-pulse-dot {
+            transform-origin: 210px 226px;
+            animation: subtlePulse 2.4s ease-in-out 2.4s infinite;
+        }
+
+        @keyframes cloudPhysicsX {
+            0%   { transform: translateX(0px); }
+            28%  { transform: translateX(-26px); }
+            62%  { transform: translateX(22px); }
+            84%  { transform: translateX(-10px); }
+            100% { transform: translateX(0px); }
+        }
+
+        @keyframes cloudPhysicsY {
+            0%   { transform: translateY(0px) rotate(0deg); }
+            33%  { transform: translateY(-9px) rotate(-1.2deg); }
+            70%  { transform: translateY(6px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes handDriftX {
+            0%   { transform: translateX(0px) translateY(0px); }
+            35%  { transform: translateX(14px) translateY(-7px); }
+            72%  { transform: translateX(-16px) translateY(-4px); }
+            100% { transform: translateX(0px) translateY(0px); }
+        }
+
+        @keyframes handSearchPhysics {
+            0%   { transform: rotate(0deg); }
+            24%  { transform: rotate(-13deg); }
+            32%  { transform: rotate(-14.5deg); } /* Slight natural pause at apex */
+            68%  { transform: rotate(12deg); }
+            76%  { transform: rotate(13.5deg); }  /* Slight natural pause at apex */
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes emitSignalArc {
+            0% {
+                opacity: 0;
+                transform: translateY(6px) scale(0.85);
+                stroke: #ffffff;
+            }
+            25% {
+                opacity: 0.85;
+                stroke: #d1d1d6;
+            }
+            65% {
+                opacity: 0.45;
+                stroke: var(--meena-red);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-44px) scale(1.25);
+                stroke: var(--meena-red);
+            }
+        }
+
+        @keyframes nodeRipple {
+            0%   { opacity: 0; transform: scale(0.7); }
+            35%  { opacity: 0.65; }
+            100% { opacity: 0; transform: scale(1.9); }
+        }
+
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 0.35; transform: scale(0.92); }
+            50%      { opacity: 1; transform: scale(1.08); }
+        }
+
+        /* =========================================================
+           OVERSIZED PROFESSIONAL TYPOGRAPHY
+        ========================================================== */
+        .text-block {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: textReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+        }
+
+        @keyframes textReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            margin: 0 0 14px 0;
+            font-size: clamp(2.1rem, 7vw, 2.85rem);
+            font-weight: 800;
+            letter-spacing: -0.035em;
+            line-height: 1.08;
+            color: var(--text-primary);
+        }
+
+        p {
+            margin: 0 auto 34px auto;
+            font-size: 15.5px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 320px;
+        }
+
+        .retry-btn {
+            background-color: #ffffff;
+            color: #121212;
+            border: none;
+            padding: 16px 44px;
+            border-radius: 999px;
+            font-size: 15.5px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            cursor: pointer;
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25s ease, color 0.25s ease;
+            outline: none;
+            min-width: 200px;
+        }
+
+        .retry-btn:active {
+            transform: scale(0.94);
+        }
+
+        .retry-btn.error-shake {
+            background-color: var(--meena-red);
+            color: #ffffff;
+            animation: subtleShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+        }
+
+        @keyframes subtleShake {
+            0%, 100% { transform: translateX(0); }
+            20%      { transform: translateX(-6px); }
+            40%      { transform: translateX(6px); }
+            60%      { transform: translateX(-4px); }
+            80%      { transform: translateX(4px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="offline-layout" id="offlineLayout">
+
+        <!-- PURE SELF-DRAWING VECTOR ILLUSTRATION + PHYSICS -->
+        <div class="canvas-stage">
+            <svg class="scene-svg" viewBox="0 0 420 350" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="cloudSurface" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#23232b" stop-opacity="0.9" />
+                        <stop offset="100%" stop-color="#15151a" stop-opacity="0.9" />
+                    </linearGradient>
+
+                    <linearGradient id="phoneSurface" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#202028" />
+                        <stop offset="100%" stop-color="#141419" />
+                    </linearGradient>
+
+                    <linearGradient id="handFill" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#1d1d24" />
+                        <stop offset="100%" stop-color="#121212" />
+                    </linearGradient>
+                </defs>
+
+                <!-- =========================================================
+                     1. THE CLOUD (Draws First, Then Drifts with Slow Physics)
+                ========================================================== -->
+                <g class="cloud-drift-x">
+                    <g class="cloud-drift-y">
+                        
+                        <!-- Soft Fill (Fades in after outline draws) -->
+                        <path class="fill-fade"
+                              d="M 145 106 H 275 C 296 106 312 91 310 71 C 308 53 293 40 275 41 C 266 18 243 6 215 8 C 185 10 162 29 157 52 C 137 51 120 66 122 85 C 124 98 134 106 145 106 Z"
+                              fill="url(#cloudSurface)" />
+
+                        <!-- Self-Drawing Outer Cloud Blueprint Line -->
+                        <path class="draw-cloud"
+                              pathLength="1000"
+                              d="M 145 106 H 275 C 296 106 312 91 310 71 C 308 53 293 40 275 41 C 266 18 243 6 215 8 C 185 10 162 29 157 52 C 137 51 120 66 122 85 C 124 98 134 106 145 106 Z"
+                              fill="none"
+                              stroke="var(--stroke-main)"
+                              stroke-width="2.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round" />
+
+                        <!-- Self-Drawing Inner Cloud Contour Line -->
+                        <path class="draw-cloud"
+                              pathLength="1000"
+                              d="M 164 54 C 170 33 190 19 215 21 C 237 22 254 34 262 52"
+                              fill="none"
+                              stroke="var(--stroke-muted)"
+                              stroke-width="1.8"
+                              stroke-linecap="round" />
+
+                        <!-- Cloud Receiver Node + Disconnected Cross -->
+                        <circle class="cloud-node-ring" cx="210" cy="72" r="14" fill="none" stroke="var(--meena-red)" stroke-width="1.5" />
+                        
+                        <circle class="draw-detail"
+                                pathLength="1000"
+                                cx="210" cy="72" r="12"
+                                fill="none"
+                                stroke="var(--meena-red)"
+                                stroke-width="2" />
+
+                        <path class="draw-detail"
+                              pathLength="1000"
+                              d="M 205.5 67.5 L 214.5 76.5 M 214.5 67.5 L 205.5 76.5"
+                              fill="none"
+                              stroke="var(--meena-red)"
+                              stroke-width="2.2"
+                              stroke-linecap="round" />
+                    </g>
+                </g>
+
+                <!-- =========================================================
+                     2. THE HAND & PHONE (Draws Second, Then Searches Slowly)
+                ========================================================== -->
+                <g class="hand-sway-outer">
+                    <g class="hand-tilt-inner">
+
+                        <!-- Rising Physics Signal Arcs (Start after drawing finishes) -->
+                        <path class="signal-arc arc-1" d="M 192 162 Q 210 148 228 162" stroke-width="2.4" />
+                        <path class="signal-arc arc-2" d="M 181 148 Q 210 130 239 148" stroke-width="2.2" />
+                        <path class="signal-arc arc-3" d="M 170 134 Q 210 112 250 134" stroke-width="2" />
+
+                        <!-- Subtle Hand Backdrop Fill so lines stay crisp -->
+                        <path class="fill-fade"
+                              d="M 162 348 C 164 322 162 302 155 278 C 149 258 151 236 161 226 C 167 220 175 224 176 234 L 246 210 C 256 230 256 266 244 294 C 234 314 228 330 226 348 Z"
+                              fill="url(#handFill)" />
+
+                        <!-- Smartphone Surface Fill -->
+                        <rect class="fill-fade"
+                              x="174" y="176" width="72" height="126" rx="14"
+                              fill="url(#phoneSurface)" />
+
+                        <!-- Self-Drawing Left Wrist & Thumb Cradling the Phone -->
+                        <path class="draw-hand-phone"
+                              pathLength="1000"
+                              d="M 162 348 C 164 322 162 302 155 278 C 149 258 151 236 161 226 C 167 220 176 224 176 235 C 176 247 174 260 183 271"
+                              fill="none"
+                              stroke="var(--stroke-main)"
+                              stroke-width="2.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round" />
+
+                        <!-- Self-Drawing Smartphone Outer Frame -->
+                        <rect class="draw-hand-phone"
+                              pathLength="1000"
+                              x="174" y="176" width="72" height="126" rx="14"
+                              fill="none"
+                              stroke="var(--stroke-main)"
+                              stroke-width="2.5" />
+
+                        <!-- Self-Drawing Smartphone Inner Screen Bezel -->
+                        <rect class="draw-detail"
+                              pathLength="1000"
+                              x="180" y="183" width="60" height="112" rx="10"
+                              fill="none"
+                              stroke="var(--stroke-muted)"
+                              stroke-width="1.5" />
+
+                        <!-- Top Speaker Detail -->
+                        <line class="draw-detail"
+                              pathLength="1000"
+                              x1="201" y1="191" x2="219" y2="191"
+                              stroke="var(--stroke-muted)"
+                              stroke-width="2"
+                              stroke-linecap="round" />
+
+                        <!-- On-Screen Searching Signal Graphic -->
+                        <g class="fill-fade">
+                            <circle class="screen-pulse-dot" cx="210" cy="226" r="14" fill="rgba(255, 59, 48, 0.14)" />
+                        </g>
+
+                        <!-- Self-Drawing Mini Wi-Fi Icon Inside Phone Screen -->
+                        <path class="draw-detail"
+                              pathLength="1000"
+                              d="M 197 222 Q 210 211 223 222"
+                              fill="none"
+                              stroke="var(--stroke-main)"
+                              stroke-width="2.2"
+                              stroke-linecap="round" />
+                        <path class="draw-detail"
+                              pathLength="1000"
+                              d="M 202 228 Q 210 221 218 228"
+                              fill="none"
+                              stroke="var(--stroke-main)"
+                              stroke-width="2.2"
+                              stroke-linecap="round" />
+                        <circle class="fill-fade" cx="210" cy="234" r="2.2" fill="var(--meena-red)" />
+
+                        <!-- Minimalist Signal Bars on Screen -->
+                        <line class="draw-detail" pathLength="1000" x1="196" y1="264" x2="196" y2="259" stroke="var(--meena-red)" stroke-width="2.6" stroke-linecap="round" />
+                        <line class="draw-detail" pathLength="1000" x1="205" y1="264" x2="205" y2="254" stroke="var(--stroke-muted)" stroke-width="2.6" stroke-linecap="round" />
+                        <line class="draw-detail" pathLength="1000" x1="214" y1="264" x2="214" y2="249" stroke="var(--stroke-muted)" stroke-width="2.6" stroke-linecap="round" />
+                        <line class="draw-detail" pathLength="1000" x1="223" y1="264" x2="223" y2="244" stroke="var(--stroke-muted)" stroke-width="2.6" stroke-linecap="round" />
+
+                        <!-- Self-Drawing Right Fingers & Palm Wrapping Phone Edge -->
+                        <path class="draw-hand-phone"
+                              pathLength="1000"
+                              d="M 246 206 C 257 206 258 218 246 220
+                                 M 246 223 C 258 223 259 235 246 237
+                                 M 246 240 C 256 240 257 252 246 254
+                                 M 246 256 C 254 272 246 290 236 308 C 229 321 226 334 225 348"
+                              fill="none"
+                              stroke="var(--stroke-main)"
+                              stroke-width="2.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round" />
+                    </g>
+                </g>
+            </svg>
+        </div>
+
+        <!-- BOLD, HIGH-IMPACT TYPOGRAPHY -->
+        <div class="text-block">
+            <h1>No Internet Connection</h1>
+            <p>Please check your network settings and reconnect to continue using Meena Marketing.</p>
+            <button class="retry-btn" id="retryBtn" onclick="retryConnection()">Try Again</button>
+        </div>
+
+    </div>
+
+    <script>
+        const offlineLayout = document.getElementById('offlineLayout');
+        const retryBtn = document.getElementById('retryBtn');
+        let isChecking = false;
+
+        async function retryConnection() {
+            if (isChecking) return;
+            isChecking = true;
+
+            if (navigator.vibrate) navigator.vibrate(35);
+
+            retryBtn.classList.remove('error-shake');
+            offlineLayout.classList.add('scanning');
+            retryBtn.innerText = "Checking...";
+
+            await new Promise(resolve => setTimeout(resolve, 850));
+
+            if (navigator.onLine) {
+                try {
+                    const response = await fetch('./manifest.json?check=' + Date.now(), {
+                        method: 'HEAD',
+                        cache: 'no-store'
+                    });
+                    if (response.ok) {
+                        window.location.reload();
+                        return;
+                    }
+                } catch (e) {
+                    // Still offline
+                }
+            }
+
+            if (navigator.vibrate) navigator.vibrate([45, 60, 45]);
+            offlineLayout.classList.remove('scanning');
+            retryBtn.classList.add('error-shake');
+            retryBtn.innerText = "Try Again";
+            isChecking = false;
+        }
+
+        // Automatically reload the exact moment the device regains connection
+        window.addEventListener('online', () => {
+            window.location.reload();
+        });
+    </script>
+</body>
+</html>
