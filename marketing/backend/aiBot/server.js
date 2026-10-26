@@ -14,6 +14,7 @@
  * 10. In-Band Notice Injection: Alerts users directly in chat if a failover occurred.
  * 11. High-Speed Vision Processing: In-memory image compression (Sharp) to KB sizes.
  * 12. Forensic Audit Engine: Dedicated `/auditChat` endpoint for timeline math and discrepancy checks.
+ * 13. Zero-Read JSON Export: Downloads complete inventory from RAM without hitting Firebase.
  */
 
 // ============================================================================
@@ -94,7 +95,9 @@ db.collection('inventory').onSnapshot((snapshot) => {
                 model: d.model || 'N/A',
                 qty: d.qty || 0,
                 price: d.price || 0, // Included price to ensure AI can answer pricing queries
-                history: d.history || [] // Appended full ledger history for /auditChat endpoint
+                history: d.history || [], // Appended full ledger history for /auditChat endpoint
+                mrp: d.mrp || 0, // Cached in RAM for Zero-Read JSON Export
+                myRate: d.myRate || 0 // Cached in RAM for Zero-Read JSON Export
             });
         }
         
@@ -537,6 +540,30 @@ app.get('/', (req, res) => {
             border-radius: 50%;
         }
 
+        /* Mini Download Button Styling */
+        .dl-btn {
+            background: rgba(16, 185, 129, 0.1); 
+            border: 1px solid var(--emerald); 
+            color: var(--emerald); 
+            padding: 10px 20px; 
+            border-radius: 8px; 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 0.85rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            text-decoration: none;
+        }
+        .dl-btn:hover { 
+            background: rgba(16, 185, 129, 0.2); 
+            transform: translateY(-2px); 
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); 
+        }
+
         /* Footer */
         footer {
             border-top: 1px solid var(--border);
@@ -616,6 +643,14 @@ app.get('/', (req, res) => {
                 <div class="state-chip">HEALTHY</div>
             </div>
         </div>
+        
+        <!-- Zero-Read JSON Export Button Section -->
+        <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 20px;">
+            <button onclick="window.location.href='/download-inventory'" class="dl-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Download Inventory JSON (RAM Cache)
+            </button>
+        </div>
     </div>
 
     <footer>
@@ -651,6 +686,34 @@ app.get('/', (req, res) => {
     </script>
 </body>
 </html>`);
+});
+
+// ----------------------------------------------------------------------------
+// Zero-Read JSON Export Endpoint (Directly from RAM)
+// ----------------------------------------------------------------------------
+app.get('/download-inventory', (req, res) => {
+    try {
+        console.log("[Inventory Export] Generating zero-read JSON download from RAM cache...");
+        
+        // Format exactly to the required specification without hitting Firebase
+        const exportData = inventoryMemory.map(item => ({
+            productName: item.name,
+            model: item.model,
+            quantity: item.qty,
+            myRate: item.myRate,
+            sellingPrice: item.price,
+            mrp: item.mrp
+        }));
+
+        res.setHeader('Content-disposition', `attachment; filename=meena_inventory_export_${Date.now()}.json`);
+        res.setHeader('Content-type', 'application/json');
+        res.status(200).send(JSON.stringify(exportData, null, 2));
+        
+        console.log(`[Inventory Export] Success: ${exportData.length} products sent to client.`);
+    } catch (error) {
+        console.error("[Inventory Export Error]", error);
+        res.status(500).json({ error: "Failed to generate inventory file from memory." });
+    }
 });
 
 // REST Endpoint for Standard Typing/Chat
