@@ -30,10 +30,14 @@
 
         /* Prevent layout shift before Material Icons load */
         .material-symbols-outlined {
-            min-width: 24px;
-            min-height: 24px;
+            width: 24px;
+            height: 24px;
+            font-size: 24px;
             display: inline-block;
             text-align: center;
+            overflow: hidden;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         /* Hide scrollbar for IE, Edge and Firefox */
