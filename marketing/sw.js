@@ -1,7 +1,7 @@
 // sw.js
 
 // 1. CACHE CONFIGURATION
-const CACHE_NAME = 'goorac-meena-v2';
+const CACHE_NAME = 'goorac-meena-v33';
 const DYNAMIC_CACHE_NAME = 'goorac-meena-dynamic-v2';
 
 // 2. APP SHELL (Core Files)
