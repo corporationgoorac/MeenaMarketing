@@ -1,8 +1,8 @@
 // sw.js (Inside /billing/)
 
 // 1. CACHE CONFIGURATION
-const CACHE_NAME = 'billing-app-v3'; 
-const DYNAMIC_CACHE_NAME = 'billing-app-dynamic-v3';
+const CACHE_NAME = 'billing-app-v4'; // Bumped to v4 to trigger immediate cache refresh for offline.html
+const DYNAMIC_CACHE_NAME = 'billing-app-dynamic-v4';
 
 // 2. APP SHELL (Core assets located directly inside the 'billing' directory)
 const ASSETS_TO_CACHE = [
@@ -17,6 +17,7 @@ const ASSETS_TO_CACHE = [
   './login.html',
   './manifest.json',
   './offer.html',
+  './offline.html', // Added offline.html to be cached instantly
   './pending.html',
   './products.json',
   './today.html'
@@ -60,41 +61,40 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      // The background network fetch for 0ms instant updates
-      const fetchPromise = fetch(event.request)
-        .then((networkResponse) => {
-          // If valid response, silently update the cache for the NEXT visit
-          if (networkResponse && (networkResponse.status === 200 || networkResponse.type === 'opaque')) {
-            const responseClone = networkResponse.clone();
-            const requestUrl = new URL(event.request.url);
-            
-            // PROFESSIONAL TWEAK: Segregate core files vs dynamic external assets
-            const isCoreFile = ASSETS_TO_CACHE.some(route => 
-              requestUrl.pathname.endsWith(route.replace('./', '')) && route !== './'
-            );
-            
-            // Route the file to the correct organized cache folder
-            const targetCache = isCoreFile ? CACHE_NAME : DYNAMIC_CACHE_NAME;
-            
-            caches.open(targetCache).then((cache) => cache.put(event.request, responseClone));
-          }
-          return networkResponse;
-        })
-        .catch(() => {
-          console.warn('[Billing Service Worker] Background update failed (Offline).');
-        });
+      
+      // The background network fetch for 0ms instant updates WITHOUT immediately catching the error
+      const fetchPromise = fetch(event.request).then((networkResponse) => {
+        // If valid response, silently update the cache for the NEXT visit
+        if (networkResponse && (networkResponse.status === 200 || networkResponse.type === 'opaque')) {
+          const responseClone = networkResponse.clone();
+          const requestUrl = new URL(event.request.url);
+          
+          // PROFESSIONAL TWEAK: Segregate core files vs dynamic external assets
+          const isCoreFile = ASSETS_TO_CACHE.some(route => 
+            requestUrl.pathname.endsWith(route.replace('./', '')) && route !== './'
+          );
+          
+          // Route the file to the correct organized cache folder
+          const targetCache = isCoreFile ? CACHE_NAME : DYNAMIC_CACHE_NAME;
+          
+          caches.open(targetCache).then((cache) => cache.put(event.request, responseClone));
+        }
+        return networkResponse;
+      });
 
       // 1. If we have the file in cache, return it instantly (0ms load)
       if (cachedResponse) {
+        // Catch the background fetch error silently here so it doesn't clutter the console
+        fetchPromise.catch(() => console.warn('[Billing Service Worker] Background update paused (Offline).'));
         return cachedResponse;
       }
 
       // 2. If it's NOT in the cache yet, wait for the network fetch
       return fetchPromise.catch(() => {
-        // 3. ULTIMATE FAILSAFE: If offline and a requested HTML page isn't in cache, serve bill.html
+        // 3. ULTIMATE FAILSAFE: If offline and a requested HTML page isn't in cache, serve offline.html
         if (event.request.headers.get('accept')?.includes('text/html')) {
-          console.log('[Billing Service Worker] Offline HTML fallback triggered.');
-          return caches.match('./bill.html');
+          console.log('[Billing Service Worker] Offline HTML fallback triggered. Serving offline.html');
+          return caches.match('./offline.html');
         }
       });
     })
