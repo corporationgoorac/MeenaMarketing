@@ -1,7 +1,7 @@
 // sw.js
 
 // 1. CACHE CONFIGURATION
-const CACHE_NAME = 'goorac-meena-v34'; // Bumped version to v34 to trigger immediate cache refresh for offline.html
+const CACHE_NAME = 'goorac-meena-v35'; // Bumped version to v35 to trigger immediate cache refresh for offline.html
 const DYNAMIC_CACHE_NAME = 'goorac-meena-dynamic-v2';
 
 // 2. APP SHELL (Core Files)
@@ -62,11 +62,22 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 5. FETCH EVENT - Pure Stale-While-Revalidate with Cache Segregation & Offline Fallback
+// 5. FETCH EVENT - 0ms Load + Hardware Offline Check
 self.addEventListener('fetch', (event) => {
   // Only intercept standard GET requests from http/https
   if (event.request.method !== 'GET' || !event.request.url.startsWith('http')) return;
 
+  const isHTML = event.request.headers.get('accept')?.includes('text/html');
+
+  // STRICT HARDWARE OFFLINE CHECK
+  // If the device knows it has no internet right now, instantly show offline.html
+  if (isHTML && !navigator.onLine) {
+    console.warn('[Service Worker] Device is offline. Forcing offline.html');
+    event.respondWith(caches.match('./offline.html'));
+    return;
+  }
+
+  // IF ONLINE: Proceed with 0ms Instant Load (Stale-While-Revalidate)
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       
@@ -101,7 +112,7 @@ self.addEventListener('fetch', (event) => {
       // 2. If it's NOT in the cache yet, wait for the network fetch
       // 3. ULTIMATE FAILSAFE: If offline and a requested HTML page isn't in cache, serve offline.html
       return fetchPromise.catch(() => {
-        if (event.request.headers.get('accept')?.includes('text/html')) {
+        if (isHTML) {
           console.log('[Service Worker] Offline HTML fallback triggered. Serving offline.html');
           return caches.match('./offline.html');
         }
