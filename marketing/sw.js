@@ -1,7 +1,7 @@
 // sw.js
 
 // 1. CACHE CONFIGURATION
-const CACHE_NAME = 'goorac-meena-v33';
+const CACHE_NAME = 'goorac-meena-v34'; // Bumped version to v34 to trigger immediate cache refresh for offline.html
 const DYNAMIC_CACHE_NAME = 'goorac-meena-dynamic-v2';
 
 // 2. APP SHELL (Core Files)
@@ -25,6 +25,7 @@ const APP_SHELL = [
   './manifest.json',
   './mrkting.html',
   './offer.html',
+  './offline.html', // Added offline.html to be cached instantly
   './pending.html',
   './products.json',
   './search.html',
@@ -61,38 +62,50 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 5. FETCH EVENT - Pure Stale-While-Revalidate with Cache Segregation
+// 5. FETCH EVENT - Pure Stale-While-Revalidate with Cache Segregation & Offline Fallback
 self.addEventListener('fetch', (event) => {
   // Only intercept standard GET requests from http/https
   if (event.request.method !== 'GET' || !event.request.url.startsWith('http')) return;
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      // The background network fetch
-      const fetchPromise = fetch(event.request)
-        .then((networkResponse) => {
-          // If valid response, silently update the cache for the NEXT visit
-          if (networkResponse && (networkResponse.status === 200 || networkResponse.type === 'opaque')) {
-            const clone = networkResponse.clone();
-            
-            // PROFESSIONAL TWEAK: Segregate core files vs dynamic external assets
-            const requestUrl = new URL(event.request.url);
-            // Check if the requested file is one of our core APP_SHELL files
-            const isCoreFile = APP_SHELL.some(route => 
-              requestUrl.pathname.endsWith(route.replace('./', '')) && route !== './'
-            );
-            
-            // Route the file to the correct organized cache folder
-            const targetCache = isCoreFile ? CACHE_NAME : DYNAMIC_CACHE_NAME;
+      
+      // Define the background network fetch WITHOUT immediately catching the error
+      const fetchPromise = fetch(event.request).then((networkResponse) => {
+        // If valid response, silently update the cache for the NEXT visit
+        if (networkResponse && (networkResponse.status === 200 || networkResponse.type === 'opaque')) {
+          const clone = networkResponse.clone();
+          
+          // PROFESSIONAL TWEAK: Segregate core files vs dynamic external assets
+          const requestUrl = new URL(event.request.url);
+          // Check if the requested file is one of our core APP_SHELL files
+          const isCoreFile = APP_SHELL.some(route => 
+            requestUrl.pathname.endsWith(route.replace('./', '')) && route !== './'
+          );
+          
+          // Route the file to the correct organized cache folder
+          const targetCache = isCoreFile ? CACHE_NAME : DYNAMIC_CACHE_NAME;
 
-            caches.open(targetCache).then((cache) => cache.put(event.request, clone));
-          }
-          return networkResponse;
-        })
-        .catch(() => console.warn('[Service Worker] Background update failed (Offline).'));
+          caches.open(targetCache).then((cache) => cache.put(event.request, clone));
+        }
+        return networkResponse;
+      });
 
-      // Instantly return the cached version if it exists (0ms load), otherwise wait for the network
-      return cachedResponse || fetchPromise;
+      // 1. If we have the file in cache, return it instantly (0ms load)
+      if (cachedResponse) {
+        // Catch the background fetch error silently here so it doesn't clutter the console
+        fetchPromise.catch(() => console.warn('[Service Worker] Background update paused (Offline).'));
+        return cachedResponse;
+      }
+
+      // 2. If it's NOT in the cache yet, wait for the network fetch
+      // 3. ULTIMATE FAILSAFE: If offline and a requested HTML page isn't in cache, serve offline.html
+      return fetchPromise.catch(() => {
+        if (event.request.headers.get('accept')?.includes('text/html')) {
+          console.log('[Service Worker] Offline HTML fallback triggered. Serving offline.html');
+          return caches.match('./offline.html');
+        }
+      });
     })
   );
 });
