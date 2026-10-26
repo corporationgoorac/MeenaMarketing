@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Offline - Meena Marketing</title>
     
     <!-- Matches the mobile status bar seamlessly to the app background -->
@@ -12,10 +12,10 @@
         :root {
             --bg-color: #121212;
             --surface-soft: #1a1a20;
-            --stroke-main: #e5e5ea;
-            --stroke-muted: #52525e;
+            --stroke-main: #ececf2;
+            --stroke-muted: #525260;
             --text-primary: #ffffff;
-            --text-secondary: #8e8e98;
+            --text-secondary: #8e8e99;
             --meena-red: #ff3b30;
         }
 
@@ -33,34 +33,138 @@
             background-color: var(--bg-color);
             color: var(--text-primary);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             overflow: hidden;
             user-select: none;
             -webkit-user-select: none;
         }
 
-        .offline-layout {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            width: 100%;
-            max-width: 460px;
-            padding: 20px 28px;
+        /* =========================================================
+           1. TOP-LEFT CASUAL PENCIL-WRITTEN BRANDING (NO HEADER)
+        ========================================================== */
+        .brand-corner {
+            position: fixed;
+            top: max(20px, env(safe-area-inset-top, 20px));
+            left: 22px;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .brand-svg {
+            width: 215px;
+            height: 54px;
+            overflow: visible;
+        }
+
+        .brand-cursive {
+            font-family: "Segoe Script", "Bradley Hand", "Snell Roundhand", "Apple Chancery", "Dancing Script", "Brush Script MT", cursive;
+            font-size: 23px;
+            font-weight: 600;
+            font-style: italic;
+            letter-spacing: 0.4px;
+        }
+
+        /* Self-writing pencil stroke effect on the cursive letters */
+        .pencil-write-meena {
+            fill: rgba(255, 59, 48, 0);
+            stroke: var(--meena-red);
+            stroke-width: 1.15;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 320;
+            stroke-dashoffset: 320;
+            animation: 
+                sketchText 1.15s cubic-bezier(0.35, 0, 0.25, 1) 0.15s forwards,
+                fillMeenaRed 0.6s ease 0.95s forwards;
+        }
+
+        .pencil-write-marketing {
+            fill: rgba(255, 255, 255, 0);
+            stroke: #ffffff;
+            stroke-width: 1.05;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 420;
+            stroke-dashoffset: 420;
+            animation: 
+                sketchText 1.35s cubic-bezier(0.35, 0, 0.25, 1) 0.95s forwards,
+                fillMarketingWhite 0.6s ease 1.95s forwards;
+        }
+
+        /* Hand-sketched graphite underline flourish */
+        .pencil-underline {
+            fill: none;
+            stroke-dasharray: 240;
+            stroke-dashoffset: 240;
+            animation: sketchUnderline 0.85s cubic-bezier(0.22, 1, 0.36, 1) 2.1s forwards;
+        }
+
+        /* Animated Pencil Nib that glides across while writing */
+        .pencil-nib-follower {
+            opacity: 0;
+            animation: glidePencil 2.75s cubic-bezier(0.35, 0, 0.25, 1) 0.15s forwards;
+        }
+
+        @keyframes sketchText {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes fillMeenaRed {
+            to {
+                fill: var(--meena-red);
+                stroke-width: 0.35;
+            }
+        }
+
+        @keyframes fillMarketingWhite {
+            to {
+                fill: #ffffff;
+                stroke-width: 0.3;
+            }
+        }
+
+        @keyframes sketchUnderline {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes glidePencil {
+            0%   { opacity: 0; transform: translate(4px, 26px) rotate(-18deg); }
+            8%   { opacity: 0.95; transform: translate(14px, 24px) rotate(-12deg); }
+            25%  { transform: translate(52px, 19px) rotate(-8deg); }
+            42%  { transform: translate(84px, 25px) rotate(-14deg); }
+            62%  { transform: translate(136px, 18px) rotate(-9deg); }
+            80%  { transform: translate(188px, 24px) rotate(-15deg); }
+            90%  { opacity: 0.9; transform: translate(110px, 38px) rotate(-6deg); }
+            100% { opacity: 0; transform: translate(178px, 35px) rotate(0deg); }
         }
 
         /* =========================================================
-           STAGE & SELF-DRAWING VECTOR ENGINE
+           2. FULL-SCREEN NATIVE STRUCTURE
+        ========================================================== */
+        .offline-layout {
+            width: 100%;
+            height: 100%;
+            max-width: 460px;
+            margin: 0 auto;
+            padding: 64px 28px max(34px, env(safe-area-inset-bottom, 34px)) 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        /* =========================================================
+           3. SPACIOUS STAGE & SIMULTANEOUS DRAW + MOVE ENGINE
         ========================================================== */
         .canvas-stage {
             width: 100%;
-            max-width: 380px;
-            height: 310px;
-            margin-bottom: 18px;
+            max-width: 390px;
+            flex: 1;
+            max-height: 410px;
+            min-height: 270px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
         }
 
@@ -70,31 +174,31 @@
             overflow: visible;
         }
 
-        /* Step 1: Draw the Cloud First (0.1s -> 1.4s) */
+        /* Step 1: Draw the Cloud First (while already drifting!) */
         .draw-cloud {
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
-            animation: traceLine 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+            animation: traceLine 1.75s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
         }
 
-        /* Step 2: Draw the Hand & Phone Second (0.85s -> 2.3s) */
+        /* Step 2: Draw the Hand & Phone Second (while already swaying!) */
         .draw-hand-phone {
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
-            animation: traceLine 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.85s forwards;
+            animation: traceLine 1.85s cubic-bezier(0.22, 1, 0.36, 1) 0.55s forwards;
         }
 
-        /* Step 3: Draw Internal UI Details (1.5s -> 2.6s) */
+        /* Step 3: Draw Fine Architectural Details */
         .draw-detail {
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
-            animation: traceLine 1.1s cubic-bezier(0.22, 1, 0.36, 1) 1.5s forwards;
+            animation: traceLine 1.3s cubic-bezier(0.22, 1, 0.36, 1) 1.15s forwards;
         }
 
-        /* Step 4: Softly Fade in Surfaces After Lines Finish Drawing */
+        /* Step 4: Softly Fade in Matte Surfaces During Final Sketch Phase */
         .fill-fade {
             opacity: 0;
-            animation: fadeInSurface 1.2s ease-out 1.8s forwards;
+            animation: fadeInSurface 1.4s ease-out 1.1s forwards;
         }
 
         @keyframes traceLine {
@@ -106,114 +210,112 @@
         }
 
         /* =========================================================
-           ORGANIC MULTI-AXIS PHYSICS (NON-REPEATING TIMINGS)
-           Layered prime durations (6.8s, 8.5s, 11.2s) create slow,
-           natural, randomized drift & pendulum physics.
+           4. CONTINUOUS ORGANIC PHYSICS (ACTIVE FROM 0.0s WHILE DRAWING)
         ========================================================== */
         .cloud-drift-x {
-            animation: cloudPhysicsX 11.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) 2.2s infinite;
+            animation: cloudPhysicsX 11.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) -1.8s infinite;
         }
 
         .cloud-drift-y {
-            animation: cloudPhysicsY 6.8s cubic-bezier(0.37, 0, 0.63, 1) 2.2s infinite;
-            transform-origin: 210px 68px;
+            animation: cloudPhysicsY 7.1s cubic-bezier(0.37, 0, 0.63, 1) -0.9s infinite;
+            transform-origin: 210px 56px;
         }
 
-        /* Hand & Phone Pendulum Physics */
+        /* Hand & Phone Pendulum Physics - Active Immediately During Sketch */
         .hand-sway-outer {
-            animation: handDriftX 8.5s cubic-bezier(0.42, 0, 0.58, 1) 2.3s infinite;
+            animation: handDriftX 8.9s cubic-bezier(0.42, 0, 0.58, 1) -2.1s infinite;
         }
 
         .hand-tilt-inner {
-            transform-origin: 210px 350px; /* Pivots naturally from lower forearm */
-            animation: handSearchPhysics 6.4s cubic-bezier(0.37, 0, 0.63, 1) 2.3s infinite;
+            transform-origin: 210px 410px;
+            animation: handSearchPhysics 6.6s cubic-bezier(0.37, 0, 0.63, 1) -0.6s infinite;
         }
 
-        /* Faster physics when user taps "Try Again" */
+        /* Faster scan physics when user taps "Try Again" */
         .scanning .hand-tilt-inner {
-            animation: handSearchPhysics 1.8s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+            animation: handSearchPhysics 1.65s cubic-bezier(0.37, 0, 0.63, 1) infinite;
         }
 
-        /* Signal Pulses Travelling from Phone Toward Cloud */
+        /* Long-Distance Signal Pulses Travelling Across the Wide Sky Gap */
         .signal-arc {
             fill: none;
             stroke-linecap: round;
             opacity: 0;
         }
 
-        .arc-1 { animation: emitSignalArc 3.6s cubic-bezier(0.16, 1, 0.3, 1) 2.5s infinite; }
-        .arc-2 { animation: emitSignalArc 3.6s cubic-bezier(0.16, 1, 0.3, 1) 3.3s infinite; }
-        .arc-3 { animation: emitSignalArc 3.6s cubic-bezier(0.16, 1, 0.3, 1) 4.1s infinite; }
+        .arc-1 { animation: emitSignalArc 3.8s cubic-bezier(0.16, 1, 0.3, 1) 1.4s infinite; }
+        .arc-2 { animation: emitSignalArc 3.8s cubic-bezier(0.16, 1, 0.3, 1) 2.3s infinite; }
+        .arc-3 { animation: emitSignalArc 3.8s cubic-bezier(0.16, 1, 0.3, 1) 3.2s infinite; }
 
         /* Disconnected Core Node inside Cloud */
         .cloud-node-ring {
-            transform-origin: 210px 72px;
+            transform-origin: 210px 58px;
             opacity: 0;
-            animation: nodeRipple 3.6s ease-out 2.6s infinite;
+            animation: nodeRipple 3.6s ease-out 1.6s infinite;
         }
 
         /* Searching dot inside phone screen */
         .screen-pulse-dot {
-            transform-origin: 210px 226px;
-            animation: subtlePulse 2.4s ease-in-out 2.4s infinite;
+            transform-origin: 210px 264px;
+            animation: subtlePulse 2.4s ease-in-out 1.4s infinite;
         }
 
         @keyframes cloudPhysicsX {
             0%   { transform: translateX(0px); }
-            28%  { transform: translateX(-26px); }
-            62%  { transform: translateX(22px); }
-            84%  { transform: translateX(-10px); }
+            28%  { transform: translateX(-28px); }
+            62%  { transform: translateX(25px); }
+            84%  { transform: translateX(-11px); }
             100% { transform: translateX(0px); }
         }
 
         @keyframes cloudPhysicsY {
             0%   { transform: translateY(0px) rotate(0deg); }
-            33%  { transform: translateY(-9px) rotate(-1.2deg); }
-            70%  { transform: translateY(6px) rotate(1deg); }
+            33%  { transform: translateY(-8px) rotate(-1.1deg); }
+            70%  { transform: translateY(6px) rotate(0.9deg); }
             100% { transform: translateY(0px) rotate(0deg); }
         }
 
         @keyframes handDriftX {
             0%   { transform: translateX(0px) translateY(0px); }
-            35%  { transform: translateX(14px) translateY(-7px); }
-            72%  { transform: translateX(-16px) translateY(-4px); }
+            35%  { transform: translateX(15px) translateY(-6px); }
+            72%  { transform: translateX(-16px) translateY(-3px); }
             100% { transform: translateX(0px) translateY(0px); }
         }
 
         @keyframes handSearchPhysics {
             0%   { transform: rotate(0deg); }
-            24%  { transform: rotate(-13deg); }
-            32%  { transform: rotate(-14.5deg); } /* Slight natural pause at apex */
-            68%  { transform: rotate(12deg); }
-            76%  { transform: rotate(13.5deg); }  /* Slight natural pause at apex */
+            24%  { transform: rotate(-11.5deg); }
+            32%  { transform: rotate(-13deg); }
+            68%  { transform: rotate(11deg); }
+            76%  { transform: rotate(12.5deg); }
             100% { transform: rotate(0deg); }
         }
 
         @keyframes emitSignalArc {
             0% {
                 opacity: 0;
-                transform: translateY(6px) scale(0.85);
+                transform: translateY(8px) scale(0.84);
                 stroke: #ffffff;
             }
-            25% {
+            22% {
                 opacity: 0.85;
-                stroke: #d1d1d6;
+                stroke: #dcdce2;
             }
-            65% {
+            62% {
                 opacity: 0.45;
                 stroke: var(--meena-red);
             }
             100% {
                 opacity: 0;
-                transform: translateY(-44px) scale(1.25);
+                transform: translateY(-76px) scale(1.32);
                 stroke: var(--meena-red);
             }
         }
 
         @keyframes nodeRipple {
-            0%   { opacity: 0; transform: scale(0.7); }
+            0%   { opacity: 0; transform: scale(0.75); }
             35%  { opacity: 0.65; }
-            100% { opacity: 0; transform: scale(1.9); }
+            100% { opacity: 0; transform: scale(1.95); }
         }
 
         @keyframes subtlePulse {
@@ -222,12 +324,17 @@
         }
 
         /* =========================================================
-           OVERSIZED PROFESSIONAL TYPOGRAPHY
+           5. BOTTOM-ANCHORED TYPOGRAPHY & COMPACT BUTTON
         ========================================================== */
         .text-block {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 6px;
             opacity: 0;
-            transform: translateY(10px);
-            animation: textReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+            transform: translateY(12px);
+            animation: textReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
         }
 
         @keyframes textReveal {
@@ -238,36 +345,37 @@
         }
 
         h1 {
-            margin: 0 0 14px 0;
-            font-size: clamp(2.1rem, 7vw, 2.85rem);
+            margin: 0 0 10px 0;
+            font-size: clamp(1.95rem, 6.4vw, 2.55rem);
             font-weight: 800;
             letter-spacing: -0.035em;
-            line-height: 1.08;
+            line-height: 1.1;
             color: var(--text-primary);
         }
 
         p {
-            margin: 0 auto 34px auto;
-            font-size: 15.5px;
+            margin: 0 auto 22px auto;
+            font-size: 14.5px;
             font-weight: 400;
             color: var(--text-secondary);
-            line-height: 1.6;
-            max-width: 320px;
+            line-height: 1.55;
+            max-width: 300px;
         }
 
+        /* Sleek, Smaller Pill Button */
         .retry-btn {
             background-color: #ffffff;
             color: #121212;
-            border: none;
-            padding: 16px 44px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 11px 28px;
             border-radius: 999px;
-            font-size: 15.5px;
+            font-size: 13.5px;
             font-weight: 700;
-            letter-spacing: -0.01em;
+            letter-spacing: 0.01em;
             cursor: pointer;
-            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25s ease, color 0.25s ease;
+            transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.22s ease, color 0.22s ease;
             outline: none;
-            min-width: 200px;
+            min-width: 136px;
         }
 
         .retry-btn:active {
@@ -277,6 +385,7 @@
         .retry-btn.error-shake {
             background-color: var(--meena-red);
             color: #ffffff;
+            border-color: var(--meena-red);
             animation: subtleShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97);
         }
 
@@ -291,171 +400,261 @@
 </head>
 <body>
 
+    <!-- TOP-LEFT CASUAL PENCIL BRANDING (NO HEADER) -->
+    <div class="brand-corner" aria-label="Meena Marketing">
+        <svg class="brand-svg" viewBox="0 0 230 56" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <!-- Subtle graphite texture filter for authentic pencil grain -->
+                <filter id="pencilGrain" x="-5%" y="-5%" width="110%" height="110%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise" />
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="0.55" xChannelSelector="R" yChannelSelector="G" />
+                </filter>
+                <linearGradient id="underlineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#ff3b30" stop-opacity="0.9" />
+                    <stop offset="42%" stop-color="#ff3b30" stop-opacity="0.65" />
+                    <stop offset="43%" stop-color="#ffffff" stop-opacity="0.65" />
+                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0.15" />
+                </linearGradient>
+            </defs>
+
+            <g filter="url(#pencilGrain)">
+                <!-- "Meena" in Red + "Marketing" in White -->
+                <text x="4" y="29" class="brand-cursive">
+                    <tspan class="pencil-write-meena">Meena</tspan>
+                    <tspan dx="5" class="pencil-write-marketing">Marketing</tspan>
+                </text>
+
+                <!-- Casual Hand-Drawn Pencil Underline Flourish -->
+                <path class="pencil-underline"
+                      pathLength="240"
+                      d="M 6 37 Q 92 32 184 36 Q 152 40 118 41"
+                      stroke="url(#underlineGrad)"
+                      stroke-width="1.4"
+                      stroke-linecap="round" />
+            </g>
+
+            <!-- Minimalist Pencil Tip Gliding While Writing -->
+            <g class="pencil-nib-follower">
+                <polygon points="0,0 4,-11 9,-8" fill="#d1d1d6" />
+                <polygon points="0,0 2.2,-6 5,-4.4" fill="#ff3b30" />
+            </g>
+        </svg>
+    </div>
+
+    <!-- MAIN FULL-SCREEN CONTENT -->
     <div class="offline-layout" id="offlineLayout">
 
-        <!-- PURE SELF-DRAWING VECTOR ILLUSTRATION + PHYSICS -->
+        <!-- SPACIOUS 420x420 VECTOR STAGE (LARGE DISTANCE BETWEEN CLOUD & PHONE) -->
         <div class="canvas-stage">
-            <svg class="scene-svg" viewBox="0 0 420 350" xmlns="http://www.w3.org/2000/svg">
+            <svg class="scene-svg" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="cloudSurface" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#23232b" stop-opacity="0.9" />
-                        <stop offset="100%" stop-color="#15151a" stop-opacity="0.9" />
+                        <stop offset="0%" stop-color="#24242e" stop-opacity="0.92" />
+                        <stop offset="100%" stop-color="#15151b" stop-opacity="0.92" />
                     </linearGradient>
 
                     <linearGradient id="phoneSurface" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#202028" />
-                        <stop offset="100%" stop-color="#141419" />
+                        <stop offset="0%" stop-color="#22222b" />
+                        <stop offset="100%" stop-color="#131318" />
+                    </linearGradient>
+
+                    <linearGradient id="screenGlass" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#191922" />
+                        <stop offset="100%" stop-color="#101015" />
                     </linearGradient>
 
                     <linearGradient id="handFill" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#1d1d24" />
+                        <stop offset="0%" stop-color="#1d1d25" />
                         <stop offset="100%" stop-color="#121212" />
                     </linearGradient>
                 </defs>
 
                 <!-- =========================================================
-                     1. THE CLOUD (Draws First, Then Drifts with Slow Physics)
+                     ZONE 1: HIGH ALTITUDE CLOUD (Y: 8 to 92)
+                     Drifts continuously even while drawing its strokes
                 ========================================================== -->
                 <g class="cloud-drift-x">
                     <g class="cloud-drift-y">
                         
-                        <!-- Soft Fill (Fades in after outline draws) -->
+                        <!-- Soft Matte Cloud Fill -->
                         <path class="fill-fade"
-                              d="M 145 106 H 275 C 296 106 312 91 310 71 C 308 53 293 40 275 41 C 266 18 243 6 215 8 C 185 10 162 29 157 52 C 137 51 120 66 122 85 C 124 98 134 106 145 106 Z"
+                              d="M 148 92 H 272 C 292 92 307 78 305 59 C 303 42 289 30 272 31 C 263 10 241 -1 214 1 C 186 3 164 21 159 42 C 140 41 124 55 126 73 C 128 85 137 92 148 92 Z"
                               fill="url(#cloudSurface)" />
 
                         <!-- Self-Drawing Outer Cloud Blueprint Line -->
                         <path class="draw-cloud"
                               pathLength="1000"
-                              d="M 145 106 H 275 C 296 106 312 91 310 71 C 308 53 293 40 275 41 C 266 18 243 6 215 8 C 185 10 162 29 157 52 C 137 51 120 66 122 85 C 124 98 134 106 145 106 Z"
+                              d="M 148 92 H 272 C 292 92 307 78 305 59 C 303 42 289 30 272 31 C 263 10 241 -1 214 1 C 186 3 164 21 159 42 C 140 41 124 55 126 73 C 128 85 137 92 148 92 Z"
                               fill="none"
                               stroke="var(--stroke-main)"
-                              stroke-width="2.5"
+                              stroke-width="2.4"
                               stroke-linecap="round"
                               stroke-linejoin="round" />
 
-                        <!-- Self-Drawing Inner Cloud Contour Line -->
+                        <!-- Self-Drawing Inner Cloud Elevation Contour -->
                         <path class="draw-cloud"
                               pathLength="1000"
-                              d="M 164 54 C 170 33 190 19 215 21 C 237 22 254 34 262 52"
+                              d="M 166 44 C 172 25 191 12 214 14 C 235 15 251 26 259 42"
                               fill="none"
                               stroke="var(--stroke-muted)"
-                              stroke-width="1.8"
+                              stroke-width="1.65"
                               stroke-linecap="round" />
 
-                        <!-- Cloud Receiver Node + Disconnected Cross -->
-                        <circle class="cloud-node-ring" cx="210" cy="72" r="14" fill="none" stroke="var(--meena-red)" stroke-width="1.5" />
+                        <!-- Subtle Bottom Horizon Detail Inside Cloud -->
+                        <line class="draw-detail"
+                              pathLength="1000"
+                              x1="158" y1="81" x2="262" y2="81"
+                              stroke="var(--stroke-muted)"
+                              stroke-width="1.2"
+                              stroke-linecap="round"
+                              opacity="0.55" />
+
+                        <!-- Cloud Disconnected Core Node + Ripple -->
+                        <circle class="cloud-node-ring" cx="210" cy="58" r="13.5" fill="none" stroke="var(--meena-red)" stroke-width="1.5" />
                         
                         <circle class="draw-detail"
                                 pathLength="1000"
-                                cx="210" cy="72" r="12"
+                                cx="210" cy="58" r="11.5"
                                 fill="none"
                                 stroke="var(--meena-red)"
                                 stroke-width="2" />
 
                         <path class="draw-detail"
                               pathLength="1000"
-                              d="M 205.5 67.5 L 214.5 76.5 M 214.5 67.5 L 205.5 76.5"
+                              d="M 205.8 53.8 L 214.2 62.2 M 214.2 53.8 L 205.8 62.2"
                               fill="none"
                               stroke="var(--meena-red)"
-                              stroke-width="2.2"
+                              stroke-width="2.1"
                               stroke-linecap="round" />
                     </g>
                 </g>
 
                 <!-- =========================================================
-                     2. THE HAND & PHONE (Draws Second, Then Searches Slowly)
+                     ZONE 2: LOWER ARCHITECTURAL HAND & FLAGSHIP PHONE (Y: 214 to 415)
+                     122px vertical separation from the cloud for spacious depth
                 ========================================================== -->
                 <g class="hand-sway-outer">
                     <g class="hand-tilt-inner">
 
-                        <!-- Rising Physics Signal Arcs (Start after drawing finishes) -->
-                        <path class="signal-arc arc-1" d="M 192 162 Q 210 148 228 162" stroke-width="2.4" />
-                        <path class="signal-arc arc-2" d="M 181 148 Q 210 130 239 148" stroke-width="2.2" />
-                        <path class="signal-arc arc-3" d="M 170 134 Q 210 112 250 134" stroke-width="2" />
+                        <!-- Rising Signal Waves Travelling Across the Open Sky Gap -->
+                        <path class="signal-arc arc-1" d="M 193 200 Q 210 186 227 200" stroke-width="2.3" />
+                        <path class="signal-arc arc-2" d="M 182 184 Q 210 165 238 184" stroke-width="2.1" />
+                        <path class="signal-arc arc-3" d="M 170 168 Q 210 144 250 168" stroke-width="1.85" />
 
-                        <!-- Subtle Hand Backdrop Fill so lines stay crisp -->
+                        <!-- Matte Hand & Wrist Silhouette Fill -->
                         <path class="fill-fade"
-                              d="M 162 348 C 164 322 162 302 155 278 C 149 258 151 236 161 226 C 167 220 175 224 176 234 L 246 210 C 256 230 256 266 244 294 C 234 314 228 330 226 348 Z"
+                              d="M 160 412 C 163 382 161 354 154 324 C 148 298 150 274 160 263 C 166 256 174 260 175 271 L 245 248 C 256 268 256 306 244 338 C 235 362 229 386 227 412 Z"
                               fill="url(#handFill)" />
 
-                        <!-- Smartphone Surface Fill -->
+                        <!-- Flagship Smartphone Outer Chassis Fill -->
                         <rect class="fill-fade"
-                              x="174" y="176" width="72" height="126" rx="14"
+                              x="173" y="214" width="74" height="132" rx="15"
                               fill="url(#phoneSurface)" />
 
-                        <!-- Self-Drawing Left Wrist & Thumb Cradling the Phone -->
-                        <path class="draw-hand-phone"
-                              pathLength="1000"
-                              d="M 162 348 C 164 322 162 302 155 278 C 149 258 151 236 161 226 C 167 220 176 224 176 235 C 176 247 174 260 183 271"
-                              fill="none"
-                              stroke="var(--stroke-main)"
-                              stroke-width="2.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round" />
+                        <!-- Flagship Smartphone Inner Glass Fill -->
+                        <rect class="fill-fade"
+                              x="178.5" y="219.5" width="63" height="121" rx="11.5"
+                              fill="url(#screenGlass)" />
 
-                        <!-- Self-Drawing Smartphone Outer Frame -->
+                        <!-- Subtle Diagonal Glass Reflection on Screen -->
+                        <path class="fill-fade"
+                              d="M 185 226 L 234 226 L 185 295 Z"
+                              fill="rgba(255, 255, 255, 0.025)" />
+
+                        <!-- Self-Drawing Smartphone Outer Titanium Frame -->
                         <rect class="draw-hand-phone"
                               pathLength="1000"
-                              x="174" y="176" width="72" height="126" rx="14"
+                              x="173" y="214" width="74" height="132" rx="15"
                               fill="none"
                               stroke="var(--stroke-main)"
-                              stroke-width="2.5" />
+                              stroke-width="2.4" />
 
-                        <!-- Self-Drawing Smartphone Inner Screen Bezel -->
+                        <!-- Self-Drawing Inner Screen Bezel -->
                         <rect class="draw-detail"
                               pathLength="1000"
-                              x="180" y="183" width="60" height="112" rx="10"
+                              x="179" y="220" width="62" height="120" rx="11"
                               fill="none"
                               stroke="var(--stroke-muted)"
-                              stroke-width="1.5" />
+                              stroke-width="1.4" />
 
-                        <!-- Top Speaker Detail -->
+                        <!-- Dynamic Island / Top Speaker Pill -->
+                        <rect class="draw-detail"
+                              pathLength="1000"
+                              x="199" y="226" width="22" height="4.5" rx="2.25"
+                              fill="none"
+                              stroke="var(--stroke-muted)"
+                              stroke-width="1.4" />
+
+                        <!-- On-Screen Searching Radar Glow -->
+                        <g class="fill-fade">
+                            <circle class="screen-pulse-dot" cx="210" cy="264" r="14.5" fill="rgba(255, 59, 48, 0.14)" />
+                        </g>
+
+                        <!-- Self-Drawing Wi-Fi Symbol Inside Phone Screen -->
+                        <path class="draw-detail"
+                              pathLength="1000"
+                              d="M 197 260 Q 210 249 223 260"
+                              fill="none"
+                              stroke="var(--stroke-main)"
+                              stroke-width="2.1"
+                              stroke-linecap="round" />
+                        <path class="draw-detail"
+                              pathLength="1000"
+                              d="M 202 266 Q 210 259 218 266"
+                              fill="none"
+                              stroke="var(--stroke-main)"
+                              stroke-width="2.1"
+                              stroke-linecap="round" />
+                        <circle class="fill-fade" cx="210" cy="272" r="2.2" fill="var(--meena-red)" />
+
+                        <!-- Precision Telemetry Signal Bars on Phone Screen -->
+                        <line class="draw-detail" pathLength="1000" x1="196" y1="302" x2="196" y2="297" stroke="var(--meena-red)" stroke-width="2.5" stroke-linecap="round" />
+                        <line class="draw-detail" pathLength="1000" x1="205" y1="302" x2="205" y2="292" stroke="var(--stroke-muted)" stroke-width="2.5" stroke-linecap="round" />
+                        <line class="draw-detail" pathLength="1000" x1="214" y1="302" x2="214" y2="287" stroke="var(--stroke-muted)" stroke-width="2.5" stroke-linecap="round" />
+                        <line class="draw-detail" pathLength="1000" x1="223" y1="302" x2="223" y2="282" stroke="var(--stroke-muted)" stroke-width="2.5" stroke-linecap="round" />
+
+                        <!-- Bottom Home Bar Indicator Inside Phone -->
                         <line class="draw-detail"
                               pathLength="1000"
-                              x1="201" y1="191" x2="219" y2="191"
+                              x1="199" y1="333" x2="221" y2="333"
                               stroke="var(--stroke-muted)"
                               stroke-width="2"
                               stroke-linecap="round" />
 
-                        <!-- On-Screen Searching Signal Graphic -->
-                        <g class="fill-fade">
-                            <circle class="screen-pulse-dot" cx="210" cy="226" r="14" fill="rgba(255, 59, 48, 0.14)" />
-                        </g>
+                        <!-- Ergonomic Left Thumb & Wrist (Overlaps Left Bezel Naturally) -->
+                        <path class="fill-fade"
+                              d="M 160 412 C 163 382 161 354 154 324 C 148 298 150 274 160 263 C 167 256 177 261 178 273 C 179 285 186 294 185 305 C 184 313 176 318 173 326 Z"
+                              fill="url(#handFill)" />
 
-                        <!-- Self-Drawing Mini Wi-Fi Icon Inside Phone Screen -->
-                        <path class="draw-detail"
-                              pathLength="1000"
-                              d="M 197 222 Q 210 211 223 222"
-                              fill="none"
-                              stroke="var(--stroke-main)"
-                              stroke-width="2.2"
-                              stroke-linecap="round" />
-                        <path class="draw-detail"
-                              pathLength="1000"
-                              d="M 202 228 Q 210 221 218 228"
-                              fill="none"
-                              stroke="var(--stroke-main)"
-                              stroke-width="2.2"
-                              stroke-linecap="round" />
-                        <circle class="fill-fade" cx="210" cy="234" r="2.2" fill="var(--meena-red)" />
-
-                        <!-- Minimalist Signal Bars on Screen -->
-                        <line class="draw-detail" pathLength="1000" x1="196" y1="264" x2="196" y2="259" stroke="var(--meena-red)" stroke-width="2.6" stroke-linecap="round" />
-                        <line class="draw-detail" pathLength="1000" x1="205" y1="264" x2="205" y2="254" stroke="var(--stroke-muted)" stroke-width="2.6" stroke-linecap="round" />
-                        <line class="draw-detail" pathLength="1000" x1="214" y1="264" x2="214" y2="249" stroke="var(--stroke-muted)" stroke-width="2.6" stroke-linecap="round" />
-                        <line class="draw-detail" pathLength="1000" x1="223" y1="264" x2="223" y2="244" stroke="var(--stroke-muted)" stroke-width="2.6" stroke-linecap="round" />
-
-                        <!-- Self-Drawing Right Fingers & Palm Wrapping Phone Edge -->
                         <path class="draw-hand-phone"
                               pathLength="1000"
-                              d="M 246 206 C 257 206 258 218 246 220
-                                 M 246 223 C 258 223 259 235 246 237
-                                 M 246 240 C 256 240 257 252 246 254
-                                 M 246 256 C 254 272 246 290 236 308 C 229 321 226 334 225 348"
+                              d="M 160 412 C 163 382 161 354 154 324 C 148 298 150 274 160 263 C 167 256 177 261 178 273 C 179 285 186 294 185 305 C 184 312 177 316 173 321"
                               fill="none"
                               stroke="var(--stroke-main)"
-                              stroke-width="2.5"
+                              stroke-width="2.4"
+                              stroke-linecap="round"
+                              stroke-linejoin="round" />
+
+                        <!-- Subtle Thumb Knuckle & Nail Crease -->
+                        <path class="draw-detail"
+                              pathLength="1000"
+                              d="M 173 269 C 176 273 176 280 172 283"
+                              fill="none"
+                              stroke="var(--stroke-muted)"
+                              stroke-width="1.4"
+                              stroke-linecap="round" />
+
+                        <!-- Contoured Right Fingers Gripping Phone Chassis + Tapered Forearm -->
+                        <path class="draw-hand-phone"
+                              pathLength="1000"
+                              d="M 247 244 C 258 244 259 256 247 258
+                                 M 247 261 C 260 261 261 273 247 275
+                                 M 247 278 C 258 278 259 290 247 292
+                                 M 247 295 C 255 295 256 306 247 308
+                                 M 247 308 C 254 324 246 346 236 366 C 230 380 227 396 226 412"
+                              fill="none"
+                              stroke="var(--stroke-main)"
+                              stroke-width="2.4"
                               stroke-linecap="round"
                               stroke-linejoin="round" />
                     </g>
@@ -463,7 +662,7 @@
             </svg>
         </div>
 
-        <!-- BOLD, HIGH-IMPACT TYPOGRAPHY -->
+        <!-- BOTTOM-ANCHORED TYPOGRAPHY & COMPACT PILL BUTTON -->
         <div class="text-block">
             <h1>No Internet Connection</h1>
             <p>Please check your network settings and reconnect to continue using Meena Marketing.</p>
