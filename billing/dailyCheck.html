@@ -141,6 +141,71 @@
         
         /* ADVANCED FIX: Hide useless buttons for infinite scroll */
         .full-screen-loader, .btn-load-more { display: none !important; opacity: 0; pointer-events: none; z-index: -100; }
+
+        /* =========================================
+           GOOGLE MATERIAL DESIGN ANIMATIONS
+           ========================================= */
+        .google-anim-container {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.0, 0.0, 0.2, 1);
+        }
+        .google-anim-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Material TV Glow */
+        .mat-tv-fill {
+            fill: rgba(16, 185, 129, 0);
+            transition: fill 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) 0.4s;
+        }
+        .mat-tv-fill.filled {
+            fill: rgba(16, 185, 129, 0.1);
+        }
+
+        /* Checkmark Pop */
+        .mat-check {
+            transform-origin: center;
+            transform: scale(0);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .mat-check.popped {
+            transform: scale(1);
+        }
+
+        /* Sun Continuous Breathing */
+        .mat-sun-core {
+            transform-origin: center;
+            transition: transform 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+            animation: matBreathe 4s ease-in-out infinite alternate 1s;
+        }
+
+        /* Rays stagger scale */
+        .mat-ray {
+            transform-origin: center;
+            transform: scale(0);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        .mat-ray.visible {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        @keyframes matBreathe {
+            0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.4)); }
+            100% { transform: scale(1.15); filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.8)); }
+        }
+
+        /* Subtle continuous rotation for the sun rays */
+        .mat-rays-group {
+            transform-origin: center;
+            animation: matSlowRotate 30s linear infinite;
+        }
+        @keyframes matSlowRotate {
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -250,28 +315,41 @@
         </svg>
     </template>
     
+    <!-- Google Material: Audit Complete SVG -->
     <template id="svgAllChecked">
-        <svg class="empty-svg" viewBox="0 0 24 24" fill="none" stroke="var(--info-color)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-            <line x1="8" y1="21" x2="16" y2="21"></line>
-            <line x1="12" y1="17" x2="12" y2="21"></line>
-            <path d="M12 8l-3 3 1.5 1.5L12 11l4.5 4.5L18 14z"></path>
-        </svg>
+        <div class="google-anim-container" id="matAuditSuccess">
+            <svg class="empty-svg" viewBox="0 0 24 24" fill="none" stroke="var(--info-color)" stroke-linecap="round" stroke-linejoin="round" style="overflow: visible;">
+                <!-- TV Monitor -->
+                <g class="mat-tv-fill">
+                    <rect class="mat-path" x="2" y="3" width="20" height="14" rx="2" ry="2" stroke-width="1.5"></rect>
+                    <line class="mat-path" x1="8" y1="21" x2="16" y2="21" stroke-width="1.5"></line>
+                    <line class="mat-path" x1="12" y1="17" x2="12" y2="21" stroke-width="1.5"></line>
+                </g>
+                <!-- Google Pay Style Checkmark -->
+                <path class="mat-path mat-check" stroke="var(--success-color)" stroke-width="2.5" d="M8 10l3 3l6-6"></path>
+            </svg>
+        </div>
     </template>
     
-    <!-- ADVANCED FIX: Sunday Interceptor SVG -->
+    <!-- Google Material: Sunday Rest SVG -->
     <template id="svgSundayRest">
-        <svg class="empty-svg" viewBox="0 0 24 24" fill="none" stroke="var(--warning-color)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
+        <div class="google-anim-container" id="matSundayRest">
+            <svg class="empty-svg" viewBox="0 0 24 24" fill="none" stroke="var(--warning-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="overflow: visible;">
+                <!-- Sun Core -->
+                <circle class="mat-path mat-sun-core" cx="12" cy="12" r="5" fill="rgba(245, 158, 11, 0.2)"></circle>
+                <!-- Rotating, Staggered Rays -->
+                <g class="mat-rays-group">
+                    <line class="mat-path mat-ray" x1="12" y1="1" x2="12" y2="3"></line>
+                    <line class="mat-path mat-ray" x1="12" y1="21" x2="12" y2="23"></line>
+                    <line class="mat-path mat-ray" x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line class="mat-path mat-ray" x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line class="mat-path mat-ray" x1="1" y1="12" x2="3" y2="12"></line>
+                    <line class="mat-path mat-ray" x1="21" y1="12" x2="23" y2="12"></line>
+                    <line class="mat-path mat-ray" x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line class="mat-path mat-ray" x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </g>
+            </svg>
+        </div>
     </template>
 
     <script type="module">
@@ -850,6 +928,72 @@
                     */
                     setTimeout(() => runAutoPilot(todayStr), 100); 
                 }
+            }
+        });
+
+        // ==========================================
+        // GOOGLE MATERIAL SVG ANIMATION ENGINE
+        // ==========================================
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // Function to calculate exact length and draw SVG paths perfectly
+            function animateMaterialSVG(containerId) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                // 1. Slide up the container
+                setTimeout(() => container.classList.add('visible'), 50);
+
+                // 2. Mathematically draw all paths
+                const paths = container.querySelectorAll('.mat-path');
+                paths.forEach((path, index) => {
+                    const length = path.getTotalLength();
+                    path.style.strokeDasharray = length;
+                    path.style.strokeDashoffset = length;
+                    
+                    // Force browser to recalculate layout before animating
+                    path.getBoundingClientRect();
+                    
+                    // Apply Google Deceleration Curve to the drawing
+                    path.style.transition = `stroke-dashoffset 0.8s cubic-bezier(0.0, 0.0, 0.2, 1) ${index * 0.05}s`;
+                    path.style.strokeDashoffset = '0';
+                });
+
+                // 3. Trigger specific element animations based on the SVG type
+                if (containerId === 'matAuditSuccess') {
+                    setTimeout(() => {
+                        const fill = container.querySelector('.mat-tv-fill');
+                        const check = container.querySelector('.mat-check');
+                        if (fill) fill.classList.add('filled');
+                        if (check) check.classList.add('popped');
+                    }, 600); // Wait for TV to mostly draw before popping the checkmark
+                }
+                
+                if (containerId === 'matSundayRest') {
+                    const rays = container.querySelectorAll('.mat-ray');
+                    rays.forEach((ray, index) => {
+                        setTimeout(() => ray.classList.add('visible'), 400 + (index * 80));
+                    });
+                }
+            }
+
+            // Use a MutationObserver to watch the grids. 
+            // When Firebase injects the Empty State HTML, this immediately triggers the animation.
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach(mutation => {
+                    mutation.addedNodes.forEach(node => {
+                        if (node.nodeType === 1) { // If it's an HTML Element
+                            if (node.querySelector('#matAuditSuccess')) animateMaterialSVG('matAuditSuccess');
+                            if (node.querySelector('#matSundayRest')) animateMaterialSVG('matSundayRest');
+                        }
+                    });
+                });
+            });
+
+            // Start watching the main containers where you inject the empty states
+            const pendingGrid = document.getElementById('pendingGrid');
+            if (pendingGrid) {
+                observer.observe(pendingGrid, { childList: true, subtree: true });
             }
         });
 
