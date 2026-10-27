@@ -69,7 +69,7 @@ self.addEventListener('fetch', (event) => {
 
   const isHTML = event.request.headers.get('accept')?.includes('text/html');
 
-  // Absolute URL reference for offline.html to prevent cold-start relative path resolution bugs
+  // Create an absolute URL reference for offline.html to prevent cold-start relative path resolution bugs
   const offlinePageUrl = new URL('./offline.html', self.location).href;
 
   // STRICT HARDWARE OFFLINE CHECK
@@ -78,9 +78,11 @@ self.addEventListener('fetch', (event) => {
     console.warn('[Service Worker] Device is offline. Forcing offline.html');
     event.respondWith(
       caches.match(offlinePageUrl).then((response) => {
-        return response || new Response('<h2>You are offline</h2>', {
-          status: 200,
-          headers: { 'Content-Type': 'text/html' }
+        return response || caches.match('./offline.html').then((relResponse) => {
+          return relResponse || new Response('<h2>You are offline</h2>', {
+            status: 200,
+            headers: { 'Content-Type': 'text/html' }
+          });
         });
       })
     );
@@ -107,7 +109,7 @@ self.addEventListener('fetch', (event) => {
           // Route the file to the correct organized cache folder
           const targetCache = isCoreFile ? CACHE_NAME : DYNAMIC_CACHE_NAME;
 
-          caches.open(targetCache).then((cache) => cache.put(event.request, clone));
+          caches.open(targetCache).then((cache) => cache.put(event.request, clone).catch((err) => console.warn('[Service Worker] Cache put failed:', err)));
         }
         return networkResponse;
       });
@@ -125,9 +127,11 @@ self.addEventListener('fetch', (event) => {
         if (isHTML) {
           console.log('[Service Worker] Offline HTML fallback triggered. Serving offline.html');
           return caches.match(offlinePageUrl).then((response) => {
-            return response || new Response('<h2>You are offline</h2>', {
-              status: 200,
-              headers: { 'Content-Type': 'text/html' }
+            return response || caches.match('./offline.html').then((relResponse) => {
+              return relResponse || new Response('<h2>You are offline</h2>', {
+                status: 200,
+                headers: { 'Content-Type': 'text/html' }
+              });
             });
           });
         }
