@@ -1,8 +1,8 @@
 // sw.js (Inside /marketing/)
 
 // 1. CACHE CONFIGURATION
-const CACHE_NAME = 'goorac-meena-v36'; // Bumped version to apply advanced fixes
-const DYNAMIC_CACHE_NAME = 'goorac-meena-dynamic-v36';
+const CACHE_NAME = 'goorac-meena-v38'; // Bumped version to v38 to apply the self-healing fix
+const DYNAMIC_CACHE_NAME = 'goorac-meena-dynamic-v37';
 
 // 2. APP SHELL (Core Files)
 const APP_SHELL = [
@@ -70,6 +70,35 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// --- ADVANCED FIX 4: SILENT BACKGROUND HEALING ---
+// This function runs without blocking the UI. It checks for critical missing files
+// and silently restores them to the cache in the background.
+function silentBackgroundHeal() {
+  const criticalFiles = [
+    './offline.html'
+    // Note: You can add more absolute must-have files here in the future
+  ];
+  
+  caches.open(CACHE_NAME).then((cache) => {
+    criticalFiles.forEach((file) => {
+      cache.match(file).then((cachedResponse) => {
+        if (!cachedResponse) {
+          console.log(`[Marketing Service Worker] Background Heal: Missing ${file} detected. Downloading silently...`);
+          fetch(file).then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200) {
+              cache.put(file, networkResponse.clone());
+              console.log(`[Marketing Service Worker] Background Heal: Successfully restored ${file} to cache.`);
+            }
+          }).catch(() => {
+            // Fails completely silently if the network drops during the background heal
+          });
+        }
+      });
+    });
+  });
+}
+// --------------------------------------------------
+
 // 5. FETCH EVENT - 0ms Load + Hardware Offline Check
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET' || !event.request.url.startsWith('http')) return;
@@ -91,6 +120,15 @@ self.addEventListener('fetch', (event) => {
       })
     );
     return;
+  }
+
+  // TRIGGER SILENT HEAL (Only runs when online and requesting an HTML page)
+  // event.waitUntil ensures the Service Worker stays alive long enough to finish the background check,
+  // but it DOES NOT block event.respondWith from returning the page instantly.
+  if (isHTML && navigator.onLine) {
+    event.waitUntil(
+      Promise.resolve().then(() => silentBackgroundHeal())
+    );
   }
 
   // IF ONLINE: Proceed with 0ms Instant Load (Stale-While-Revalidate)
