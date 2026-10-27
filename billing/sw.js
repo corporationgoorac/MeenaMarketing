@@ -1,14 +1,13 @@
 // sw.js (Inside /billing/)
 
 // 1. CACHE CONFIGURATION
-const CACHE_NAME = 'billing-app-v7'; // Bumped to v7 to trigger immediate cache refresh for the new offline logic
-const DYNAMIC_CACHE_NAME = 'billing-app-dynamic-v7';
+const CACHE_NAME = 'billing-app-v9'; // Bumped to v9 to force the fresh file list
+const DYNAMIC_CACHE_NAME = 'billing-app-dynamic-v9';
 
-// 2. APP SHELL (Core assets located directly inside the 'billing' directory)
+// 2. APP SHELL (Matched EXACTLY to your actual folder contents)
 const ASSETS_TO_CACHE = [
-  './',
   './abc.html',
-  './aiBot.html', // Added aiBot.html to core shell
+  './aiBot.html',
   './bill.html',
   './config.js',
   './dailyCheck.html',
@@ -17,19 +16,27 @@ const ASSETS_TO_CACHE = [
   './login.html',
   './manifest.json',
   './offer.html',
-  './offline.html', // Added offline.html to be cached instantly
+  './offline.html',
   './pending.html',
   './products.json',
-  './today.html'
+  './today.html',
+  './viewBill.html'
 ];
 
-// 3. INSTALL EVENT: Pre-cache the App Shell
+// 3. INSTALL EVENT: Pre-cache the App Shell Individually
 self.addEventListener('install', (event) => {
   console.log('[Billing Service Worker] Installing & Caching App Shell...');
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(ASSETS_TO_CACHE))
-      .catch((error) => console.error('[Billing Service Worker] Cache AddAll Failed:', error))
+    caches.open(CACHE_NAME).then((cache) => {
+      // ADVANCED FIX 1: Cache individually! If one file ever goes missing, it skips it safely instead of crashing everything.
+      return Promise.all(
+        ASSETS_TO_CACHE.map((file) => {
+          return cache.add(file).catch((err) => {
+            console.warn(`[Billing Service Worker] Skipped caching missing file: ${file}`, err);
+          });
+        })
+      );
+    })
   );
   // Force activate immediately without waiting for open tabs to close
   self.skipWaiting();
@@ -42,7 +49,8 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME && cacheName !== DYNAMIC_CACHE_NAME) {
+          // ADVANCED FIX 2: Only delete old BILLING caches (starts with 'billing-app-'). Stop deleting the Marketing caches!
+          if (cacheName.startsWith('billing-app-') && cacheName !== CACHE_NAME && cacheName !== DYNAMIC_CACHE_NAME) {
             console.log('[Billing Service Worker] Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
@@ -60,8 +68,8 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET' || !event.request.url.startsWith('http')) return;
 
   const isHTML = event.request.headers.get('accept')?.includes('text/html');
-
-  // Create an absolute URL reference for offline.html to prevent cold-start relative path resolution bugs
+  
+  // ADVANCED FIX 3: Absolute URL reference for offline.html to prevent cold-start relative path bugs
   const offlinePageUrl = new URL('./offline.html', self.location).href;
 
   // STRICT HARDWARE OFFLINE CHECK
@@ -100,7 +108,8 @@ self.addEventListener('fetch', (event) => {
           // Route the file to the correct organized cache folder
           const targetCache = isCoreFile ? CACHE_NAME : DYNAMIC_CACHE_NAME;
           
-          caches.open(targetCache).then((cache) => cache.put(event.request, responseClone).catch((err) => console.warn('[Billing Service Worker] Cache put failed:', err)));
+          // ADVANCED FIX 4: Catch background cache-put network errors safely
+          caches.open(targetCache).then((cache) => cache.put(event.request, responseClone).catch(() => {}));
         }
         return networkResponse;
       });
@@ -108,13 +117,13 @@ self.addEventListener('fetch', (event) => {
       // 1. If we have the file in cache, return it instantly (0ms load)
       if (cachedResponse) {
         // Catch the background fetch error silently here so it doesn't clutter the console
-        fetchPromise.catch(() => console.warn('[Billing Service Worker] Background update paused (Offline).'));
+        fetchPromise.catch(() => {});
         return cachedResponse;
       }
 
       // 2. If it's NOT in the cache yet, wait for the network fetch
       return fetchPromise.catch(() => {
-        // 3. ULTIMATE FAILSAFE: If offline and a requested HTML page isn't in cache, serve offline.html
+        // ADVANCED FIX 5: HTML fails -> show offline.html. Image/JS fails -> return empty Response to avoid TypeError crash.
         if (isHTML) {
           console.log('[Billing Service Worker] Offline HTML fallback triggered. Serving offline.html');
           return caches.match(offlinePageUrl).then((response) => {
@@ -126,6 +135,8 @@ self.addEventListener('fetch', (event) => {
             });
           });
         }
+        // Fallback for non-HTML requests (images, external APIs) so it doesn't return undefined and crash
+        return new Response('', { status: 404, statusText: 'Offline' });
       });
     })
   );
