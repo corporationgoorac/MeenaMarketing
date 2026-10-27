@@ -69,11 +69,21 @@ self.addEventListener('fetch', (event) => {
 
   const isHTML = event.request.headers.get('accept')?.includes('text/html');
 
+  // Absolute URL reference for offline.html to prevent cold-start relative path resolution bugs
+  const offlinePageUrl = new URL('./offline.html', self.location).href;
+
   // STRICT HARDWARE OFFLINE CHECK
   // If the device knows it has no internet right now, instantly show offline.html
   if (isHTML && !navigator.onLine) {
     console.warn('[Service Worker] Device is offline. Forcing offline.html');
-    event.respondWith(caches.match('./offline.html'));
+    event.respondWith(
+      caches.match(offlinePageUrl).then((response) => {
+        return response || new Response('<h2>You are offline</h2>', {
+          status: 200,
+          headers: { 'Content-Type': 'text/html' }
+        });
+      })
+    );
     return;
   }
 
@@ -114,7 +124,12 @@ self.addEventListener('fetch', (event) => {
       return fetchPromise.catch(() => {
         if (isHTML) {
           console.log('[Service Worker] Offline HTML fallback triggered. Serving offline.html');
-          return caches.match('./offline.html');
+          return caches.match(offlinePageUrl).then((response) => {
+            return response || new Response('<h2>You are offline</h2>', {
+              status: 200,
+              headers: { 'Content-Type': 'text/html' }
+            });
+          });
         }
       });
     })
