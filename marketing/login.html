@@ -1968,13 +1968,6 @@
                 confirmText: 'Done'
             });
 
-            isSignUpMode = false;
-            renderAuthUI();
-            hideAllModalSteps();
-            stepAuth.classList.remove('hidden');
-            history.replaceState({ view: 'login' }, "", "#login");
-             
-            
         } catch (e) {
             setBtnLoading(resetBtn, false);
             await showCustomDialog({
