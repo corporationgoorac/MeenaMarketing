@@ -2084,10 +2084,10 @@
             const userSnap = await getDoc(userRef);
 
             if (userSnap.exists()) {
-                // Existing Meena Marketing user -> redirect straight to index.html
+                // Existing Meena Marketing user -> redirect straight to the app
                 showToast('Welcome back!', false);
                 setTimeout(() => {
-                    window.location.href = 'index.html';
+                    window.location.href = 'setup.html';
                 }, 400);
             } else {
                 // New Meena Marketing user -> show Name & Profile Setup inside modal
@@ -2151,7 +2151,7 @@
             showToast('Profile setup complete!', false);
 
             setTimeout(() => {
-                window.location.href = 'index.html';
+                window.location.href = 'setup.html';
             }, 400);
         } catch (error) {
             console.error("Error saving user data:", error);
