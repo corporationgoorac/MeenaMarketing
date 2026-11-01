@@ -5,406 +5,2165 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Login - Meena Marketing</title>
     
-    <!-- UPGRADED: Theme color precisely matches the new Hero Arch for a seamless Android toolbar -->
-    <meta name="theme-color" content="#212121">
+    <!-- Seamless Mobile PWA Status Bar Color matching the Meena Marketing Dark Theme -->
+    <meta name="theme-color" content="#121212">
+    <link rel="manifest" href="manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet" />
-    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+
     <style>
-        /* Meena Marketing Dark Theme Palette */
         :root {
-            --bg-color: #121212;
-            --surface-color: #212121;
-            --text-color: #ffffff;
-            --text-secondary: #aaaaaa;
-            --meena-red: #ff3333;
-            --marketing-white: #ffffff;
-            --button-hover: rgba(255, 51, 51, 0.1);
+            /* Meena Marketing Dark & Vivid Red Theme Palette */
+            --bg: #121212;
+            --surface: #212121;
+            --text: #ffffff;
+            --text-muted: #aaaaaa;
+            --accent: #ff3333; /* Meena Red */
+            --accent-hover: #cc0000;
+            --error: #ff3333;
+            --success: #00ba7c;
+            --border: rgba(255, 255, 255, 0.14);
+            --btn-hover: #e6e6e6;
         }
 
-        /* UPGRADED: Anti-copy, anti-zoom, and 100dvh anti-wobble scroll lock */
-        html, body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100dvh; /* UPGRADED: Dynamic Viewport Height prevents fake scrolling on mobile */
-            width: 100vw;
-            overflow: hidden; /* Prevents bounce scrolling on mobile */
-            
-            /* Completely disable text selection, long-press menus, and double-tap zoom */
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            touch-action: manipulation; 
-        }
-
-        /* =========================================================================
-           NEW HERO ARCH: Seamless Status Bar Integration & Vivid Red Glow
-           ========================================================================= */
-        .hero-arch {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 38vh; 
-            background: linear-gradient(to bottom, #212121 40%, transparent 100%); /* Exact match to the Daily Check / Inventory header, blending smoothly at the bottom */
-            border-radius: 0 0 50% 50%;
-            transform: scaleX(1.5); /* Sweeping premium curve */
-            /* Vivid neon-red glow: 55% opacity with a 5px spread to perfectly separate from the dark background */
-            box-shadow: 0 15px 35px 5px rgba(255, 51, 51, 0.55); 
-            z-index: 0;
-        }
-
-        /* UPGRADED: Professional Sleek Login Card */
-        .auth-container {
-            background: linear-gradient(145deg, #1e1e1e, #121212);
-            padding: 45px 35px;
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.05); /* Premium subtle border */
-            width: 88%;
-            max-width: 380px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.05);
-            text-align: center;
-            position: relative;
-            box-sizing: border-box;
-            z-index: 10; /* Ensures the card floats safely above the glowing Hero Arch */
-        }
-
-        .brand-logo {
-            width: 75px;
-            height: 75px;
-            border-radius: 18px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.7);
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-
-        /* Redesigned to match the sleek header from index.html */
-        .brand-title { 
-            font-size: 1.5em; 
-            font-weight: 800; 
-            margin-bottom: 4px;
-            letter-spacing: 0.5px;
-        }
-        .meena { color: var(--meena-red); }
-        .marketing { color: var(--marketing-white); }
-        
-        .subtitle { 
-            font-size: 0.85em; 
-            color: var(--text-secondary); 
-            margin-bottom: 35px; 
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-weight: 600;
-        }
-
-        /* UPGRADED: Modern Google Button optimized for mobile thumbs */
-        .google-btn {
-            background-color: rgba(255, 255, 255, 0.03);
-            color: var(--text-color);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0 20px;
-            height: 52px; /* Standard mobile touch target size */
-            border-radius: 26px;
-            font-size: 1.05em;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            width: 100%;
-            box-sizing: border-box;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .google-btn:hover {
-            background-color: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        }
-
-        .google-btn:active { 
-            transform: scale(0.96); 
-            box-shadow: none;
-        }
-
-        .google-icon { width: 22px; height: 22px; }
-
-        /* Setup Profile Section */
-        #setup-section {
-            display: none;
-            animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .profile-dp {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 3px solid var(--meena-red);
-            margin: 0 auto 20px auto;
-            object-fit: cover;
-            display: block;
-            box-shadow: 0 0 30px rgba(255, 51, 51, 0.25);
-            background-color: #111;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-            text-align: left;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 0.8em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-            margin-left: 4px;
-        }
-
-        .input-group input {
-            width: 100%;
-            box-sizing: border-box;
-            background-color: rgba(0, 0, 0, 0.3);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 16px; /* 16px is critical to prevent iOS auto-zoom on focus */
-            border-radius: 14px;
-            font-size: 16px; /* 16px is critical to prevent iOS auto-zoom on focus */
-            outline: none;
-            transition: all 0.3s;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .input-group input:focus {
-            border-color: var(--meena-red);
-            background-color: rgba(0, 0, 0, 0.5);
-            box-shadow: 0 0 0 3px rgba(255, 51, 51, 0.15), inset 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .submit-btn {
-            background: linear-gradient(135deg, var(--meena-red), #cc0000);
-            color: white;
-            border: none;
-            height: 52px;
-            border-radius: 14px;
-            font-size: 1.05em;
-            font-weight: bold;
-            width: 100%;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 20px rgba(255, 51, 51, 0.3);
-        }
-
-        .submit-btn:hover {
-            box-shadow: 0 12px 25px rgba(255, 51, 51, 0.4);
-            transform: translateY(-2px);
-        }
-        
-        .submit-btn:active { 
-            transform: scale(0.96); 
-            box-shadow: 0 4px 10px rgba(255, 51, 51, 0.3);
-        }
-
-        /* Loader */
-        #loader {
-            display: none;
-            margin: 25px auto;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top: 3px solid var(--meena-red);
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* =========================================================================
-           NEW UPGRADES: HIDDEN SCROLLBAR & ENHANCED PROFESSIONAL STYLING
-           ========================================================================= */
-        
-        /* 1. Completely hide the scrollbar across all major browsers */
+        /* Completely hide the scrollbar across all major browsers */
         ::-webkit-scrollbar {
             display: none !important;
             width: 0 !important;
             height: 0 !important;
         }
 
-        html, body {
-            -ms-overflow-style: none !important;  /* IE and Edge */
-            scrollbar-width: none !important;  /* Firefox */
-            
-            /* Allow vertical scrolling ONLY if the keyboard forces the screen up, 
-               preventing elements from being hidden off-screen */
-            overflow-y: auto !important; 
-            overflow-x: hidden !important;
-            
-            /* Add a subtle, high-end studio lighting glow to the dark background */
-            background-image: 
-                radial-gradient(circle at top right, rgba(255, 51, 51, 0.04), transparent 40%), 
-                radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.02), transparent 40%) !important;
+        * {
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            outline: none;
+            touch-action: manipulation;
         }
 
-        /* 2. Make the Auth Container feel more premium (Glassmorphism & Depth) */
-        .auth-container {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            background: linear-gradient(145deg, rgba(30, 30, 30, 0.85), rgba(18, 18, 18, 0.95)) !important;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,255,255,0.08) !important;
-            margin: 20px 0; /* Add margin so it breathes when scrolling on small screens */
+        html, body {
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at top right, rgba(255, 51, 51, 0.08), transparent 45%), 
+                radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.02), transparent 45%);
+            color: var(--text);
+            height: 100dvh;
+            width: 100vw;
+            overflow: hidden;
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
         }
-        
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- LANDING LAYOUT (Quantum Structure + Meena Colors) --- */
+        .login-card {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            overflow-y: auto;
+            animation: fadeIn 0.5s ease-out forwards;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        @media (min-width: 800px) {
+            .login-card {
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                padding: 0;
+                max-width: 1000px;
+            }
+            .desktop-left {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .desktop-right {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 40px;
+                align-items: center;
+                text-align: center;
+            }
+            .logo-box-img {
+                width: 260px !important;
+                height: 260px !important;
+                margin: 0 !important;
+                border-radius: 36px !important;
+            }
+        }
+
+        @media (max-width: 799px) {
+            .desktop-left {
+                display: flex;
+                width: 100%;
+                margin-bottom: 28px;
+                justify-content: center;
+            }
+            .desktop-right {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .logo-box-img {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            border-radius: 18px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 51, 51, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: var(--surface);
+        }
+
+        h1 {
+            font-size: 38px;
+            margin-bottom: 12px;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            margin-top: 6px;
+            text-align: center;
+            width: 100%;
+        }
+
+        h1 .meena {
+            color: var(--accent);
+        }
+
+        h1 .marketing {
+            color: var(--text);
+        }
+
+         h2 {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 22px;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin-bottom: 32px;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* BUTTON GROUP */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 300px;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .auth-btn {
+            border: none;
+            padding: 0 24px;
+            height: 44px;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            position: relative;
+        }
+
+        .auth-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Google Button: Crisp White */
+        .google-btn {
+            background: #ffffff;
+            color: #121212;
+        }
+        .google-btn:hover {
+            background: #e6e6e6;
+        }
+        .google-btn:active {
+            background: #cccccc;
+            transform: scale(0.98);
+        }
+
+        /* Create Account: Meena Red */
+        .create-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: #ffffff;
+            margin-bottom: 4px;
+            box-shadow: 0 6px 18px rgba(255, 51, 51, 0.3);
+        }
+        .create-btn:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 8px 22px rgba(255, 51, 51, 0.45);
+        }
+        .create-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Sign In: Outline with Red Accent */
+        .signin-btn {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+        }
+        .signin-btn:hover {
+            background: rgba(255, 51, 51, 0.1);
+            border-color: rgba(255, 51, 51, 0.4);
+        }
+        .signin-btn:active {
+            transform: scale(0.98);
+        }
+
+        .or-divider {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 300px;
+            margin: 4px 0;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        .or-divider::before, .or-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+            margin: 0 8px;
+        }
+
+        /* TERMS FOOTER */
+        .terms-text {
+            width: 100%;
+            max-width: 300px;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 22px;
+            line-height: 1.35;
+            margin-top: 6px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .terms-text span {
+            color: var(--accent);
+        }
+
+        .have-account {
+            margin-top: 4px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.72);
+            z-index: 1000;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg);
+            width: 100%;
+            height: 100%;
+            max-width: 600px;
+            max-height: 680px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95);
+        }
+
+        @media (max-width: 600px) {
+            .modal-content {
+                border-radius: 0;
+                max-height: 100dvh;
+                border: none;
+                animation: slideUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 0 16px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-icon-btn {
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            margin-left: -8px;
+        }
+        .nav-icon-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .nav-icon-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .modal-logo-center {
+            height: 30px;
+            width: 30px;
+            border-radius: 7px;
+            object-fit: contain;
+        }
+
+        .modal-body {
+            padding: 0 32px 32px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .modal-inner-width {
+            width: 100%;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 22px 0 20px;
+            line-height: 1.2;
+            width: 100%;
+            text-align: center;
+            align-self: center;
+        }
+
+        .modal-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 22px;
+            font-size: 14px;
+            line-height: 1.45;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* --- FLOATING LABEL INPUTS --- */
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 18px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px var(--accent);
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .input-wrapper.error-shake {
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+            border-color: var(--error);
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        .text-input {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 16px; /* Prevents iOS auto-zoom */
+            height: 100%;
+            flex: 1;
+            padding: 24px 12px 6px 12px;
+            font-family: inherit;
+            width: 100%;
+            -webkit-user-select: text;
+            user-select: text;
+        }
+        .text-input::placeholder {
+            color: transparent;
+        }
+
+        .floating-label {
+            position: absolute;
+            left: 12px;
+            top: 18px;
+            font-size: 16px;
+            color: var(--text-muted);
+            transition: 0.2s cubic-bezier(0,0,0.2,1);
+            pointer-events: none;
+        }
+
+        .text-input:focus + .floating-label,
+        .text-input:not(:placeholder-shown) + .floating-label {
+            top: 6px;
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Toggle Password Eye */
+        .password-toggle {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            margin-right: 4px;
+        }
+        .password-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* --- PASSWORD REQUIREMENTS CHECKLIST --- */
+        .pass-criteria-box {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 20px;
+            text-align: left;
+            display: none;
+        }
+        .pass-criteria-box.active {
+            display: block;
+        }
+        .pass-criteria-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+        .criteria-item {
+            font-size: 13px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+            transition: color 0.2s;
+        }
+        .criteria-item:last-child {
+            margin-bottom: 0;
+        }
+        .criteria-item.valid {
+            color: var(--success);
+        }
+        .criteria-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1.5px solid var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            flex-shrink: 0;
+        }
+        .criteria-item.valid .criteria-dot {
+            border-color: var(--success);
+            background: var(--success);
+            color: #000;
+            font-weight: 900;
+        }
+
+        /* --- ACTION / NEXT BUTTONS --- */
+        .next-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: #ffffff;
+            border: none;
+            border-radius: 9999px;
+            height: 48px;
+            width: 100%;
+            font-weight: 700;
+            font-size: 16px;
+            margin-top: 8px;
+            margin-bottom: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 6px 18px rgba(255, 51, 51, 0.28);
+        }
+        .next-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .next-btn:hover:not(:disabled) {
+            background: var(--accent-hover);
+            box-shadow: 0 8px 22px rgba(255, 51, 51, 0.4);
+        }
+        .next-btn:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .btn-loader {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 0, 0, 0.15);
+            border-top-color: #121212;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+        .btn-loader.light {
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-top-color: #ffffff;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .toggle-auth-text {
+            margin-top: 18px;
+            color: var(--text-muted);
+            font-size: 15px;
+            text-align: center;
+            width: 100%;
+        }
+        .toggle-auth-text span {
+            color: var(--accent);
+            cursor: pointer;
+            font-weight: 700;
+        }
+        .toggle-auth-text span:hover {
+            text-decoration: underline;
+        }
+
+        #forgot-msg {
+            color: var(--success);
+            font-size: 14px;
+            margin-top: 10px;
+            opacity: 0;
+            text-align: center;
+            width: 100%;
+            transition: opacity 0.3s ease;
+        }
+
+        #status-msg {
+            color: var(--error);
+            margin-top: 12px;
+            min-height: 20px;
+            font-size: 13px;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* User email badge for Set Password & Setup steps */
+        .user-email-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Profile DP for Meena Marketing Profile Setup Step */
+        .profile-dp {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            margin: 4px auto 16px auto;
+            object-fit: cover;
+            display: block;
+            box-shadow: 0 0 28px rgba(255, 51, 51, 0.3);
+            background-color: var(--surface);
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3000;
+            width: 90%;
+            max-width: 400px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .toast.error {
+            background: var(--error);
+            border-color: var(--error);
+        }
+        .toast.success {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        /* --- CUSTOM HTML CONFIRMATION & ERROR DIALOG POPUP --- */
+        .dialog-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 2500;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+
+        .dialog-box {
+            background: #181818;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 340px;
+            padding: 28px 24px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.85);
+            transform: scale(0.95);
+            animation: popIn 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes popIn {
+            to { transform: scale(1); }
+        }
+
+        .dialog-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 22px;
+            font-weight: 800;
+        }
+        .dialog-icon.error {
+            background: rgba(255, 51, 51, 0.15);
+            color: var(--error);
+        }
+        .dialog-icon.confirm {
+            background: rgba(255, 51, 51, 0.15);
+            color: var(--accent);
+        }
+        .dialog-icon.success {
+            background: rgba(0, 186, 124, 0.15);
+            color: var(--success);
+        }
+
+        .dialog-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+            line-height: 1.25;
+        }
+
+        .dialog-message {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.45;
+            margin-bottom: 24px;
+            word-break: break-word;
+        }
+
+        .dialog-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .dialog-btn {
+            height: 44px;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dialog-btn-primary {
+            background: #ffffff;
+            color: #121212;
+        }
+        .dialog-btn-primary:hover {
+            background: #e6e6e6;
+        }
+        .dialog-btn-primary.accent,
+        .dialog-btn-primary.error {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: #ffffff;
+        }
+        .dialog-btn-primary.accent:hover,
+        .dialog-btn-primary.error:hover {
+            background: var(--accent-hover);
+        }
+
+        .dialog-btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .dialog-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
-    <!-- NEW: The Premium Sweeping Arch Background Layer -->
-    <div class="hero-arch"></div>
+<!-- Toast Notification -->
+<div class="toast-container">
+    <div id="toast-msg" class="toast"></div>
+</div>
 
-    <div class="auth-container">
-        <div id="login-section">
-            <img src="icon.png" alt="Meena Marketing" class="brand-logo" onerror="this.src='https://via.placeholder.com/70/212121/ff3333?text=MM'">
-            <div class="brand-title"><span class="meena">Meena</span> <span class="marketing">Marketing</span></div>
-            <div class="subtitle">Secure Login</div>
-            
-            <button class="google-btn" id="google-login-btn">
-                <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+<!-- Custom HTML Confirmation & Error Popup Modal (Mobile Back-Button Supported) -->
+<div id="custom-dialog-overlay" class="dialog-overlay">
+    <div class="dialog-box">
+        <div id="dialog-icon" class="dialog-icon error">!</div>
+        <div id="dialog-title" class="dialog-title">Notice</div>
+        <div id="dialog-message" class="dialog-message">Message goes here.</div>
+        <div class="dialog-actions">
+            <button id="dialog-confirm-btn" class="dialog-btn dialog-btn-primary">OK</button>
+            <button id="dialog-cancel-btn" class="dialog-btn dialog-btn-secondary hidden">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Main Landing View -->
+<div class="login-card">
+    <div class="desktop-left">
+        <img src="icon.png" class="logo-box-img" alt="Meena Marketing" onerror="this.src='https://via.placeholder.com/150/212121/ff3333?text=MM'">
+    </div>
+
+    <div class="desktop-right">
+        <h1><span class="meena">Meena</span> <span class="marketing">Marketing</span></h1>
+        <h2>Secure Login</h2>
+        
+        <div class="btn-group">
+            <!-- Google Login Button with Built-in Spinner -->
+            <button id="google-btn" class="auth-btn google-btn">
+                <svg id="google-btn-icon" width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                     <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
                     <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
                     <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
                     <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
                 </svg>
-                Sign in with Google
+                <span id="google-btn-text">Continue with Google</span>
+                <div id="google-btn-loader" class="btn-loader"></div>
             </button>
 
-            <div id="loader"></div>
-        </div>
+            <div class="or-divider">or</div>
 
-        <div id="setup-section">
-            <div class="brand-title" style="font-size: 1.3em; margin-bottom: 20px;">Welcome to the Team!</div>
+            <!-- Create Account Button -->
+            <button id="signup-trigger-btn" class="auth-btn create-btn">
+                <span>Create account</span>
+            </button>
             
-            <img id="user-dp" class="profile-dp" src="" alt="Profile Picture">
-            
-            <div class="input-group">
-                <label for="user-name">Confirm your full name</label>
-                <input type="text" id="user-name" placeholder="E.g. Meena Kumar">
+            <div class="terms-text">
+                Authorized access for <span>Meena Marketing</span> team members and staff management.
             </div>
 
-            <button class="submit-btn" id="complete-setup-btn">Complete Setup</button>
+            <!-- Sign In Section -->
+            <div class="have-account">Already have an account?</div>
+            <button id="login-trigger-btn" class="auth-btn signin-btn">
+                <span>Sign in</span>
+            </button>
+        </div>
+
+        <div id="status-msg"></div>
+    </div>
+</div>
+
+<!-- Main Multi-Step Auth & Setup Modal -->
+<div id="email-modal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button class="nav-icon-btn" id="modal-back-btn" aria-label="Back">
+                <svg viewBox="0 0 24 24"><g><path d="M7.414 13l5.043 5.04-1.414 1.42L3.586 12l7.457-7.46 1.414 1.42L7.414 11H21v2H7.414z"></path></g></svg>
+            </button>
+            
+            <img src="icon.png" class="modal-logo-center" alt="Logo" onerror="this.src='https://via.placeholder.com/40/212121/ff3333?text=MM'">
+            
+            <div style="width: 32px;"></div>
+        </div>
+        
+        <div class="modal-body">
+            <div class="modal-inner-width">
+                
+                <!-- STEP 1: EMAIL LOGIN / SIGN UP -->
+                <div id="step-auth" style="width:100%; display:flex; flex-direction:column;">
+                    <div class="modal-title" id="auth-title">Sign in to Meena Marketing</div>
+                    
+                    <div class="input-wrapper" id="email-wrapper">
+                        <input type="email" id="email-input" class="text-input" placeholder=" " autocomplete="email">
+                        <label class="floating-label">Email</label>
+                    </div>
+
+                    <div class="input-wrapper" id="pass-wrapper">
+                        <input type="password" id="password-input" class="text-input" placeholder=" ">
+                        <label class="floating-label">Password</label>
+                        <button type="button" class="password-toggle" id="toggle-pass-btn" aria-label="Toggle Password Visibility">
+                            <svg id="eye-icon" viewBox="0 0 24 24"><g><path d="M10.5 13.5c-.828 0-1.5.672-1.5 1.5s.672 1.5 1.5 1.5 1.5-.672 1.5-1.5-.672-1.5-1.5-1.5zm-5.22-3.72l1.41-1.42L21.53 23.23 20.11 24.65 17.48 22.02C15.93 22.65 14.26 23 12.5 23 6.64 23 2 18.5 2 13.5c0-1.39.29-2.73.83-3.98l-2.61-2.6 1.42-1.42 3.64 3.64zM12.5 21c1.33 0 2.59-.28 3.74-.78L8.68 12.66c-.16.48-.26 1-.26 1.54 0 2.21 1.79 4 4 4 .19 0 .38-.02.56-.05L11.53 19.59c-.32.05-.65.09-1.03.09zm0-17c-5.86 0-10.5 4.5-10.5 9.5 0 .23.01.46.03.68l2.5-2.5C5.1 9.87 6.46 8.5 8.1 7.6L9.5 6.2c.98-.13 1.99-.2 3-.2 5.86 0 10.5 4.5 10.5 9.5 0 1.51-.43 2.92-1.18 4.18l1.52 1.52c1.11-1.63 1.66-3.48 1.66-5.42 0-5.87-5.51-11.5-12.5-11.5z"></path></g></svg>
+                        </button>
+                    </div>
+
+                    <!-- Password strength checklist (visible during Sign Up) -->
+                    <div id="signup-pass-criteria" class="pass-criteria-box">
+                        <div class="pass-criteria-title">Password Requirements</div>
+                        <div id="crit-signup-len" class="criteria-item">
+                            <span class="criteria-dot"></span> At least 8 characters
+                        </div>
+                        <div id="crit-signup-cap" class="criteria-item">
+                            <span class="criteria-dot"></span> At least 1 capital letter (A-Z)
+                        </div>
+                        <div id="crit-signup-sym" class="criteria-item">
+                            <span class="criteria-dot"></span> At least 1 special symbol (!@#$...)
+                        </div>
+                    </div>
+
+                    <button id="auth-btn" class="next-btn">
+                        <span id="auth-btn-text">Log in</span>
+                        <div class="btn-loader light"></div>
+                    </button>
+
+                    <button id="forgot-trigger" class="auth-btn signin-btn" style="height: 38px; font-size: 14px; border: 1px solid var(--border); color: var(--text);">
+                        Forgot password?
+                    </button>
+
+                    <div class="toggle-auth-text" id="toggle-text">
+                        Don't have an account? <span id="toggle-mode-link">Sign up</span>
+                    </div>
+                </div>
+
+                <!-- STEP 2: FORGOT PASSWORD (SEND RESET EMAIL) -->
+                <div id="step-forgot" class="hidden" style="width:100%; display:flex; flex-direction:column;">
+                    <div class="modal-title">Find your account</div>
+                    <p class="modal-subtitle">
+                        Enter the email associated with your Meena Marketing account and we'll send you a password reset link.
+                    </p>
+
+                    <div class="input-wrapper" id="reset-email-wrapper">
+                        <input type="email" id="reset-email-input" class="text-input" placeholder=" " autocomplete="email">
+                        <label class="floating-label">Email</label>
+                    </div>
+
+                    <button id="reset-btn" class="next-btn">
+                        <span>Send Reset Link</span>
+                        <div class="btn-loader light"></div>
+                    </button>
+
+                    <div id="forgot-msg">Check your email for the reset link.</div>
+                </div>
+
+                <!-- STEP 3: SET PASSWORD FOR GOOGLE USERS WITHOUT PASSWORD -->
+                <div id="step-set-password" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+                    <div class="modal-title" style="margin-bottom: 10px;">Set your password</div>
+                    <p class="modal-subtitle">
+                        Secure your Meena Marketing account by creating a password. This lets you sign in with either Google or your email and password anytime.
+                    </p>
+
+                    <div id="google-user-email-pill" class="user-email-pill">user@email.com</div>
+
+                    <div class="input-wrapper" id="link-pass-wrapper">
+                        <input type="password" id="link-password-input" class="text-input" placeholder=" " autocomplete="new-password">
+                        <label class="floating-label">Create Password</label>
+                        <button type="button" class="password-toggle" id="toggle-link-pass-btn" aria-label="Toggle Password Visibility">
+                            <svg class="eye-svg" viewBox="0 0 24 24"><g><path d="M10.5 13.5c-.828 0-1.5.672-1.5 1.5s.672 1.5 1.5 1.5 1.5-.672 1.5-1.5-.672-1.5-1.5-1.5zm-5.22-3.72l1.41-1.42L21.53 23.23 20.11 24.65 17.48 22.02C15.93 22.65 14.26 23 12.5 23 6.64 23 2 18.5 2 13.5c0-1.39.29-2.73.83-3.98l-2.61-2.6 1.42-1.42 3.64 3.64zM12.5 21c1.33 0 2.59-.28 3.74-.78L8.68 12.66c-.16.48-.26 1-.26 1.54 0 2.21 1.79 4 4 4 .19 0 .38-.02.56-.05L11.53 19.59c-.32.05-.65.09-1.03.09zm0-17c-5.86 0-10.5 4.5-10.5 9.5 0 .23.01.46.03.68l2.5-2.5C5.1 9.87 6.46 8.5 8.1 7.6L9.5 6.2c.98-.13 1.99-.2 3-.2 5.86 0 10.5 4.5 10.5 9.5 0 1.51-.43 2.92-1.18 4.18l1.52 1.52c1.11-1.63 1.66-3.48 1.66-5.42 0-5.87-5.51-11.5-12.5-11.5z"></path></g></svg>
+                        </button>
+                    </div>
+
+                    <div class="input-wrapper" id="link-confirm-wrapper">
+                        <input type="password" id="link-confirm-input" class="text-input" placeholder=" " autocomplete="new-password">
+                        <label class="floating-label">Confirm Password</label>
+                    </div>
+
+                    <div class="pass-criteria-box active">
+                        <div class="pass-criteria-title">Password Requirements</div>
+                        <div id="crit-link-len" class="criteria-item">
+                            <span class="criteria-dot"></span> At least 8 characters
+                        </div>
+                        <div id="crit-link-cap" class="criteria-item">
+                            <span class="criteria-dot"></span> At least 1 capital letter (A-Z)
+                        </div>
+                        <div id="crit-link-sym" class="criteria-item">
+                            <span class="criteria-dot"></span> At least 1 special symbol (!@#$...)
+                        </div>
+                    </div>
+
+                    <button id="save-password-btn" class="next-btn">
+                        <span>Set Password & Continue</span>
+                        <div class="btn-loader light"></div>
+                    </button>
+                </div>
+
+                <!-- STEP 4: CUSTOM IN-APP PASSWORD RESET PAGE (HANDLES FIREBASE oobCode) -->
+                <div id="step-custom-reset" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+                    <div class="modal-title" style="margin-bottom: 10px;">Create new password</div>
+                    <p class="modal-subtitle" id="custom-reset-subtitle">
+                        Enter a strong new password for your Meena Marketing account.
+                    </p>
+
+                    <div id="reset-account-email-pill" class="user-email-pill hidden"></div>
+
+                    <div class="input-wrapper" id="new-reset-pass-wrapper">
+                        <input type="password" id="new-reset-pass-input" class="text-input" placeholder=" " autocomplete="new-password">
+                        <label class="floating-label">New Password</label>
+                        <button type="button" class="password-toggle" id="toggle-reset-pass-btn" aria-label="Toggle Password Visibility">
+                            <svg class="eye-svg" viewBox="0 0 24 24"><g><path d="M10.5 13.5c-.828 0-1.5.672-1.5 1.5s.672 1.5 1.5 1.5 1.5-.672 1.5-1.5-.672-1.5-1.5-1.5zm-5.22-3.72l1.41-1.42L21.53 23.23 20.11 24.65 17.48 22.02C15.93 22.65 14.26 23 12.5 23 6.64 23 2 18.5 2 13.5c0-1.39.29-2.73.83-3.98l-2.61-2.6 1.42-1.42 3.64 3.64zM12.5 21c1.33 0 2.59-.28 3.74-.78L8.68 12.66c-.16.48-.26 1-.26 1.54 0 2.21 1.79 4 4 4 .19 0 .38-.02.56-.05L11.53 19.59c-.32.05-.65.09-1.03.09zm0-17c-5.86 0-10.5 4.5-10.5 9.5 0 .23.01.46.03.68l2.5-2.5C5.1 9.87 6.46 8.5 8.1 7.6L9.5 6.2c.98-.13 1.99-.2 3-.2 5.86 0 10.5 4.5 10.5 9.5 0 1.51-.43 2.92-1.18 4.18l1.52 1.52c1.11-1.63 1.66-3.48 1.66-5.42 0-5.87-5.51-11.5-12.5-11.5z"></path></g></svg>
+                        </button>
+                    </div>
+
+                    <div class="input-wrapper" id="new-reset-confirm-wrapper">
+                        <input type="password" id="new-reset-confirm-input" class="text-input" placeholder=" " autocomplete="new-password">
+                        <label class="floating-label">Confirm New Password</label>
+                    </div>
+
+                    <div class="pass-criteria-box active">
+                        <div class="pass-criteria-title">Password Requirements</div>
+                        <div id="crit-reset-len" class="criteria-item">
+                            <span class="criteria-dot"></span> At least 8 characters
+                        </div>
+                        <div id="crit-reset-cap" class="criteria-item">
+                            <span class="criteria-dot"></span> At least 1 capital letter (A-Z)
+                        </div>
+                        <div id="crit-reset-sym" class="criteria-item">
+                            <span class="criteria-dot"></span> At least 1 special symbol (!@#$...)
+                        </div>
+                    </div>
+
+                    <button id="confirm-new-pass-btn" class="next-btn">
+                        <span>Update Password</span>
+                        <div class="btn-loader light"></div>
+                    </button>
+                </div>
+
+                <!-- STEP 5: MEENA MARKETING PROFILE SETUP (NAME CONFIRMATION FOR NEW USERS) -->
+                <div id="step-setup-profile" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+                    <div class="modal-title" style="margin-bottom: 8px;">Welcome to the Team!</div>
+                    <p class="modal-subtitle">
+                        Confirm your full name to complete your Meena Marketing profile setup.
+                    </p>
+
+                    <img id="user-dp" class="profile-dp" src="https://via.placeholder.com/100/212121/ff3333?text=MM" alt="Profile Picture">
+                    <div id="setup-user-email-pill" class="user-email-pill">user@email.com</div>
+
+                    <div class="input-wrapper" id="setup-name-wrapper">
+                        <input type="text" id="user-name-input" class="text-input" placeholder=" " autocomplete="name">
+                        <label class="floating-label">Confirm your full name (E.g. Meena Kumar)</label>
+                    </div>
+
+                    <button id="complete-setup-btn" class="next-btn">
+                        <span>Complete Setup</span>
+                        <div class="btn-loader light"></div>
+                    </button>
+                </div>
+
+            </div>
         </div>
     </div>
+</div>
 
-    <script type="module">
-        // Make sure your config.js exports 'auth' and 'db'
-        import { auth, db } from './config.js';
-        import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-        import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+<script type="module">
+    // --- FIREBASE MODULAR SDK IMPORTS (Meena Marketing v12.9.0 Setup) ---
+    import { auth, db } from './config.js';
+    import {
+        GoogleAuthProvider,
+        EmailAuthProvider,
+        signInWithPopup,
+        signInWithEmailAndPassword,
+        createUserWithEmailAndPassword,
+        linkWithCredential,
+        fetchSignInMethodsForEmail,
+        sendPasswordResetEmail,
+        verifyPasswordResetCode,
+        confirmPasswordReset,
+        signOut
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+    import {
+        doc,
+        getDoc,
+        setDoc,
+        serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-        const loginSection = document.getElementById('login-section');
-        const setupSection = document.getElementById('setup-section');
-        const googleBtn = document.getElementById('google-login-btn');
-        const loader = document.getElementById('loader');
-        
-        const userDp = document.getElementById('user-dp');
-        const userNameInput = document.getElementById('user-name');
-        const completeSetupBtn = document.getElementById('complete-setup-btn');
+    // --- UI ELEMENTS ---
+    const googleBtn = document.getElementById('google-btn');
+    const googleBtnIcon = document.getElementById('google-btn-icon');
+    const googleBtnText = document.getElementById('google-btn-text');
+    const googleBtnLoader = document.getElementById('google-btn-loader');
 
-        let pendingUser = null; // Store user details temporarily if they are new
+    const signupTrigger = document.getElementById('signup-trigger-btn');
+    const loginTrigger = document.getElementById('login-trigger-btn');
 
-        // Handle Google Login Click
-        googleBtn.addEventListener('click', async () => {
-            if (navigator.vibrate) navigator.vibrate(40);
-            
-            googleBtn.style.display = 'none';
-            loader.style.display = 'block';
-            
-            const provider = new GoogleAuthProvider();
-            
-            try {
-                const result = await signInWithPopup(auth, provider);
-                const user = result.user;
+    const modal = document.getElementById('email-modal');
+    const backBtn = document.getElementById('modal-back-btn');
+    const statusMsg = document.getElementById('status-msg');
+    const toastMsg = document.getElementById('toast-msg');
 
-                // Check if user already exists in Firestore
-                const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
+    // Modal Step Containers
+    const stepAuth = document.getElementById('step-auth');
+    const stepForgot = document.getElementById('step-forgot');
+    const stepSetPassword = document.getElementById('step-set-password');
+    const stepCustomReset = document.getElementById('step-custom-reset');
+    const stepSetupProfile = document.getElementById('step-setup-profile');
 
-                if (userSnap.exists()) {
-                    // User exists, send to dashboard!
-                    window.location.href = 'bill.html';
-                } else {
-                    // User is NEW. Hide login, show setup UI.
-                    pendingUser = user;
-                    
-                    loginSection.style.display = 'none';
-                    setupSection.style.display = 'block';
-                    
-                    // Populate data from Google
-                    userDp.src = user.photoURL || 'https://via.placeholder.com/90/333/fff?text=User';
-                    userNameInput.value = user.displayName || '';
-                }
+    // Step 1: Login / Signup Inputs
+    const emailInput = document.getElementById('email-input');
+    const emailWrapper = document.getElementById('email-wrapper');
+    const passInput = document.getElementById('password-input');
+    const passWrapper = document.getElementById('pass-wrapper');
+    const authBtn = document.getElementById('auth-btn');
+    const authBtnText = document.getElementById('auth-btn-text');
+    const authTitle = document.getElementById('auth-title');
+    const toggleText = document.getElementById('toggle-text');
+    const forgotTrigger = document.getElementById('forgot-trigger');
+    const signupPassCriteria = document.getElementById('signup-pass-criteria');
 
-            } catch (error) {
-                console.error("Login Failed:", error);
-                alert("Login failed. Please try again.");
-                googleBtn.style.display = 'flex';
-                loader.style.display = 'none';
+    // Step 2: Forgot Password Inputs
+    const resetEmailInput = document.getElementById('reset-email-input');
+    const resetEmailWrapper = document.getElementById('reset-email-wrapper');
+    const resetBtn = document.getElementById('reset-btn');
+    const forgotMsg = document.getElementById('forgot-msg');
+
+    // Step 3: Set Password (Google Link) Inputs
+    const googleUserEmailPill = document.getElementById('google-user-email-pill');
+    const linkPassInput = document.getElementById('link-password-input');
+    const linkPassWrapper = document.getElementById('link-pass-wrapper');
+    const linkConfirmInput = document.getElementById('link-confirm-input');
+    const linkConfirmWrapper = document.getElementById('link-confirm-wrapper');
+    const savePasswordBtn = document.getElementById('save-password-btn');
+
+    // Step 4: Custom Password Reset (oobCode) Inputs
+    const resetAccountEmailPill = document.getElementById('reset-account-email-pill');
+    const newResetPassInput = document.getElementById('new-reset-pass-input');
+    const newResetPassWrapper = document.getElementById('new-reset-pass-wrapper');
+    const newResetConfirmInput = document.getElementById('new-reset-confirm-input');
+    const newResetConfirmWrapper = document.getElementById('new-reset-confirm-wrapper');
+    const confirmNewPassBtn = document.getElementById('confirm-new-pass-btn');
+
+    // Step 5: Meena Marketing Profile Setup Inputs
+    const userDp = document.getElementById('user-dp');
+    const setupUserEmailPill = document.getElementById('setup-user-email-pill');
+    const userNameInput = document.getElementById('user-name-input');
+    const setupNameWrapper = document.getElementById('setup-name-wrapper');
+    const completeSetupBtn = document.getElementById('complete-setup-btn');
+
+    // Password Visibility Toggles
+    const togglePassBtn = document.getElementById('toggle-pass-btn');
+    const eyeIcon = document.getElementById('eye-icon');
+    const toggleLinkPassBtn = document.getElementById('toggle-link-pass-btn');
+    const toggleResetPassBtn = document.getElementById('toggle-reset-pass-btn');
+
+    // Custom Dialog Elements
+    const dialogOverlay = document.getElementById('custom-dialog-overlay');
+    const dialogIcon = document.getElementById('dialog-icon');
+    const dialogTitle = document.getElementById('dialog-title');
+    const dialogMessage = document.getElementById('dialog-message');
+    const dialogConfirmBtn = document.getElementById('dialog-confirm-btn');
+    const dialogCancelBtn = document.getElementById('dialog-cancel-btn');
+
+    // --- APPLICATION STATE ---
+    let isSignUpMode = false;
+    let pendingGoogleUser = null;
+    let pendingSetupUser = null;
+    let activeResetCode = null;
+    let dialogResolveCallback = null;
+    let isDialogOpen = false;
+
+    // --- HELPER FUNCTIONS ---
+    function vibrate(ms = 15) {
+        if (navigator.vibrate) navigator.vibrate(ms);
+    }
+
+    function showToast(message, isError = true) {
+        toastMsg.innerText = message;
+        toastMsg.classList.remove('error', 'success');
+        if (isError) toastMsg.classList.add('error');
+        else toastMsg.classList.add('success');
+
+        toastMsg.classList.add('show');
+        setTimeout(() => toastMsg.classList.remove('show'), 3200);
+    }
+
+    function setBtnLoading(btn, isLoading) {
+        const span = btn.querySelector('span');
+        const loader = btn.querySelector('.btn-loader');
+        if (isLoading) {
+            btn.disabled = true;
+            if (span) span.style.display = 'none';
+            if (loader) loader.style.display = 'block';
+        } else {
+            btn.disabled = false;
+            if (span) span.style.display = 'block';
+            if (loader) loader.style.display = 'none';
+        }
+    }
+
+    function setGoogleBtnLoading(isLoading) {
+        if (isLoading) {
+            googleBtn.disabled = true;
+            googleBtnIcon.style.display = 'none';
+            googleBtnText.style.display = 'none';
+            googleBtnLoader.style.display = 'block';
+        } else {
+            googleBtn.disabled = false;
+            googleBtnIcon.style.display = 'block';
+            googleBtnText.style.display = 'inline';
+            googleBtnLoader.style.display = 'none';
+        }
+    }
+
+    function triggerShake(wrapper) {
+        wrapper.classList.remove('error-shake');
+        void wrapper.offsetWidth;
+        wrapper.classList.add('error-shake');
+        setTimeout(() => wrapper.classList.remove('error-shake'), 400);
+    }
+
+    // --- PASSWORD VALIDATION (8+ chars, 1 Capital, 1 Special Symbol) ---
+    function evaluatePasswordStrength(password) {
+        return {
+            hasLength: password.length >= 8,
+            hasUpper: /[A-Z]/.test(password),
+            hasSymbol: /[^A-Za-z0-9]/.test(password),
+            get isValid() {
+                return this.hasLength && this.hasUpper && this.hasSymbol;
             }
+        };
+    }
+
+    function updateCriteriaUI(password, prefix) {
+        const res = evaluatePasswordStrength(password);
+        const lenEl = document.getElementById(`crit-${prefix}-len`);
+        const capEl = document.getElementById(`crit-${prefix}-cap`);
+        const symEl = document.getElementById(`crit-${prefix}-sym`);
+
+        if (lenEl) {
+            lenEl.classList.toggle('valid', res.hasLength);
+            lenEl.querySelector('.criteria-dot').innerText = res.hasLength ? '✓' : '';
+        }
+        if (capEl) {
+            capEl.classList.toggle('valid', res.hasUpper);
+            capEl.querySelector('.criteria-dot').innerText = res.hasUpper ? '✓' : '';
+        }
+        if (symEl) {
+            symEl.classList.toggle('valid', res.hasSymbol);
+            symEl.querySelector('.criteria-dot').innerText = res.hasSymbol ? '✓' : '';
+        }
+        return res.isValid;
+    }
+
+    passInput.addEventListener('input', () => {
+        if (isSignUpMode) updateCriteriaUI(passInput.value, 'signup');
+    });
+    linkPassInput.addEventListener('input', () => {
+        updateCriteriaUI(linkPassInput.value, 'link');
+    });
+    newResetPassInput.addEventListener('input', () => {
+        updateCriteriaUI(newResetPassInput.value, 'reset');
+    });
+
+    // --- CUSTOM HTML DIALOG (CONFIRMATION & ERROR POPUP WITH MOBILE BACK SUPPORT) ---
+    function showCustomDialog({
+        title = 'Notice',
+        message = '',
+        type = 'error', // 'error' | 'confirm' | 'success'
+        confirmText = 'OK',
+        cancelText = null
+    }) {
+        vibrate(25);
+        return new Promise((resolve) => {
+            dialogResolveCallback = resolve;
+            isDialogOpen = true;
+
+            dialogTitle.innerText = title;
+            dialogMessage.innerText = message;
+
+            dialogIcon.className = `dialog-icon ${type}`;
+            if (type === 'error') dialogIcon.innerText = '!';
+            else if (type === 'confirm') dialogIcon.innerText = '?';
+            else if (type === 'success') dialogIcon.innerText = '✓';
+
+            dialogConfirmBtn.innerText = confirmText;
+            dialogConfirmBtn.className = 'dialog-btn dialog-btn-primary';
+            if (type === 'confirm') dialogConfirmBtn.classList.add('accent');
+            if (type === 'error') dialogConfirmBtn.classList.add('error');
+
+            if (cancelText) {
+                dialogCancelBtn.innerText = cancelText;
+                dialogCancelBtn.classList.remove('hidden');
+            } else {
+                dialogCancelBtn.classList.add('hidden');
+            }
+
+            dialogOverlay.style.display = 'flex';
+            history.pushState({ view: 'dialog' }, "", "#dialog");
+        });
+    }
+
+    function closeCustomDialog(result = false, fromPopState = false) {
+        if (!isDialogOpen) return;
+        isDialogOpen = false;
+        dialogOverlay.style.display = 'none';
+
+        if (!fromPopState && window.location.hash === '#dialog') {
+            history.back();
+        }
+
+        if (dialogResolveCallback) {
+            const cb = dialogResolveCallback;
+            dialogResolveCallback = null;
+            cb(result);
+        }
+    }
+
+    dialogConfirmBtn.addEventListener('click', () => {
+        vibrate();
+        closeCustomDialog(true, false);
+    });
+
+    dialogCancelBtn.addEventListener('click', () => {
+        vibrate();
+        closeCustomDialog(false, false);
+    });
+
+    // --- PASSWORD VISIBILITY TOGGLES ---
+    const OPEN_EYE_SVG = '<g><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"></path></g>';
+    const SLASHED_EYE_SVG = '<g><path d="M10.5 13.5c-.828 0-1.5.672-1.5 1.5s.672 1.5 1.5 1.5 1.5-.672 1.5-1.5-.672-1.5-1.5-1.5zm-5.22-3.72l1.41-1.42L21.53 23.23 20.11 24.65 17.48 22.02C15.93 22.65 14.26 23 12.5 23 6.64 23 2 18.5 2 13.5c0-1.39.29-2.73.83-3.98l-2.61-2.6 1.42-1.42 3.64 3.64zM12.5 21c1.33 0 2.59-.28 3.74-.78L8.68 12.66c-.16.48-.26 1-.26 1.54 0 2.21 1.79 4 4 4 .19 0 .38-.02.56-.05L11.53 19.59c-.32.05-.65.09-1.03.09zm0-17c-5.86 0-10.5 4.5-10.5 9.5 0 .23.01.46.03.68l2.5-2.5C5.1 9.87 6.46 8.5 8.1 7.6L9.5 6.2c.98-.13 1.99-.2 3-.2 5.86 0 10.5 4.5 10.5 9.5 0 1.51-.43 2.92-1.18 4.18l1.52 1.52c1.11-1.63 1.66-3.48 1.66-5.42 0-5.87-5.51-11.5-12.5-11.5z"></path></g>';
+
+    togglePassBtn.addEventListener('click', () => {
+        const type = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passInput.setAttribute('type', type);
+        if (type === 'text') {
+            eyeIcon.innerHTML = OPEN_EYE_SVG;
+            eyeIcon.style.fill = 'var(--accent)';
+        } else {
+            eyeIcon.innerHTML = SLASHED_EYE_SVG;
+            eyeIcon.style.fill = 'currentColor';
+        }
+    });
+
+    toggleLinkPassBtn.addEventListener('click', () => {
+        const isPass = linkPassInput.getAttribute('type') === 'password';
+        const newType = isPass ? 'text' : 'password';
+        linkPassInput.setAttribute('type', newType);
+        linkConfirmInput.setAttribute('type', newType);
+        const svg = toggleLinkPassBtn.querySelector('.eye-svg');
+        svg.innerHTML = isPass ? OPEN_EYE_SVG : SLASHED_EYE_SVG;
+        svg.style.fill = isPass ? 'var(--accent)' : 'currentColor';
+    });
+
+    toggleResetPassBtn.addEventListener('click', () => {
+        const isPass = newResetPassInput.getAttribute('type') === 'password';
+        const newType = isPass ? 'text' : 'password';
+        newResetPassInput.setAttribute('type', newType);
+        newResetConfirmInput.setAttribute('type', newType);
+        const svg = toggleResetPassBtn.querySelector('.eye-svg');
+        svg.innerHTML = isPass ? OPEN_EYE_SVG : SLASHED_EYE_SVG;
+        svg.style.fill = isPass ? 'var(--accent)' : 'currentColor';
+    });
+
+    // --- NAVIGATION & HISTORY (Modal & Hardware Back Button) ---
+    function hideAllModalSteps() {
+        stepAuth.classList.add('hidden');
+        stepForgot.classList.add('hidden');
+        stepSetPassword.classList.add('hidden');
+        stepCustomReset.classList.add('hidden');
+        stepSetupProfile.classList.add('hidden');
+    }
+
+    function openModal(mode = 'login') {
+        modal.style.display = 'flex';
+        emailInput.value = '';
+        passInput.value = '';
+        emailWrapper.classList.remove('error-shake');
+        passWrapper.classList.remove('error-shake');
+        updateCriteriaUI('', 'signup');
+
+        hideAllModalSteps();
+        stepAuth.classList.remove('hidden');
+
+        if (mode === 'signup') {
+            isSignUpMode = true;
+            renderAuthUI();
+            history.pushState({ view: 'signup' }, "", "#signup");
+        } else {
+            isSignUpMode = false;
+            renderAuthUI();
+            history.pushState({ view: 'login' }, "", "#login");
+        }
+
+        setTimeout(() => emailInput.focus(), 150);
+    }
+
+    function openSetPasswordModal(user) {
+        pendingGoogleUser = user;
+        modal.style.display = 'flex';
+        hideAllModalSteps();
+        stepSetPassword.classList.remove('hidden');
+
+        googleUserEmailPill.innerText = user.email || 'Google Account';
+        linkPassInput.value = '';
+        linkConfirmInput.value = '';
+        updateCriteriaUI('', 'link');
+
+        history.pushState({ view: 'set-password' }, "", "#set-password");
+        setTimeout(() => linkPassInput.focus(), 150);
+    }
+
+    function openSetupProfileModal(user, replaceHistory = false) {
+        pendingSetupUser = user;
+        modal.style.display = 'flex';
+        hideAllModalSteps();
+        stepSetupProfile.classList.remove('hidden');
+
+        const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email || 'MM')}&background=212121&color=ff3333&bold=true`;
+        userDp.src = user.photoURL || fallbackAvatar;
+        userDp.onerror = () => { userDp.src = fallbackAvatar; };
+
+        setupUserEmailPill.innerText = user.email || 'Meena Marketing Staff';
+        userNameInput.value = user.displayName || '';
+        setupNameWrapper.classList.remove('error-shake');
+
+        // Use replaceState when transitioning from Set Password so back button does NOT go back to already-completed Set Password page
+        if (replaceHistory) {
+            history.replaceState({ view: 'setup-profile' }, "", "#setup-profile");
+        } else {
+            history.pushState({ view: 'setup-profile' }, "", "#setup-profile");
+        }
+
+        setTimeout(() => userNameInput.focus(), 150);
+    }
+
+    function openCustomResetModal(oobCode, email) {
+        activeResetCode = oobCode;
+        modal.style.display = 'flex';
+        hideAllModalSteps();
+        stepCustomReset.classList.remove('hidden');
+
+        if (email) {
+            resetAccountEmailPill.innerText = email;
+            resetAccountEmailPill.classList.remove('hidden');
+        }
+        newResetPassInput.value = '';
+        newResetConfirmInput.value = '';
+        updateCriteriaUI('', 'reset');
+
+        history.pushState({ view: 'custom-reset' }, "", "#reset-password");
+        setTimeout(() => newResetPassInput.focus(), 150);
+    }
+
+    // Triggered by buttons on Landing Page
+    signupTrigger.addEventListener('click', () => { vibrate(); openModal('signup'); });
+    loginTrigger.addEventListener('click', () => { vibrate(); openModal('login'); });
+
+    // Triggered by Forgot Password inside Modal
+    forgotTrigger.addEventListener('click', () => {
+        vibrate();
+        history.pushState({ view: 'recovery' }, "", "#recovery");
+        renderRecoveryUI();
+    });
+
+    // Top-Left Back Button Handler inside Modal
+    backBtn.addEventListener('click', async () => {
+        vibrate();
+        const currentHash = window.location.hash;
+
+        if (currentHash === '#set-password' && pendingGoogleUser) {
+            const stay = await showCustomDialog({
+                title: 'Password Required',
+                message: 'You need to set a password for your email so you can log in smoothly across all devices. Are you sure you want to cancel login?',
+                type: 'confirm',
+                confirmText: 'Stay & Set Password',
+                cancelText: 'Cancel Login'
+            });
+            if (!stay) {
+                await signOut(auth);
+                pendingGoogleUser = null;
+                setGoogleBtnLoading(false);
+                modal.style.display = 'none';
+                history.replaceState(null, "", window.location.pathname);
+            }
+            return;
+        }
+
+        if (currentHash === '#setup-profile' && pendingSetupUser) {
+            const stay = await showCustomDialog({
+                title: 'Complete Your Profile',
+                message: 'Please confirm your full name to finish setting up your Meena Marketing account. Do you want to cancel and sign out?',
+                type: 'confirm',
+                confirmText: 'Stay & Complete',
+                cancelText: 'Sign Out'
+            });
+            if (!stay) {
+                await signOut(auth);
+                pendingSetupUser = null;
+                setGoogleBtnLoading(false);
+                modal.style.display = 'none';
+                history.replaceState(null, "", window.location.pathname);
+            }
+            return;
+        }
+
+        window.history.back();
+    });
+
+    // Handle History Changes (Mobile Back/Forward Gesture Support)
+    window.addEventListener('popstate', async () => {
+        if (isDialogOpen) {
+            closeCustomDialog(false, true);
+            return;
+        }
+
+        const hash = window.location.hash;
+
+        if (hash === '#signup') {
+            modal.style.display = 'flex';
+            isSignUpMode = true;
+            renderAuthUI();
+            hideAllModalSteps();
+            stepAuth.classList.remove('hidden');
+        }
+        else if (hash === '#login') {
+            modal.style.display = 'flex';
+            isSignUpMode = false;
+            renderAuthUI();
+            hideAllModalSteps();
+            stepAuth.classList.remove('hidden');
+        }
+        else if (hash === '#recovery') {
+            modal.style.display = 'flex';
+            renderRecoveryUI();
+        }
+        else if (hash === '#set-password') {
+            if (pendingGoogleUser) {
+                modal.style.display = 'flex';
+                hideAllModalSteps();
+                stepSetPassword.classList.remove('hidden');
+            } else {
+                modal.style.display = 'none';
+            }
+        }
+        else if (hash === '#setup-profile') {
+            if (pendingSetupUser) {
+                modal.style.display = 'flex';
+                hideAllModalSteps();
+                stepSetupProfile.classList.remove('hidden');
+            } else {
+                modal.style.display = 'none';
+            }
+        }
+        else if (hash === '#reset-password') {
+            if (activeResetCode) {
+                modal.style.display = 'flex';
+                hideAllModalSteps();
+                stepCustomReset.classList.remove('hidden');
+            } else {
+                modal.style.display = 'none';
+            }
+        }
+        else {
+            // User navigated back to root landing screen
+            if (pendingGoogleUser || pendingSetupUser) {
+                await signOut(auth);
+                pendingGoogleUser = null;
+                pendingSetupUser = null;
+                setGoogleBtnLoading(false);
+            }
+            modal.style.display = 'none';
+        }
+    });
+
+    // UI Renders
+    function renderAuthUI() {
+        if (isSignUpMode) {
+            authTitle.innerText = "Create your account";
+            authBtnText.innerText = "Sign up";
+            toggleText.innerHTML = `Have an account already? <span id="toggle-mode-link">Log in</span>`;
+            forgotTrigger.classList.add('hidden');
+            signupPassCriteria.classList.add('active');
+            updateCriteriaUI(passInput.value, 'signup');
+        } else {
+            authTitle.innerText = "Sign in to Meena Marketing";
+            authBtnText.innerText = "Log in";
+            toggleText.innerHTML = `Don't have an account? <span id="toggle-mode-link">Sign up</span>`;
+            forgotTrigger.classList.remove('hidden');
+            signupPassCriteria.classList.remove('active');
+        }
+        const link = document.getElementById('toggle-mode-link');
+        if (link) link.addEventListener('click', toggleAuthMode);
+    }
+
+    function renderRecoveryUI() {
+        hideAllModalSteps();
+        stepForgot.classList.remove('hidden');
+        resetEmailInput.value = emailInput.value;
+        forgotMsg.style.opacity = '0';
+        // setTimeout(() => resetEmailInput.focus(), 100);
+    }
+
+    function toggleAuthMode() {
+        vibrate();
+        isSignUpMode = !isSignUpMode;
+        const newHash = isSignUpMode ? "#signup" : "#login";
+        history.replaceState({ view: isSignUpMode ? 'signup' : 'login' }, "", newHash);
+        renderAuthUI();
+    }
+
+    // Bind initial toggle link
+    const initialToggleLink = document.getElementById('toggle-mode-link');
+    if (initialToggleLink) initialToggleLink.addEventListener('click', toggleAuthMode);
+
+    // --- FRIENDLY FIREBASE ERROR FORMATTER ---
+    function formatFirebaseError(error) {
+        const code = error && error.code ? error.code : '';
+        switch (code) {
+            case 'auth/email-already-in-use':
+                return 'This email is already registered. Please sign in with your password or use Google Login.';
+            case 'auth/invalid-email':
+                return 'Please enter a valid email address.';
+            case 'auth/user-not-found':
+                return 'No account found with this email. Please create an account first.';
+            case 'auth/wrong-password':
+            case 'auth/invalid-credential':
+            case 'auth/invalid-login-credentials':
+                return 'Incorrect email or password. If you signed up with Google, please click "Continue with Google" or reset your password.';
+            case 'auth/weak-password':
+                return 'Password must be at least 8 characters with 1 capital letter and 1 special symbol.';
+            case 'auth/too-many-requests':
+                return 'Too many failed attempts. Please wait a moment or reset your password.';
+            case 'auth/popup-closed-by-user':
+                return 'Google sign-in was cancelled.';
+            case 'auth/network-request-failed':
+                return 'Network error. Please check your internet connection.';
+            default:
+                return error.message || 'An unexpected authentication error occurred.';
+        }
+    }
+
+    // --- CHECK IF USER HAS PASSWORD PROVIDER LINKED ---
+    async function userHasPasswordSet(user) {
+        if (!user) return false;
+        await user.reload();
+        const freshUser = auth.currentUser || user;
+
+        const hasPasswordProvider = (freshUser.providerData || []).some(
+            (p) => p && p.providerId === 'password'
+        );
+        if (hasPasswordProvider) return true;
+
+        if (freshUser.email) {
+            try {
+                const methods = await fetchSignInMethodsForEmail(auth, freshUser.email);
+                if (Array.isArray(methods) && methods.includes('password')) {
+                    return true;
+                }
+            } catch (_) {
+                // Ignore if Email Enumeration Protection is active
+            }
+        }
+        return false;
+    }
+
+    // --- AUTHENTICATION FLOWS ---
+
+    // 1. Google Login with Spinner & Mandatory Password Check
+    googleBtn.addEventListener('click', async () => {
+        vibrate(30);
+        statusMsg.innerText = "";
+        setGoogleBtnLoading(true);
+
+        try {
+            const provider = new GoogleAuthProvider();
+            provider.setCustomParameters({ prompt: 'select_account' });
+
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+
+            const hasPassword = await userHasPasswordSet(user);
+
+            if (!hasPassword) {
+                setGoogleBtnLoading(false);
+                openSetPasswordModal(user);
+            } else {
+                await handleSuccess(user, false);
+            }
+        } catch (e) {
+            setGoogleBtnLoading(false);
+            if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') {
+                showToast('Google sign-in cancelled.', true);
+            } else {
+                await showCustomDialog({
+                    title: 'Google Sign-In Failed',
+                    message: formatFirebaseError(e),
+                    type: 'error',
+                    confirmText: 'Got it'
+                });
+            }
+        }
+    });
+
+    // 1B. Save & Link Password for Google-Authenticated User
+    savePasswordBtn.addEventListener('click', async () => {
+        vibrate();
+        if (!pendingGoogleUser) return;
+
+        const newPass = linkPassInput.value;
+        const confirmPass = linkConfirmInput.value;
+        const strength = evaluatePasswordStrength(newPass);
+
+        if (!strength.isValid) {
+            triggerShake(linkPassWrapper);
+            await showCustomDialog({
+                title: 'Weak Password',
+                message: 'Your password must be at least 8 characters long and include at least 1 capital letter (A-Z) and 1 special symbol (!@#$%^&*).',
+                type: 'error',
+                confirmText: 'Fix Password'
+            });
+            return;
+        }
+
+        if (newPass !== confirmPass) {
+            triggerShake(linkConfirmWrapper);
+            await showCustomDialog({
+                title: 'Passwords Do Not Match',
+                message: 'Please make sure both password fields match exactly.',
+                type: 'error',
+                confirmText: 'Try Again'
+            });
+            return;
+        }
+
+        const confirmed = await showCustomDialog({
+            title: 'Confirm Password',
+            message: `Set this password for ${pendingGoogleUser.email}? You will be able to sign in using either Google or your email & password.`,
+            type: 'confirm',
+            confirmText: 'Yes, Set Password',
+            cancelText: 'Review'
         });
 
-        // Handle Complete Setup Click
-        completeSetupBtn.addEventListener('click', async () => {
-            if (navigator.vibrate) navigator.vibrate(40);
-            
-            const finalName = userNameInput.value.trim();
-            if (!finalName) {
-                alert("Please enter your name.");
+        if (!confirmed) return;
+
+        setBtnLoading(savePasswordBtn, true);
+
+        try {
+            const credential = EmailAuthProvider.credential(pendingGoogleUser.email, newPass);
+            await linkWithCredential(pendingGoogleUser, credential);
+
+            const linkedUser = auth.currentUser || pendingGoogleUser;
+            pendingGoogleUser = null;
+            setBtnLoading(savePasswordBtn, false);
+
+            showToast('Password linked successfully!', false);
+            // Pass replaceHistory=true so the Set Password screen is removed from back-stack once completed
+            await handleSuccess(linkedUser, true);
+        } catch (e) {
+            setBtnLoading(savePasswordBtn, false);
+            if (e.code === 'auth/provider-already-linked' || e.code === 'auth/credential-already-in-use') {
+                const linkedUser = auth.currentUser || pendingGoogleUser;
+                pendingGoogleUser = null;
+                await handleSuccess(linkedUser, true);
+            } else {
+                await showCustomDialog({
+                    title: 'Could Not Set Password',
+                    message: formatFirebaseError(e),
+                    type: 'error',
+                    confirmText: 'OK'
+                });
+            }
+        }
+    });
+
+    // 2. Email Login / Sign Up
+    authBtn.addEventListener('click', async () => {
+        vibrate();
+        const email = emailInput.value.trim();
+        const pass = passInput.value;
+
+        let isValid = true;
+        if (!email) {
+            triggerShake(emailWrapper);
+            isValid = false;
+        }
+        if (!pass) {
+            triggerShake(passWrapper);
+            isValid = false;
+        }
+        if (!isValid) return;
+
+        if (isSignUpMode) {
+            const strength = evaluatePasswordStrength(pass);
+            if (!strength.isValid) {
+                triggerShake(passWrapper);
+                await showCustomDialog({
+                    title: 'Password Requirements',
+                    message: 'Please create a password with at least 8 characters, 1 capital letter (A-Z), and 1 special symbol.',
+                    type: 'error',
+                    confirmText: 'OK'
+                });
                 return;
             }
+        }
 
-            const originalText = completeSetupBtn.innerText;
-            completeSetupBtn.innerText = "Saving...";
-            completeSetupBtn.disabled = true;
+        setBtnLoading(authBtn, true);
 
+        try {
+            let methods = [];
             try {
-                // Create document in Firestore
-                await setDoc(doc(db, "users", pendingUser.uid), {
-                    uid: pendingUser.uid,
-                    name: finalName,
-                    email: pendingUser.email,
-                    photoURL: pendingUser.photoURL,
-                    role: "staff", // You can default roles here
-                    createdAt: serverTimestamp()
+                methods = await fetchSignInMethodsForEmail(auth, email);
+            } catch (_) {
+                // Continues gracefully if Email Enumeration Protection is enabled
+            }
+
+            if (isSignUpMode) {
+                if (methods.length > 0) {
+                    setBtnLoading(authBtn, false);
+                    const switchLogin = await showCustomDialog({
+                        title: 'Email Already Exists',
+                        message: methods.includes('google.com') && !methods.includes('password')
+                            ? 'This email is already registered with Google. Please sign in with Google to set your password.'
+                            : 'An account with this email already exists. Would you like to switch to Log In instead?',
+                        type: 'confirm',
+                        confirmText: 'Switch to Log In',
+                        cancelText: 'Cancel'
+                    });
+                    if (switchLogin) {
+                        toggleAuthMode();
+                    }
+                    return;
+                }
+
+                const confirmCreate = await showCustomDialog({
+                    title: 'Create Account',
+                    message: `Create a new Meena Marketing account with ${email}?`,
+                    type: 'confirm',
+                    confirmText: 'Create Account',
+                    cancelText: 'Cancel'
                 });
 
-                // Redirect to dashboard
-                window.location.href = 'bill.html';
-                
-            } catch (error) {
-                console.error("Error saving user data:", error);
-                alert("Failed to save data. Please try again.");
-                completeSetupBtn.innerText = originalText;
-                completeSetupBtn.disabled = false;
+                if (!confirmCreate) {
+                    setBtnLoading(authBtn, false);
+                    return;
+                }
+
+                const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                setBtnLoading(authBtn, false);
+                await handleSuccess(cred.user, true);
+            } else {
+                if (methods.includes('google.com') && !methods.includes('password')) {
+                    setBtnLoading(authBtn, false);
+                    const useGoogle = await showCustomDialog({
+                        title: 'Google Account Detected',
+                        message: 'This email is registered via Google and does not have a password set yet. Sign in with Google now to set your password.',
+                        type: 'confirm',
+                        confirmText: 'Continue with Google',
+                        cancelText: 'Cancel'
+                    });
+                    if (useGoogle) {
+                        modal.style.display = 'none';
+                        history.replaceState(null, "", window.location.pathname);
+                        googleBtn.click();
+                    }
+                    return;
+                }
+
+                const cred = await signInWithEmailAndPassword(auth, email, pass);
+                setBtnLoading(authBtn, false);
+                await handleSuccess(cred.user, true);
             }
+        } catch (e) {
+            setBtnLoading(authBtn, false);
+
+            if (e.code === 'auth/email-already-in-use') {
+                const switchMode = await showCustomDialog({
+                    title: 'Email Already Registered',
+                    message: 'An account with this email already exists. Please log in with your password or use Google Sign-In.',
+                    type: 'confirm',
+                    confirmText: 'Go to Log In',
+                    cancelText: 'Close'
+                });
+                if (switchMode && isSignUpMode) {
+                    toggleAuthMode();
+                }
+            } else {
+                await showCustomDialog({
+                    title: isSignUpMode ? 'Sign Up Error' : 'Sign In Error',
+                    message: formatFirebaseError(e),
+                    type: 'error',
+                    confirmText: 'Try Again'
+                });
+            }
+        }
+    });
+
+    
+    // 3. Password Reset Request (Sends Reset Email with Custom In-App Action URL)
+    resetBtn.addEventListener('click', async () => {
+        vibrate();
+        
+        // FIX 1: Force the mobile keyboard to close immediately before showing any dialogs
+        if (document.activeElement) {
+            document.activeElement.blur();
+        }
+
+        const email = resetEmailInput.value.trim();
+        if (!email) {
+            triggerShake(resetEmailWrapper);
+            await showCustomDialog({
+                title: 'Email Required',
+                message: 'Please enter the email address associated with your Meena Marketing account.',
+                type: 'error',
+                confirmText: 'OK'
+            });
+            return;
+        }
+
+        const confirmReset = await showCustomDialog({
+            title: 'Send Password Reset?',
+            message: `We will send a password reset link to ${email}.`,
+            type: 'confirm',
+            confirmText: 'Send Email',
+            cancelText: 'Cancel'
         });
-    </script>
+
+        if (!confirmReset) return;
+
+        setBtnLoading(resetBtn, true);
+        try {
+            const actionCodeSettings = {
+                url: window.location.origin + window.location.pathname,
+                handleCodeInApp: false
+            };
+
+            try {
+                await sendPasswordResetEmail(auth, email, actionCodeSettings);
+            } catch (_) {
+                await sendPasswordResetEmail(auth, email);
+            }
+
+            setBtnLoading(resetBtn, false);
+            forgotMsg.style.opacity = '1';
+
+            // Wait for the user to click "Done" on the success popup
+            await showCustomDialog({
+                title: 'Reset Link Sent',
+                message: `Check your inbox at ${email} and click the reset link to create a new password.`,
+                type: 'success',
+                confirmText: 'Done'
+            });
+
+            // FIX 2: Pop the '#recovery' state off the history stack.
+            // Your existing window 'popstate' listener will automatically catch this 
+            // and cleanly route the user back to the '#login' view.
+            forgotMsg.style.opacity = '0'; // Reset the inline message
+            resetEmailInput.value = '';    // Clear the input field for next time
+            window.history.back();
+
+        } catch (e) {
+            setBtnLoading(resetBtn, false);
+            await showCustomDialog({
+                title: 'Reset Failed',
+                message: formatFirebaseError(e),
+                type: 'error',
+                confirmText: 'OK'
+            });
+        }
+    });
+
+    // 4. Custom In-App Password Reset Handler (?mode=resetPassword&oobCode=...)
+    confirmNewPassBtn.addEventListener('click', async () => {
+        vibrate();
+        if (!activeResetCode) return;
+
+        const newPass = newResetPassInput.value;
+        const confirmPass = newResetConfirmInput.value;
+        const strength = evaluatePasswordStrength(newPass);
+
+        if (!strength.isValid) {
+            triggerShake(newResetPassWrapper);
+            await showCustomDialog({
+                title: 'Weak Password',
+                message: 'Your new password must be at least 8 characters long and contain at least 1 capital letter and 1 special symbol.',
+                type: 'error',
+                confirmText: 'Fix Password'
+            });
+            return;
+        }
+
+        if (newPass !== confirmPass) {
+            triggerShake(newResetConfirmWrapper);
+            await showCustomDialog({
+                title: 'Passwords Do Not Match',
+                message: 'Both password fields must match.',
+                type: 'error',
+                confirmText: 'Try Again'
+            });
+            return;
+        }
+
+        setBtnLoading(confirmNewPassBtn, true);
+        try {
+            await confirmPasswordReset(auth, activeResetCode, newPass);
+            setBtnLoading(confirmNewPassBtn, false);
+            activeResetCode = null;
+
+            window.history.replaceState({}, document.title, window.location.pathname);
+
+            await showCustomDialog({
+                title: 'Password Updated',
+                message: 'Your password has been reset successfully. You can now log in with your new password.',
+                type: 'success',
+                confirmText: 'Log In Now'
+            });
+
+            openModal('login');
+        } catch (e) {
+            setBtnLoading(confirmNewPassBtn, false);
+            await showCustomDialog({
+                title: 'Reset Link Expired',
+                message: formatFirebaseError(e),
+                type: 'error',
+                confirmText: 'Request New Link'
+            });
+            renderRecoveryUI();
+        }
+    });
+
+    // Detect Firebase Password Reset Link Parameters on Page Load
+    (async function checkUrlForPasswordReset() {
+        const params = new URLSearchParams(window.location.search);
+        const mode = params.get('mode');
+        const oobCode = params.get('oobCode');
+
+        if (mode === 'resetPassword' && oobCode) {
+            try {
+                const email = await verifyPasswordResetCode(auth, oobCode);
+                openCustomResetModal(oobCode, email);
+            } catch (e) {
+                await showCustomDialog({
+                    title: 'Invalid or Expired Link',
+                    message: 'This password reset link has expired or has already been used. Please request a new reset link.',
+                    type: 'error',
+                    confirmText: 'OK'
+                });
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        }
+    })();
+
+    // 5. Post-Auth Routing & Meena Marketing Firestore Profile Check
+    async function handleSuccess(user, replaceHistory = false) {
+        try {
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
+
+            if (userSnap.exists()) {
+                // Existing Meena Marketing user -> redirect straight to the app
+                showToast('Welcome back!', false);
+                setTimeout(() => {
+                    window.location.href = 'setup.html';
+                }, 400);
+            } else {
+                // New Meena Marketing user -> show Name & Profile Setup inside modal
+                setGoogleBtnLoading(false);
+                openSetupProfileModal(user, replaceHistory);
+            }
+        } catch (error) {
+            console.error("Error checking user profile:", error);
+            setGoogleBtnLoading(false);
+            await showCustomDialog({
+                title: 'Database Error',
+                message: 'Could not verify your profile data. Please check your connection and try again.',
+                type: 'error',
+                confirmText: 'OK'
+            });
+        }
+    }
+
+    // 6. Complete Meena Marketing Profile Setup (Saves exact Firestore structure)
+    completeSetupBtn.addEventListener('click', async () => {
+        vibrate(30);
+        if (!pendingSetupUser) return;
+
+        const finalName = userNameInput.value.trim();
+        if (!finalName) {
+            triggerShake(setupNameWrapper);
+            await showCustomDialog({
+                title: 'Name Required',
+                message: 'Please enter your full name to complete your Meena Marketing team profile.',
+                type: 'error',
+                confirmText: 'OK'
+            });
+            return;
+        }
+
+        const confirmSetup = await showCustomDialog({
+            title: 'Confirm Profile Name',
+            message: `Save your profile name as "${finalName}"?`,
+            type: 'confirm',
+            confirmText: 'Save & Continue',
+            cancelText: 'Edit'
+        });
+
+        if (!confirmSetup) return;
+
+        setBtnLoading(completeSetupBtn, true);
+
+        try {
+            const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(finalName)}&background=212121&color=ff3333&bold=true`;
+
+            await setDoc(doc(db, "users", pendingSetupUser.uid), {
+                uid: pendingSetupUser.uid,
+                name: finalName,
+                email: pendingSetupUser.email,
+                photoURL: pendingSetupUser.photoURL || defaultAvatar,
+                role: "staff",
+                createdAt: serverTimestamp()
+            });
+
+            pendingSetupUser = null;
+            showToast('Profile setup complete!', false);
+
+            setTimeout(() => {
+                window.location.href = 'setup.html';
+            }, 400);
+        } catch (error) {
+            console.error("Error saving user data:", error);
+            setBtnLoading(completeSetupBtn, false);
+            await showCustomDialog({
+                title: 'Setup Failed',
+                message: 'Failed to save your profile data. Please try again.',
+                type: 'error',
+                confirmText: 'Retry'
+            });
+        }
+    });
+</script>
 </body>
 </html>
