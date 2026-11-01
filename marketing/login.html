@@ -1967,6 +1967,7 @@
                 type: 'success',
                 confirmText: 'Done'
             });
+            openModal('login');
         } catch (e) {
             setBtnLoading(resetBtn, false);
             await showCustomDialog({
