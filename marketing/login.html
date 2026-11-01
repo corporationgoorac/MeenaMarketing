@@ -1920,9 +1920,16 @@
         }
     });
 
+    
     // 3. Password Reset Request (Sends Reset Email with Custom In-App Action URL)
     resetBtn.addEventListener('click', async () => {
         vibrate();
+        
+        // FIX 1: Force the mobile keyboard to close immediately before showing any dialogs
+        if (document.activeElement) {
+            document.activeElement.blur();
+        }
+
         const email = resetEmailInput.value.trim();
         if (!email) {
             triggerShake(resetEmailWrapper);
@@ -1961,12 +1968,20 @@
             setBtnLoading(resetBtn, false);
             forgotMsg.style.opacity = '1';
 
+            // Wait for the user to click "Done" on the success popup
             await showCustomDialog({
                 title: 'Reset Link Sent',
                 message: `Check your inbox at ${email} and click the reset link to create a new password.`,
                 type: 'success',
                 confirmText: 'Done'
             });
+
+            // FIX 2: Pop the '#recovery' state off the history stack.
+            // Your existing window 'popstate' listener will automatically catch this 
+            // and cleanly route the user back to the '#login' view.
+            forgotMsg.style.opacity = '0'; // Reset the inline message
+            resetEmailInput.value = '';    // Clear the input field for next time
+            window.history.back();
 
         } catch (e) {
             setBtnLoading(resetBtn, false);
