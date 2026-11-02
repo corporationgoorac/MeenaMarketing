@@ -48,8 +48,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
+            /* UPGRADED: Changed from sticky to fixed to ensure it NEVER scrolls out of view */
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 1000;
             box-shadow: 0 2px 8px rgba(0,0,0,0.5);
             backdrop-filter: blur(10px);
@@ -91,10 +94,10 @@
 
         /* Container & Cards */
         .container {
-            padding: 20px;
+            /* UPGRADED: Added 80px top padding so content is not hidden beneath the fixed header */
+            padding: 80px 20px 100px 20px;
             max-width: 800px;
             margin: 0 auto;
-            padding-bottom: 100px;
         }
 
         .section-title {
@@ -208,14 +211,15 @@
             background: var(--surface-color);
             width: 100%;
             max-width: 500px;
-            border-radius: 24px 24px 0 0;
+            border-radius: 24px 24px 0 0; /* Keeps the premium curved border on top */
             padding: 30px 25px;
             box-sizing: border-box;
             transform: translateY(100%);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
             border-top: 1px solid rgba(255,255,255,0.1);
-            max-height: 98vh; /* Updated to 98% as requested */
+            height: 100%; /* UPGRADED: 100% height as requested */
+            max-height: 100%; 
             overflow-y: auto;
         }
 
