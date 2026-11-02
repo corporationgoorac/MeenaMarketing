@@ -1075,7 +1075,7 @@
 
                     <div class="input-wrapper" id="setup-name-wrapper">
                         <input type="text" id="user-name-input" class="text-input" placeholder=" " autocomplete="name">
-                        <label class="floating-label">Enter your name</label>
+                        <label class="floating-label">Confirm your full name (E.g. Meena Kumar)</label>
                     </div>
 
                     <button id="complete-setup-btn" class="next-btn">
@@ -1195,6 +1195,7 @@
     let activeResetCode = null;
     let dialogResolveCallback = null;
     let isDialogOpen = false;
+    let isClosingDialogHistory = false;
 
     // --- HELPER FUNCTIONS ---
     function vibrate(ms = 15) {
@@ -1332,14 +1333,33 @@
         isDialogOpen = false;
         dialogOverlay.style.display = 'none';
 
-        if (!fromPopState && window.location.hash === '#dialog') {
-            history.back();
-        }
+        const resolveDialog = () => {
+            if (dialogResolveCallback) {
+                const cb = dialogResolveCallback;
+                dialogResolveCallback = null;
+                cb(result);
+            }
+        };
 
-        if (dialogResolveCallback) {
-            const cb = dialogResolveCallback;
-            dialogResolveCallback = null;
-            cb(result);
+        if (!fromPopState && window.location.hash === '#dialog') {
+            isClosingDialogHistory = true;
+            let settled = false;
+            const onDialogPop = () => {
+                if (settled) return;
+                settled = true;
+                window.removeEventListener('popstate', onDialogPop);
+                resolveDialog();
+            };
+            window.addEventListener('popstate', onDialogPop);
+            history.back();
+            setTimeout(() => {
+                if (!settled) {
+                    isClosingDialogHistory = false;
+                    onDialogPop();
+                }
+            }, 250);
+        } else {
+            resolveDialog();
         }
     }
 
@@ -1536,6 +1556,11 @@
 
     // Handle History Changes (Mobile Back/Forward Gesture Support)
     window.addEventListener('popstate', async () => {
+        if (isClosingDialogHistory) {
+            isClosingDialogHistory = false;
+            return;
+        }
+
         if (isDialogOpen) {
             closeCustomDialog(false, true);
             return;
@@ -1631,6 +1656,8 @@
     function toggleAuthMode() {
         vibrate();
         isSignUpMode = !isSignUpMode;
+        emailWrapper.classList.remove('error-shake');
+        passWrapper.classList.remove('error-shake');
         const newHash = isSignUpMode ? "#signup" : "#login";
         history.replaceState({ view: isSignUpMode ? 'signup' : 'login' }, "", newHash);
         renderAuthUI();
@@ -1734,6 +1761,10 @@
         vibrate();
         if (!pendingGoogleUser) return;
 
+        if (document.activeElement) {
+            document.activeElement.blur();
+        }
+
         const newPass = linkPassInput.value;
         const confirmPass = linkConfirmInput.value;
         const strength = evaluatePasswordStrength(newPass);
@@ -1816,6 +1847,10 @@
             isValid = false;
         }
         if (!isValid) return;
+
+        if (document.activeElement) {
+            document.activeElement.blur();
+        }
 
         if (isSignUpMode) {
             const strength = evaluatePasswordStrength(pass);
@@ -2001,6 +2036,10 @@
         vibrate();
         if (!activeResetCode) return;
 
+        if (document.activeElement) {
+            document.activeElement.blur();
+        }
+
         const newPass = newResetPassInput.value;
         const confirmPass = newResetConfirmInput.value;
         const strength = evaluatePasswordStrength(newPass);
@@ -2110,6 +2149,10 @@
     completeSetupBtn.addEventListener('click', async () => {
         vibrate(30);
         if (!pendingSetupUser) return;
+
+        if (document.activeElement) {
+            document.activeElement.blur();
+        }
 
         const finalName = userNameInput.value.trim();
         if (!finalName) {
