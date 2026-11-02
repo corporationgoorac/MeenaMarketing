@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -215,7 +216,7 @@
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
             border-top: 1px solid rgba(255,255,255,0.1);
-            max-height: 90vh;
+            max-height: 96vh; /* Updated to 96% for a more detailed, taller modal */
             overflow-y: auto;
         }
 
@@ -403,12 +404,13 @@
         
         /* UPGRADED: Skeleton UI for Users */
         .skel-card { 
-            opacity: 0.75; 
+            opacity: 0.85; 
             pointer-events: none; 
-            border-color: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.03);
+            background-color: var(--surface-color);
         }
         .skeleton-box {
-            background-color: #2a2a2a;
+            background-color: #2c2c2c;
             position: relative; 
             overflow: hidden; 
             border-radius: 4px;
@@ -416,8 +418,8 @@
         .skeleton-box::after {
             position: absolute; top: 0; right: 0; bottom: 0; left: 0;
             transform: translateX(-100%);
-            background-image: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-            animation: shimmer 1.2s infinite; 
+            background-image: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+            animation: shimmer 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite; 
             content: '';
         }
         @keyframes shimmer { 100% { transform: translateX(100%); } }
@@ -486,6 +488,7 @@
         <div class="section-title">Team Members</div>
         
         <div class="user-list" id="user-list-container">
+            <!-- 6 Professional Skeleton Loaders as requested -->
             <div class="user-card skel-card">
                 <div class="user-dp skeleton-box"></div>
                 <div class="user-info">
@@ -499,6 +502,38 @@
                 <div class="user-info">
                     <div class="skeleton-box" style="width: 50%; height: 20px; margin-bottom: 6px;"></div>
                     <div class="skeleton-box" style="width: 30%; height: 16px; border-radius: 10px;"></div>
+                </div>
+                <div class="skeleton-box" style="width: 44px; height: 44px; border-radius: 50%; margin-left: auto;"></div>
+            </div>
+            <div class="user-card skel-card">
+                <div class="user-dp skeleton-box"></div>
+                <div class="user-info">
+                    <div class="skeleton-box" style="width: 65%; height: 20px; margin-bottom: 6px;"></div>
+                    <div class="skeleton-box" style="width: 35%; height: 16px; border-radius: 10px;"></div>
+                </div>
+                <div class="skeleton-box" style="width: 44px; height: 44px; border-radius: 50%; margin-left: auto;"></div>
+            </div>
+            <div class="user-card skel-card">
+                <div class="user-dp skeleton-box"></div>
+                <div class="user-info">
+                    <div class="skeleton-box" style="width: 55%; height: 20px; margin-bottom: 6px;"></div>
+                    <div class="skeleton-box" style="width: 45%; height: 16px; border-radius: 10px;"></div>
+                </div>
+                <div class="skeleton-box" style="width: 44px; height: 44px; border-radius: 50%; margin-left: auto;"></div>
+            </div>
+            <div class="user-card skel-card">
+                <div class="user-dp skeleton-box"></div>
+                <div class="user-info">
+                    <div class="skeleton-box" style="width: 70%; height: 20px; margin-bottom: 6px;"></div>
+                    <div class="skeleton-box" style="width: 30%; height: 16px; border-radius: 10px;"></div>
+                </div>
+                <div class="skeleton-box" style="width: 44px; height: 44px; border-radius: 50%; margin-left: auto;"></div>
+            </div>
+            <div class="user-card skel-card">
+                <div class="user-dp skeleton-box"></div>
+                <div class="user-info">
+                    <div class="skeleton-box" style="width: 60%; height: 20px; margin-bottom: 6px;"></div>
+                    <div class="skeleton-box" style="width: 40%; height: 16px; border-radius: 10px;"></div>
                 </div>
                 <div class="skeleton-box" style="width: 44px; height: 44px; border-radius: 50%; margin-left: auto;"></div>
             </div>
@@ -1021,3 +1056,4 @@
     </script>
 </body>
 </html>
+```
