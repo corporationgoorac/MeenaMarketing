@@ -48,7 +48,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            /* UPGRADED: Changed from sticky to fixed to ensure it NEVER scrolls out of view */
             position: fixed;
             top: 0;
             left: 0;
@@ -94,7 +93,6 @@
 
         /* Container & Cards */
         .container {
-            /* UPGRADED: Added 80px top padding so content is not hidden beneath the fixed header */
             padding: 80px 20px 100px 20px;
             max-width: 800px;
             margin: 0 auto;
@@ -128,6 +126,24 @@
         }
         .user-card:active { transform: scale(0.98); }
 
+        /* Highlight effect for the logged-in user's card */
+        .user-card.logged-in-card {
+            border: 1px solid var(--meena-red);
+            background: linear-gradient(145deg, var(--surface-color), #2a1515);
+            box-shadow: 0 4px 20px rgba(255, 51, 51, 0.15);
+        }
+        .logged-in-badge {
+            font-size: 0.7em;
+            background: var(--meena-red);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 8px;
+            margin-left: 8px;
+            vertical-align: middle;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .user-dp {
             width: 50px;
             height: 50px;
@@ -136,6 +152,10 @@
             border: 2px solid #333;
             background-color: #111;
             flex-shrink: 0;
+        }
+        
+        .user-card.logged-in-card .user-dp {
+            border-color: var(--meena-red);
         }
 
         .user-info {
@@ -211,14 +231,14 @@
             background: var(--surface-color);
             width: 100%;
             max-width: 500px;
-            border-radius: 24px 24px 0 0; /* Keeps the premium curved border on top */
+            border-radius: 24px 24px 0 0;
             padding: 30px 25px;
             box-sizing: border-box;
             transform: translateY(100%);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
             border-top: 1px solid rgba(255,255,255,0.1);
-            height: 100%; /* UPGRADED: 100% height as requested */
+            height: 100%; 
             max-height: 100%; 
             overflow-y: auto;
         }
@@ -675,6 +695,8 @@
                 window.location.replace('login.html');
             } else {
                 currentLoggedInUserId = user.uid;
+                // Once we have the UID, fetch the users to ensure the current user is pulled to the top
+                fetchUsers(true);
             }
         });
 
@@ -732,7 +754,8 @@
         let hasMoreUsers = true;
 
         async function fetchUsers(isInitial = false) {
-            if (isFetching || !hasMoreUsers) return;
+            // Prevent fetching if already fetching, no more users, or if UID isn't loaded yet on initial load
+            if (isFetching || !hasMoreUsers || (isInitial && !currentLoggedInUserId)) return;
             isFetching = true;
             
             if (!isInitial) {
@@ -744,7 +767,7 @@
                 const usersRef = collection(db, "users");
                 
                 if (isInitial || !lastVisibleDoc) {
-                    q = query(usersRef, orderBy("name"), limit(10)); 
+                    q = query(usersRef, orderBy("name"), limit(15)); // Fetch a bit more initially to increase chances of finding the user in the first batch
                 } else {
                     q = query(usersRef, orderBy("name"), startAfter(lastVisibleDoc), limit(10));
                 }
@@ -761,6 +784,10 @@
                 }
 
                 lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+                
+                // Separate the logged-in user from the rest of the batch
+                let currentUserCardHTML = null;
+                let otherUsersHTML = '';
 
                 querySnapshot.forEach((docSnap) => {
                     const userData = docSnap.data();
@@ -768,24 +795,49 @@
                     const isAdmin = userData.admin === true || userData.role === 'admin';
                     const canEdit = userData.edit === true;
                     const canDelete = userData.delete === true;
-                    const isVisible = userData.visibility !== false; // Defaults to true if undefined
+                    const isVisible = userData.visibility !== false; 
                     
-                    const card = document.createElement('div');
-                    card.className = 'user-card';
-                    card.innerHTML = `
-                        <img src="${userData.photoURL || 'https://via.placeholder.com/50/333/fff?text=U'}" alt="DP" class="user-dp">
-                        <div class="user-info">
-                            <h4 class="user-name">${userData.name || 'Unknown User'}</h4>
-                            <span class="user-role ${isAdmin ? 'admin' : ''}" id="badge-${userId}">
-                                ${isAdmin ? 'Admin' : 'Staff'}
-                            </span>
+                    const isCurrentUser = userId === currentLoggedInUserId;
+                    
+                    const cardHTML = `
+                        <div class="user-card ${isCurrentUser ? 'logged-in-card' : ''}">
+                            <img src="${userData.photoURL || 'https://via.placeholder.com/50/333/fff?text=U'}" alt="DP" class="user-dp">
+                            <div class="user-info">
+                                <h4 class="user-name">
+                                    ${userData.name || 'Unknown User'}
+                                    ${isCurrentUser ? '<span class="logged-in-badge">You</span>' : ''}
+                                </h4>
+                                <span class="user-role ${isAdmin ? 'admin' : ''}" id="badge-${userId}">
+                                    ${isAdmin ? 'Admin' : 'Staff'}
+                                </span>
+                            </div>
+                            <button class="edit-btn" data-id="${userId}" data-name="${userData.name || ''}" data-email="${userData.email || ''}" data-dp="${userData.photoURL || ''}" data-admin="${isAdmin}" data-editaccess="${canEdit}" data-deleteaccess="${canDelete}" data-visibility="${isVisible}">
+                                <span class="material-symbols-outlined">edit</span>
+                            </button>
                         </div>
-                        <button class="edit-btn" data-id="${userId}" data-name="${userData.name || ''}" data-email="${userData.email || ''}" data-dp="${userData.photoURL || ''}" data-admin="${isAdmin}" data-editaccess="${canEdit}" data-deleteaccess="${canDelete}" data-visibility="${isVisible}">
-                            <span class="material-symbols-outlined">edit</span>
-                        </button>
                     `;
-                    userListContainer.appendChild(card);
+                    
+                    if (isCurrentUser) {
+                        currentUserCardHTML = cardHTML;
+                    } else {
+                        otherUsersHTML += cardHTML;
+                    }
                 });
+                
+                // If it's the initial load and the current user was found, prepend them to the container
+                if (isInitial && currentUserCardHTML) {
+                    userListContainer.innerHTML = currentUserCardHTML + otherUsersHTML;
+                } else if (isInitial && !currentUserCardHTML) {
+                    // Fallback if the user somehow isn't in the first alphabetical batch
+                    userListContainer.innerHTML = otherUsersHTML;
+                } else {
+                    // For paginated loads, just append. If the user is found in a later batch, 
+                    // prepend them to the VERY TOP of the list container.
+                    if (currentUserCardHTML) {
+                        userListContainer.insertAdjacentHTML('afterbegin', currentUserCardHTML);
+                    }
+                    userListContainer.insertAdjacentHTML('beforeend', otherUsersHTML);
+                }
 
             } catch (error) {
                 console.error("Error fetching users:", error);
@@ -811,7 +863,8 @@
         }, { threshold: 0.5 });
 
         observer.observe(scrollTrigger);
-        fetchUsers(true);
+        
+        // Initial fetch is now handled inside onAuthStateChanged to ensure UID is present
 
 
         // --- Professional Modal & Dependent Logic ---
