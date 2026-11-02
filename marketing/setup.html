@@ -8,20 +8,24 @@
     <!-- Seamless Mobile PWA Status Bar Color matching the Meena Marketing Dark Theme -->
     <meta name="theme-color" content="#121212">
     <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* Meena Marketing Dark & Vivid Red Theme Palette */
+            /* Meena Marketing Professional Dark Theme Palette */
             --bg: #121212;
-            --surface: #212121;
-            --surface-elevated: #2a2a2a;
+            --surface: #1a1a1a;
+            --surface-elevated: #222222;
             --text: #ffffff;
-            --text-muted: #aaaaaa;
-            --accent: #ff3333; /* Meena Red */
-            --accent-hover: #cc0000;
-            --accent-glow: rgba(255, 51, 51, 0.35);
+            --text-muted: #9e9e9e;
+            --accent: #ff3333;
+            --accent-hover: #d92626;
+            --accent-glow: rgba(255, 51, 51, 0.25);
             --success: #00ba7c;
-            --border: rgba(255, 255, 255, 0.14);
+            --border: rgba(255, 255, 255, 0.1);
+            --border-strong: rgba(255, 255, 255, 0.18);
         }
 
         /* Completely hide the scrollbar across all major browsers */
@@ -38,19 +42,19 @@
             -ms-user-select: none;
             user-select: none;
             -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             outline: none;
-            touch-action: pan-y;
         }
 
         html, body {
             background-color: var(--bg);
             background-image: 
-                radial-gradient(circle at 85% 15%, rgba(255, 51, 51, 0.09), transparent 45%), 
-                radial-gradient(circle at 15% 85%, rgba(255, 255, 255, 0.03), transparent 45%);
+                radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.04), transparent 55%),
+                radial-gradient(circle at 85% 90%, rgba(255, 51, 51, 0.05), transparent 45%);
             color: var(--text);
             height: 100dvh;
             width: 100vw;
@@ -65,7 +69,7 @@
         .onboarding-shell {
             width: 100%;
             height: 100%;
-            max-width: 560px;
+            max-width: 520px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
@@ -74,95 +78,89 @@
             z-index: 1;
         }
 
-        /* --- TOP HEADER BAR --- */
+        /* --- TOP HEADER BAR (Casual Handwriting Brand in Top-Left) --- */
         .top-bar {
-            height: 68px;
-            padding: 0 24px;
+            height: 64px;
+            padding: 18px 26px 0;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
             flex-shrink: 0;
             z-index: 20;
         }
 
-        .skip-btn {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            padding: 8px 18px;
-            border-radius: 9999px;
-            font-size: 13px;
+        .brand-signature {
+            position: relative;
+            display: inline-flex;
+             flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .brand-handwriting {
+            font-family: 'Caveat', cursive;
+            font-size: 24px;
             font-weight: 700;
+            color: #ffffff;
             letter-spacing: 0.4px;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            line-height: 1;
+            white-space: nowrap;
+            clip-path: inset(0 100% 0 0);
+            animation: handwritingReveal 1.15s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
         }
 
-        .skip-btn:hover {
-            color: var(--text);
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.28);
+        .brand-underline {
+            width: 100%;
+            height: 6px;
+            margin-top: 2px;
+            overflow: visible;
         }
 
-        .skip-btn:active {
-            transform: scale(0.94);
+        .brand-underline path {
+            stroke: rgba(255, 255, 255, 0.55);
+            stroke-width: 1.6;
+            stroke-linecap: round;
+            fill: none;
+            stroke-dasharray: 140;
+            stroke-dashoffset: 140;
+            animation: signatureLineDraw 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.75s forwards;
         }
 
-        .skip-btn.hidden-skip {
-            opacity: 0;
-            pointer-events: none;
-            transform: translateX(-10px);
+        @keyframes handwritingReveal {
+            0% {
+                clip-path: inset(0 100% 0 0);
+                opacity: 0.3;
+                transform: translateY(2px);
+            }
+            100% {
+                clip-path: inset(0 0% 0 0);
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .brand-pill {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 800;
-            letter-spacing: -0.3px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 6px 14px;
-            border-radius: 9999px;
+        @keyframes signatureLineDraw {
+            to {
+                stroke-dashoffset: 0;
+            }
         }
 
-        .brand-pill .meena {
-            color: var(--accent);
-        }
-
-        .brand-pill .dot-live {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: var(--success);
-            box-shadow: 0 0 8px var(--success);
-            animation: livePulse 2s infinite;
-        }
-
-        @keyframes livePulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.45; transform: scale(0.85); }
-        }
-
-        /* --- SLIDER VIEWPORT & TRACK --- */
+        /* --- SLIDER VIEWPORT & TRACK (FIXED ZERO-OVERLAP FLEX GEOMETRY) --- */
         .slider-viewport {
             flex: 1;
             width: 100%;
             overflow: hidden;
             position: relative;
-            display: flex;
-            align-items: center;
+            touch-action: pan-y;
         }
 
         .slider-track {
             display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
             width: 500%;
             height: 100%;
-            transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+            flex-shrink: 0;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
             will-change: transform;
         }
 
@@ -172,325 +170,243 @@
 
         .slide {
             width: 20%;
+            min-width: 20%;
+            max-width: 20%;
+            flex: 0 0 20%;
             height: 100%;
-            padding: 16px 28px 24px;
+            padding: 12px 28px 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
             position: relative;
+            overflow: hidden;
         }
 
-        /* --- GIANT ANIMATED SVG STAGE --- */
+        /* --- CLEAN PROFESSIONAL ICON STAGE (NO SPINNING CIRCLE OR RED BLOB) --- */
         .art-stage {
-            width: 220px;
-            height: 220px;
+            width: 148px;
+            height: 148px;
+            border-radius: 36px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+            border: 1px solid var(--border);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.55),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 32px;
             flex-shrink: 0;
+            opacity: 0.4;
+            transform: scale(0.92);
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        @media (max-height: 680px) {
+        .slide.active .art-stage {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        @media (max-height: 660px) {
             .art-stage {
-                width: 175px;
-                height: 175px;
-                margin-bottom: 20px;
+                width: 124px;
+                height: 124px;
+                border-radius: 28px;
+                margin-bottom: 22px;
             }
         }
 
-        .aura-ring {
-            position: absolute;
-            width: 170px;
-            height: 170px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 51, 51, 0.24) 0%, rgba(255, 51, 51, 0.05) 55%, transparent 72%);
-            filter: blur(8px);
-            z-index: 0;
-            animation: auraBreathe 3.6s ease-in-out infinite;
-        }
-
-        .orbit-ring {
-            position: absolute;
-            width: 196px;
-            height: 196px;
-            border-radius: 50%;
-            border: 1px dashed rgba(255, 255, 255, 0.12);
-            z-index: 1;
-            animation: spinSlow 24s linear infinite;
-        }
-
-        .orbit-ring::after {
-            content: "";
-            position: absolute;
-            top: -4px;
-            left: 50%;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--accent);
-            box-shadow: 0 0 12px var(--accent);
-        }
-
-        @keyframes auraBreathe {
-            0%, 100% { transform: scale(0.92); opacity: 0.7; }
-            50% { transform: scale(1.16); opacity: 1; }
-        }
-
-        @keyframes spinSlow {
-            to { transform: rotate(360deg); }
-        }
-
         .giant-svg {
-            width: 132px;
-            height: 132px;
+            width: 84px;
+            height: 84px;
             position: relative;
             z-index: 2;
             overflow: visible;
-            filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.75));
         }
 
-        /* --- SLIDE 1: COMMAND CENTER / STOREFRONT PHYSICS --- */
+        /* --- SUBTLE PROFESSIONAL SVG ANIMATIONS --- */
         .slide.active .svg-storefront {
-            animation: floatLevitating 3.4s ease-in-out infinite;
+            animation: subtleFloat 3.6s ease-in-out infinite;
         }
         .slide.active .store-roof {
-            animation: roofDrop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation: roofSettle 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
             transform-origin: center;
         }
         .slide.active .store-door-glow {
-            animation: doorPulse 2s ease-in-out infinite;
+            animation: subtlePulse 2.4s ease-in-out infinite;
         }
 
-        @keyframes floatLevitating {
+        @keyframes subtleFloat {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-11px); }
+            50% { transform: translateY(-5px); }
         }
-        @keyframes roofDrop {
-            0% { transform: translateY(-25px) scale(0.85); opacity: 0; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
+        @keyframes roofSettle {
+            0% { transform: translateY(-10px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
-        @keyframes doorPulse {
-            0%, 100% { opacity: 0.45; }
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 0.65; }
             50% { opacity: 1; }
         }
 
-        /* --- SLIDE 2: INVENTORY STACKING & SPRING BOUNCE PHYSICS --- */
+        /* Slide 2: Inventory */
         .slide.active .box-bottom {
-            animation: boxSpring1 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation: boxSlideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
         .slide.active .box-top {
             opacity: 0;
-            animation: boxSpring2 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) 0.18s forwards,
-                       boxHoverLoop 2.8s ease-in-out 1s infinite;
+            animation: boxSlideDown 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.12s forwards;
         }
         .slide.active .scan-laser {
-            animation: laserSweep 2.2s ease-in-out infinite;
+            animation: laserSweep 2.4s ease-in-out infinite;
         }
 
-        @keyframes boxSpring1 {
-            0% { transform: translateY(40px) scale(0.8); opacity: 0; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
+        @keyframes boxSlideUp {
+            0% { transform: translateY(16px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
-        @keyframes boxSpring2 {
-            0% { transform: translateY(-45px) scale(0.75); opacity: 0; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
-        }
-        @keyframes boxHoverLoop {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
+        @keyframes boxSlideDown {
+            0% { transform: translateY(-16px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
         @keyframes laserSweep {
-            0%, 100% { transform: translateY(-18px); opacity: 0.2; }
-            50% { transform: translateY(22px); opacity: 1; }
+            0%, 100% { transform: translateY(-10px); opacity: 0.3; }
+            50% { transform: translateY(12px); opacity: 0.95; }
         }
 
-        /* --- SLIDE 3: BILLING & CONTINUOUS RECEIPT SLIDE PHYSICS --- */
+        /* Slide 3: Billing */
         .slide.active .pos-terminal {
-            animation: terminalPop 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: terminalFade 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
         .slide.active .receipt-paper {
-            animation: receiptFeed 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-        .slide.active .pos-check-badge {
-            animation: badgePulse 2.4s ease-in-out infinite;
-            transform-origin: 88px 34px;
+            animation: receiptSmooth 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
-        @keyframes terminalPop {
-            0% { transform: scale(0.84); opacity: 0; }
+        @keyframes terminalFade {
+            0% { transform: scale(0.92); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
-        @keyframes receiptFeed {
-            0% { transform: translateY(18px); opacity: 0; }
+        @keyframes receiptSmooth {
+            0% { transform: translateY(10px); opacity: 0; }
             25% { transform: translateY(0px); opacity: 1; }
-            75% { transform: translateY(-8px); opacity: 1; }
-            100% { transform: translateY(-20px); opacity: 0; }
-        }
-        @keyframes badgePulse {
-            0%, 40%, 100% { transform: scale(0.85); opacity: 0.5; }
-            65% { transform: scale(1.12); opacity: 1; }
+            75% { transform: translateY(-5px); opacity: 1; }
+            100% { transform: translateY(-12px); opacity: 0; }
         }
 
-        /* --- SLIDE 4: SMART AUDITING & DYNAMIC BAR GROWTH PHYSICS --- */
+        /* Slide 4: Analytics */
         .bar-1, .bar-2, .bar-3, .bar-4 {
             transform-box: fill-box;
             transform-origin: bottom;
             transform: scaleY(0.1);
         }
         .slide.active .bar-1 {
-            animation: growBar 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.08s forwards;
+            animation: growBar 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.06s forwards;
         }
         .slide.active .bar-2 {
-            animation: growBar 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.18s forwards;
+            animation: growBar 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.14s forwards;
         }
         .slide.active .bar-3 {
-            animation: growBar 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.28s forwards;
+            animation: growBar 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.22s forwards;
         }
         .slide.active .bar-4 {
-            animation: growBar 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.38s forwards;
+            animation: growBar 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
         }
         .trend-line {
             stroke-dasharray: 140;
             stroke-dashoffset: 140;
         }
         .slide.active .trend-line {
-            animation: drawTrend 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
-        }
-        .slide.active .audit-magnifier {
-            animation: scanFloat 3s ease-in-out infinite;
+            animation: drawTrend 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
         }
 
         @keyframes growBar {
-            0% { transform: scaleY(0.08); }
+            0% { transform: scaleY(0.1); }
             100% { transform: scaleY(1); }
         }
         @keyframes drawTrend {
             to { stroke-dashoffset: 0; }
         }
-        @keyframes scanFloat {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-6px, -6px); }
-        }
 
-        /* --- SLIDE 5: ROCKET READY & BLAST-OFF PHYSICS --- */
+        /* Slide 5: Launch */
         .slide.active .rocket-group {
-            animation: rocketIdleHover 1.8s ease-in-out infinite;
+            animation: subtleFloat 2.4s ease-in-out infinite;
         }
         .slide.active .rocket-flame {
-            animation: flameFlicker 0.28s ease-in-out infinite alternate;
-            transform-origin: 60px 92px;
+            animation: flamePulse 0.35s ease-in-out infinite alternate;
+            transform-origin: 60px 90px;
         }
-
-        /* Triggered when user clicks final Launch button */
         .rocket-launching .rocket-group {
-            animation: rocketBlastOff 0.65s cubic-bezier(0.55, 0.05, 0.67, 0.19) forwards !important;
+            animation: rocketBlastOff 0.55s cubic-bezier(0.55, 0.05, 0.67, 0.19) forwards !important;
         }
 
-        @keyframes rocketIdleHover {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            25% { transform: translateY(-4px) rotate(-1deg); }
-            75% { transform: translateY(-7px) rotate(1deg); }
-        }
-        @keyframes flameFlicker {
-            0% { transform: scaleY(0.85) scaleX(0.92); opacity: 0.8; }
-            100% { transform: scaleY(1.22) scaleX(1.08); opacity: 1; }
+        @keyframes flamePulse {
+            0% { transform: scaleY(0.88); opacity: 0.75; }
+            100% { transform: scaleY(1.15); opacity: 1; }
         }
         @keyframes rocketBlastOff {
             0% { transform: translateY(0) scale(1); }
-            20% { transform: translateY(8px) scale(0.95); }
-            100% { transform: translateY(-420px) scale(1.15); opacity: 0; }
+            100% { transform: translateY(-260px) scale(1.08); opacity: 0; }
         }
 
-        /* --- PARALLAX TEXT & LARGE NAME HANDLING --- */
-        .step-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255, 51, 51, 0.12);
-            border: 1px solid rgba(255, 51, 51, 0.3);
-            color: var(--accent);
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.4px;
-            padding: 5px 12px;
-            border-radius: 9999px;
-            margin-bottom: 14px;
-            opacity: 0;
-            transform: translateY(14px);
-            transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.05s;
-        }
-
+        /* --- SHORT, SWEET & ADVANCED TYPOGRAPHY --- */
         .slide-title {
-            font-size: clamp(24px, 6vw, 32px);
+            font-size: clamp(24px, 5.5vw, 30px);
             font-weight: 800;
-            line-height: 1.2;
-            letter-spacing: -0.5px;
+            line-height: 1.22;
+            letter-spacing: -0.6px;
             color: var(--text);
-            margin-bottom: 14px;
-            max-width: 440px;
+            margin-bottom: 12px;
+            max-width: 380px;
             width: 100%;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
+            transform: translateY(14px);
+            transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.06s;
         }
 
-        /* Bulletproof container for very long Tamil or English names */
         .user-greeting-name {
-            display: block;
-            color: var(--accent);
-            font-size: clamp(22px, 5.5vw, 30px);
+            display: inline;
+            color: var(--text);
             font-weight: 800;
-            line-height: 1.25;
-            margin-top: 4px;
-            max-width: 100%;
             overflow-wrap: anywhere;
             word-break: break-word;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         .slide-subtitle {
             font-size: 15px;
+            font-weight: 400;
             line-height: 1.55;
             color: var(--text-muted);
-            max-width: 380px;
+            max-width: 320px;
             width: 100%;
             opacity: 0;
-            transform: translateY(24px);
-            transition: all 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+            transform: translateY(16px);
+            transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
         }
 
         .slide-subtitle strong {
             color: var(--text);
-            font-weight: 700;
+            font-weight: 600;
         }
 
-        /* Trigger staggered text reveal on active slide */
-        .slide.active .step-badge,
         .slide.active .slide-title,
         .slide.active .slide-subtitle {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Category Feature Pills inside slides */
+        /* Minimal Feature Tags */
         .feature-chips {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 8px;
-            margin-top: 20px;
+            margin-top: 22px;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.28s;
+            transform: translateY(16px);
+            transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.18s;
         }
 
         .slide.active .feature-chips {
@@ -499,48 +415,83 @@
         }
 
         .chip {
-            background: var(--surface);
+            background: rgba(255, 255, 255, 0.035);
             border: 1px solid var(--border);
-            color: var(--text);
-            padding: 6px 13px;
+            color: #d4d4d4;
+            padding: 6px 14px;
             border-radius: 9999px;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 500;
+            letter-spacing: 0.2px;
             display: inline-flex;
             align-items: center;
             gap: 6px;
         }
 
         .chip-dot {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             background: var(--accent);
         }
 
-        /* --- BOTTOM NAVIGATION CONTROLS --- */
+        /* --- BOTTOM NAVIGATION BAR (SKIP LEFT | DOTS CENTER | NEXT RIGHT) --- */
         .bottom-nav {
-            height: 96px;
-            padding: 0 28px 18px;
-            display: flex;
+            height: 88px;
+            padding: 0 24px 20px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
             align-items: center;
-            justify-content: space-between;
             flex-shrink: 0;
             z-index: 20;
         }
 
-        /* Expanding Pagination Dots */
+        /* Skip Button: Bottom Left */
+        .skip-btn {
+            justify-self: start;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 10px 14px;
+            margin-left: -10px;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .skip-btn:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .skip-btn:active {
+            transform: scale(0.95);
+        }
+
+        .skip-btn.hidden-skip {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-8px);
+        }
+
+        /* Pagination Dots: Center */
         .dots-container {
+            justify-self: center;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 7px;
         }
 
         .nav-dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.22);
+            background: rgba(255, 255, 255, 0.2);
             border: none;
             cursor: pointer;
             padding: 0;
@@ -548,80 +499,83 @@
         }
 
         .nav-dot:hover {
-            background: rgba(255, 255, 255, 0.45);
+            background: rgba(255, 255, 255, 0.4);
         }
 
         .nav-dot.active {
-            width: 28px;
-            background: var(--accent);
-            box-shadow: 0 0 12px var(--accent-glow);
+            width: 22px;
+            background: var(--text);
         }
 
-        /* Next / Launch Action Button */
+        /* Professional Next / Launch Button: Bottom Right */
         .next-action-btn {
-            height: 54px;
-            min-width: 54px;
+            justify-self: end;
+            height: 46px;
             padding: 0 20px;
             border-radius: 9999px;
-            border: none;
-            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-            color: #ffffff;
-            font-size: 15px;
-            font-weight: 800;
-            letter-spacing: 0.3px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #ffffff;
+            color: #121212;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
             cursor: pointer;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            box-shadow: 0 8px 24px var(--accent-glow);
-            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            gap: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .next-action-btn:hover {
-            box-shadow: 0 10px 28px rgba(255, 51, 51, 0.5);
+            background: #f0f0f0;
             transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
         }
 
         .next-action-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.96);
         }
 
         .next-action-btn svg {
-            width: 22px;
-            height: 22px;
+            width: 18px;
+            height: 18px;
             fill: currentColor;
-            transition: transform 0.3s ease;
+            transition: transform 0.25s ease;
             flex-shrink: 0;
         }
 
+        .next-action-btn:hover svg {
+            transform: translateX(2px);
+        }
+
         .next-action-btn.final-mode {
-            padding: 0 26px;
-            background: linear-gradient(135deg, var(--accent), #b30000);
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 8px 22px var(--accent-glow);
+        }
+
+        .next-action-btn.final-mode:hover {
+            box-shadow: 0 10px 26px rgba(255, 51, 51, 0.4);
         }
 
         .btn-label {
-            display: none;
             white-space: nowrap;
-        }
-
-        .next-action-btn.final-mode .btn-label {
-            display: inline;
         }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
 <div class="onboarding-shell">
-    <!-- Top Header: Left-Side Skip Button & Live Brand Pill -->
+    <!-- Top Header: Small Casual Handwriting Animated Brand in Top-Left -->
     <header class="top-bar">
-        <button id="skip-btn" class="skip-btn" aria-label="Skip Onboarding">
-            <span>Skip</span>
-        </button>
-
-        <div class="brand-pill">
-            <span class="dot-live"></span>
-            <span><span class="meena">Meena</span> Marketing</span>
+        <div class="brand-signature" aria-label="Meena Marketing">
+            <span class="brand-handwriting">Meena Marketing</span>
+            <svg class="brand-underline" viewBox="0 0 140 8" preserveAspectRatio="none">
+                <path d="M2 5.5 Q 70 1.5, 138 4.5" />
+            </svg>
         </div>
     </header>
 
@@ -629,20 +583,12 @@
     <main class="slider-viewport" id="slider-viewport">
         <div class="slider-track" id="slider-track">
 
-            <!-- SECTION 1: PERSONALIZED WELCOME COMMAND CENTER -->
+            <!-- SECTION 1: WELCOME -->
             <section class="slide active" data-index="0">
                 <div class="art-stage">
-                    <div class="aura-ring"></div>
-                    <div class="orbit-ring"></div>
-                    <!-- Giant Storefront & Command Hub SVG -->
                     <svg class="giant-svg svg-storefront" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Base Shadow -->
-                        <ellipse cx="60" cy="104" rx="38" ry="6" fill="rgba(255, 51, 51, 0.22)"/>
-                        <!-- Store Body -->
-                        <rect x="22" y="46" width="76" height="50" rx="8" fill="#212121" stroke="rgba(255,255,255,0.2)" stroke-width="2.5"/>
-                        <!-- Glowing Showroom Door / Screen -->
-                        <rect class="store-door-glow" x="34" y="58" width="52" height="28" rx="4" fill="rgba(255, 51, 51, 0.16)" stroke="#ff3333" stroke-width="2"/>
-                        <!-- Awning / Roof -->
+                        <rect x="22" y="46" width="76" height="50" rx="8" fill="#212121" stroke="rgba(255,255,255,0.22)" stroke-width="2.5"/>
+                        <rect class="store-door-glow" x="34" y="58" width="52" height="28" rx="4" fill="rgba(255, 51, 51, 0.14)" stroke="#ff3333" stroke-width="2"/>
                         <g class="store-roof">
                             <path d="M16 46L26 24H94L104 46H16Z" fill="#ff3333"/>
                             <path d="M16 46C16 51.5 20.5 55 26 55C31.5 55 36 51.5 36 46" fill="#cc0000"/>
@@ -650,18 +596,15 @@
                             <path d="M56 46C56 51.5 60.5 55 66 55C71.5 55 76 51.5 76 46" fill="#cc0000"/>
                             <path d="M76 46C76 51.5 80.5 55 86 55C91.5 55 96 51.5 96 46" fill="#ffffff" fill-opacity="0.9"/>
                         </g>
-                        <!-- Center Emblem -->
-                        <circle cx="60" cy="72" r="7" fill="#ffffff"/>
+                        <circle cx="60" cy="72" r="6" fill="#ffffff"/>
                     </svg>
                 </div>
 
-                <div class="step-badge">01 &bull; Command Center</div>
                 <h1 class="slide-title">
-                    Welcome,
-                    <span id="user-display-name" class="user-greeting-name">there</span>
+                    Welcome, <span id="user-display-name" class="user-greeting-name">there</span>
                 </h1>
                 <p class="slide-subtitle">
-                    Your unified showroom operating system for <strong>Electronics, Furniture, and Mobile</strong> retail operations.
+                    Your unified workspace for <strong>Electronics, Furniture, and Mobile</strong> retail.
                 </p>
                 <div class="feature-chips">
                     <span class="chip"><span class="chip-dot"></span>Electronics</span>
@@ -670,161 +613,123 @@
                 </div>
             </section>
 
-            <!-- SECTION 2: REAL-TIME INVENTORY MANAGEMENT -->
+            <!-- SECTION 2: INVENTORY -->
             <section class="slide" data-index="1">
                 <div class="art-stage">
-                    <div class="aura-ring"></div>
-                    <div class="orbit-ring"></div>
-                    <!-- Giant 3D Stacked Inventory & Laser Scanner SVG -->
                     <svg class="giant-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Bottom Box -->
                         <g class="box-bottom">
                             <rect x="22" y="62" width="76" height="36" rx="6" fill="#212121" stroke="rgba(255,255,255,0.22)" stroke-width="2.5"/>
                             <line x1="60" y1="62" x2="60" y2="76" stroke="#ff3333" stroke-width="3" stroke-linecap="round"/>
                             <rect x="32" y="82" width="22" height="6" rx="3" fill="rgba(255,255,255,0.25)"/>
                         </g>
-                        <!-- Top Bouncing Box -->
                         <g class="box-top">
                             <rect x="30" y="22" width="60" height="34" rx="6" fill="#2a2a2a" stroke="#ff3333" stroke-width="2.5"/>
                             <line x1="60" y1="22" x2="60" y2="34" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
                             <circle cx="76" cy="42" r="4" fill="#00ba7c"/>
                         </g>
-                        <!-- Laser Scan Line -->
                         <line class="scan-laser" x1="14" y1="58" x2="106" y2="58" stroke="#ff3333" stroke-width="2.5" stroke-linecap="round"/>
                     </svg>
                 </div>
 
-                <div class="step-badge">02 &bull; Smart Inventory</div>
-                <h1 class="slide-title">Flawless Stock Control</h1>
+                <h1 class="slide-title">Live Inventory</h1>
                 <p class="slide-subtitle">
-                    Track high-value appliances, showroom furniture sets, and mobile serials in <strong>real-time</strong> with zero stock blindspots.
+                    Monitor stock levels, serial numbers, and showroom units in <strong>real time</strong>.
                 </p>
                 <div class="feature-chips">
-                    <span class="chip"><span class="chip-dot"></span>Live Stock Count</span>
-                    <span class="chip"><span class="chip-dot"></span>Low-Stock Alerts</span>
+                    <span class="chip"><span class="chip-dot"></span>Live Stock</span>
+                    <span class="chip"><span class="chip-dot"></span>Instant Alerts</span>
                 </div>
             </section>
 
-            <!-- SECTION 3: LIGHTNING BILLING DESK & EPS -->
+            <!-- SECTION 3: BILLING -->
             <section class="slide" data-index="2">
                 <div class="art-stage">
-                    <div class="aura-ring"></div>
-                    <div class="orbit-ring"></div>
-                    <!-- Giant POS Terminal & Animated Sliding Receipt SVG -->
                     <svg class="giant-svg pos-terminal" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Animated Sliding Receipt Paper -->
                         <g class="receipt-paper">
                             <path d="M38 18H82V60H38V18Z" fill="#ffffff" rx="4"/>
                             <line x1="46" y1="28" x2="74" y2="28" stroke="#121212" stroke-width="3" stroke-linecap="round"/>
                             <line x1="46" y1="36" x2="66" y2="36" stroke="#ff3333" stroke-width="3" stroke-linecap="round"/>
                             <line x1="46" y1="44" x2="72" y2="44" stroke="#aaaaaa" stroke-width="2.5" stroke-linecap="round"/>
                         </g>
-                        <!-- POS Machine Body -->
                         <rect x="24" y="50" width="72" height="50" rx="10" fill="#212121" stroke="rgba(255,255,255,0.24)" stroke-width="2.5"/>
-                        <!-- Slot -->
                         <line x1="34" y1="50" x2="86" y2="50" stroke="#ff3333" stroke-width="4" stroke-linecap="round"/>
-                        <!-- Terminal Keypad / Screen -->
-                        <rect x="36" y="62" width="48" height="16" rx="4" fill="rgba(255, 51, 51, 0.18)" stroke="#ff3333" stroke-width="1.8"/>
+                        <rect x="36" y="62" width="48" height="16" rx="4" fill="rgba(255, 51, 51, 0.16)" stroke="#ff3333" stroke-width="1.8"/>
                         <circle cx="42" cy="88" r="3" fill="#ffffff"/>
                         <circle cx="54" cy="88" r="3" fill="#ffffff"/>
                         <circle cx="66" cy="88" r="3" fill="#ffffff"/>
                         <circle cx="78" cy="88" r="3" fill="#00ba7c"/>
-                        <!-- Verification Check Badge -->
-                        <g class="pos-check-badge">
-                            <circle cx="88" cy="34" r="13" fill="#00ba7c"/>
-                            <path d="M82 34L86 38L94 30" stroke="#121212" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                        </g>
                     </svg>
                 </div>
 
-                <div class="step-badge">03 &bull; Billing Desk</div>
-                <h1 class="slide-title">Lightning Fast Checkout</h1>
+                <h1 class="slide-title">Express Billing</h1>
                 <p class="slide-subtitle">
-                    Generate customer bills, process electronic payments, and dispatch digital invoices from the counter in seconds.
+                    Generate GST invoices and dispatch digital receipts in <strong>seconds</strong>.
                 </p>
                 <div class="feature-chips">
-                    <span class="chip"><span class="chip-dot"></span>Instant Invoicing</span>
-                    <span class="chip"><span class="chip-dot"></span>Fast EPS Checkout</span>
+                    <span class="chip"><span class="chip-dot"></span>Quick Invoicing</span>
+                    <span class="chip"><span class="chip-dot"></span>Digital Receipts</span>
                 </div>
             </section>
 
-            <!-- SECTION 4: STOCK AUDITING & AUTOMATED ANALYTICS -->
+            <!-- SECTION 4: AUDITING -->
             <section class="slide" data-index="3">
                 <div class="art-stage">
-                    <div class="aura-ring"></div>
-                    <div class="orbit-ring"></div>
-                    <!-- Giant Growing Analytics Bars & Audit Lens SVG -->
                     <svg class="giant-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Chart Base Frame -->
                         <rect x="18" y="24" width="84" height="74" rx="10" fill="#212121" stroke="rgba(255,255,255,0.2)" stroke-width="2.5"/>
-                        <!-- Staggered Growing Bars -->
                         <rect class="bar-1" x="32" y="68" width="10" height="18" rx="3" fill="rgba(255,255,255,0.35)"/>
                         <rect class="bar-2" x="48" y="56" width="10" height="30" rx="3" fill="rgba(255,255,255,0.6)"/>
                         <rect class="bar-3" x="64" y="46" width="10" height="40" rx="3" fill="#ff3333"/>
                         <rect class="bar-4" x="80" y="34" width="10" height="52" rx="3" fill="#00ba7c"/>
-                        <!-- Animated Trend Line -->
                         <path class="trend-line" d="M32 62L52 48L68 52L86 28" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                        <!-- Floating Audit Magnifier -->
-                        <g class="audit-magnifier">
-                            <circle cx="84" cy="82" r="12" fill="#121212" stroke="#ff3333" stroke-width="3"/>
-                            <line x1="93" y1="91" x2="102" y2="100" stroke="#ff3333" stroke-width="4" stroke-linecap="round"/>
-                        </g>
                     </svg>
                 </div>
 
-                <div class="step-badge">04 &bull; Auditing &amp; Reports</div>
-                <h1 class="slide-title">Precision Stock Auditing</h1>
+                <h1 class="slide-title">Smart Auditing</h1>
                 <p class="slide-subtitle">
-                    Verify physical floor stock against digital records and generate clean month-end accounting summaries automatically.
+                    Verify floor stock and export clean accounting summaries <strong>automatically</strong>.
                 </p>
                 <div class="feature-chips">
-                    <span class="chip"><span class="chip-dot"></span>Floor Verification</span>
-                    <span class="chip"><span class="chip-dot"></span>Auto Summaries</span>
+                    <span class="chip"><span class="chip-dot"></span>Stock Audits</span>
+                    <span class="chip"><span class="chip-dot"></span>Auto Reports</span>
                 </div>
             </section>
 
-            <!-- SECTION 5: FINAL AUTHENTICATED LAUNCH PAD -->
+            <!-- SECTION 5: READY TO LAUNCH -->
             <section class="slide" data-index="4" id="final-slide">
                 <div class="art-stage">
-                    <div class="aura-ring"></div>
-                    <div class="orbit-ring"></div>
-                    <!-- Giant Rocket with Physics Thruster & Launch Animation -->
                     <svg class="giant-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g class="rocket-group">
-                            <!-- Thruster Flame -->
-                            <path class="rocket-flame" d="M52 88L60 110L68 88H52Z" fill="#ff3333"/>
-                            <path class="rocket-flame" d="M55 88L60 102L65 88H55Z" fill="#ffffff"/>
-                            <!-- Rocket Fins -->
+                            <path class="rocket-flame" d="M52 88L60 108L68 88H52Z" fill="#ff3333"/>
+                            <path class="rocket-flame" d="M55 88L60 100L65 88H55Z" fill="#ffffff"/>
                             <path d="M42 66L28 82H44V66Z" fill="#cc0000"/>
                             <path d="M78 66L92 82H76V66Z" fill="#cc0000"/>
-                            <!-- Rocket Main Hull -->
-                            <path d="M60 16C46 32 42 52 42 78H78C78 52 74 32 60 16Z" fill="#ffffff"/>
-                            <!-- Rocket Nose Cone -->
-                            <path d="M60 16C53 24 49 33 47 42H73C71 33 67 24 60 16Z" fill="#ff3333"/>
-                            <!-- Cockpit Window -->
-                            <circle cx="60" cy="56" r="8" fill="#121212" stroke="#ff3333" stroke-width="2.5"/>
-                            <!-- Base Nozzle -->
+                            <path d="M60 18C46 34 42 52 42 78H78C78 52 74 34 60 18Z" fill="#ffffff"/>
+                            <path d="M60 18C53 26 49 34 47 42H73C71 34 67 26 60 18Z" fill="#ff3333"/>
+                            <circle cx="60" cy="56" r="7" fill="#121212" stroke="#ff3333" stroke-width="2.5"/>
                             <rect x="48" y="78" width="24" height="8" rx="3" fill="#212121"/>
                         </g>
                     </svg>
                 </div>
 
-                <div class="step-badge">05 &bull; Ready to Launch</div>
-                <h1 class="slide-title">System is yours fully authenticated</h1>
+                <h1 class="slide-title">All Set</h1>
                 <p class="slide-subtitle">
-                    Your terminal is synced and ready. Step into the <strong>Meena Marketing</strong> workspace now.
+                    Your account is verified and synced. Enter your <strong>workspace</strong> now.
                 </p>
                 <div class="feature-chips">
                     <span class="chip"><span class="chip-dot"></span>Cloud Synced</span>
-                    <span class="chip"><span class="chip-dot"></span>Encrypted Session</span>
+                    <span class="chip"><span class="chip-dot"></span>Ready</span>
                 </div>
             </section>
 
         </div>
     </main>
 
-    <!-- Bottom Controls: 5 Expanding Dots & Next/Launch Button -->
+    <!-- Bottom Controls: Skip (Bottom Left) | Dots (Center) | Next (Bottom Right) -->
     <footer class="bottom-nav">
+        <button id="skip-btn" class="skip-btn" aria-label="Skip Onboarding">
+            <span>Skip</span>
+        </button>
+
         <div class="dots-container" id="dots-container">
             <button class="nav-dot active" data-slide="0" aria-label="Slide 1"></button>
             <button class="nav-dot" data-slide="1" aria-label="Slide 2"></button>
@@ -834,7 +739,7 @@
         </div>
 
         <button id="next-btn" class="next-action-btn" aria-label="Next Slide">
-            <span class="btn-label">Launch Workspace</span>
+            <span class="btn-label" id="next-btn-label">Next</span>
             <svg viewBox="0 0 24 24">
                 <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
             </svg>
@@ -843,12 +748,13 @@
 </div>
 
 <script type="module">
-    // ---UI ELEMENTS & STATE ---
+    // --- UI ELEMENTS & STATE ---
     const track = document.getElementById('slider-track');
     const viewport = document.getElementById('slider-viewport');
     const slides = Array.from(document.querySelectorAll('.slide'));
     const dots = Array.from(document.querySelectorAll('.nav-dot'));
     const nextBtn = document.getElementById('next-btn');
+    const nextBtnLabel = document.getElementById('next-btn-label');
     const skipBtn = document.getElementById('skip-btn');
     const finalSlide = document.getElementById('final-slide');
     const userDisplayNameEl = document.getElementById('user-display-name');
@@ -858,17 +764,15 @@
     let isLaunching = false;
 
     // --- HAPTIC VIBRATION HELPER ---
-    function vibrate(pattern = 15) {
+    function vibrate(pattern = 12) {
         try {
             if (navigator.vibrate) navigator.vibrate(pattern);
         } catch (_) {
-            // Ignore on unsupported desktop browsers
+            // Ignore on unsupported devices
         }
     }
 
     // --- SINGLE-READ FIRESTORE NAME FETCHER WITH SAFE FALLBACK ---
-    // Performs strictly 1 document read (`getDoc`). If offline, unauthenticated,
-    // or if `config.js` fails to load, gracefully keeps "there" without breaking the app.
     (async function fetchUserNameOnce() {
         try {
             const { auth, db } = await import('./config.js');
@@ -884,13 +788,11 @@
                     },
                     () => resolve(null)
                 );
-                // Safety timeout so slow networks never block UI
                 setTimeout(() => resolve(auth.currentUser || null), 2500);
             });
 
             if (!user || !user.uid) return;
 
-            // Perform strictly ONE Firestore document read for the user's name
             const snap = await getDoc(doc(db, "users", user.uid));
             if (snap.exists()) {
                 const data = snap.data();
@@ -901,27 +803,25 @@
                 }
             }
 
-            // Secondary fallback to Auth displayName if Firestore doc has no name
             if (user.displayName && user.displayName.trim()) {
                 userDisplayNameEl.textContent = user.displayName.trim();
             }
         } catch (_) {
-            // Silent fallback: keeps "Welcome, there" intact without throwing any UI errors
             userDisplayNameEl.textContent = 'there';
         }
     })();
 
-    // --- NAVIGATION & HISTORY-SAFE REDIRECT (`window.location.replace`) ---
+    // --- NAVIGATION & HISTORY-SAFE REDIRECT ---
     function redirectToDashboard(withRocketBlast = false) {
         if (isLaunching) return;
         isLaunching = true;
-        vibrate([20, 40, 30]);
+        vibrate([15, 30, 20]);
 
         if (withRocketBlast && finalSlide) {
             finalSlide.classList.add('rocket-launching');
             setTimeout(() => {
                 window.location.replace('index.html');
-            }, 480);
+            }, 420);
         } else {
             window.location.replace('index.html');
         }
@@ -931,27 +831,24 @@
         if (isLaunching) return;
         const clamped = Math.max(0, Math.min(TOTAL_SLIDES - 1, index));
         if (clamped !== currentIndex) {
-            vibrate(12);
+            vibrate(10);
         }
         currentIndex = clamped;
 
-        // Move track smoothly
         const offsetPercent = -(currentIndex * (100 / TOTAL_SLIDES));
         track.style.transform = `translate3d(${offsetPercent}%, 0, 0)`;
 
-        // Update active classes for SVG physics & staggered text animations
         slides.forEach((s, idx) => {
             s.classList.toggle('active', idx === currentIndex);
         });
 
-        // Update pagination dots
         dots.forEach((d, idx) => {
             d.classList.toggle('active', idx === currentIndex);
         });
 
-        // Transform button on the 5th (final) slide
         const isLast = currentIndex === TOTAL_SLIDES - 1;
         nextBtn.classList.toggle('final-mode', isLast);
+        nextBtnLabel.textContent = isLast ? 'Launch' : 'Next';
         skipBtn.classList.toggle('hidden-skip', isLast);
     }
 
@@ -980,6 +877,7 @@
     let startY = 0;
     let deltaX = 0;
     let isSwiping = false;
+    let isScrollingVertically = false;
 
     viewport.addEventListener('touchstart', (e) => {
         if (isLaunching || e.touches.length !== 1) return;
@@ -987,18 +885,19 @@
         startY = e.touches[0].clientY;
         deltaX = 0;
         isSwiping = true;
+        isScrollingVertically = false;
         track.classList.add('dragging');
     }, { passive: true });
 
     viewport.addEventListener('touchmove', (e) => {
-        if (!isSwiping || isLaunching) return;
+        if (!isSwiping || isLaunching || isScrollingVertically) return;
         const currentX = e.touches[0].clientX;
         const currentY = e.touches[0].clientY;
         const diffX = currentX - startX;
         const diffY = currentY - startY;
 
-        // If user is scrolling vertically more than horizontally, cancel swipe
-        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 18) {
+        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 14) {
+            isScrollingVertically = true;
             isSwiping = false;
             track.classList.remove('dragging');
             goToSlide(currentIndex);
@@ -1007,9 +906,8 @@
 
         deltaX = diffX;
         const width = viewport.clientWidth || window.innerWidth;
-        // Apply rubber-band resistance at the first and last slides
         const isAtEdge = (currentIndex === 0 && deltaX > 0) || (currentIndex === TOTAL_SLIDES - 1 && deltaX < 0);
-        const effectiveDelta = isAtEdge ? deltaX * 0.28 : deltaX;
+        const effectiveDelta = isAtEdge ? deltaX * 0.25 : deltaX;
 
         const basePercent = -(currentIndex * (100 / TOTAL_SLIDES));
         const dragPercent = (effectiveDelta / width) * (100 / TOTAL_SLIDES);
@@ -1021,7 +919,7 @@
         isSwiping = false;
         track.classList.remove('dragging');
 
-        const threshold = Math.min(90, (viewport.clientWidth || 360) * 0.18);
+        const threshold = Math.min(80, (viewport.clientWidth || 360) * 0.16);
         if (deltaX < -threshold && currentIndex < TOTAL_SLIDES - 1) {
             goToSlide(currentIndex + 1);
         } else if (deltaX > threshold && currentIndex > 0) {
