@@ -14,15 +14,15 @@
 
     <style>
         :root {
-            /* Meena Marketing Professional Dark Theme Palette with Premium Red/White Accents */
+            /* Meena Marketing Professional Dark Theme Palette */
             --bg: #121212;
             --surface: #1a1a1a;
             --surface-elevated: #222222;
             --text: #ffffff;
             --text-muted: #9e9e9e;
-            --accent: #E60000;
-            --accent-hover: #cc0000;
-            --accent-glow: rgba(230, 0, 0, 0.4);
+            --accent: #ff3333;
+            --accent-hover: #d92626;
+            --accent-glow: rgba(255, 51, 51, 0.25);
             --success: #00ba7c;
             --border: rgba(255, 255, 255, 0.1);
             --border-strong: rgba(255, 255, 255, 0.18);
@@ -48,40 +48,50 @@
             padding: 0;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             outline: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         html, body {
             background-color: var(--bg);
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.04), transparent 55%),
-                radial-gradient(circle at 85% 90%, rgba(230, 0, 0, 0.08), transparent 45%);
+                radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.05), transparent 55%),
+                radial-gradient(circle at 85% 90%, rgba(255, 51, 51, 0.06), transparent 45%);
             color: var(--text);
+            height: 100%;
             height: 100dvh;
-            width: 100vw;
+            width: 100%;
             overflow: hidden;
             position: fixed;
             inset: 0;
             -ms-overflow-style: none !important;
             scrollbar-width: none !important;
+            backface-visibility: hidden;
+            transform: translateZ(0);
         }
 
-        /* --- DESKTOP PRO RESPONSIVE WRAPPER --- */
+        /* --- DESKTOP ENTERPRISE RESPONSIVE PRESENTATION --- */
         @media (min-width: 768px) {
             html, body {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background-color: #050505; /* Deeper background for desktop outer area */
+                background-color: #070708;
+                background-image: 
+                    radial-gradient(circle at 25% 20%, rgba(255, 51, 51, 0.07), transparent 45%),
+                    radial-gradient(circle at 75% 80%, rgba(56, 189, 248, 0.06), transparent 45%);
             }
             .onboarding-shell {
-                height: 85dvh !important;
-                max-height: 900px;
-                border-radius: 40px;
+                height: min(86dvh, 820px) !important;
+                max-width: 480px !important;
+                border-radius: 36px;
                 border: 1px solid var(--border-strong);
-                box-shadow: 0 40px 100px rgba(0,0,0,0.9), 0 0 0 10px rgba(255,255,255,0.02);
+                background: linear-gradient(180deg, #161618 0%, #121212 100%);
+                box-shadow: 
+                    0 32px 90px rgba(0, 0, 0, 0.85),
+                    0 0 0 1px rgba(255, 255, 255, 0.05),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
                 overflow: hidden;
-                background-color: var(--bg);
-                position: relative;
             }
         }
 
@@ -96,12 +106,14 @@
             justify-content: space-between;
             position: relative;
             z-index: 1;
+            backface-visibility: hidden;
+            transform: translate3d(0, 0, 0);
         }
 
-        /* --- TOP HEADER BAR --- */
+        /* --- TOP HEADER BAR (Meena in Red, Marketing in White, Zero Shake) --- */
         .top-bar {
             height: 64px;
-            padding: 18px 26px 0;
+            padding: 18px 24px 0;
             display: flex;
             align-items: center;
             justify-content: flex-start;
@@ -120,12 +132,26 @@
             font-family: 'Caveat', cursive;
             font-size: 26px;
             font-weight: 700;
-            color: #ffffff;
             letter-spacing: 0.4px;
-            line-height: 1;
+            line-height: 1.05;
             white-space: nowrap;
+            display: inline-flex;
+            align-items: baseline;
+            gap: 6px;
             clip-path: inset(0 100% 0 0);
-            animation: handwritingReveal 1.15s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+            animation: handwritingReveal 1.05s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+            will-change: clip-path;
+        }
+
+        .brand-meena {
+            font-family: 'Caveat', cursive;
+            color: var(--accent);
+            text-shadow: 0 2px 14px rgba(255, 51, 51, 0.35);
+        }
+
+        .brand-marketing {
+            font-family: 'Caveat', cursive;
+            color: #ffffff;
         }
 
         .brand-underline {
@@ -136,25 +162,29 @@
         }
 
         .brand-underline path {
-            stroke: var(--accent);
-            stroke-width: 2.2;
+            stroke: url(#brandLineGrad);
+            stroke-width: 1.8;
             stroke-linecap: round;
             fill: none;
             stroke-dasharray: 140;
             stroke-dashoffset: 140;
-            animation: signatureLineDraw 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.75s forwards;
+            animation: signatureLineDraw 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.55s forwards;
         }
 
         @keyframes handwritingReveal {
-            0% { clip-path: inset(0 100% 0 0); opacity: 0.3; transform: translateY(4px); }
-            100% { clip-path: inset(0 0% 0 0); opacity: 1; transform: translateY(0); }
+            0% {
+                clip-path: inset(0 100% 0 0);
+            }
+            100% {
+                clip-path: inset(0 0% 0 0);
+            }
         }
 
         @keyframes signatureLineDraw {
             to { stroke-dashoffset: 0; }
         }
 
-        /* --- SLIDER VIEWPORT & TRACK --- */
+        /* --- SLIDER VIEWPORT & TRACK (STABLE HARDWARE ACCELERATION) --- */
         .slider-viewport {
             flex: 1;
             width: 100%;
@@ -170,8 +200,10 @@
             width: 500%;
             height: 100%;
             flex-shrink: 0;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.35, 1);
+            transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
             will-change: transform;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
         }
 
         .slider-track.dragging {
@@ -184,7 +216,7 @@
             max-width: 20%;
             flex: 0 0 20%;
             height: 100%;
-            padding: 12px 28px 16px;
+            padding: 8px 24px 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -192,24 +224,43 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            backface-visibility: hidden;
         }
 
-        /* --- REDESIGNED ART STAGE (FREE-FLOATING 3D FEEL, NO BOX) --- */
+        /* --- LARGE, FREE-FLOATING COLORFUL ART STAGE (NO BOX) --- */
         .art-stage {
-            width: 160px;
-            height: 160px;
-            background: transparent; 
-            border: none;            
-            box-shadow: none;        
+            width: 184px;
+            height: 184px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 32px;
+            margin-bottom: 20px;
             flex-shrink: 0;
             opacity: 0;
-            transform: scale(0.6) translateY(30px);
-            transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            transform: scale(0.84) translateY(14px);
+            transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+        }
+
+        /* Ambient multi-color aura behind free-floating SVG */
+        .art-stage::before {
+            content: '';
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.16) 0%, rgba(255, 51, 51, 0.12) 55%, transparent 75%);
+            filter: blur(18px);
+            z-index: 0;
+            animation: auraBreathe 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes auraBreathe {
+            0% { transform: scale(0.92); opacity: 0.7; }
+            100% { transform: scale(1.12); opacity: 1; }
         }
 
         .slide.active .art-stage {
@@ -217,120 +268,134 @@
             transform: scale(1) translateY(0);
         }
 
-        @media (max-height: 660px) {
+        @media (max-height: 680px) {
             .art-stage {
-                width: 130px;
-                height: 130px;
-                margin-bottom: 22px;
+                width: 148px;
+                height: 148px;
+                margin-bottom: 14px;
             }
         }
 
         .giant-svg {
-            width: 100px;
-            height: 100px;
+            width: 136px;
+            height: 136px;
             position: relative;
             z-index: 2;
             overflow: visible;
-            /* High-end 3D drop shadow making it pop off the dark background */
-            filter: drop-shadow(0 20px 24px rgba(230, 0, 0, 0.35)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+            filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.65));
         }
 
-        /* --- HEAVY ENTERPRISE-GRADE CCX ANIMATIONS --- */
+        @media (max-height: 680px) {
+            .giant-svg {
+                width: 112px;
+                height: 112px;
+            }
+        }
+
+        /* --- MINUTE, CREATIVE MULTI-COLOR SVG ANIMATIONS --- */
+        .svg-sparkle {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: sparkleTwinkle 2.6s ease-in-out infinite;
+        }
+        .svg-sparkle.delay-1 { animation-delay: 0.6s; }
+        .svg-sparkle.delay-2 { animation-delay: 1.3s; }
+
+        @keyframes sparkleTwinkle {
+            0%, 100% { transform: scale(0.65) rotate(0deg); opacity: 0.4; }
+            50% { transform: scale(1.18) rotate(20deg); opacity: 1; }
+        }
+
+        /* Slide 1: Storefront */
         .slide.active .svg-storefront {
-            animation: dynamicFloat 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+            animation: smoothFloat 3.8s ease-in-out infinite;
         }
         .slide.active .store-roof {
-            animation: roofBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+            animation: roofSettle 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
             transform-origin: center;
-            opacity: 0;
         }
         .slide.active .store-door-glow {
-            animation: heavyPulse 2s ease-in-out infinite;
+            animation: subtlePulse 2.4s ease-in-out infinite;
         }
 
-        @keyframes dynamicFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            33% { transform: translateY(-8px) rotate(1.5deg); }
-            66% { transform: translateY(-4px) rotate(-1deg); }
+        @keyframes smoothFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
         }
-        @keyframes roofBounce {
-            0% { transform: translateY(-40px) scale(1.1); opacity: 0; }
+        @keyframes roofSettle {
+            0% { transform: translateY(-12px) scale(0.95); opacity: 0; }
             100% { transform: translateY(0) scale(1); opacity: 1; }
         }
-        @keyframes heavyPulse {
-            0%, 100% { opacity: 0.5; filter: brightness(1); }
-            50% { opacity: 1; filter: brightness(1.5); }
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 0.72; }
+            50% { opacity: 1; }
         }
 
         /* Slide 2: Inventory */
         .slide.active .box-bottom {
-            animation: boxElasticUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
-            opacity: 0;
+            animation: boxSlideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
         .slide.active .box-top {
             opacity: 0;
-            animation: boxElasticDown 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s forwards;
+            animation: boxSlideDown 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
         }
         .slide.active .scan-laser {
-            animation: aggressiveLaser 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+            animation: laserSweep 2.2s ease-in-out infinite;
         }
 
-        @keyframes boxElasticUp {
-            0% { transform: translateY(30px) scale(0.9); opacity: 0; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
+        @keyframes boxSlideUp {
+            0% { transform: translateY(18px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
-        @keyframes boxElasticDown {
-            0% { transform: translateY(-30px) scale(0.9); opacity: 0; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
+        @keyframes boxSlideDown {
+            0% { transform: translateY(-18px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
-        @keyframes aggressiveLaser {
-            0%, 100% { transform: translateY(-16px) scaleX(0.8); opacity: 0; stroke-width: 2.5; }
-            50% { transform: translateY(16px) scaleX(1.1); opacity: 1; stroke-width: 4; filter: drop-shadow(0 0 8px var(--accent)); }
+        @keyframes laserSweep {
+            0%, 100% { transform: translateY(-14px); opacity: 0.35; }
+            50% { transform: translateY(14px); opacity: 1; }
         }
 
         /* Slide 3: Billing */
         .slide.active .pos-terminal {
-            animation: terminalSpring 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            transform-origin: bottom center;
+            animation: terminalFade 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
         .slide.active .receipt-paper {
-            animation: receiptShoot 2.4s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
-            transform-origin: bottom center;
+            animation: receiptSmooth 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
-        @keyframes terminalSpring {
-            0% { transform: scale(0.7) rotate(-5deg); opacity: 0; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        @keyframes terminalFade {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
-        @keyframes receiptShoot {
-            0% { transform: translateY(20px) scaleY(0.5); opacity: 0; }
-            30% { transform: translateY(0px) scaleY(1); opacity: 1; }
-            70% { transform: translateY(-4px) scaleY(1); opacity: 1; }
-            100% { transform: translateY(-30px) scaleY(1.1); opacity: 0; }
+        @keyframes receiptSmooth {
+            0% { transform: translateY(10px); opacity: 0; }
+            25% { transform: translateY(0px); opacity: 1; }
+            75% { transform: translateY(-6px); opacity: 1; }
+            100% { transform: translateY(-14px); opacity: 0; }
         }
 
         /* Slide 4: Analytics */
         .bar-1, .bar-2, .bar-3, .bar-4 {
             transform-box: fill-box;
             transform-origin: bottom;
-            transform: scaleY(0);
+            transform: scaleY(0.08);
         }
-        .slide.active .bar-1 { animation: elasticBar 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards; }
-        .slide.active .bar-2 { animation: elasticBar 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards; }
-        .slide.active .bar-3 { animation: elasticBar 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards; }
-        .slide.active .bar-4 { animation: elasticBar 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; }
+        .slide.active .bar-1 { animation: growBar 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.06s forwards; }
+        .slide.active .bar-2 { animation: growBar 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.14s forwards; }
+        .slide.active .bar-3 { animation: growBar 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.22s forwards; }
+        .slide.active .bar-4 { animation: growBar 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.30s forwards; }
         
         .trend-line {
             stroke-dasharray: 140;
             stroke-dashoffset: 140;
-            filter: drop-shadow(0 4px 6px rgba(230,0,0,0.6));
         }
         .slide.active .trend-line {
-            animation: drawTrend 1.2s cubic-bezier(0.45, 0, 0.55, 1) 0.35s forwards;
+            animation: drawTrend 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
         }
 
-        @keyframes elasticBar {
-            0% { transform: scaleY(0); }
+        @keyframes growBar {
+            0% { transform: scaleY(0.08); }
             100% { transform: scaleY(1); }
         }
         @keyframes drawTrend {
@@ -339,83 +404,127 @@
 
         /* Slide 5: Launch */
         .slide.active .rocket-group {
-            animation: dynamicFloat 3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-            transform-origin: center;
+            animation: smoothFloat 2.5s ease-in-out infinite;
         }
         .slide.active .rocket-flame {
-            animation: extremeFlame 0.2s ease-in-out infinite alternate;
+            animation: flamePulse 0.28s ease-in-out infinite alternate;
             transform-origin: 60px 90px;
         }
         .rocket-launching .rocket-group {
-            animation: cinematicBlastOff 0.7s cubic-bezier(0.75, 0, 0.25, 1) forwards !important;
+            animation: rocketBlastOff 0.58s cubic-bezier(0.55, 0.05, 0.67, 0.19) forwards !important;
         }
 
-        @keyframes extremeFlame {
-            0% { transform: scaleY(0.7) scaleX(0.9); opacity: 0.8; filter: brightness(1); }
-            100% { transform: scaleY(1.3) scaleX(1.1); opacity: 1; filter: brightness(1.5); }
+        @keyframes flamePulse {
+            0% { transform: scaleY(0.85); opacity: 0.8; }
+            100% { transform: scaleY(1.22); opacity: 1; }
         }
-        @keyframes cinematicBlastOff {
-            0% { transform: translateY(0) scale(1) rotate(0); }
-            40% { transform: translateY(20px) scale(0.9) rotate(-2deg); }
-            100% { transform: translateY(-400px) scale(1.2) rotate(5deg); opacity: 0; }
+        @keyframes rocketBlastOff {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-280px) scale(1.12); opacity: 0; }
         }
 
-        /* --- REFINED TYPOGRAPHY (DARK MODE) --- */
+        /* --- SHORT, SWEET TYPOGRAPHY & MULTI-COLOR ANIMATED USER NAME --- */
         .slide-title {
-            font-size: clamp(26px, 6vw, 32px);
+            font-size: clamp(22px, 5.2vw, 29px);
             font-weight: 800;
-            line-height: 1.22;
-            letter-spacing: -0.8px;
+            line-height: 1.24;
+            letter-spacing: -0.5px;
             color: var(--text);
-            margin-bottom: 14px;
-            max-width: 380px;
+            margin-bottom: 10px;
+            max-width: 390px;
             width: 100%;
             opacity: 0;
-            transform: translateY(20px) scale(0.96);
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s;
+            transform: translateY(12px);
+            transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.04s, opacity 0.4s ease 0.04s;
         }
 
+        /* Dynamic Multi-Color Shimmer Name (Handles Short & Very Long Names Gracefully) */
         .user-greeting-name {
-            display: inline;
-            color: var(--accent);
+            display: inline-block;
+            max-width: 100%;
             font-weight: 800;
-            overflow-wrap: anywhere;
+            background: linear-gradient(
+                110deg,
+                #38bdf8 0%,
+                #34d399 28%,
+                #fbbf24 55%,
+                #f472b6 80%,
+                #38bdf8 100%
+            );
+            background-size: 220% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: #38bdf8;
+            animation: nameColorFlow 4.5s linear infinite;
+            overflow-wrap: break-word;
             word-break: break-word;
+            vertical-align: bottom;
+        }
+
+        /* Automatically scale font if the user's name is very long */
+        .user-greeting-name.long-name {
+            font-size: clamp(19px, 4.4vw, 24px);
+            line-height: 1.2;
+        }
+
+        @keyframes nameColorFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 220% 50%; }
         }
 
         .slide-subtitle {
-            font-size: 16px;
+            font-size: 14.5px;
             font-weight: 400;
-            line-height: 1.55;
+            line-height: 1.5;
             color: var(--text-muted);
-            max-width: 320px;
+            max-width: 300px;
             width: 100%;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.18s;
+            transform: translateY(14px);
+            transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.09s, opacity 0.4s ease 0.09s;
         }
 
         .slide-subtitle strong {
-            color: #ffffff;
-            font-weight: 700;
+            color: var(--text);
+            font-weight: 600;
         }
 
         .slide.active .slide-title,
         .slide.active .slide-subtitle {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translateY(0);
         }
 
-        /* Modern Colorful Chips */
+        /* Kinetic Text Shake & Move Animation when clicking Next */
+        @keyframes kineticTextMove {
+            0% { transform: translate3d(0, 0, 0); }
+            25% { transform: translate3d(9px, -2px, 0) scale(1.015); }
+            55% { transform: translate3d(-5px, 1px, 0); }
+            80% { transform: translate3d(2px, 0, 0); }
+            100% { transform: translate3d(0, 0, 0); }
+        }
+
+        .slide.active.text-kinetic-shake .slide-title {
+            animation: kineticTextMove 0.46s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .slide.active.text-kinetic-shake .slide-subtitle {
+            animation: kineticTextMove 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.03s;
+        }
+        .slide.active.text-kinetic-shake .feature-chips {
+            animation: kineticTextMove 0.56s cubic-bezier(0.22, 1, 0.36, 1) 0.06s;
+        }
+
+        /* Minimal Feature Tags */
         .feature-chips {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
-            margin-top: 26px;
+            gap: 8px;
+            margin-top: 18px;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.26s;
+            transform: translateY(14px);
+            transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.14s, opacity 0.4s ease 0.14s;
         }
 
         .slide.active .feature-chips {
@@ -424,68 +533,68 @@
         }
 
         .chip {
-            background: rgba(230, 0, 0, 0.1);
-            border: 1px solid rgba(230, 0, 0, 0.25);
-            color: #ffffff;
-            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.045);
+            border: 1px solid var(--border);
+            color: #e4e4e7;
+            padding: 6px 13px;
             border-radius: 9999px;
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .chip-dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--accent);
-            box-shadow: 0 0 6px var(--accent);
+            background: #38bdf8;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
         }
 
-        /* --- BOTTOM NAVIGATION BAR (FIXED OVERLAP & 25% PADDING) --- */
+        /* --- BOTTOM NAVIGATION BAR (ZERO-OVERLAP 3-COLUMN GRID + 25% MOBILE SPACING) --- */
         .bottom-nav {
-            min-height: 96px;
-            padding: 0 24px 24px;
-            display: flex;
-            justify-content: space-between;
+            width: 100%;
+            padding: 12px 22px 28px;
+            display: grid;
+            grid-template-columns: minmax(64px, 1fr) auto minmax(105px, 1fr);
             align-items: center;
-            position: relative;
+            column-gap: 10px;
             flex-shrink: 0;
             z-index: 20;
         }
 
-        /* Mobile specific exactly 25% padding layout as requested */
+        /* Mobile Bottom Spacing 25% so controls sit comfortably in the thumb zone */
         @media (max-width: 767px) {
             .bottom-nav {
-                padding-bottom: calc(25% + env(safe-area-inset-bottom));
+                padding: 8px 18px calc(25% + env(safe-area-inset-bottom, 0px));
             }
         }
 
         /* Skip Button: Bottom Left */
         .skip-btn {
+            justify-self: start;
             background: transparent;
             border: 1px solid transparent;
             color: var(--text-muted);
-            padding: 10px 14px;
-            margin-left: -10px;
+            padding: 8px 10px;
+            margin-left: -6px;
             border-radius: 9999px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             letter-spacing: 0.2px;
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
             display: inline-flex;
             align-items: center;
-            z-index: 2;
+            white-space: nowrap;
         }
 
         .skip-btn:hover {
             color: var(--text);
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .skip-btn:active {
@@ -495,93 +604,99 @@
         .skip-btn.hidden-skip {
             opacity: 0;
             pointer-events: none;
-            transform: translateX(-10px);
+            transform: translateX(-8px);
         }
 
-        /* Pagination Dots: Center (Absolute positioned to guarantee ZERO overlap) */
+        /* Pagination Dots: Strictly Contained in Center Grid Column (Never Overlaps Next/Launch) */
         .dots-container {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
+            justify-self: center;
             display: flex;
             align-items: center;
-            gap: 8px;
-            z-index: 1;
+            justify-content: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            max-width: 112px;
         }
 
         .nav-dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.22);
             border: none;
             cursor: pointer;
             padding: 0;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            flex-shrink: 0;
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .nav-dot:hover {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.45);
         }
 
+        /* Compact Active Line Pill so it never collides with the Launch button */
         .nav-dot.active {
-            width: 28px;
-            background: var(--accent);
-            box-shadow: 0 2px 10px var(--accent-glow);
+            width: 18px;
+            background: linear-gradient(90deg, #ff3333, #ff7b54);
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.45);
         }
 
         /* Professional Next / Launch Button: Bottom Right */
         .next-action-btn {
-            height: 50px;
-            padding: 0 22px;
+            justify-self: end;
+            height: 44px;
+            padding: 0 18px;
             border-radius: 9999px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            background: #ffffff; /* Marketing white accent on dark mode */
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: #ffffff;
             color: #121212;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 2;
+            gap: 6px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            white-space: nowrap;
         }
 
         .next-action-btn:hover {
-            background: #f0f0f0;
-            transform: translateY(-2px);
-            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.6);
+            background: #f2f2f2;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
         }
 
         .next-action-btn:active {
-            transform: scale(0.94);
+            transform: scale(0.95);
         }
 
         .next-action-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 17px;
+            height: 17px;
             fill: currentColor;
-            transition: transform 0.3s ease;
+            transition: transform 0.25s ease;
             flex-shrink: 0;
         }
 
         .next-action-btn:hover svg {
-            transform: translateX(4px);
+            transform: translateX(2px);
         }
 
         .next-action-btn.final-mode {
             background: linear-gradient(135deg, var(--accent), var(--accent-hover));
             color: #ffffff;
             border-color: transparent;
-            box-shadow: 0 12px 28px var(--accent-glow);
+            box-shadow: 0 8px 22px var(--accent-glow);
         }
 
         .next-action-btn.final-mode:hover {
-            box-shadow: 0 16px 34px rgba(230, 0, 0, 0.5);
+            box-shadow: 0 10px 26px rgba(255, 51, 51, 0.45);
         }
 
         .btn-label {
@@ -592,11 +707,21 @@
 <body oncontextmenu="return false;">
 
 <div class="onboarding-shell">
-    <!-- Top Header: Small Casual Handwriting Animated Brand in Top-Left -->
+    <!-- Top Header: Meena in Red, Marketing in White -->
     <header class="top-bar">
         <div class="brand-signature" aria-label="Meena Marketing">
-            <span class="brand-handwriting">Meena Marketing</span>
+            <span class="brand-handwriting">
+                <span class="brand-meena">Meena</span>
+                <span class="brand-marketing">Marketing</span>
+            </span>
             <svg class="brand-underline" viewBox="0 0 140 8" preserveAspectRatio="none">
+                <defs>
+                    <linearGradient id="brandLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#ff3333" />
+                        <stop offset="55%" stop-color="#ff3333" />
+                        <stop offset="100%" stop-color="#ffffff" />
+                    </linearGradient>
+                </defs>
                 <path d="M2 5.5 Q 70 1.5, 138 4.5" />
             </svg>
         </div>
@@ -610,16 +735,35 @@
             <section class="slide active" data-index="0">
                 <div class="art-stage">
                     <svg class="giant-svg svg-storefront" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="22" y="46" width="76" height="50" rx="8" fill="#212121" stroke="#E60000" stroke-width="3"/>
-                        <rect class="store-door-glow" x="34" y="58" width="52" height="28" rx="4" fill="rgba(230, 0, 0, 0.15)" stroke="#E60000" stroke-width="2.5"/>
+                        <defs>
+                            <linearGradient id="storeBodyGrad" x1="22" y1="46" x2="98" y2="96" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#2b3040"/>
+                                <stop offset="100%" stop-color="#171923"/>
+                            </linearGradient>
+                            <linearGradient id="storeGlassGrad" x1="34" y1="58" x2="86" y2="86" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/>
+                                <stop offset="100%" stop-color="#818cf8" stop-opacity="0.15"/>
+                            </linearGradient>
+                            <linearGradient id="awningRed" x1="16" y1="24" x2="104" y2="46" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#ff3333"/>
+                                <stop offset="100%" stop-color="#f97316"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Creative Ambient Sparkles -->
+                        <circle class="svg-sparkle" cx="16" cy="22" r="3" fill="#fbbf24"/>
+                        <circle class="svg-sparkle delay-1" cx="105" cy="28" r="2.5" fill="#38bdf8"/>
+                        <circle class="svg-sparkle delay-2" cx="20" cy="90" r="2.5" fill="#34d399"/>
+
+                        <rect x="22" y="46" width="76" height="50" rx="10" fill="url(#storeBodyGrad)" stroke="#38bdf8" stroke-width="2.2"/>
+                        <rect class="store-door-glow" x="34" y="58" width="52" height="28" rx="5" fill="url(#storeGlassGrad)" stroke="#38bdf8" stroke-width="2"/>
                         <g class="store-roof">
-                            <path d="M16 46L26 24H94L104 46H16Z" fill="#E60000"/>
-                            <path d="M16 46C16 51.5 20.5 55 26 55C31.5 55 36 51.5 36 46" fill="#cc0000"/>
-                            <path d="M36 46C36 51.5 40.5 55 46 55C51.5 55 56 51.5 56 46" fill="#ffffff" fill-opacity="0.95"/>
-                            <path d="M56 46C56 51.5 60.5 55 66 55C71.5 55 76 51.5 76 46" fill="#cc0000"/>
-                            <path d="M76 46C76 51.5 80.5 55 86 55C91.5 55 96 51.5 96 46" fill="#ffffff" fill-opacity="0.95"/>
+                            <path d="M16 46L26 24H94L104 46H16Z" fill="url(#awningRed)"/>
+                            <path d="M16 46C16 51.5 20.5 55 26 55C31.5 55 36 51.5 36 46" fill="#ff3333"/>
+                            <path d="M36 46C36 51.5 40.5 55 46 55C51.5 55 56 51.5 56 46" fill="#fbbf24"/>
+                            <path d="M56 46C56 51.5 60.5 55 66 55C71.5 55 76 51.5 76 46" fill="#38bdf8"/>
+                            <path d="M76 46C76 51.5 80.5 55 86 55C91.5 55 96 51.5 96 46" fill="#34d399"/>
                         </g>
-                        <circle cx="60" cy="72" r="6" fill="#ffffff"/>
+                        <circle cx="60" cy="72" r="6" fill="#fbbf24"/>
                     </svg>
                 </div>
 
@@ -627,7 +771,7 @@
                     Welcome, <span id="user-display-name" class="user-greeting-name">there</span>
                 </h1>
                 <p class="slide-subtitle">
-                    Your unified workspace for <strong>Electronics, Furniture, and Mobile</strong> retail.
+                    All-in-one hub for <strong>Electronics, Furniture & Mobile</strong>.
                 </p>
                 <div class="feature-chips">
                     <span class="chip"><span class="chip-dot"></span>Electronics</span>
@@ -640,23 +784,36 @@
             <section class="slide" data-index="1">
                 <div class="art-stage">
                     <svg class="giant-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="invBoxBottom" x1="22" y1="62" x2="98" y2="98" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#312e81"/>
+                                <stop offset="100%" stop-color="#1e1b4b"/>
+                            </linearGradient>
+                            <linearGradient id="invBoxTop" x1="30" y1="22" x2="90" y2="56" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#0284c7"/>
+                                <stop offset="100%" stop-color="#1e3a8a"/>
+                            </linearGradient>
+                        </defs>
+                        <circle class="svg-sparkle" cx="18" cy="30" r="3" fill="#34d399"/>
+                        <circle class="svg-sparkle delay-1" cx="102" cy="36" r="2.5" fill="#fbbf24"/>
+
                         <g class="box-bottom">
-                            <rect x="22" y="62" width="76" height="36" rx="6" fill="#212121" stroke="#E60000" stroke-width="3"/>
-                            <line x1="60" y1="62" x2="60" y2="76" stroke="#E60000" stroke-width="3" stroke-linecap="round"/>
-                            <rect x="32" y="82" width="22" height="6" rx="3" fill="rgba(255,255,255,0.2)"/>
+                            <rect x="22" y="62" width="76" height="36" rx="7" fill="url(#invBoxBottom)" stroke="#a855f7" stroke-width="2.4"/>
+                            <line x1="60" y1="62" x2="60" y2="76" stroke="#fbbf24" stroke-width="3.2" stroke-linecap="round"/>
+                            <rect x="32" y="82" width="22" height="6" rx="3" fill="#38bdf8"/>
                         </g>
                         <g class="box-top">
-                            <rect x="30" y="22" width="60" height="34" rx="6" fill="#2a2a2a" stroke="#E60000" stroke-width="3"/>
-                            <line x1="60" y1="22" x2="60" y2="34" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
-                            <circle cx="76" cy="42" r="4" fill="#00ba7c"/>
+                            <rect x="30" y="22" width="60" height="34" rx="7" fill="url(#invBoxTop)" stroke="#38bdf8" stroke-width="2.4"/>
+                            <line x1="60" y1="22" x2="60" y2="34" stroke="#fbbf24" stroke-width="3.2" stroke-linecap="round"/>
+                            <circle cx="76" cy="42" r="4.5" fill="#00ba7c"/>
                         </g>
-                        <line class="scan-laser" x1="14" y1="58" x2="106" y2="58" stroke="#E60000" stroke-width="3" stroke-linecap="round"/>
+                        <line class="scan-laser" x1="14" y1="58" x2="106" y2="58" stroke="#34d399" stroke-width="3" stroke-linecap="round"/>
                     </svg>
                 </div>
 
                 <h1 class="slide-title">Live Inventory</h1>
                 <p class="slide-subtitle">
-                    Monitor stock levels, serial numbers, and showroom units in <strong>real time</strong>.
+                    Track stock, serials, and showroom units <strong>instantly</strong>.
                 </p>
                 <div class="feature-chips">
                     <span class="chip"><span class="chip-dot"></span>Live Stock</span>
@@ -668,25 +825,34 @@
             <section class="slide" data-index="2">
                 <div class="art-stage">
                     <svg class="giant-svg pos-terminal" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="posBodyGrad" x1="24" y1="50" x2="96" y2="100" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#1e293b"/>
+                                <stop offset="100%" stop-color="#0f172a"/>
+                            </linearGradient>
+                        </defs>
+                        <circle class="svg-sparkle" cx="22" cy="28" r="2.8" fill="#fbbf24"/>
+                        <circle class="svg-sparkle delay-2" cx="98" cy="30" r="3" fill="#38bdf8"/>
+
                         <g class="receipt-paper">
                             <path d="M38 18H82V60H38V18Z" fill="#ffffff" rx="4"/>
-                            <line x1="46" y1="28" x2="74" y2="28" stroke="#121212" stroke-width="3" stroke-linecap="round"/>
-                            <line x1="46" y1="36" x2="66" y2="36" stroke="#E60000" stroke-width="3" stroke-linecap="round"/>
-                            <line x1="46" y1="44" x2="72" y2="44" stroke="#aaaaaa" stroke-width="2.5" stroke-linecap="round"/>
+                            <line x1="46" y1="28" x2="74" y2="28" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+                            <line x1="46" y1="36" x2="66" y2="36" stroke="#ff3333" stroke-width="3" stroke-linecap="round"/>
+                            <line x1="46" y1="44" x2="72" y2="44" stroke="#00ba7c" stroke-width="2.5" stroke-linecap="round"/>
                         </g>
-                        <rect x="24" y="50" width="72" height="50" rx="10" fill="#212121" stroke="#E60000" stroke-width="3"/>
-                        <line x1="34" y1="50" x2="86" y2="50" stroke="#E60000" stroke-width="4" stroke-linecap="round"/>
-                        <rect x="36" y="62" width="48" height="16" rx="4" fill="rgba(230, 0, 0, 0.2)" stroke="#E60000" stroke-width="2"/>
-                        <circle cx="42" cy="88" r="3" fill="#ffffff"/>
-                        <circle cx="54" cy="88" r="3" fill="#ffffff"/>
-                        <circle cx="66" cy="88" r="3" fill="#ffffff"/>
-                        <circle cx="78" cy="88" r="3" fill="#00ba7c"/>
+                        <rect x="24" y="50" width="72" height="50" rx="10" fill="url(#posBodyGrad)" stroke="#38bdf8" stroke-width="2.5"/>
+                        <line x1="34" y1="50" x2="86" y2="50" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+                        <rect x="36" y="62" width="48" height="16" rx="4" fill="rgba(56, 189, 248, 0.18)" stroke="#38bdf8" stroke-width="1.8"/>
+                        <circle cx="42" cy="88" r="3.2" fill="#fbbf24"/>
+                        <circle cx="54" cy="88" r="3.2" fill="#38bdf8"/>
+                        <circle cx="66" cy="88" r="3.2" fill="#f472b6"/>
+                        <circle cx="78" cy="88" r="3.2" fill="#00ba7c"/>
                     </svg>
                 </div>
 
                 <h1 class="slide-title">Express Billing</h1>
                 <p class="slide-subtitle">
-                    Generate GST invoices and dispatch digital receipts in <strong>seconds</strong>.
+                    Create GST bills and share digital receipts in <strong>seconds</strong>.
                 </p>
                 <div class="feature-chips">
                     <span class="chip"><span class="chip-dot"></span>Quick Invoicing</span>
@@ -698,18 +864,21 @@
             <section class="slide" data-index="3">
                 <div class="art-stage">
                     <svg class="giant-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="18" y="24" width="84" height="74" rx="10" fill="#212121" stroke="#E60000" stroke-width="3"/>
-                        <rect class="bar-1" x="32" y="68" width="10" height="18" rx="3" fill="rgba(255,255,255,0.35)"/>
-                        <rect class="bar-2" x="48" y="56" width="10" height="30" rx="3" fill="rgba(255,255,255,0.6)"/>
-                        <rect class="bar-3" x="64" y="46" width="10" height="40" rx="3" fill="#E60000"/>
+                        <circle class="svg-sparkle" cx="16" cy="20" r="2.8" fill="#a855f7"/>
+                        <circle class="svg-sparkle delay-1" cx="104" cy="18" r="3" fill="#34d399"/>
+
+                        <rect x="18" y="24" width="84" height="74" rx="11" fill="#181824" stroke="#818cf8" stroke-width="2.5"/>
+                        <rect class="bar-1" x="32" y="68" width="10" height="18" rx="3" fill="#38bdf8"/>
+                        <rect class="bar-2" x="48" y="56" width="10" height="30" rx="3" fill="#a855f7"/>
+                        <rect class="bar-3" x="64" y="46" width="10" height="40" rx="3" fill="#fbbf24"/>
                         <rect class="bar-4" x="80" y="34" width="10" height="52" rx="3" fill="#00ba7c"/>
-                        <path class="trend-line" d="M32 62L52 48L68 52L86 28" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path class="trend-line" d="M32 62L52 48L68 52L86 28" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
 
                 <h1 class="slide-title">Smart Auditing</h1>
                 <p class="slide-subtitle">
-                    Verify floor stock and export clean accounting summaries <strong>automatically</strong>.
+                    Verify floor stock and export clean reports <strong>automatically</strong>.
                 </p>
                 <div class="feature-chips">
                     <span class="chip"><span class="chip-dot"></span>Stock Audits</span>
@@ -721,22 +890,26 @@
             <section class="slide" data-index="4" id="final-slide">
                 <div class="art-stage">
                     <svg class="giant-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="svg-sparkle" cx="22" cy="26" r="3" fill="#fbbf24"/>
+                        <circle class="svg-sparkle delay-1" cx="98" cy="24" r="2.8" fill="#38bdf8"/>
+                        <circle class="svg-sparkle delay-2" cx="24" cy="70" r="2.5" fill="#f472b6"/>
+
                         <g class="rocket-group">
-                            <path class="rocket-flame" d="M52 88L60 108L68 88H52Z" fill="#E60000"/>
-                            <path class="rocket-flame" d="M55 88L60 100L65 88H55Z" fill="#ffffff"/>
-                            <path d="M42 66L28 82H44V66Z" fill="#cc0000"/>
-                            <path d="M78 66L92 82H76V66Z" fill="#cc0000"/>
-                            <path d="M60 18C46 34 42 52 42 78H78C78 52 74 34 60 18Z" fill="#ffffff" stroke="#E60000" stroke-width="2.5"/>
-                            <path d="M60 18C53 26 49 34 47 42H73C71 34 67 26 60 18Z" fill="#E60000"/>
-                            <circle cx="60" cy="56" r="8" fill="#121212" stroke="#E60000" stroke-width="3"/>
-                            <rect x="48" y="78" width="24" height="8" rx="3" fill="#212121"/>
+                            <path class="rocket-flame" d="M52 88L60 110L68 88H52Z" fill="#ff3333"/>
+                            <path class="rocket-flame" d="M55 88L60 101L65 88H55Z" fill="#fbbf24"/>
+                            <path d="M42 66L28 82H44V66Z" fill="#8b5cf6"/>
+                            <path d="M78 66L92 82H76V66Z" fill="#8b5cf6"/>
+                            <path d="M60 18C46 34 42 52 42 78H78C78 52 74 34 60 18Z" fill="#ffffff"/>
+                            <path d="M60 18C53 26 49 34 47 42H73C71 34 67 26 60 18Z" fill="#ff3333"/>
+                            <circle cx="60" cy="56" r="7.5" fill="#38bdf8" stroke="#121212" stroke-width="2.5"/>
+                            <rect x="48" y="78" width="24" height="8" rx="3" fill="#fbbf24"/>
                         </g>
                     </svg>
                 </div>
 
                 <h1 class="slide-title">All Set</h1>
                 <p class="slide-subtitle">
-                    Your account is verified and synced. Enter your <strong>workspace</strong> now.
+                    Account synced and verified. Launch your <strong>workspace</strong>.
                 </p>
                 <div class="feature-chips">
                     <span class="chip"><span class="chip-dot"></span>Cloud Synced</span>
@@ -795,6 +968,17 @@
         }
     }
 
+    // --- HELPER FOR SAFE & CLEAN LONG USER NAMES ---
+    function applyUserDisplayName(rawName) {
+        const cleanName = (rawName || '').trim() || 'there';
+        userDisplayNameEl.textContent = cleanName;
+        if (cleanName.length > 14) {
+            userDisplayNameEl.classList.add('long-name');
+        } else {
+            userDisplayNameEl.classList.remove('long-name');
+        }
+    }
+
     // --- SINGLE-READ FIRESTORE NAME FETCHER WITH SAFE FALLBACK ---
     (async function fetchUserNameOnce() {
         try {
@@ -821,16 +1005,16 @@
                 const data = snap.data();
                 const fetchedName = data && typeof data.name === 'string' ? data.name.trim() : '';
                 if (fetchedName) {
-                    userDisplayNameEl.textContent = fetchedName;
+                    applyUserDisplayName(fetchedName);
                     return;
                 }
             }
 
             if (user.displayName && user.displayName.trim()) {
-                userDisplayNameEl.textContent = user.displayName.trim();
+                applyUserDisplayName(user.displayName.trim());
             }
         } catch (_) {
-            userDisplayNameEl.textContent = 'there';
+            applyUserDisplayName('there');
         }
     })();
 
@@ -844,16 +1028,24 @@
             finalSlide.classList.add('rocket-launching');
             setTimeout(() => {
                 window.location.replace('index.html');
-            }, 600); // slightly longer timeout to match extreme cinematic animation
+            }, 520);
         } else {
             window.location.replace('index.html');
         }
     }
 
-    function goToSlide(index) {
+    function triggerSlideTextKineticAnimation(slideEl) {
+        if (!slideEl) return;
+        slideEl.classList.remove('text-kinetic-shake');
+        void slideEl.offsetWidth; // Force reflow so animation triggers cleanly every time
+        slideEl.classList.add('text-kinetic-shake');
+    }
+
+    function goToSlide(index, withKineticText = true) {
         if (isLaunching) return;
         const clamped = Math.max(0, Math.min(TOTAL_SLIDES - 1, index));
-        if (clamped !== currentIndex) {
+        const changed = clamped !== currentIndex;
+        if (changed) {
             vibrate(10);
         }
         currentIndex = clamped;
@@ -862,8 +1054,16 @@
         track.style.transform = `translate3d(${offsetPercent}%, 0, 0)`;
 
         slides.forEach((s, idx) => {
-            s.classList.toggle('active', idx === currentIndex);
+            const isActive = idx === currentIndex;
+            s.classList.toggle('active', isActive);
+            if (!isActive) {
+                s.classList.remove('text-kinetic-shake');
+            }
         });
+
+        if (withKineticText && changed) {
+            triggerSlideTextKineticAnimation(slides[currentIndex]);
+        }
 
         dots.forEach((d, idx) => {
             d.classList.toggle('active', idx === currentIndex);
@@ -878,7 +1078,7 @@
     // --- BUTTON & DOT LISTENERS ---
     nextBtn.addEventListener('click', () => {
         if (currentIndex < TOTAL_SLIDES - 1) {
-            goToSlide(currentIndex + 1);
+            goToSlide(currentIndex + 1, true);
         } else {
             redirectToDashboard(true);
         }
@@ -891,7 +1091,7 @@
     dots.forEach((dot) => {
         dot.addEventListener('click', () => {
             const target = parseInt(dot.getAttribute('data-slide'), 10);
-            if (!isNaN(target)) goToSlide(target);
+            if (!isNaN(target)) goToSlide(target, true);
         });
     });
 
@@ -923,7 +1123,7 @@
             isScrollingVertically = true;
             isSwiping = false;
             track.classList.remove('dragging');
-            goToSlide(currentIndex);
+            goToSlide(currentIndex, false);
             return;
         }
 
@@ -944,11 +1144,11 @@
 
         const threshold = Math.min(80, (viewport.clientWidth || 360) * 0.16);
         if (deltaX < -threshold && currentIndex < TOTAL_SLIDES - 1) {
-            goToSlide(currentIndex + 1);
+            goToSlide(currentIndex + 1, true);
         } else if (deltaX > threshold && currentIndex > 0) {
-            goToSlide(currentIndex - 1);
+            goToSlide(currentIndex - 1, true);
         } else {
-            goToSlide(currentIndex);
+            goToSlide(currentIndex, false);
         }
         deltaX = 0;
     }
@@ -959,9 +1159,9 @@
     // Keyboard navigation support for desktop testing
     window.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
-            if (currentIndex < TOTAL_SLIDES - 1) goToSlide(currentIndex + 1);
+            if (currentIndex < TOTAL_SLIDES - 1) goToSlide(currentIndex + 1, true);
         } else if (e.key === 'ArrowLeft') {
-            if (currentIndex > 0) goToSlide(currentIndex - 1);
+            if (currentIndex > 0) goToSlide(currentIndex - 1, true);
         } else if (e.key === 'Enter' && currentIndex === TOTAL_SLIDES - 1) {
             redirectToDashboard(true);
         }
