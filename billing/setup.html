@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Setup - Meena Marketing</title>
+    
+    <!-- Seamless Mobile PWA Status Bar Color matching the Meena Marketing Dark Theme -->
+    <meta name="theme-color" content="#121212">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Meena Marketing Signature Dark Theme Palette */
+            --bg: #121212;
+            --surface: #1a1a1a;
+            --surface-elevated: #222222;
+            --text: #ffffff;
+            --text-muted: #9e9e9e;
+            --accent: #ff3333;
+            --accent-hover: #d92626;
+            --accent-glow: rgba(255, 51, 51, 0.28);
+            --success: #00ba7c;
+            --border: rgba(255, 255, 255, 0.1);
+            --border-strong: rgba(255, 255, 255, 0.18);
+        }
+
+        /* Completely hide scrollbars across all major browsers */
+        ::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+
+        * {
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            outline: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html, body {
+        background-color: #121212;
+        background-image: 
+        radial-gradient(circle at top right, rgba(255, 51, 51, 0.08), transparent 45%), 
+        radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.02), transparent 45%);
+       color: var(--text);
+       height: 100%;
+       height: 100dvh;
+       width: 100%;
+       overflow: hidden;
+       position: fixed;
+       inset: 0;
+       -ms-overflow-style: none !important;
+       scrollbar-width: none !important;
+       backface-visibility: hidden;
+       transform: translateZ(0);
+       }
+
+
+        /* --- MAIN APP SHELL (MOBILE DEFAULT: FULLSCREEN VERTICAL NATIVE APP) --- */
+        .onboarding-shell {
+            width: 100%;
+            height: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1;
+            backface-visibility: hidden;
+            transform: translate3d(0, 0, 0);
+        }
+
+        /* --- TOP HEADER BAR (Meena in Red, Marketing in White) --- */
+        .top-bar {
+            height: 58px;
+            padding: 16px 24px 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-shrink: 0;
+            z-index: 20;
+        }
+
+        .brand-signature {
+            position: relative;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .brand-handwriting {
+            font-family: 'Caveat', cursive;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            line-height: 1.05;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: baseline;
+            gap: 6px;
+            clip-path: inset(0 100% 0 0);
+            animation: handwritingReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards;
+            will-change: clip-path;
+        }
+
+        .brand-meena {
+            font-family: 'Caveat', cursive;
+            color: var(--accent);
+            text-shadow: 0 2px 14px rgba(255, 51, 51, 0.35);
+        }
+
+        .brand-marketing {
+            font-family: 'Caveat', cursive;
+            color: #ffffff;
+        }
+
+        .brand-underline {
+            width: 100%;
+            height: 6px;
+            margin-top: 2px;
+            overflow: visible;
+        }
+
+        .brand-underline path {
+            stroke: url(#brandLineGrad);
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            fill: none;
+            stroke-dasharray: 140;
+            stroke-dashoffset: 140;
+            animation: signatureLineDraw 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+        }
+
+        @keyframes handwritingReveal {
+            0% { clip-path: inset(0 100% 0 0); }
+            100% { clip-path: inset(0 0% 0 0); }
+        }
+
+        @keyframes signatureLineDraw {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* --- SLIDER VIEWPORT & TRACK --- */
+        .slider-viewport {
+            flex: 1;
+            width: 100%;
+            min-height: 0;
+            overflow: hidden;
+            position: relative;
+            touch-action: pan-y;
+        }
+
+        .slider-track {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            width: 500%;
+            height: 100%;
+            flex-shrink: 0;
+            transition: transform 0.54s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+        }
+
+        .slider-track.dragging {
+            transition: none !important;
+        }
+
+        .slide {
+            width: 20%;
+            min-width: 20%;
+            max-width: 20%;
+            flex: 0 0 20%;
+            height: 100%;
+            padding: 4px 24px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backface-visibility: hidden;
+        }
+
+        /* --- HALF-SCREEN NATIVE APP HERO ILLUSTRATION STAGE (NO BOX) --- */
+        .art-stage {
+            width: 100%;
+            height: 58%;
+            min-height: 210px;
+            max-height: 360px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+            opacity: 0;
+            transform: scale(0.88) translateY(16px);
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+        }
+
+        /* Ambient multi-color radial glow behind the half-screen scene */
+        .art-stage::before {
+            content: '';
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.14) 0%, rgba(168, 85, 247, 0.1) 42%, rgba(255, 51, 51, 0.08) 70%, transparent 80%);
+            filter: blur(22px);
+            z-index: 0;
+            animation: auraBreathe 4.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes auraBreathe {
+            0% { transform: scale(0.9); opacity: 0.65; }
+            100% { transform: scale(1.12); opacity: 1; }
+        }
+
+        .slide.active .art-stage {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* Wide Interactive Vector Scene inside the Half-Screen Stage */
+        .hero-scene-svg {
+            width: 100%;
+            height: 100%;
+            max-width: 380px;
+            max-height: 320px;
+            position: relative;
+            z-index: 2;
+            overflow: visible;
+            filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.6));
+        }
+
+        /* --- SELF-DRAWING & MOVING ANIMATIONS FOR EVERY SVG ELEMENT --- */
+        .draw-path {
+            stroke-dasharray: 320;
+            stroke-dashoffset: 320;
+        }
+
+        .slide.active .draw-path {
+            animation: svgStrokeDraw 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .slide.active .draw-delay-1 { animation-delay: 0.12s; }
+        .slide.active .draw-delay-2 { animation-delay: 0.24s; }
+        .slide.active .draw-delay-3 { animation-delay: 0.36s; }
+
+        @keyframes svgStrokeDraw {
+            0% { stroke-dashoffset: 320; opacity: 0.25; }
+            100% { stroke-dashoffset: 0; opacity: 1; }
+        }
+
+        /* Centerpiece SVG Continuous Motion */
+        .centerpiece-group {
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+
+        .slide.active .centerpiece-group {
+            animation: centerpieceFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes centerpieceFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-7px); }
+        }
+
+        /* 6 Orbiting / Floating Emoji-Style Vector Icons per Screen */
+        .emoji-node {
+            transform-box: fill-box;
+            transform-origin: center;
+            opacity: 0;
+        }
+
+        .slide.active .emoji-node.e-1 {
+            animation: emojiPopIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.08s forwards,
+                       emojiFloatA 3.4s ease-in-out 0.65s infinite;
+        }
+        .slide.active .emoji-node.e-2 {
+            animation: emojiPopIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s forwards,
+                       emojiFloatB 3.8s ease-in-out 0.72s infinite;
+        }
+        .slide.active .emoji-node.e-3 {
+            animation: emojiPopIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.22s forwards,
+                       emojiFloatC 3.2s ease-in-out 0.8s infinite;
+        }
+        .slide.active .emoji-node.e-4 {
+            animation: emojiPopIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.29s forwards,
+                       emojiFloatB 4.1s ease-in-out 0.86s infinite;
+        }
+        .slide.active .emoji-node.e-5 {
+            animation: emojiPopIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.36s forwards,
+                       emojiFloatA 3.6s ease-in-out 0.92s infinite;
+        }
+        .slide.active .emoji-node.e-6 {
+            animation: emojiPopIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.43s forwards,
+                       emojiFloatC 3.9s ease-in-out 0.98s infinite;
+        }
+
+        @keyframes emojiPopIn {
+            0% { opacity: 0; transform: scale(0.35) translateY(18px) rotate(-12deg); }
+            100% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
+        }
+
+        @keyframes emojiFloatA {
+            0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+            50% { transform: translate3d(0, -8px, 0) rotate(5deg); }
+        }
+
+        @keyframes emojiFloatB {
+            0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+            50% { transform: translate3d(4px, -7px, 0) rotate(-6deg); }
+        }
+
+        @keyframes emojiFloatC {
+            0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(-4px, -6px, 0) scale(1.06); }
+        }
+
+        /* Specialized internal SVG animations per slide */
+        .slide.active .scan-laser {
+            animation: laserSweep 2.2s ease-in-out infinite;
+        }
+        @keyframes laserSweep {
+            0%, 100% { transform: translateY(-16px); opacity: 0.35; }
+            50% { transform: translateY(18px); opacity: 1; }
+        }
+
+        .slide.active .receipt-paper {
+            animation: receiptSmooth 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        @keyframes receiptSmooth {
+            0% { transform: translateY(12px); opacity: 0; }
+            25% { transform: translateY(0px); opacity: 1; }
+            75% { transform: translateY(-6px); opacity: 1; }
+            100% { transform: translateY(-14px); opacity: 0; }
+        }
+
+        .bar-1, .bar-2, .bar-3, .bar-4 {
+            transform-box: fill-box;
+            transform-origin: bottom;
+            transform: scaleY(0.08);
+        }
+        .slide.active .bar-1 { animation: growBar 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards; }
+        .slide.active .bar-2 { animation: growBar 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.18s forwards; }
+        .slide.active .bar-3 { animation: growBar 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.26s forwards; }
+        .slide.active .bar-4 { animation: growBar 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.34s forwards; }
+
+        @keyframes growBar {
+            0% { transform: scaleY(0.08); }
+            100% { transform: scaleY(1); }
+        }
+
+        .slide.active .rocket-flame {
+            animation: flamePulse 0.25s ease-in-out infinite alternate;
+            transform-origin: center top;
+            transform-box: fill-box;
+        }
+        .rocket-launching .centerpiece-group {
+            animation: rocketBlastOff 0.55s cubic-bezier(0.55, 0.05, 0.67, 0.19) forwards !important;
+        }
+
+        @keyframes flamePulse {
+            0% { transform: scaleY(0.82); opacity: 0.78; }
+            100% { transform: scaleY(1.25); opacity: 1; }
+        }
+        @keyframes rocketBlastOff {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-260px) scale(1.12); opacity: 0; }
+        }
+
+        /* --- SHORT, SWEET & PUNCHY TEXT BLOCK --- */
+        .slide-copy {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 360px;
+            margin-top: 4px;
+            z-index: 5;
+        }
+
+        .slide-title {
+            font-size: clamp(26px, 6.2vw, 32px);
+            font-weight: 800;
+            line-height: 1.18;
+            letter-spacing: -0.7px;
+            color: var(--text);
+            margin-bottom: 10px;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.04s, opacity 0.4s ease 0.04s;
+        }
+
+        /* Instant Animated Multi-Color Gradient Greeting ("there") */
+        .user-greeting-name {
+            display: inline-block;
+            font-weight: 800;
+            background: linear-gradient(
+                110deg,
+                #38bdf8 0%,
+                #34d399 28%,
+                #fbbf24 55%,
+                #f472b6 80%,
+                #38bdf8 100%
+            );
+            background-size: 220% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: #38bdf8;
+            animation: nameColorFlow 4s linear infinite;
+        }
+
+        @keyframes nameColorFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 220% 50%; }
+        }
+
+        .slide-subtitle {
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.48;
+            color: var(--text-muted);
+            max-width: 290px;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(14px);
+            transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.09s, opacity 0.4s ease 0.09s;
+        }
+
+        .slide-subtitle strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .slide.active .slide-title,
+        .slide.active .slide-subtitle {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Kinetic Text Shake & Glide when clicking Next */
+        @keyframes kineticTextMove {
+            0% { transform: translate3d(0, 0, 0); }
+            25% { transform: translate3d(10px, -2px, 0) scale(1.015); }
+            55% { transform: translate3d(-5px, 1px, 0); }
+            80% { transform: translate3d(2px, 0, 0); }
+            100% { transform: translate3d(0, 0, 0); }
+        }
+
+        .slide.active.text-kinetic-shake .slide-title {
+            animation: kineticTextMove 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .slide.active.text-kinetic-shake .slide-subtitle {
+            animation: kineticTextMove 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.03s;
+        }
+
+        /* --- BOTTOM NAVIGATION BAR (ZERO-OVERLAP 3-COLUMN GRID) --- */
+        .bottom-nav {
+           width: 100%;
+           padding: 12px 16px calc(25% + env(safe-area-inset-bottom, 0px));
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           position: relative;
+           flex-shrink: 0;
+           z-index: 20;
+       }
+
+        .skip-btn {
+            justify-self: start;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 8px 10px;
+            margin-left: -6px;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .skip-btn:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .skip-btn:active {
+            transform: scale(0.95);
+        }
+
+        .skip-btn.hidden-skip {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-8px);
+        }
+
+        .dots-container {
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           gap: 6px;
+           padding: 6px 12px;
+           border-radius: 9999px;
+           background: rgba(255, 255, 255, 0.035);
+           border: 1px solid rgba(255, 255, 255, 0.07);
+           position: absolute;
+           left: 50%;
+           transform: translateX(-50%);
+         }
+
+        .nav-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.22);
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            flex-shrink: 0;
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .nav-dot:hover {
+            background: rgba(255, 255, 255, 0.45);
+        }
+
+        .nav-dot.active {
+            width: 18px;
+            background: linear-gradient(90deg, #ff3333, #ff7b54);
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.45);
+        }
+
+        .next-action-btn {
+            justify-self: end;
+            height: 38px;
+            padding: 0 16px;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: #ffffff;
+            color: #121212;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            white-space: nowrap;
+        }
+
+        .next-action-btn:hover {
+            background: #f2f2f2;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+        }
+
+        .next-action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .next-action-btn svg {
+            width: 15px;
+            height: 15px;
+            fill: currentColor;
+            transition: transform 0.25s ease;
+            flex-shrink: 0;
+        }
+
+        .next-action-btn:hover svg {
+            transform: translateX(2px);
+        }
+
+        .next-action-btn.final-mode {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 8px 22px var(--accent-glow);
+        }
+
+        .next-action-btn.final-mode:hover {
+            box-shadow: 0 10px 26px rgba(255, 51, 51, 0.45);
+        }
+
+        .btn-label {
+            white-space: nowrap;
+        }
+
+        /* ============================================================================
+           COMPLETELY DIFFERENT DESKTOP UI: NEAT WIDESCREEN RECTANGLE (ZERO SCROLLING)
+           ============================================================================ */
+        @media (min-width: 820px) {
+            html, body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #08080a;
+                background-image: 
+                    radial-gradient(circle at 20% 25%, rgba(255, 51, 51, 0.08), transparent 45%),
+                    radial-gradient(circle at 80% 75%, rgba(56, 189, 248, 0.07), transparent 45%);
+            }
+
+            .onboarding-shell {
+                width: min(92vw, 900px) !important;
+                max-width: 900px !important;
+                height: min(82dvh, 500px) !important;
+                min-height: 430px;
+                border-radius: 28px;
+                border: 1px solid var(--border-strong);
+                background: linear-gradient(135deg, #18181c 0%, #121214 100%);
+                box-shadow: 
+                    0 30px 80px rgba(0, 0, 0, 0.85),
+                    0 0 0 1px rgba(255, 255, 255, 0.06),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+                overflow: hidden;
+            }
+
+            .top-bar {
+                height: 56px;
+                padding: 18px 36px 0;
+            }
+
+            /* Horizontal Split Slide Layout on Desktop */
+            .slide {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                text-align: left;
+                padding: 0 44px;
+                gap: 32px;
+            }
+
+            .art-stage {
+                width: 54%;
+                height: 100%;
+                max-height: 340px;
+                margin-bottom: 0;
+                background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03), transparent 70%);
+                border-radius: 24px;
+            }
+
+            .hero-scene-svg {
+                max-width: 400px;
+                max-height: 310px;
+            }
+
+            .slide-copy {
+                width: 46%;
+                max-width: 360px;
+                align-items: flex-start;
+                text-align: left;
+                margin-top: 0;
+            }
+
+            .slide-title {
+                font-size: 34px;
+                margin-bottom: 12px;
+            }
+
+            .slide-subtitle {
+                font-size: 16px;
+                max-width: 340px;
+            }
+
+            .bottom-nav {
+                height: 68px;
+                padding: 0 36px 18px !important;
+            }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+<div class="onboarding-shell">
+    <!-- Top Header: Meena in Red, Marketing in White -->
+    <header class="top-bar">
+        <div class="brand-signature" aria-label="Meena Marketing">
+            <span class="brand-handwriting">
+                <span class="brand-meena">Meena</span>
+                <span class="brand-marketing">Marketing</span>
+            </span>
+            <svg class="brand-underline" viewBox="0 0 140 8" preserveAspectRatio="none">
+                <defs>
+                    <linearGradient id="brandLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#ff3333" />
+                        <stop offset="55%" stop-color="#ff3333" />
+                        <stop offset="100%" stop-color="#ffffff" />
+                    </linearGradient>
+                </defs>
+                <path d="M2 5.5 Q 70 1.5, 138 4.5" />
+            </svg>
+        </div>
+    </header>
+
+    <!-- 5-Section Swipeable Viewport -->
+    <main class="slider-viewport" id="slider-viewport">
+        <div class="slider-track" id="slider-track">
+
+            <!-- =========================================================
+                 SECTION 1: HELLO THERE (STOREFRONT + 6 FLOATING EMOJI SVGS)
+                 ========================================================= -->
+            <section class="slide active" data-index="0">
+                <div class="art-stage">
+                    <svg class="hero-scene-svg" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="s1StoreBody" x1="100" y1="90" x2="220" y2="195" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#272c3d"/>
+                                <stop offset="100%" stop-color="#151822"/>
+                            </linearGradient>
+                            <linearGradient id="s1Awning" x1="92" y1="68" x2="228" y2="104" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#ff3333"/>
+                                <stop offset="100%" stop-color="#f97316"/>
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Decorative Orbit Ring (Self-Drawing) -->
+                        <ellipse class="draw-path" cx="160" cy="135" rx="128" ry="88" stroke="rgba(255,255,255,0.08)" stroke-width="1.5" stroke-dasharray="6 6"/>
+
+                        <!-- Centerpiece: Grand Retail Hub -->
+                        <g class="centerpiece-group">
+                            <rect class="draw-path" x="104" y="96" width="112" height="84" rx="14" fill="url(#s1StoreBody)" stroke="#38bdf8" stroke-width="2.5"/>
+                            <rect class="draw-path draw-delay-1" x="122" y="116" width="76" height="46" rx="8" fill="rgba(56, 189, 248, 0.16)" stroke="#38bdf8" stroke-width="2"/>
+                            <path class="draw-path" d="M94 96L110 66H210L226 96H94Z" fill="url(#s1Awning)" stroke="#ff3333" stroke-width="1.5"/>
+                            <path d="M94 96C94 104 101 109 110 109C119 109 126 104 126 96" fill="#ff3333"/>
+                            <path d="M126 96C126 104 133 109 142 109C151 109 158 104 158 96" fill="#fbbf24"/>
+                            <path d="M158 96C158 104 165 109 174 109C183 109 190 104 190 96" fill="#38bdf8"/>
+                            <path d="M190 96C190 104 197 109 206 109C215 109 222 104 222 96" fill="#34d399"/>
+                            <circle cx="160" cy="139" r="9" fill="#fbbf24"/>
+                        </g>
+
+                        <!-- Emoji SVG 1: Smartphone (Top Left) -->
+                        <g class="emoji-node e-1">
+                            <rect class="draw-path" x="30" y="34" width="32" height="54" rx="8" fill="#1e1b4b" stroke="#a855f7" stroke-width="2.2"/>
+                            <line class="draw-path draw-delay-1" x1="41" y1="41" x2="51" y2="41" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="46" cy="79" r="2.5" fill="#fbbf24"/>
+                        </g>
+
+                        <!-- Emoji SVG 2: Smart TV / Monitor (Top Right) -->
+                        <g class="emoji-node e-2">
+                            <rect class="draw-path" x="242" y="32" width="54" height="38" rx="7" fill="#0f172a" stroke="#38bdf8" stroke-width="2.2"/>
+                            <polygon points="265,44 265,58 277,51" fill="#ff3333"/>
+                            <path class="draw-path draw-delay-1" d="M258 76H280" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+                        </g>
+
+                        <!-- Emoji SVG 3: Luxury Sofa / Furniture (Middle Left) -->
+                        <g class="emoji-node e-3">
+                            <rect class="draw-path" x="18" y="132" width="52" height="24" rx="6" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
+                            <rect class="draw-path draw-delay-1" x="12" y="142" width="64" height="18" rx="5" fill="#047857" stroke="#34d399" stroke-width="2"/>
+                        </g>
+
+                        <!-- Emoji SVG 4: Washing Machine / Appliance (Middle Right) -->
+                        <g class="emoji-node e-4">
+                            <rect class="draw-path" x="252" y="122" width="44" height="52" rx="8" fill="#31102f" stroke="#f472b6" stroke-width="2.2"/>
+                            <circle class="draw-path draw-delay-1" cx="274" cy="152" r="12" fill="rgba(244,114,182,0.2)" stroke="#fbbf24" stroke-width="2.2"/>
+                            <circle cx="262" cy="131" r="2" fill="#38bdf8"/>
+                            <circle cx="269" cy="131" r="2" fill="#34d399"/>
+                        </g>
+
+                        <!-- Emoji SVG 5: Shopping Bag (Bottom Left) -->
+                        <g class="emoji-node e-5">
+                            <rect class="draw-path" x="52" y="194" width="38" height="40" rx="7" fill="#451a03" stroke="#fbbf24" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M63 194V187C63 182 67 179 71 179C75 179 79 182 79 187V194" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round"/>
+                            <circle cx="71" cy="214" r="5" fill="#ff3333"/>
+                        </g>
+
+                        <!-- Emoji SVG 6: Instant Lightning Badge (Bottom Right) -->
+                        <g class="emoji-node e-6">
+                            <circle class="draw-path" cx="238" cy="214" r="22" fill="#1e293b" stroke="#fbbf24" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M241 199L230 215H239L236 229L248 212H239L241 199Z" fill="#fbbf24" stroke="#fbbf24" stroke-width="1.2" stroke-linejoin="round"/>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="slide-copy">
+                    <h1 class="slide-title">
+                        Hello, <span class="user-greeting-name">there</span>
+                    </h1>
+                    <p class="slide-subtitle">
+                        Unified retail hub for <strong>Electronics, Furniture & Mobiles</strong>.
+                    </p>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 SECTION 2: LIVE INVENTORY (CRATES + 6 FLOATING EMOJI SVGS)
+                 ========================================================= -->
+            <section class="slide" data-index="1">
+                <div class="art-stage">
+                    <svg class="hero-scene-svg" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <ellipse class="draw-path" cx="160" cy="135" rx="128" ry="88" stroke="rgba(56,189,248,0.1)" stroke-width="1.5" stroke-dasharray="6 6"/>
+
+                        <!-- Centerpiece: Smart Inventory Crates + Laser -->
+                        <g class="centerpiece-group">
+                            <rect class="draw-path" x="106" y="134" width="108" height="52" rx="10" fill="#1e1b4b" stroke="#a855f7" stroke-width="2.5"/>
+                            <line class="draw-path draw-delay-1" x1="160" y1="134" x2="160" y2="154" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
+                            <rect x="122" y="164" width="30" height="8" rx="4" fill="#38bdf8"/>
+
+                            <rect class="draw-path draw-delay-1" x="118" y="74" width="84" height="48" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line class="draw-path draw-delay-2" x1="160" y1="74" x2="160" y2="92" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
+                            <circle cx="182" cy="102" r="6" fill="#00ba7c"/>
+
+                            <line class="scan-laser" x1="90" y1="128" x2="230" y2="128" stroke="#34d399" stroke-width="3.5" stroke-linecap="round"/>
+                        </g>
+
+                        <!-- Emoji SVG 1: Barcode Scanner Tag -->
+                        <g class="emoji-node e-1">
+                            <rect class="draw-path" x="24" y="38" width="52" height="36" rx="7" fill="#181826" stroke="#38bdf8" stroke-width="2.2"/>
+                            <line class="draw-path draw-delay-1" x1="35" y1="47" x2="35" y2="65" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+                            <line class="draw-path draw-delay-1" x1="43" y1="47" x2="43" y2="65" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                            <line class="draw-path draw-delay-2" x1="51" y1="47" x2="51" y2="65" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                            <line class="draw-path draw-delay-2" x1="61" y1="47" x2="61" y2="65" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round"/>
+                        </g>
+
+                        <!-- Emoji SVG 2: QR Matrix Badge -->
+                        <g class="emoji-node e-2">
+                            <rect class="draw-path" x="246" y="34" width="46" height="46" rx="9" fill="#1e1b4b" stroke="#a855f7" stroke-width="2.2"/>
+                            <rect x="255" y="43" width="10" height="10" rx="2" stroke="#fbbf24" stroke-width="2.2"/>
+                            <rect x="273" y="43" width="10" height="10" rx="2" stroke="#38bdf8" stroke-width="2.2"/>
+                            <rect x="255" y="61" width="10" height="10" rx="2" stroke="#34d399" stroke-width="2.2"/>
+                            <circle cx="278" cy="66" r="4" fill="#ff3333"/>
+                        </g>
+
+                        <!-- Emoji SVG 3: Fast Delivery Truck -->
+                        <g class="emoji-node e-3">
+                            <rect class="draw-path" x="16" y="130" width="38" height="26" rx="5" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M54 138H68L74 147V156H54V138Z" fill="#047857" stroke="#34d399" stroke-width="2.2" stroke-linejoin="round"/>
+                            <circle cx="28" cy="158" r="5" fill="#fbbf24"/>
+                            <circle cx="62" cy="158" r="5" fill="#fbbf24"/>
+                        </g>
+
+                        <!-- Emoji SVG 4: Alert Bell -->
+                        <g class="emoji-node e-4">
+                            <circle class="draw-path" cx="274" cy="144" r="23" fill="#2e1018" stroke="#ff3333" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M274 129C267 129 263 134 263 141V148L259 152H289L285 148V141C285 134 281 129 274 129Z" fill="#fbbf24"/>
+                            <circle cx="274" cy="156" r="3" fill="#ffffff"/>
+                        </g>
+
+                        <!-- Emoji SVG 5: Verified Stock Shield -->
+                        <g class="emoji-node e-5">
+                            <path class="draw-path" d="M68 186L88 194V210C88 223 79 232 68 236C57 232 48 223 48 210V194L68 186Z" fill="#0f291e" stroke="#00ba7c" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M60 211L66 217L77 205" stroke="#34d399" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+
+                        <!-- Emoji SVG 6: Showroom Location Pin -->
+                        <g class="emoji-node e-6">
+                            <path class="draw-path" d="M244 186C233 186 225 194 225 205C225 219 244 235 244 235C244 235 263 219 263 205C263 194 255 186 244 186Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2.2"/>
+                            <circle cx="244" cy="204" r="6" fill="#ff3333"/>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="slide-copy">
+                    <h1 class="slide-title">Live Inventory</h1>
+                    <p class="slide-subtitle">
+                        Track stock, serials, and floor units in <strong>real time</strong>.
+                    </p>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 SECTION 3: EXPRESS BILLING (POS + 6 FLOATING EMOJI SVGS)
+                 ========================================================= -->
+            <section class="slide" data-index="2">
+                <div class="art-stage">
+                    <svg class="hero-scene-svg" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <ellipse class="draw-path" cx="160" cy="135" rx="128" ry="88" stroke="rgba(251,191,36,0.1)" stroke-width="1.5" stroke-dasharray="6 6"/>
+
+                        <!-- Centerpiece: Express POS + Animated Receipt -->
+                        <g class="centerpiece-group">
+                            <g class="receipt-paper">
+                                <rect class="draw-path" x="126" y="54" width="68" height="62" rx="6" fill="#ffffff"/>
+                                <line x1="138" y1="70" x2="182" y2="70" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="138" y1="82" x2="170" y2="82" stroke="#ff3333" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="138" y1="94" x2="178" y2="94" stroke="#00ba7c" stroke-width="3" stroke-linecap="round"/>
+                            </g>
+                            <rect class="draw-path" x="106" y="104" width="108" height="76" rx="14" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line class="draw-path draw-delay-1" x1="120" y1="104" x2="200" y2="104" stroke="#fbbf24" stroke-width="4.5" stroke-linecap="round"/>
+                            <rect class="draw-path draw-delay-1" x="124" y="122" width="72" height="24" rx="6" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+                            <circle cx="132" cy="162" r="4.5" fill="#fbbf24"/>
+                            <circle cx="150" cy="162" r="4.5" fill="#38bdf8"/>
+                            <circle cx="168" cy="162" r="4.5" fill="#f472b6"/>
+                            <circle cx="186" cy="162" r="4.5" fill="#00ba7c"/>
+                        </g>
+
+                        <!-- Emoji SVG 1: Smart Card -->
+                        <g class="emoji-node e-1">
+                            <rect class="draw-path" x="22" y="40" width="56" height="36" rx="7" fill="#31102f" stroke="#f472b6" stroke-width="2.2"/>
+                            <line class="draw-path draw-delay-1" x1="22" y1="52" x2="78" y2="52" stroke="#fbbf24" stroke-width="3"/>
+                            <rect x="30" y="60" width="12" height="8" rx="2" fill="#38bdf8"/>
+                        </g>
+
+                        <!-- Emoji SVG 2: Gold Currency Coin -->
+                        <g class="emoji-node e-2">
+                            <circle class="draw-path" cx="268" cy="54" r="22" fill="#451a03" stroke="#fbbf24" stroke-width="2.5"/>
+                            <path class="draw-path draw-delay-1" d="M261 45H275M261 52H275M261 45C268 45 271 48 271 52C271 56 267 59 261 59L273 66" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+
+                        <!-- Emoji SVG 3: Contactless / UPI Wave -->
+                        <g class="emoji-node e-3">
+                            <circle class="draw-path" cx="42" cy="144" r="22" fill="#0f172a" stroke="#38bdf8" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M35 150C38 145 45 145 48 150" stroke="#34d399" stroke-width="2.4" stroke-linecap="round"/>
+                            <path class="draw-path draw-delay-2" d="M31 144C37 136 47 136 53 144" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round"/>
+                            <circle cx="42" cy="154" r="2.5" fill="#fbbf24"/>
+                        </g>
+
+                        <!-- Emoji SVG 4: Instant Share / Dispatch Plane -->
+                        <g class="emoji-node e-4">
+                            <circle class="draw-path" cx="274" cy="144" r="22" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M262 143L284 134L277 156L272 147L262 143Z" fill="#34d399" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+                        </g>
+
+                        <!-- Emoji SVG 5: GST Verified Star Badge -->
+                        <g class="emoji-node e-5">
+                            <circle class="draw-path" cx="68" cy="212" r="21" fill="#1e1b4b" stroke="#a855f7" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M60 212L66 218L77 206" stroke="#fbbf24" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+
+                        <!-- Emoji SVG 6: Tax Calculator Widget -->
+                        <g class="emoji-node e-6">
+                            <rect class="draw-path" x="228" y="190" width="38" height="46" rx="8" fill="#181824" stroke="#ff3333" stroke-width="2.2"/>
+                            <rect x="235" y="197" width="24" height="10" rx="3" fill="#38bdf8"/>
+                            <circle cx="239" cy="216" r="2.5" fill="#fbbf24"/>
+                            <circle cx="247" cy="216" r="2.5" fill="#ffffff"/>
+                            <circle cx="255" cy="216" r="2.5" fill="#34d399"/>
+                            <circle cx="239" cy="226" r="2.5" fill="#ffffff"/>
+                            <circle cx="247" cy="226" r="2.5" fill="#ff3333"/>
+                            <circle cx="255" cy="226" r="2.5" fill="#fbbf24"/>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="slide-copy">
+                    <h1 class="slide-title">Express Billing</h1>
+                    <p class="slide-subtitle">
+                        Create GST invoices and dispatch digital receipts in <strong>seconds</strong>.
+                    </p>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 SECTION 4: SMART AUDITING (ANALYTICS + 6 FLOATING EMOJI SVGS)
+                 ========================================================= -->
+            <section class="slide" data-index="3">
+                <div class="art-stage">
+                    <svg class="hero-scene-svg" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <ellipse class="draw-path" cx="160" cy="135" rx="128" ry="88" stroke="rgba(168,85,247,0.12)" stroke-width="1.5" stroke-dasharray="6 6"/>
+
+                        <!-- Centerpiece: Live Analytics Board -->
+                        <g class="centerpiece-group">
+                            <rect class="draw-path" x="98" y="72" width="124" height="110" rx="16" fill="#181824" stroke="#818cf8" stroke-width="2.5"/>
+                            <rect class="bar-1" x="118" y="138" width="14" height="26" rx="4" fill="#38bdf8"/>
+                            <rect class="bar-2" x="142" y="120" width="14" height="44" rx="4" fill="#a855f7"/>
+                            <rect class="bar-3" x="166" y="104" width="14" height="60" rx="4" fill="#fbbf24"/>
+                            <rect class="bar-4" x="190" y="86" width="14" height="78" rx="4" fill="#00ba7c"/>
+                            <path class="draw-path draw-delay-2" d="M120 128L148 108L172 114L198 78" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+
+                        <!-- Emoji SVG 1: Donut Chart -->
+                        <g class="emoji-node e-1">
+                            <circle class="draw-path" cx="48" cy="54" r="22" fill="#1e1b4b" stroke="#38bdf8" stroke-width="4"/>
+                            <path class="draw-path draw-delay-1" d="M48 32A22 22 0 0 1 70 54" stroke="#ff3333" stroke-width="5" stroke-linecap="round"/>
+                            <circle cx="48" cy="54" r="7" fill="#fbbf24"/>
+                        </g>
+
+                        <!-- Emoji SVG 2: Audit Magnifier -->
+                        <g class="emoji-node e-2">
+                            <circle class="draw-path" cx="264" cy="50" r="18" fill="rgba(56,189,248,0.15)" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line class="draw-path draw-delay-1" x1="277" y1="63" x2="290" y2="76" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+                        </g>
+
+                        <!-- Emoji SVG 3: Cloud Sync Node -->
+                        <g class="emoji-node e-3">
+                            <rect class="draw-path" x="16" y="124" width="52" height="36" rx="18" fill="#0f172a" stroke="#38bdf8" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M42 150V134M42 134L36 140M42 134L48 140" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+
+                        <!-- Emoji SVG 4: Target / Accuracy -->
+                        <g class="emoji-node e-4">
+                            <circle class="draw-path" cx="274" cy="142" r="22" fill="#2e1018" stroke="#ff3333" stroke-width="2.2"/>
+                            <circle class="draw-path draw-delay-1" cx="274" cy="142" r="12" stroke="#fbbf24" stroke-width="2"/>
+                            <circle cx="274" cy="142" r="4.5" fill="#34d399"/>
+                        </g>
+
+                        <!-- Emoji SVG 5: Clean Summary Report -->
+                        <g class="emoji-node e-5">
+                            <rect class="draw-path" x="48" y="190" width="38" height="46" rx="7" fill="#1e293b" stroke="#a855f7" stroke-width="2.2"/>
+                            <line class="draw-path draw-delay-1" x1="56" y1="202" x2="78" y2="202" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+                            <line class="draw-path draw-delay-1" x1="56" y1="212" x2="74" y2="212" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+                            <line class="draw-path draw-delay-2" x1="56" y1="222" x2="70" y2="222" stroke="#34d399" stroke-width="2.5" stroke-linecap="round"/>
+                        </g>
+
+                        <!-- Emoji SVG 6: Security Lock -->
+                        <g class="emoji-node e-6">
+                            <rect class="draw-path" x="228" y="200" width="40" height="32" rx="7" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M239 200V192C239 187 243 183 248 183C253 183 257 187 257 192V200" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round"/>
+                            <circle cx="248" cy="216" r="4" fill="#fbbf24"/>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="slide-copy">
+                    <h1 class="slide-title">Smart Auditing</h1>
+                    <p class="slide-subtitle">
+                        Verify floor stock and export clean reports <strong>automatically</strong>.
+                    </p>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 SECTION 5: ALL SET (ROCKET + 6 FLOATING EMOJI SVGS)
+                 ========================================================= -->
+            <section class="slide" data-index="4" id="final-slide">
+                <div class="art-stage">
+                    <svg class="hero-scene-svg" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <ellipse class="draw-path" cx="160" cy="135" rx="128" ry="88" stroke="rgba(255,51,51,0.14)" stroke-width="1.5" stroke-dasharray="6 6"/>
+
+                        <!-- Centerpiece: Launch Rocket -->
+                        <g class="centerpiece-group">
+                            <path class="rocket-flame" d="M148 176L160 212L172 176H148Z" fill="#ff3333"/>
+                            <path class="rocket-flame" d="M153 176L160 198L167 176H153Z" fill="#fbbf24"/>
+                            <path class="draw-path" d="M134 142L114 166H138V142Z" fill="#8b5cf6" stroke="#a855f7" stroke-width="1.8"/>
+                            <path class="draw-path" d="M186 142L206 166H182V142Z" fill="#8b5cf6" stroke="#a855f7" stroke-width="1.8"/>
+                            <path class="draw-path" d="M160 64C138 88 134 116 134 160H186C186 116 182 88 160 64Z" fill="#ffffff" stroke="#38bdf8" stroke-width="2.2"/>
+                            <path d="M160 64C149 76 144 88 141 100H179C176 88 171 76 160 64Z" fill="#ff3333"/>
+                            <circle class="draw-path draw-delay-1" cx="160" cy="124" r="11" fill="#38bdf8" stroke="#121212" stroke-width="3"/>
+                            <rect x="142" y="160" width="36" height="12" rx="4" fill="#fbbf24"/>
+                        </g>
+
+                        <!-- Emoji SVG 1: Premium Crown -->
+                        <g class="emoji-node e-1">
+                            <path class="draw-path" d="M26 66L32 42L46 54L60 38L74 54L88 42L94 66H26Z" fill="#451a03" stroke="#fbbf24" stroke-width="2.2" stroke-linejoin="round"/>
+                            <circle cx="60" cy="34" r="3" fill="#ff3333"/>
+                        </g>
+
+                        <!-- Emoji SVG 2: Starburst Sparkle -->
+                        <g class="emoji-node e-2">
+                            <circle class="draw-path" cx="268" cy="52" r="22" fill="#1e1b4b" stroke="#a855f7" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M268 37L272 48L283 52L272 56L268 67L264 56L253 52L264 48L268 37Z" fill="#fbbf24"/>
+                        </g>
+
+                        <!-- Emoji SVG 3: High-Speed Gauge -->
+                        <g class="emoji-node e-3">
+                            <circle class="draw-path" cx="42" cy="144" r="22" fill="#0f172a" stroke="#38bdf8" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M30 150A14 14 0 1 1 54 150" stroke="#34d399" stroke-width="2.5" stroke-linecap="round"/>
+                            <line class="draw-path draw-delay-2" x1="42" y1="148" x2="50" y2="138" stroke="#ff3333" stroke-width="2.5" stroke-linecap="round"/>
+                        </g>
+
+                        <!-- Emoji SVG 4: Connected Globe -->
+                        <g class="emoji-node e-4">
+                            <circle class="draw-path" cx="274" cy="144" r="22" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
+                            <ellipse class="draw-path draw-delay-1" cx="274" cy="144" rx="10" ry="22" stroke="#38bdf8" stroke-width="1.8"/>
+                            <line class="draw-path draw-delay-1" x1="252" y1="144" x2="296" y2="144" stroke="#34d399" stroke-width="1.8"/>
+                        </g>
+
+                        <!-- Emoji SVG 5: Verified Ready Check -->
+                        <g class="emoji-node e-5">
+                            <circle class="draw-path" cx="64" cy="212" r="21" fill="#0f291e" stroke="#00ba7c" stroke-width="2.4"/>
+                            <path class="draw-path draw-delay-1" d="M55 212L61 218L74 205" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+
+                        <!-- Emoji SVG 6: Customer Delight Heart -->
+                        <g class="emoji-node e-6">
+                            <circle class="draw-path" cx="250" cy="212" r="21" fill="#31102f" stroke="#f472b6" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M250 222C250 222 238 214 238 206C238 202 241 199 245 199C248 199 250 201 250 203C250 201 252 199 255 199C259 199 262 202 262 206C262 214 250 222 250 222Z" fill="#ff3333"/>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="slide-copy">
+                    <h1 class="slide-title">All Set</h1>
+                    <p class="slide-subtitle">
+                        Everything is configured. Launch your <strong>workspace</strong> now.
+                    </p>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Bottom Controls: Skip (Bottom Left) | Dots (Center) | Next (Bottom Right) -->
+    <footer class="bottom-nav">
+        <button id="skip-btn" class="skip-btn" aria-label="Skip Onboarding">
+            <span>Skip</span>
+        </button>
+
+        <div class="dots-container" id="dots-container">
+            <button class="nav-dot active" data-slide="0" aria-label="Slide 1"></button>
+            <button class="nav-dot" data-slide="1" aria-label="Slide 2"></button>
+            <button class="nav-dot" data-slide="2" aria-label="Slide 3"></button>
+            <button class="nav-dot" data-slide="3" aria-label="Slide 4"></button>
+            <button class="nav-dot" data-slide="4" aria-label="Slide 5"></button>
+        </div>
+
+        <button id="next-btn" class="next-action-btn" aria-label="Next Slide">
+            <span class="btn-label" id="next-btn-label">Next</span>
+            <svg viewBox="0 0 24 24">
+                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+            </svg>
+        </button>
+    </footer>
+</div>
+
+<script>
+    // --- UI ELEMENTS & STATE (ZERO FIREBASE, INSTANT EXECUTION) ---
+    const track = document.getElementById('slider-track');
+    const viewport = document.getElementById('slider-viewport');
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const dots = Array.from(document.querySelectorAll('.nav-dot'));
+    const nextBtn = document.getElementById('next-btn');
+    const nextBtnLabel = document.getElementById('next-btn-label');
+    const skipBtn = document.getElementById('skip-btn');
+    const finalSlide = document.getElementById('final-slide');
+
+    const TOTAL_SLIDES = slides.length;
+    let currentIndex = 0;
+    let isLaunching = false;
+
+    // --- HAPTIC VIBRATION HELPER ---
+    function vibrate(pattern = 12) {
+        try {
+            if (navigator.vibrate) navigator.vibrate(pattern);
+        } catch (_) {
+            // Ignore on unsupported devices
+        }
+    }
+
+    // --- NAVIGATION & HISTORY-SAFE REDIRECT ---
+    function redirectToDashboard(withRocketBlast = false) {
+        if (isLaunching) return;
+        isLaunching = true;
+        vibrate([15, 30, 20]);
+
+        if (withRocketBlast && finalSlide) {
+            finalSlide.classList.add('rocket-launching');
+            setTimeout(() => {
+                window.location.replace('index.html');
+            }, 520);
+        } else {
+            window.location.replace('index.html');
+        }
+    }
+
+    function triggerSlideAnimations(slideEl) {
+        if (!slideEl) return;
+        slideEl.classList.remove('text-kinetic-shake');
+        void slideEl.offsetWidth; // Force clean reflow so SVG draw + text kinetic motion replay
+        slideEl.classList.add('text-kinetic-shake');
+    }
+
+    function goToSlide(index, withKineticText = true) {
+        if (isLaunching) return;
+        const clamped = Math.max(0, Math.min(TOTAL_SLIDES - 1, index));
+        const changed = clamped !== currentIndex;
+        if (changed) {
+            vibrate(10);
+        }
+        currentIndex = clamped;
+
+        const offsetPercent = -(currentIndex * (100 / TOTAL_SLIDES));
+        track.style.transform = `translate3d(${offsetPercent}%, 0, 0)`;
+
+        slides.forEach((s, idx) => {
+            const isActive = idx === currentIndex;
+            s.classList.toggle('active', isActive);
+            if (!isActive) {
+                s.classList.remove('text-kinetic-shake');
+            }
+        });
+
+        if (withKineticText && changed) {
+            triggerSlideAnimations(slides[currentIndex]);
+        }
+
+        dots.forEach((d, idx) => {
+            d.classList.toggle('active', idx === currentIndex);
+        });
+
+        const isLast = currentIndex === TOTAL_SLIDES - 1;
+        nextBtn.classList.toggle('final-mode', isLast);
+        nextBtnLabel.textContent = isLast ? 'Launch' : 'Next';
+        skipBtn.classList.toggle('hidden-skip', isLast);
+    }
+
+    // --- BUTTON & DOT LISTENERS ---
+    nextBtn.addEventListener('click', () => {
+        if (currentIndex < TOTAL_SLIDES - 1) {
+            goToSlide(currentIndex + 1, true);
+        } else {
+            redirectToDashboard(true);
+        }
+    });
+
+    skipBtn.addEventListener('click', () => {
+        redirectToDashboard(false);
+    });
+
+    dots.forEach((dot) => {
+        dot.addEventListener('click', () => {
+            const target = parseInt(dot.getAttribute('data-slide'), 10);
+            if (!isNaN(target)) goToSlide(target, true);
+        });
+    });
+
+    // --- TOUCH & POINTER SWIPE PHYSICS ---
+    let startX = 0;
+    let startY = 0;
+    let deltaX = 0;
+    let isSwiping = false;
+    let isScrollingVertically = false;
+
+    viewport.addEventListener('touchstart', (e) => {
+        if (isLaunching || e.touches.length !== 1) return;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        deltaX = 0;
+        isSwiping = true;
+        isScrollingVertically = false;
+        track.classList.add('dragging');
+    }, { passive: true });
+
+    viewport.addEventListener('touchmove', (e) => {
+        if (!isSwiping || isLaunching || isScrollingVertically) return;
+        const currentX = e.touches[0].clientX;
+        const currentY = e.touches[0].clientY;
+        const diffX = currentX - startX;
+        const diffY = currentY - startY;
+
+        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 14) {
+            isScrollingVertically = true;
+            isSwiping = false;
+            track.classList.remove('dragging');
+            goToSlide(currentIndex, false);
+            return;
+        }
+
+        deltaX = diffX;
+        const width = viewport.clientWidth || window.innerWidth;
+        const isAtEdge = (currentIndex === 0 && deltaX > 0) || (currentIndex === TOTAL_SLIDES - 1 && deltaX < 0);
+        const effectiveDelta = isAtEdge ? deltaX * 0.25 : deltaX;
+
+        const basePercent = -(currentIndex * (100 / TOTAL_SLIDES));
+        const dragPercent = (effectiveDelta / width) * (100 / TOTAL_SLIDES);
+        track.style.transform = `translate3d(${basePercent + dragPercent}%, 0, 0)`;
+    }, { passive: true });
+
+    function finishTouchSwipe() {
+        if (!isSwiping) return;
+        isSwiping = false;
+        track.classList.remove('dragging');
+
+        const threshold = Math.min(80, (viewport.clientWidth || 360) * 0.16);
+        if (deltaX < -threshold && currentIndex < TOTAL_SLIDES - 1) {
+            goToSlide(currentIndex + 1, true);
+        } else if (deltaX > threshold && currentIndex > 0) {
+            goToSlide(currentIndex - 1, true);
+        } else {
+            goToSlide(currentIndex, false);
+        }
+        deltaX = 0;
+    }
+
+    viewport.addEventListener('touchend', finishTouchSwipe);
+    viewport.addEventListener('touchcancel', finishTouchSwipe);
+
+    // Keyboard navigation support for desktop testing
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            if (currentIndex < TOTAL_SLIDES - 1) goToSlide(currentIndex + 1, true);
+        } else if (e.key === 'ArrowLeft') {
+            if (currentIndex > 0) goToSlide(currentIndex - 1, true);
+        } else if (e.key === 'Enter' && currentIndex === TOTAL_SLIDES - 1) {
+            redirectToDashboard(true);
+        }
+    });
+</script>
+</body>
+</html>
