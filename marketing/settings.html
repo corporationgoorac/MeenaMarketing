@@ -195,7 +195,7 @@
             display: none;
             opacity: 0;
             transition: opacity 0.3s ease;
-            align-items: flex-end; /* Align to bottom for mobile feel */
+            align-items: flex-end;
             justify-content: center;
         }
 
@@ -216,7 +216,7 @@
             box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
             border-top: 1px solid rgba(255,255,255,0.1);
             max-height: 90vh;
-            overflow-y: auto; /* Added to handle multiple setting rows on small screens */
+            overflow-y: auto;
         }
 
         .modal-overlay.active .modal-content {
@@ -236,7 +236,7 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.8);
             border: 1px solid rgba(255,255,255,0.1);
             text-align: center;
-            margin-bottom: 30px; /* Float above the bottom slightly */
+            margin-bottom: 30px; 
         }
         
         #logout-modal.active .mini-modal-content,
@@ -303,15 +303,31 @@
             box-shadow: 0 0 0 3px rgba(255, 51, 51, 0.15), inset 0 2px 4px rgba(0,0,0,0.5);
         }
 
+        /* --- NEW: Modal Section Titles & Disabled Row Styles --- */
+        .modal-section-title {
+            font-size: 0.85em;
+            text-transform: uppercase;
+            color: var(--meena-red);
+            margin: 25px 0 10px 4px;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
         .setting-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05); /* Added slight divider for clarity */
+            padding: 15px 4px;
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            transition: opacity 0.3s ease;
         }
         .setting-row:last-of-type {
             border-bottom: none;
+        }
+
+        .setting-row.disabled-row {
+            opacity: 0.35;
+            pointer-events: none;
         }
 
         .setting-label {
@@ -322,6 +338,20 @@
             font-size: 0.8em;
             color: var(--text-secondary);
             margin-top: 4px;
+        }
+
+        /* --- NEW: Self-Edit Protection Warning --- */
+        .self-edit-warning {
+            color: #ffaa00;
+            font-size: 0.85em;
+            background: rgba(255, 170, 0, 0.1);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: none;
+            border: 1px solid rgba(255, 170, 0, 0.3);
+            text-align: center;
+            font-weight: 500;
         }
 
         /* Professional Toggle Switch */
@@ -347,6 +377,9 @@
         }
         input:checked + .slider { background-color: var(--meena-red); }
         input:checked + .slider:before { transform: translateX(22px); }
+        
+        /* Visually show a switch is disabled */
+        input:disabled + .slider { cursor: not-allowed; }
 
         .modal-actions {
             margin-top: 30px;
@@ -383,7 +416,6 @@
         .skeleton-box::after {
             position: absolute; top: 0; right: 0; bottom: 0; left: 0;
             transform: translateX(-100%);
-            /* Smoother, brighter shimmer effect */
             background-image: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
             animation: shimmer 1.2s infinite; 
             content: '';
@@ -406,10 +438,10 @@
             background: rgba(255, 51, 51, 0.15);
         }
 
-        /* --- NEW: Custom Error Toast Notification --- */
+        /* --- Custom Error Toast Notification --- */
         .error-toast {
             position: fixed;
-            top: -100px; /* Hidden by default */
+            top: -100px; 
             left: 50%;
             transform: translateX(-50%);
             background-color: var(--meena-red);
@@ -429,7 +461,7 @@
             pointer-events: none;
         }
         .error-toast.show {
-            top: 25px; /* Slide down into view */
+            top: 25px; 
         }
     </style>
 </head>
@@ -487,12 +519,19 @@
                 </div>
             </div>
             
+            <div class="self-edit-warning" id="self-edit-warning">
+                <span class="material-symbols-outlined" style="font-size: 18px; vertical-align: bottom; margin-right: 4px;">gpp_maybe</span>
+                You cannot modify your own access levels.
+            </div>
+
             <div class="input-group">
                 <label for="edit-user-name">Full Name</label>
                 <input type="text" id="edit-user-name" placeholder="Enter full name">
             </div>
 
-            <div class="setting-row">
+            <div class="modal-section-title">Role & Permissions</div>
+
+            <div class="setting-row" id="row-admin">
                 <div>
                     <div class="setting-label">Administrator Access</div>
                     <div class="setting-desc">Allow user to modify system data</div>
@@ -503,7 +542,7 @@
                 </label>
             </div>
 
-            <div class="setting-row">
+            <div class="setting-row" id="row-edit">
                 <div>
                     <div class="setting-label">Edit Access</div>
                     <div class="setting-desc">Allow user to edit content</div>
@@ -514,13 +553,26 @@
                 </label>
             </div>
 
-            <div class="setting-row">
+            <div class="setting-row" id="row-delete">
                 <div>
                     <div class="setting-label">Delete Access</div>
                     <div class="setting-desc">Allow user to delete content</div>
                 </div>
                 <label class="switch">
                     <input type="checkbox" id="delete-access-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="modal-section-title">Visibility Control</div>
+
+            <div class="setting-row" id="row-visibility">
+                <div>
+                    <div class="setting-label">Account Visibility</div>
+                    <div class="setting-desc">Allow user to be visible in the system</div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="visibility-toggle">
                     <span class="slider"></span>
                 </label>
             </div>
@@ -577,18 +629,24 @@
 
         const auth = getAuth(app);
         
-        // Ensure user is logged in
+        let currentLoggedInUserId = null;
+
+        // Ensure user is logged in & grab their UID for self-edit protection
         onAuthStateChanged(auth, (user) => {
-            if (!user) window.location.replace('login.html');
+            if (!user) {
+                window.location.replace('login.html');
+            } else {
+                currentLoggedInUserId = user.uid;
+            }
         });
 
-        // --- NEW: Custom Error Toast Function ---
+        // --- Custom Error Toast Function ---
         function showError(message) {
             const toast = document.getElementById('error-toast');
             const msgEl = document.getElementById('error-toast-msg');
             msgEl.innerText = message;
             toast.classList.add('show');
-            if (navigator.vibrate) navigator.vibrate([100, 50, 100]); // Aggressive feedback for error
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]); 
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 4000);
@@ -608,7 +666,7 @@
         }
 
         document.getElementById('cancel-logout-btn').addEventListener('click', () => {
-            history.back(); // Closes via popstate
+            history.back(); 
         });
 
         logoutModalOverlay.addEventListener('click', (e) => {
@@ -639,8 +697,6 @@
             if (isFetching || !hasMoreUsers) return;
             isFetching = true;
             
-            // UPGRADED: Only show the bottom loading spinner if it is NOT the initial load
-            // (Because the skeletons handle the loading visuals during the initial load)
             if (!isInitial) {
                 loadingSpinner.style.display = 'inline-block';
             }
@@ -657,7 +713,7 @@
 
                 const querySnapshot = await getDocs(q);
                 
-                if (isInitial) userListContainer.innerHTML = ''; // Clear skeletons
+                if (isInitial) userListContainer.innerHTML = ''; 
 
                 if (querySnapshot.empty) {
                     hasMoreUsers = false;
@@ -674,6 +730,7 @@
                     const isAdmin = userData.admin === true || userData.role === 'admin';
                     const canEdit = userData.edit === true;
                     const canDelete = userData.delete === true;
+                    const isVisible = userData.visibility !== false; // Defaults to true if undefined
                     
                     const card = document.createElement('div');
                     card.className = 'user-card';
@@ -685,7 +742,7 @@
                                 ${isAdmin ? 'Admin' : 'Staff'}
                             </span>
                         </div>
-                        <button class="edit-btn" data-id="${userId}" data-name="${userData.name || ''}" data-email="${userData.email || ''}" data-dp="${userData.photoURL || ''}" data-admin="${isAdmin}" data-editaccess="${canEdit}" data-deleteaccess="${canDelete}">
+                        <button class="edit-btn" data-id="${userId}" data-name="${userData.name || ''}" data-email="${userData.email || ''}" data-dp="${userData.photoURL || ''}" data-admin="${isAdmin}" data-editaccess="${canEdit}" data-deleteaccess="${canDelete}" data-visibility="${isVisible}">
                             <span class="material-symbols-outlined">edit</span>
                         </button>
                     `;
@@ -709,7 +766,6 @@
             isFetching = false;
         }
 
-        // Initialize Intersection Observer for Infinity Scroll
         const observer = new IntersectionObserver((entries) => {
             if (entries.isIntersecting && hasMoreUsers) {
                 fetchUsers();
@@ -717,27 +773,70 @@
         }, { threshold: 0.5 });
 
         observer.observe(scrollTrigger);
-        
-        // Initial Fetch
         fetchUsers(true);
 
 
-        // --- Professional Modal & Mobile Back Button Logic ---
+        // --- Professional Modal & Dependent Logic ---
         const modalOverlay = document.getElementById('edit-modal');
         const adminToggle = document.getElementById('admin-toggle');
         const editAccessToggle = document.getElementById('edit-access-toggle');
         const deleteAccessToggle = document.getElementById('delete-access-toggle');
+        const visibilityToggle = document.getElementById('visibility-toggle');
+        
+        const rowAdmin = document.getElementById('row-admin');
+        const rowEdit = document.getElementById('row-edit');
+        const rowDelete = document.getElementById('row-delete');
+        const rowVisibility = document.getElementById('row-visibility');
+        const selfEditWarning = document.getElementById('self-edit-warning');
+        
         const saveBtn = document.getElementById('save-modal-btn');
         const deleteBtn = document.getElementById('delete-user-btn');
         const editNameInput = document.getElementById('edit-user-name'); 
         
-        // --- NEW: Delete confirm variables ---
         const deleteConfirmModal = document.getElementById('delete-confirm-modal');
         const confirmDeleteActionBtn = document.getElementById('confirm-delete-action-btn');
         
         let currentEditingUserId = null;
 
-        function openModal(id, name, email, dp, isAdmin, canEdit, canDelete) {
+        // Smart Matrix Logic to Update Switch Dependencies
+        function updateToggleStates() {
+            // If the user is editing themselves, skip dependency logic to keep everything locked
+            if (currentEditingUserId === currentLoggedInUserId) return;
+
+            const isAdmin = adminToggle.checked;
+            
+            if (isAdmin) {
+                // Unlock Edit & Delete
+                rowEdit.classList.remove('disabled-row');
+                editAccessToggle.disabled = false;
+                
+                rowDelete.classList.remove('disabled-row');
+                deleteAccessToggle.disabled = false;
+                
+                // Force Visibility ON and Lock it
+                visibilityToggle.checked = true;
+                rowVisibility.classList.add('disabled-row');
+                visibilityToggle.disabled = true;
+            } else {
+                // Lock Edit & Delete to OFF
+                editAccessToggle.checked = false;
+                rowEdit.classList.add('disabled-row');
+                editAccessToggle.disabled = true;
+                
+                deleteAccessToggle.checked = false;
+                rowDelete.classList.add('disabled-row');
+                deleteAccessToggle.disabled = true;
+                
+                // Unlock Visibility
+                rowVisibility.classList.remove('disabled-row');
+                visibilityToggle.disabled = false;
+            }
+        }
+
+        // Attach Real-Time Listener to Admin Toggle
+        adminToggle.addEventListener('change', updateToggleStates);
+
+        function openModal(id, name, email, dp, isAdminStr, canEditStr, canDeleteStr, isVisibleStr) {
             currentEditingUserId = id;
             document.getElementById('modal-name').innerText = name || 'Unknown';
             document.getElementById('modal-email').innerText = email || 'No email provided';
@@ -745,13 +844,38 @@
             
             editNameInput.value = name || '';
             
-            adminToggle.checked = isAdmin === 'true';
-            editAccessToggle.checked = canEdit === 'true';
-            deleteAccessToggle.checked = canDelete === 'true';
+            adminToggle.checked = isAdminStr === 'true';
+            editAccessToggle.checked = canEditStr === 'true';
+            deleteAccessToggle.checked = canDeleteStr === 'true';
+            visibilityToggle.checked = isVisibleStr !== 'false';
+
+            // Self-Edit Protection Rule
+            if (currentEditingUserId === currentLoggedInUserId) {
+                selfEditWarning.style.display = 'block';
+                
+                // Lock absolutely everything
+                rowAdmin.classList.add('disabled-row');
+                adminToggle.disabled = true;
+                rowEdit.classList.add('disabled-row');
+                editAccessToggle.disabled = true;
+                rowDelete.classList.add('disabled-row');
+                deleteAccessToggle.disabled = true;
+                rowVisibility.classList.add('disabled-row');
+                visibilityToggle.disabled = true;
+                
+                // Hide Delete completely for self
+                deleteBtn.style.display = 'none';
+            } else {
+                selfEditWarning.style.display = 'none';
+                deleteBtn.style.display = 'flex';
+                
+                // Re-enable Admin Toggle and trigger dependency logic
+                rowAdmin.classList.remove('disabled-row');
+                adminToggle.disabled = false;
+                updateToggleStates();
+            }
 
             modalOverlay.classList.add('active');
-            
-            // Push state to history to enable mobile back button support
             history.pushState({ modalOpen: true, type: 'edit' }, "", "#edit");
         }
 
@@ -760,7 +884,6 @@
             currentEditingUserId = null;
         }
 
-        // Handle mobile back button for ALL modals
         window.addEventListener('popstate', (e) => {
             if (modalOverlay.classList.contains('active')) {
                 closeModal();
@@ -773,17 +896,14 @@
             }
         });
 
-        // Close on Cancel button
         document.getElementById('close-modal-btn').addEventListener('click', () => {
-            history.back(); // Triggers popstate to close modal properly
+            history.back(); 
         });
 
-        // Close if clicking outside the modal content
         modalOverlay.addEventListener('click', (e) => {
             if (e.target === modalOverlay) history.back();
         });
 
-        // Event Delegation for Edit Buttons
         userListContainer.addEventListener('click', (e) => {
             const editBtn = e.target.closest('.edit-btn');
             if (editBtn) {
@@ -794,7 +914,8 @@
                     editBtn.dataset.dp,
                     editBtn.dataset.admin,
                     editBtn.dataset.editaccess,
-                    editBtn.dataset.deleteaccess
+                    editBtn.dataset.deleteaccess,
+                    editBtn.dataset.visibility
                 );
             }
         });
@@ -810,34 +931,33 @@
             const makeAdmin = adminToggle.checked;
             const makeEdit = editAccessToggle.checked;
             const makeDelete = deleteAccessToggle.checked;
+            const makeVisibility = visibilityToggle.checked;
             const newName = editNameInput.value.trim(); 
 
             try {
-                // Update Firestore with the new name, roles, edit and delete booleans
                 await updateDoc(doc(db, "users", currentEditingUserId), {
                     admin: makeAdmin,
                     role: makeAdmin ? "admin" : "staff",
                     name: newName,
                     edit: makeEdit,
-                    delete: makeDelete
+                    delete: makeDelete,
+                    visibility: makeVisibility
                 });
 
-                // Update UI locally without reloading the page
                 const badge = document.getElementById(`badge-${currentEditingUserId}`);
                 const editBtn = document.querySelector(`.edit-btn[data-id="${currentEditingUserId}"]`);
                 
-                // Update the badge
                 if (badge) {
                     badge.innerText = makeAdmin ? "Admin" : "Staff";
                     if (makeAdmin) badge.classList.add('admin');
                     else badge.classList.remove('admin');
                 }
                 
-                // Update the data attributes and the visible name on the user card
                 if (editBtn) {
                     editBtn.dataset.admin = makeAdmin.toString();
                     editBtn.dataset.editaccess = makeEdit.toString();
                     editBtn.dataset.deleteaccess = makeDelete.toString();
+                    editBtn.dataset.visibility = makeVisibility.toString();
                     editBtn.dataset.name = newName;
                     
                     const card = editBtn.closest('.user-card');
@@ -845,11 +965,9 @@
                     if (userNameEl) userNameEl.innerText = newName || 'Unknown User';
                 }
 
-                // Close modal
                 history.back();
             } catch (error) {
                 console.error("Error updating user:", error);
-                // UPGRADED: Replaced alert with custom error toast
                 showError("Failed to update user: " + error.message);
             } finally {
                 saveBtn.innerText = originalText;
@@ -857,53 +975,43 @@
             }
         });
 
-        // Delete User Logic (Opening the Custom Confirmation Modal)
+        // Delete User Logic 
         deleteBtn.addEventListener('click', () => {
             if (!currentEditingUserId) return;
-
-            // UPGRADED: Replaced window.confirm() with custom modal trigger
             deleteConfirmModal.classList.add('active');
             history.pushState({ modalOpen: true, type: 'confirm-delete' }, "", "#confirm-delete");
         });
 
-        // Close delete modal on overlay click
         deleteConfirmModal.addEventListener('click', (e) => {
             if (e.target === deleteConfirmModal) history.back();
         });
 
-        // Close delete modal via its Cancel button
         document.getElementById('cancel-delete-btn').addEventListener('click', () => {
             history.back();
         });
 
-        // Proceeding with Actual Deletion from inside Custom Confirm Modal
         confirmDeleteActionBtn.addEventListener('click', async () => {
             const originalText = confirmDeleteActionBtn.innerHTML;
             confirmDeleteActionBtn.innerHTML = '<span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">sync</span> Deleting...';
             confirmDeleteActionBtn.disabled = true;
 
             try {
-                // Delete from Firestore
                 await deleteDoc(doc(db, "users", currentEditingUserId));
 
-                // Remove from UI
                 const editBtn = document.querySelector(`.edit-btn[data-id="${currentEditingUserId}"]`);
                 if (editBtn) {
                     const card = editBtn.closest('.user-card');
                     if (card) card.remove();
                 }
 
-                // Close the delete confirm modal and then the edit modal safely
                 window.history.go(-2); 
             } catch (error) {
                 console.error("Error deleting user:", error);
-                // UPGRADED: Replaced alert with custom error toast
                 showError("Failed to delete user: " + error.message);
                 
                 confirmDeleteActionBtn.innerHTML = originalText;
                 confirmDeleteActionBtn.disabled = false;
             } finally {
-                // Reset button state just in case it stays in DOM
                 setTimeout(() => {
                     confirmDeleteActionBtn.innerHTML = originalText;
                     confirmDeleteActionBtn.disabled = false;
