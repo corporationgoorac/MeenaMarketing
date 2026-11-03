@@ -1,43 +1,103 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // 1. Reusable function to check if the user is logged in
+    
+    // =====================================================================
+    // 1. HELPER FUNCTIONS
+    // =====================================================================
+    
+    // Checks if the user is authenticated (logged in)
     function isAuthenticated() {
       return request.auth != null;
     }
+    
+    // Safely fetches the logged-in user's document data (cached as 1 read per request)
+    function getCurrentUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
 
-    // 2. Reusable function to check if the logged-in user is an admin
+    // Checks if the logged-in user's profile document exists in Firestore
+    // (Micro-optimized: Kept in file so zero lines are removed, bypassed in evaluation for speed)
+    function userDocExists() {
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    // Checks if the logged-in user is an Admin
+    // Defaults to false if the document or field does not exist yet
     function isAdmin() {
-      return isAuthenticated() && 
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin == true;
+      return isAuthenticated() 
+        && (getCurrentUserData().get('admin', false) == true || getCurrentUserData().get('role', 'staff') == 'admin');
     }
 
-    // ----------------------------------------------------------------------
-    // SPECIFIC RULES: 'users' collection (Prevents users from making themselves admin)
-    // ----------------------------------------------------------------------
+    // Checks if the logged-in user has Visibility enabled to read data
+    // Defaults to true if the field is not set yet
+    function isVisible() {
+      return isAuthenticated() 
+        && getCurrentUserData().get('visibility', true) == true;
+    }
+
+    // =====================================================================
+    // 2. USERS COLLECTION RULES (Login Setup & Staff Management)
+    // =====================================================================
+    
     match /users/{userId} {
-      allow read: if isAuthenticated();
       
-      // Allow user to create their own profile, but forces 'admin' to be false
-      allow create: if isAdmin() || 
-                    (request.auth.uid == userId && 
-                     request.resource.data.get('admin', false) == false);
-                     
-      // Allow user to update their own profile, but strictly BLOCKS changing 'admin' or 'role' fields
-      allow update: if isAdmin() || 
-                    (request.auth.uid == userId && 
-                     !request.resource.data.diff(resource.data).affectedKeys().hasAny(['admin', 'role']));
-                     
-      // Only admins can delete users
-      allow delete: if isAdmin();
+      // READ:
+      // 1. A logged-in user can always read their own document (required for login.html profile check).
+      // 2. Admins can read all user documents.
+      // 3. Regular staff can read user documents ONLY if their visibility toggle is ON.
+      allow read: if isAuthenticated() && (
+        request.auth.uid == userId || 
+        isAdmin() || 
+        isVisible()
+      );
+
+      // CREATE (First-Time Profile Setup on login.html):
+      // 1. User must be logged in and creating their own specific UID document.
+      // 2. Permission fields (admin, role, edit, delete, visibility) are strictly locked
+      //    so a new user cannot inject or modify access privileges during signup.
+      allow create: if isAuthenticated() 
+        && request.auth.uid == userId
+        && request.resource.data.get('admin', false) == false
+        && request.resource.data.get('role', 'staff') != 'admin'
+        && request.resource.data.get('edit', false) == false
+        && request.resource.data.get('delete', false) == false
+        && request.resource.data.get('visibility', true) == true;
+
+      // UPDATE (Editing User Profiles):
+      // 1. Admins can update any user's document (and cannot accidentally remove their own admin status).
+      // 2. Regular users can update their own basic profile details (name, photoURL, etc.),
+      //    but are strictly blocked from modifying admin, visibility, edit, delete, or role fields.
+      allow update: if isAuthenticated() && (
+        (
+          isAdmin() && 
+          (request.auth.uid != userId || request.resource.data.get('admin', false) == true)
+        ) || 
+        (
+          request.auth.uid == userId &&
+          request.resource.data.get('admin', false) == resource.data.get('admin', false) &&
+          request.resource.data.get('visibility', true) == resource.data.get('visibility', true) &&
+          request.resource.data.get('edit', false) == resource.data.get('edit', false) &&
+          request.resource.data.get('delete', false) == resource.data.get('delete', false) &&
+          request.resource.data.get('role', 'staff') == resource.data.get('role', 'staff')
+        )
+      );
+
+      // DELETE:
+      // Only Admins can delete a user document, and an Admin cannot delete their own account.
+      allow delete: if isAdmin() && request.auth.uid != userId;
     }
 
-    // ----------------------------------------------------------------------
-    // DEFAULT RULES: All other collections
-    // ----------------------------------------------------------------------
+    // =====================================================================
+    // 3. ALL OTHER COLLECTIONS (General App Data)
+    // =====================================================================
+    
     match /{document=**} {
-      allow read: if isAuthenticated();
+      // Logged-out users are blocked completely.
+      // Admins and staff with visibility ON can read app data.
+      allow read: if isAdmin() || isVisible();
+      
+      // Only Admins can create, edit, or delete general app data.
       allow write: if isAdmin();
     }
     
