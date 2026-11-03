@@ -30,10 +30,10 @@ service cloud.firestore {
     }
 
     // Checks if the logged-in user has Visibility enabled to read data
-    // Defaults to true if the field is not set yet
+    // Defaults to false if the field is not set yet (Strict Deny-by-Default)
     function isVisible() {
       return isAuthenticated() 
-        && getCurrentUserData().get('visibility', true) == true;
+        && getCurrentUserData().get('visibility', false) == true;
     }
 
     // =====================================================================
@@ -62,7 +62,7 @@ service cloud.firestore {
         && request.resource.data.get('role', 'staff') != 'admin'
         && request.resource.data.get('edit', false) == false
         && request.resource.data.get('delete', false) == false
-        && request.resource.data.get('visibility', true) == true;
+        && request.resource.data.get('visibility', false) == false;
 
       // UPDATE (Editing User Profiles):
       // 1. Admins can update any user's document (and cannot accidentally remove their own admin status).
@@ -76,7 +76,7 @@ service cloud.firestore {
         (
           request.auth.uid == userId &&
           request.resource.data.get('admin', false) == resource.data.get('admin', false) &&
-          request.resource.data.get('visibility', true) == resource.data.get('visibility', true) &&
+          request.resource.data.get('visibility', false) == resource.data.get('visibility', false) &&
           request.resource.data.get('edit', false) == resource.data.get('edit', false) &&
           request.resource.data.get('delete', false) == resource.data.get('delete', false) &&
           request.resource.data.get('role', 'staff') == resource.data.get('role', 'staff')
