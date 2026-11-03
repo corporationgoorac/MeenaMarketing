@@ -31,6 +31,8 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             overflow-x: hidden;
+            overflow-y: auto; /* Fixes skeleton scrolling jitter on mobile */
+            -webkit-overflow-scrolling: touch; /* Enables smooth hardware scrolling */
             
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -138,10 +140,10 @@
             color: white;
             padding: 2px 6px;
             border-radius: 8px;
-            margin-left: 8px;
             vertical-align: middle;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            flex-shrink: 0;
         }
 
         .user-dp {
@@ -161,6 +163,7 @@
         .user-info {
             flex-grow: 1;
             overflow: hidden;
+            min-width: 0; /* FIX: Prevents long names from blowing out the flex layout */
         }
 
         .user-name {
@@ -168,9 +171,17 @@
             font-weight: bold;
             color: var(--marketing-white);
             margin: 0 0 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px; /* Spaces the name perfectly from the 'You' badge */
+        }
+
+        /* FIX: Applies proper ellipsis truncation specifically to the text, preserving the badge */
+        .name-text {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: block;
         }
 
         .user-role {
@@ -197,6 +208,7 @@
             align-items: center;
             justify-content: center;
             background: rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
         }
 
         /* Loader element for infinity scroll */
@@ -279,16 +291,38 @@
             border-bottom: 1px solid #333;
             padding-bottom: 15px;
         }
+        
+        /* FIX: Ensures modal text block can cleanly truncate long names/emails */
+        .modal-header > div {
+            min-width: 0; 
+            flex: 1;
+        }
 
         .modal-dp {
             width: 60px; height: 60px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--meena-red);
+            flex-shrink: 0;
         }
 
-        .modal-name { font-size: 1.2em; font-weight: bold; margin: 0; }
-        .modal-email { font-size: 0.8em; color: var(--text-secondary); margin: 5px 0 0 0; }
+        /* FIX: Added truncation properties for modal headers */
+        .modal-name { 
+            font-size: 1.2em; 
+            font-weight: bold; 
+            margin: 0; 
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .modal-email { 
+            font-size: 0.8em; 
+            color: var(--text-secondary); 
+            margin: 5px 0 0 0; 
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
         /* Input Group Styles for Editing Name */
         .input-group {
@@ -384,6 +418,7 @@
             display: inline-block;
             width: 50px;
             height: 28px;
+            flex-shrink: 0;
         }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider {
@@ -795,16 +830,18 @@
                     const isAdmin = userData.admin === true || userData.role === 'admin';
                     const canEdit = userData.edit === true;
                     const canDelete = userData.delete === true;
-                    const isVisible = userData.visibility !== false; 
+                    // FIX: Strict Deny-by-Default Logic -> If visibility is missing, it evaluates to false
+                    const isVisible = userData.visibility === true; 
                     
                     const isCurrentUser = userId === currentLoggedInUserId;
                     
+                    // FIX: Wrapped user name in <span class="name-text"> to prevent truncation logic from breaking the 'You' badge layout
                     const cardHTML = `
                         <div class="user-card ${isCurrentUser ? 'logged-in-card' : ''}">
                             <img src="${userData.photoURL || 'https://via.placeholder.com/50/333/fff?text=U'}" alt="DP" class="user-dp">
                             <div class="user-info">
                                 <h4 class="user-name">
-                                    ${userData.name || 'Unknown User'}
+                                    <span class="name-text">${userData.name || 'Unknown User'}</span>
                                     ${isCurrentUser ? '<span class="logged-in-badge">You</span>' : ''}
                                 </h4>
                                 <span class="user-role ${isAdmin ? 'admin' : ''}" id="badge-${userId}">
@@ -938,7 +975,9 @@
             adminToggle.checked = isAdminStr === 'true';
             editAccessToggle.checked = canEditStr === 'true';
             deleteAccessToggle.checked = canDeleteStr === 'true';
-            visibilityToggle.checked = isVisibleStr !== 'false';
+            
+            // FIX: Strict Deny-by-Default Logic mapped to the toggle switch
+            visibilityToggle.checked = isVisibleStr === 'true';
 
             // Self-Edit Protection Rule
             if (currentEditingUserId === currentLoggedInUserId) {
@@ -1052,7 +1091,8 @@
                     editBtn.dataset.name = newName;
                     
                     const card = editBtn.closest('.user-card');
-                    const userNameEl = card.querySelector('.user-name');
+                    // FIX: Targeting `.name-text` so the innerText update doesn't wipe out the "You" badge HTML when saving
+                    const userNameEl = card.querySelector('.name-text');
                     if (userNameEl) userNameEl.innerText = newName || 'Unknown User';
                 }
 
