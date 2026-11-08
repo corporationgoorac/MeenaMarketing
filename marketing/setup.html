@@ -85,7 +85,7 @@
             transform: translate3d(0, 0, 0);
         }
 
-        /* --- TOP HEADER BAR (Corporate Sans-Serif: Meena in Red, Marketing in White) --- */
+        /* --- TOP HEADER BAR (Exact Same Position, Upgraded Executive Brand Wordmark) --- */
         .top-bar {
             height: 58px;
             padding: 16px 24px 0;
@@ -105,14 +105,14 @@
 
         .brand-handwriting {
             font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 21px;
+            font-size: 22px;
             font-weight: 800;
-            letter-spacing: -0.5px;
-            line-height: 1.1;
+            letter-spacing: -0.65px;
+            line-height: 1.08;
             white-space: nowrap;
             display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            align-items: baseline;
+            gap: 7px;
             clip-path: inset(0 100% 0 0);
             animation: handwritingReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.06s forwards;
             will-change: clip-path, transform;
@@ -122,34 +122,39 @@
             font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
             font-weight: 800;
             color: var(--accent);
-            background: linear-gradient(135deg, #ff3333 0%, #ff6b6b 100%);
+            background: linear-gradient(135deg, #ff2a2a 0%, #ff5555 55%, #ff8080 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 12px rgba(255, 51, 51, 0.32));
+            filter: drop-shadow(0 2px 14px rgba(255, 51, 51, 0.38));
         }
 
         .brand-marketing {
             font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
             font-weight: 700;
             color: #ffffff;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.35px;
+            background: linear-gradient(180deg, #ffffff 0%, #d4d4d8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .brand-underline {
             width: 100%;
             height: 6px;
-            margin-top: 3px;
+            margin-top: 4px;
             overflow: visible;
         }
 
         .brand-underline path {
             stroke: url(#brandLineGrad);
-            stroke-width: 2.2;
+            stroke-width: 2.4;
             stroke-linecap: round;
             fill: none;
             stroke-dasharray: 140;
             stroke-dashoffset: 140;
+            filter: drop-shadow(0 1px 6px rgba(255, 51, 51, 0.45));
             animation: signatureLineDraw 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
         }
 
@@ -189,17 +194,18 @@
             transition: none !important;
         }
 
+        /* --- MOBILE SLIDE: VERTICALLY CENTERED SVG & TEXT --- */
         .slide {
             width: 20%;
             min-width: 20%;
             max-width: 20%;
             flex: 0 0 20%;
             height: 100%;
-            padding: 4px 24px 12px;
+            padding: 16px 24px 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -209,9 +215,9 @@
         /* --- HALF-SCREEN NATIVE APP HERO ILLUSTRATION STAGE (WITH BLUE & RED AURORA) --- */
         .art-stage {
             width: 100%;
-            height: 58%;
+            height: 54%;
             min-height: 210px;
-            max-height: 360px;
+            max-height: 320px;
             background: transparent;
             border: none;
             box-shadow: none;
@@ -219,7 +225,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 12px;
+            margin-top: auto;
+            margin-bottom: 14px;
             flex-shrink: 0;
             opacity: 0;
             transform: scale(0.88) translateY(16px);
@@ -234,8 +241,8 @@
             height: 265px;
             border-radius: 50%;
             background: 
-                radial-gradient(circle at 30% 35%, rgba(37, 99, 235, 0.44) 0%, rgba(56, 189, 248, 0.24) 35%, transparent 70%),
-                radial-gradient(circle at 72% 68%, rgba(255, 51, 51, 0.42) 0%, rgba(225, 29, 72, 0.22) 40%, transparent 72%);
+                radial-gradient(circle at 30% 35%, rgba(37, 99, 235, 0.46) 0%, rgba(56, 189, 248, 0.25) 35%, transparent 70%),
+                radial-gradient(circle at 72% 68%, rgba(255, 51, 51, 0.44) 0%, rgba(225, 29, 72, 0.24) 40%, transparent 72%);
             filter: blur(26px);
             z-index: 0;
             animation: auraBreathe 4.2s ease-in-out infinite alternate;
@@ -284,7 +291,7 @@
             width: 100%;
             height: 100%;
             max-width: 380px;
-            max-height: 320px;
+            max-height: 310px;
             position: relative;
             z-index: 2;
             overflow: visible;
@@ -326,7 +333,7 @@
             50% { transform: translateY(-7px); }
         }
 
-        /* --- STORYSET-STYLE HUMAN CHARACTER ANIMATIONS (HAND, BODY, FACE) --- */
+        /* --- PROFESSIONAL EXECUTIVE HUMAN CHARACTER ANIMATIONS --- */
         .character-group {
             transform-box: fill-box;
             transform-origin: bottom center;
@@ -335,7 +342,7 @@
 
         .slide.active .character-group {
             animation: characterEntrance 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.14s forwards,
-                       characterBreathe 3.8s ease-in-out 0.8s infinite;
+                       characterBreathe 4s ease-in-out 0.8s infinite;
         }
 
         .character-arm-wave {
@@ -344,7 +351,7 @@
         }
 
         .slide.active .character-arm-wave {
-            animation: handWaveMotion 1.8s ease-in-out infinite alternate;
+            animation: handWaveMotion 2.2s ease-in-out infinite alternate;
         }
 
         .character-arm-action {
@@ -353,7 +360,7 @@
         }
 
         .slide.active .character-arm-action {
-            animation: handActionMotion 2.1s ease-in-out infinite alternate;
+            animation: handActionMotion 2.2s ease-in-out infinite alternate;
         }
 
         .character-head {
@@ -362,32 +369,32 @@
         }
 
         .slide.active .character-head {
-            animation: headNodMotion 3.2s ease-in-out infinite;
+            animation: headNodMotion 3.6s ease-in-out infinite;
         }
 
         @keyframes characterEntrance {
-            0% { opacity: 0; transform: translateY(18px) scale(0.9); }
+            0% { opacity: 0; transform: translateY(16px) scale(0.92); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         @keyframes characterBreathe {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-4px); }
+            50% { transform: translateY(-3.5px); }
         }
 
         @keyframes handWaveMotion {
-            0% { transform: rotate(-8deg); }
-            100% { transform: rotate(18deg); }
+            0% { transform: rotate(-5deg); }
+            100% { transform: rotate(12deg); }
         }
 
         @keyframes handActionMotion {
-            0% { transform: rotate(-6deg) translateY(0px); }
-            100% { transform: rotate(10deg) translateY(-3px); }
+            0% { transform: rotate(-4deg) translateY(0px); }
+            100% { transform: rotate(7deg) translateY(-3px); }
         }
 
         @keyframes headNodMotion {
             0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(3.5deg); }
+            50% { transform: rotate(2.5deg); }
         }
 
         /* 6 Orbiting / Floating Emoji-Style Vector Icons per Screen */
@@ -494,7 +501,7 @@
             100% { transform: translateY(-260px) scale(1.12); opacity: 0; }
         }
 
-        /* --- SHORT, SWEET & PUNCHY TEXT BLOCK --- */
+        /* --- SHORT, SWEET & PUNCHY TEXT BLOCK (CENTERED WITH SVG) --- */
         .slide-copy {
             display: flex;
             flex-direction: column;
@@ -503,6 +510,7 @@
             width: 100%;
             max-width: 360px;
             margin-top: 4px;
+            margin-bottom: auto;
             z-index: 5;
         }
 
@@ -583,7 +591,7 @@
             animation: kineticTextMove 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.03s;
         }
 
-        /* --- BOTTOM NAVIGATION BAR (ZERO-OVERLAP 3-COLUMN GRID) --- */
+        /* --- BOTTOM NAVIGATION BAR (EXACT ORIGINAL POSITION PRESERVED) --- */
         .bottom-nav {
             width: 100%;
             padding: 12px 16px calc(25% + env(safe-area-inset-bottom, 0px));
@@ -770,6 +778,7 @@
                 width: 54%;
                 height: 100%;
                 max-height: 340px;
+                margin-top: 0;
                 margin-bottom: 0;
                 background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03), transparent 70%);
                 border-radius: 24px;
@@ -786,6 +795,7 @@
                 align-items: flex-start;
                 text-align: left;
                 margin-top: 0;
+                margin-bottom: 0;
             }
 
             .slide-title {
@@ -808,7 +818,7 @@
 <body oncontextmenu="return false;">
 
 <div class="onboarding-shell">
-    <!-- Top Header: Corporate Sans-Serif Meena in Red, Marketing in White -->
+    <!-- Top Header: Executive Sans-Serif Meena in Red, Marketing in White -->
     <header class="top-bar">
         <div class="brand-signature" aria-label="Meena Marketing">
             <span class="brand-handwriting">
@@ -819,8 +829,8 @@
                 <defs>
                     <linearGradient id="brandLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" stop-color="#ff3333" />
-                        <stop offset="50%" stop-color="#38bdf8" />
-                        <stop offset="100%" stop-color="#ffffff" />
+                        <stop offset="48%" stop-color="#38bdf8" />
+                        <stop offset="100%" stop-color="rgba(255,255,255,0.15)" />
                     </linearGradient>
                 </defs>
                 <path d="M2 4.5 L 138 4.5" />
@@ -833,7 +843,7 @@
         <div class="slider-track" id="slider-track">
 
             <!-- =========================================================
-                 SECTION 1: HELLO THERE (STOREFRONT + HUMAN CHARACTER + 6 FLOATING SVGS)
+                 SECTION 1: HELLO THERE (STOREFRONT + EXECUTIVE DIRECTOR + 6 FLOATING SVGS)
                  ========================================================= -->
             <section class="slide active" data-index="0">
                 <div class="art-stage">
@@ -847,9 +857,13 @@
                                 <stop offset="0%" stop-color="#ff3333"/>
                                 <stop offset="100%" stop-color="#2563eb"/>
                             </linearGradient>
-                            <linearGradient id="charSuit1" x1="0" y1="0" x2="1" y2="1">
-                                <stop offset="0%" stop-color="#2563eb"/>
-                                <stop offset="100%" stop-color="#ff3333"/>
+                            <linearGradient id="execSuitNavy" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#1e293b"/>
+                                <stop offset="100%" stop-color="#0f172a"/>
+                            </linearGradient>
+                            <linearGradient id="execSkin" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#f6ad55"/>
+                                <stop offset="100%" stop-color="#dd6b20"/>
                             </linearGradient>
                         </defs>
 
@@ -858,44 +872,65 @@
 
                         <!-- Centerpiece: Grand Retail Hub -->
                         <g class="centerpiece-group">
-                            <rect class="draw-path" x="92" y="92" width="108" height="84" rx="14" fill="url(#s1StoreBody)" stroke="#38bdf8" stroke-width="2.5"/>
-                            <rect class="draw-path draw-delay-1" x="108" y="112" width="74" height="46" rx="8" fill="rgba(56, 189, 248, 0.16)" stroke="#38bdf8" stroke-width="2"/>
-                            <path class="draw-path" d="M84 92L98 64H194L208 92H84Z" fill="url(#s1Awning)" stroke="#ff3333" stroke-width="1.5"/>
-                            <path d="M84 92C84 100 91 105 99 105C107 105 114 100 114 92" fill="#ff3333"/>
-                            <path d="M114 92C114 100 121 105 129 105C137 105 144 100 144 92" fill="#fbbf24"/>
-                            <path d="M144 92C144 100 151 105 159 105C167 105 174 100 174 92" fill="#38bdf8"/>
-                            <path d="M174 92C174 100 181 105 189 105C197 105 204 100 204 92" fill="#34d399"/>
-                            <circle cx="146" cy="135" r="8" fill="#fbbf24"/>
+                            <rect class="draw-path" x="84" y="92" width="106" height="86" rx="14" fill="url(#s1StoreBody)" stroke="#38bdf8" stroke-width="2.5"/>
+                            <rect class="draw-path draw-delay-1" x="100" y="112" width="74" height="46" rx="8" fill="rgba(56, 189, 248, 0.16)" stroke="#38bdf8" stroke-width="2"/>
+                            <path class="draw-path" d="M76 92L90 64H184L198 92H76Z" fill="url(#s1Awning)" stroke="#ff3333" stroke-width="1.5"/>
+                            <path d="M76 92C76 100 83 105 91 105C99 105 106 100 106 92" fill="#ff3333"/>
+                            <path d="M106 92C106 100 113 105 121 105C129 105 136 100 136 92" fill="#fbbf24"/>
+                            <path d="M136 92C136 100 143 105 151 105C159 105 166 100 166 92" fill="#38bdf8"/>
+                            <path d="M166 92C166 100 173 105 181 105C189 105 196 100 196 92" fill="#34d399"/>
+                            <circle cx="137" cy="135" r="8" fill="#fbbf24"/>
                         </g>
 
-                        <!-- Storyset-Style Character 1: Store Manager Waving Hello (Face, Body, Hand) -->
+                        <!-- Detailed Corporate Character 1: Retail Director with Tablet & Executive Gesture -->
                         <g class="character-group">
-                            <!-- Torso / Blazer -->
-                            <path class="draw-path" d="M196 190C196 168 208 156 222 156C236 156 248 168 248 190H196Z" fill="url(#charSuit1)" stroke="#ffffff" stroke-width="1.8"/>
-                            <!-- Shirt & Tie -->
-                            <polygon points="217,156 227,156 222,174" fill="#ffffff"/>
-                            <polygon points="220,160 224,160 223,173 221,173" fill="#ff3333"/>
-                            <!-- Left Arm Resting -->
-                            <path d="M200 164C192 172 190 182 194 188" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
-                            <!-- Animated Right Waving Arm & Hand -->
+                            <!-- Tailored Suit Torso & Broad Shoulders -->
+                            <path class="draw-path" d="M188 194C188 166 200 152 222 152C244 152 256 166 256 194H188Z" fill="url(#execSuitNavy)" stroke="#38bdf8" stroke-width="1.8"/>
+                            <!-- Crisp Dress Shirt V-Neck & Executive Crimson Tie -->
+                            <polygon points="214,152 230,152 222,178" fill="#f8fafc"/>
+                            <polygon points="220,155 224,155 225,175 222,179 219,175" fill="#ff3333"/>
+                            <!-- Tailored Suit Lapels -->
+                            <path d="M214 152L206 172L222 179" stroke="#475569" stroke-width="1.6" fill="none"/>
+                            <path d="M230 152L238 172L222 179" stroke="#475569" stroke-width="1.6" fill="none"/>
+                            <!-- Breast Pocket Handkerchief -->
+                            <path d="M235 168L241 165L243 170H235Z" fill="#ff3333"/>
+                            <!-- Left Arm Holding Enterprise Tablet -->
+                            <path d="M192 162C184 170 183 180 190 186" stroke="#1e293b" stroke-width="8" stroke-linecap="round"/>
+                            <rect x="176" y="164" width="20" height="26" rx="3.5" transform="rotate(-10 176 164)" fill="#0f172a" stroke="#38bdf8" stroke-width="1.6"/>
+                            <line x1="181" y1="171" x2="190" y2="169" stroke="#ff3333" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="182" y1="176" x2="192" y2="174" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="192" cy="180" r="3.5" fill="url(#execSkin)"/>
+                            <!-- Animated Right Tailored Sleeve, Cuff, Watch & Sculpted Hand -->
                             <g class="character-arm-wave">
-                                <path d="M242 164C254 156 262 142 258 130" stroke="#ff3333" stroke-width="5.5" stroke-linecap="round"/>
-                                <!-- Open Waving Hand & Fingers -->
-                                <circle cx="258" cy="126" r="5.5" fill="#fbd38d" stroke="#ffffff" stroke-width="1.2"/>
-                                <line x1="255" y1="121" x2="253" y2="116" stroke="#fbd38d" stroke-width="2.2" stroke-linecap="round"/>
-                                <line x1="258" y1="120" x2="258" y2="115" stroke="#fbd38d" stroke-width="2.2" stroke-linecap="round"/>
-                                <line x1="261" y1="121" x2="263" y2="117" stroke="#fbd38d" stroke-width="2.2" stroke-linecap="round"/>
+                                <path d="M248 160C258 152 265 140 263 126" stroke="#1e293b" stroke-width="8.5" stroke-linecap="round"/>
+                                <path d="M248 160C258 152 265 140 263 126" stroke="#38bdf8" stroke-width="1.4" stroke-linecap="round"/>
+                                <!-- White Shirt Cuff & Gold Watch -->
+                                <rect x="258" y="122" width="9" height="4" rx="1.5" transform="rotate(-12 258 122)" fill="#ffffff"/>
+                                <rect x="259" y="120" width="7" height="2.5" rx="1" transform="rotate(-12 259 120)" fill="#fbbf24"/>
+                                <!-- Sculpted Executive Palm & Fingers -->
+                                <path d="M259 120C258 113 261 108 265 109C268 110 270 115 267 121Z" fill="url(#execSkin)"/>
+                                <path d="M258 116L255 112" stroke="url(#execSkin)" stroke-width="2.4" stroke-linecap="round"/>
                             </g>
-                            <!-- Animated Head & Friendly Face -->
+                            <!-- Sculpted Neck, Jawline, Hair & Executive Glasses -->
                             <g class="character-head">
-                                <rect x="218" y="147" width="8" height="10" rx="3" fill="#f6ad55"/>
-                                <circle cx="222" cy="136" r="14" fill="#fbd38d" stroke="#ffffff" stroke-width="1.5"/>
-                                <!-- Modern Hair -->
-                                <path d="M208 134C208 122 216 118 226 120C234 121 237 127 236 134C233 128 226 126 218 127C212 128 210 131 208 134Z" fill="#0f172a"/>
-                                <!-- Eyes & Smile -->
-                                <circle cx="217" cy="135" r="1.6" fill="#0f172a"/>
-                                <circle cx="227" cy="135" r="1.6" fill="#0f172a"/>
-                                <path d="M218 141Q222 145 226 141" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                                <path d="M217 142H227V154C227 156 217 156 217 154V142Z" fill="url(#execSkin)"/>
+                                <path d="M217 145Q222 149 227 145" fill="rgba(0,0,0,0.18)"/>
+                                <!-- Left & Right Ears -->
+                                <circle cx="209" cy="133" r="3" fill="url(#execSkin)"/>
+                                <circle cx="235" cy="133" r="3" fill="url(#execSkin)"/>
+                                <!-- Sculpted Head & Jaw -->
+                                <rect x="210" y="116" width="24" height="29" rx="11" fill="url(#execSkin)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+                                <!-- Executive Haircut -->
+                                <path d="M209 128C208 116 215 111 224 112C233 113 237 118 236 128C234 121 229 119 221 119C214 119 211 123 209 128Z" fill="#0f172a"/>
+                                <!-- Eyebrows & Rimless Executive Glasses -->
+                                <line x1="214" y1="127" x2="219" y2="127" stroke="#0f172a" stroke-width="1.6" stroke-linecap="round"/>
+                                <line x1="225" y1="127" x2="230" y2="127" stroke="#0f172a" stroke-width="1.6" stroke-linecap="round"/>
+                                <rect x="213" y="129" width="8" height="5.5" rx="1.5" fill="rgba(56,189,248,0.18)" stroke="#0f172a" stroke-width="1.3"/>
+                                <rect x="223" y="129" width="8" height="5.5" rx="1.5" fill="rgba(56,189,248,0.18)" stroke="#0f172a" stroke-width="1.3"/>
+                                <line x1="221" y1="131" x2="223" y2="131" stroke="#0f172a" stroke-width="1.3"/>
+                                <!-- Subtle Nose & Confident Expression -->
+                                <path d="M222 131V136L220.5 137" stroke="#b75515" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+                                <path d="M218.5 140.5Q222 142.5 225.5 140" stroke="#0f172a" stroke-width="1.5" stroke-linecap="round" fill="none"/>
                             </g>
                         </g>
 
@@ -921,10 +956,10 @@
 
                         <!-- Emoji SVG 4: Washing Machine / Appliance (Middle Right) -->
                         <g class="emoji-node e-4">
-                            <rect class="draw-path" x="262" y="118" width="42" height="50" rx="8" fill="#31102f" stroke="#ff3333" stroke-width="2.2"/>
-                            <circle class="draw-path draw-delay-1" cx="283" cy="147" r="11" fill="rgba(255,51,51,0.2)" stroke="#38bdf8" stroke-width="2.2"/>
-                            <circle cx="271" cy="127" r="2" fill="#38bdf8"/>
-                            <circle cx="278" cy="127" r="2" fill="#34d399"/>
+                            <rect class="draw-path" x="268" y="118" width="40" height="48" rx="8" fill="#31102f" stroke="#ff3333" stroke-width="2.2"/>
+                            <circle class="draw-path draw-delay-1" cx="288" cy="146" r="10" fill="rgba(255,51,51,0.2)" stroke="#38bdf8" stroke-width="2.2"/>
+                            <circle cx="276" cy="127" r="2" fill="#38bdf8"/>
+                            <circle cx="283" cy="127" r="2" fill="#34d399"/>
                         </g>
 
                         <!-- Emoji SVG 5: Shopping Bag (Bottom Left) -->
@@ -936,8 +971,8 @@
 
                         <!-- Emoji SVG 6: Instant Lightning Badge (Bottom Right) -->
                         <g class="emoji-node e-6">
-                            <circle class="draw-path" cx="248" cy="216" r="20" fill="#1e293b" stroke="#fbbf24" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M251 203L241 217H249L246 229L257 214H249L251 203Z" fill="#fbbf24" stroke="#fbbf24" stroke-width="1.2" stroke-linejoin="round"/>
+                            <circle class="draw-path" cx="252" cy="218" r="19" fill="#1e293b" stroke="#fbbf24" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M255 205L245 219H253L250 231L261 216H253L255 205Z" fill="#fbbf24" stroke="#fbbf24" stroke-width="1.2" stroke-linejoin="round"/>
                         </g>
                     </svg>
                 </div>
@@ -953,7 +988,7 @@
             </section>
 
             <!-- =========================================================
-                 SECTION 2: LIVE INVENTORY (CRATES + SCANNING CHARACTER + 6 FLOATING SVGS)
+                 SECTION 2: LIVE INVENTORY (CRATES + INVENTORY ENGINEER + 6 FLOATING SVGS)
                  ========================================================= -->
             <section class="slide" data-index="1">
                 <div class="art-stage">
@@ -962,35 +997,46 @@
 
                         <!-- Centerpiece: Smart Inventory Crates + Laser -->
                         <g class="centerpiece-group">
-                            <rect class="draw-path" x="92" y="134" width="104" height="52" rx="10" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2.5"/>
-                            <line class="draw-path draw-delay-1" x1="144" y1="134" x2="144" y2="154" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
-                            <rect x="108" y="164" width="30" height="8" rx="4" fill="#ff3333"/>
+                            <rect class="draw-path" x="84" y="134" width="102" height="52" rx="10" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line class="draw-path draw-delay-1" x1="135" y1="134" x2="135" y2="154" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
+                            <rect x="100" y="164" width="30" height="8" rx="4" fill="#ff3333"/>
 
-                            <rect class="draw-path draw-delay-1" x="104" y="74" width="80" height="48" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
-                            <line class="draw-path draw-delay-2" x1="144" y1="74" x2="144" y2="92" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
-                            <circle cx="166" cy="102" r="6" fill="#00ba7c"/>
+                            <rect class="draw-path draw-delay-1" x="96" y="74" width="78" height="48" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line class="draw-path draw-delay-2" x1="135" y1="74" x2="135" y2="92" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
+                            <circle cx="157" cy="102" r="6" fill="#00ba7c"/>
 
-                            <line class="scan-laser" x1="80" y1="128" x2="210" y2="128" stroke="#ff3333" stroke-width="3.5" stroke-linecap="round"/>
+                            <line class="scan-laser" x1="74" y1="128" x2="198" y2="128" stroke="#ff3333" stroke-width="3.5" stroke-linecap="round"/>
                         </g>
 
-                        <!-- Storyset-Style Character 2: Inventory Specialist Holding Scanner (Face, Body, Hand) -->
+                        <!-- Detailed Corporate Character 2: Operations Engineer with Laser Barcode Gun -->
                         <g class="character-group">
-                            <path class="draw-path" d="M202 190C202 168 213 156 226 156C239 156 250 168 250 190H202Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
-                            <!-- Animated Arm Pointing Barcode Scanner at Crates -->
+                            <!-- Tailored Technical Operations Jacket -->
+                            <path class="draw-path" d="M194 194C194 166 206 152 226 152C246 152 258 166 258 194H194Z" fill="#0f172a" stroke="#38bdf8" stroke-width="1.8"/>
+                            <polygon points="218,152 234,152 226,174" fill="#38bdf8"/>
+                            <!-- Corporate Lanyard & Smart ID Badge -->
+                            <path d="M218 152L224 174L234 152" stroke="#ffffff" stroke-width="1.4" fill="none"/>
+                            <rect x="220" y="173" width="12" height="15" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+                            <line x1="223" y1="178" x2="229" y2="178" stroke="#ff3333" stroke-width="1.6"/>
+                            <!-- Animated Arm Operating Industrial Laser Scanner -->
                             <g class="character-arm-action">
-                                <path d="M210 164L188 148" stroke="#2563eb" stroke-width="5.5" stroke-linecap="round"/>
-                                <circle cx="186" cy="146" r="4.5" fill="#fbd38d"/>
-                                <!-- Handheld Scanner Device -->
-                                <rect x="174" y="136" width="14" height="9" rx="3" fill="#ff3333" stroke="#ffffff" stroke-width="1.2"/>
-                                <path d="M174 140L156 132V148L174 140Z" fill="rgba(56, 189, 248, 0.35)"/>
+                                <path d="M204 162L180 146" stroke="#1e293b" stroke-width="8.5" stroke-linecap="round"/>
+                                <path d="M204 162L180 146" stroke="#38bdf8" stroke-width="1.4" stroke-linecap="round"/>
+                                <!-- Sculpted Hand & Industrial Scanner Gun -->
+                                <circle cx="178" cy="144" r="4.5" fill="url(#execSkin)"/>
+                                <path d="M164 134H182C184 134 185 136 184 139L180 149H174L176 141H164V134Z" fill="#ff3333" stroke="#ffffff" stroke-width="1.2"/>
+                                <polygon points="164,137 138,126 138,148" fill="rgba(56, 189, 248, 0.32)"/>
                             </g>
-                            <!-- Head & Face -->
+                            <!-- Sculpted Head, Hair & Smart AR Glasses -->
                             <g class="character-head">
-                                <circle cx="226" cy="136" r="13.5" fill="#fbd38d" stroke="#ffffff" stroke-width="1.5"/>
-                                <path d="M213 132C214 121 224 118 234 121C239 123 241 128 240 133C236 127 222 126 213 132Z" fill="#1e1b4b"/>
-                                <circle cx="221" cy="135" r="1.6" fill="#0f172a"/>
-                                <circle cx="230" cy="135" r="1.6" fill="#0f172a"/>
-                                <path d="M222 141Q226 144 230 141" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                                <path d="M221 142H231V154H221V142Z" fill="url(#execSkin)"/>
+                                <circle cx="213" cy="133" r="3" fill="url(#execSkin)"/>
+                                <circle cx="239" cy="133" r="3" fill="url(#execSkin)"/>
+                                <rect x="214" y="116" width="24" height="29" rx="11" fill="url(#execSkin)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+                                <path d="M213 127C213 115 221 111 230 112C237 113 240 119 239 127C236 121 230 119 222 119C216 119 214 123 213 127Z" fill="#0f172a"/>
+                                <!-- Smart Inventory Visor / Glasses -->
+                                <rect x="216" y="128" width="19" height="6" rx="2" fill="rgba(56,189,248,0.28)" stroke="#38bdf8" stroke-width="1.4"/>
+                                <path d="M226 131V136L224.5 137" stroke="#b75515" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+                                <path d="M222 140.5Q226 142.5 229.5 140" stroke="#0f172a" stroke-width="1.5" stroke-linecap="round" fill="none"/>
                             </g>
                         </g>
 
@@ -1022,9 +1068,9 @@
 
                         <!-- Emoji SVG 4: Alert Bell -->
                         <g class="emoji-node e-4">
-                            <circle class="draw-path" cx="278" cy="144" r="21" fill="#2e1018" stroke="#ff3333" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M278 130C272 130 268 135 268 141V148L264 152H292L288 148V141C288 135 284 130 278 130Z" fill="#fbbf24"/>
-                            <circle cx="278" cy="156" r="3" fill="#ffffff"/>
+                            <circle class="draw-path" cx="280" cy="144" r="20" fill="#2e1018" stroke="#ff3333" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M280 130C274 130 270 135 270 141V148L266 152H294L290 148V141C290 135 286 130 280 130Z" fill="#fbbf24"/>
+                            <circle cx="280" cy="156" r="3" fill="#ffffff"/>
                         </g>
 
                         <!-- Emoji SVG 5: Verified Stock Shield -->
@@ -1035,8 +1081,8 @@
 
                         <!-- Emoji SVG 6: Showroom Location Pin -->
                         <g class="emoji-node e-6">
-                            <path class="draw-path" d="M248 188C237 188 229 196 229 207C229 221 248 236 248 236C248 236 267 221 267 207C267 196 259 188 248 188Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2.2"/>
-                            <circle cx="248" cy="206" r="6" fill="#ff3333"/>
+                            <path class="draw-path" d="M252 190C241 190 233 198 233 209C233 223 252 238 252 238C252 238 271 223 271 209C271 198 263 190 252 190Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2.2"/>
+                            <circle cx="252" cy="208" r="6" fill="#ff3333"/>
                         </g>
                     </svg>
                 </div>
@@ -1050,7 +1096,7 @@
             </section>
 
             <!-- =========================================================
-                 SECTION 3: EXPRESS BILLING (POS + CASHIER CHARACTER + 6 FLOATING SVGS)
+                 SECTION 3: EXPRESS BILLING (POS + FINTECH SPECIALIST + 6 FLOATING SVGS)
                  ========================================================= -->
             <section class="slide" data-index="2">
                 <div class="art-stage">
@@ -1060,35 +1106,51 @@
                         <!-- Centerpiece: Express POS + Animated Receipt -->
                         <g class="centerpiece-group">
                             <g class="receipt-paper">
-                                <rect class="draw-path" x="114" y="54" width="66" height="62" rx="6" fill="#ffffff"/>
-                                <line x1="126" y1="70" x2="168" y2="70" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/>
-                                <line x1="126" y1="82" x2="158" y2="82" stroke="#ff3333" stroke-width="3.5" stroke-linecap="round"/>
-                                <line x1="126" y1="94" x2="164" y2="94" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+                                <rect class="draw-path" x="106" y="54" width="66" height="62" rx="6" fill="#ffffff"/>
+                                <line x1="118" y1="70" x2="160" y2="70" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="118" y1="82" x2="150" y2="82" stroke="#ff3333" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="118" y1="94" x2="156" y2="94" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
                             </g>
-                            <rect class="draw-path" x="94" y="104" width="106" height="76" rx="14" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
-                            <line class="draw-path draw-delay-1" x1="108" y1="104" x2="186" y2="104" stroke="#ff3333" stroke-width="4.5" stroke-linecap="round"/>
-                            <rect class="draw-path draw-delay-1" x="112" y="122" width="70" height="24" rx="6" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
-                            <circle cx="120" cy="162" r="4.5" fill="#fbbf24"/>
-                            <circle cx="138" cy="162" r="4.5" fill="#38bdf8"/>
-                            <circle cx="156" cy="162" r="4.5" fill="#ff3333"/>
-                            <circle cx="174" cy="162" r="4.5" fill="#00ba7c"/>
+                            <rect class="draw-path" x="86" y="104" width="104" height="76" rx="14" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line class="draw-path draw-delay-1" x1="100" y1="104" x2="176" y2="104" stroke="#ff3333" stroke-width="4.5" stroke-linecap="round"/>
+                            <rect class="draw-path draw-delay-1" x="104" y="122" width="68" height="24" rx="6" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+                            <circle cx="112" cy="162" r="4.5" fill="#fbbf24"/>
+                            <circle cx="130" cy="162" r="4.5" fill="#38bdf8"/>
+                            <circle cx="148" cy="162" r="4.5" fill="#ff3333"/>
+                            <circle cx="166" cy="162" r="4.5" fill="#00ba7c"/>
                         </g>
 
-                        <!-- Storyset-Style Character 3: Billing Executive Tapping POS (Face, Body, Hand) -->
+                        <!-- Detailed Corporate Character 3: FinTech Billing Specialist with NFC Card & POS Touch -->
                         <g class="character-group">
-                            <path class="draw-path" d="M202 190C202 168 213 156 226 156C239 156 250 168 250 190H202Z" fill="#ff3333" stroke="#ffffff" stroke-width="1.8"/>
+                            <!-- Tailored Crimson-Trimmed Executive Blazer -->
+                            <path class="draw-path" d="M194 194C194 166 206 152 226 152C246 152 258 166 258 194H194Z" fill="#181824" stroke="#ff3333" stroke-width="1.8"/>
+                            <polygon points="218,152 234,152 226,176" fill="#ffffff"/>
+                            <polygon points="224,155 228,155 229,174 226,178 223,174" fill="#2563eb"/>
+                            <path d="M218 152L210 172L226 178" stroke="#ff3333" stroke-width="1.4" fill="none"/>
+                            <path d="M234 152L242 172L226 178" stroke="#ff3333" stroke-width="1.4" fill="none"/>
+                            <!-- Animated Arm Tapping POS Terminal with NFC Smart Card -->
                             <g class="character-arm-action">
-                                <path d="M208 164L186 152" stroke="#ff3333" stroke-width="5.5" stroke-linecap="round"/>
-                                <!-- Hand Tapping Screen -->
-                                <circle cx="183" cy="150" r="4.8" fill="#fbd38d" stroke="#ffffff" stroke-width="1.2"/>
-                                <circle cx="176" cy="146" r="7" stroke="#38bdf8" stroke-width="1.5" opacity="0.8"/>
+                                <path d="M202 162L178 148" stroke="#181824" stroke-width="8.5" stroke-linecap="round"/>
+                                <path d="M202 162L178 148" stroke="#ff3333" stroke-width="1.5" stroke-linecap="round"/>
+                                <rect x="175" y="143" width="4" height="8" rx="1" transform="rotate(28 175 143)" fill="#ffffff"/>
+                                <circle cx="174" cy="146" r="4.5" fill="url(#execSkin)"/>
+                                <!-- NFC Executive Payment Card -->
+                                <rect x="156" y="136" width="18" height="12" rx="2.5" transform="rotate(-12 156 136)" fill="#2563eb" stroke="#38bdf8" stroke-width="1.3"/>
+                                <circle cx="162" cy="140" r="9" stroke="#34d399" stroke-width="1.4" stroke-dasharray="3 3"/>
                             </g>
+                            <!-- Sculpted Head, Hair & Executive Profile -->
                             <g class="character-head">
-                                <circle cx="226" cy="136" r="13.5" fill="#fbd38d" stroke="#ffffff" stroke-width="1.5"/>
-                                <path d="M212 134C213 121 224 118 235 121C240 123 241 129 239 134C234 127 221 127 212 134Z" fill="#0f172a"/>
-                                <circle cx="221" cy="135" r="1.6" fill="#0f172a"/>
-                                <circle cx="230" cy="135" r="1.6" fill="#0f172a"/>
-                                <path d="M222 141Q226 145 230 141" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                                <path d="M221 142H231V154H221V142Z" fill="url(#execSkin)"/>
+                                <circle cx="213" cy="133" r="3" fill="url(#execSkin)"/>
+                                <circle cx="239" cy="133" r="3" fill="url(#execSkin)"/>
+                                <rect x="214" y="116" width="24" height="29" rx="11" fill="url(#execSkin)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+                                <path d="M213 128C212 115 221 111 230 112C238 113 240 119 239 128C236 121 230 119 222 119C216 119 214 123 213 128Z" fill="#0f172a"/>
+                                <line x1="218" y1="128" x2="223" y2="128" stroke="#0f172a" stroke-width="1.6" stroke-linecap="round"/>
+                                <line x1="229" y1="128" x2="234" y2="128" stroke="#0f172a" stroke-width="1.6" stroke-linecap="round"/>
+                                <circle cx="220.5" cy="132" r="1.5" fill="#0f172a"/>
+                                <circle cx="231.5" cy="132" r="1.5" fill="#0f172a"/>
+                                <path d="M226 131V136L224.5 137" stroke="#b75515" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+                                <path d="M222 140.5Q226 142.5 229.5 140" stroke="#0f172a" stroke-width="1.5" stroke-linecap="round" fill="none"/>
                             </g>
                         </g>
 
@@ -1115,8 +1177,8 @@
 
                         <!-- Emoji SVG 4: Instant Share / Dispatch Plane -->
                         <g class="emoji-node e-4">
-                            <circle class="draw-path" cx="278" cy="144" r="21" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M266 143L288 134L281 156L276 147L266 143Z" fill="#34d399" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+                            <circle class="draw-path" cx="280" cy="144" r="20" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M268 143L290 134L283 156L278 147L268 143Z" fill="#34d399" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
                         </g>
 
                         <!-- Emoji SVG 5: GST Verified Star Badge -->
@@ -1127,14 +1189,14 @@
 
                         <!-- Emoji SVG 6: Tax Calculator Widget -->
                         <g class="emoji-node e-6">
-                            <rect class="draw-path" x="234" y="192" width="38" height="44" rx="8" fill="#181824" stroke="#ff3333" stroke-width="2.2"/>
-                            <rect x="241" y="199" width="24" height="10" rx="3" fill="#38bdf8"/>
-                            <circle cx="245" cy="218" r="2.5" fill="#fbbf24"/>
-                            <circle cx="253" cy="218" r="2.5" fill="#ffffff"/>
-                            <circle cx="261" cy="218" r="2.5" fill="#34d399"/>
-                            <circle cx="245" cy="227" r="2.5" fill="#ffffff"/>
-                            <circle cx="253" cy="227" r="2.5" fill="#ff3333"/>
-                            <circle cx="261" cy="227" r="2.5" fill="#fbbf24"/>
+                            <rect class="draw-path" x="238" y="194" width="38" height="44" rx="8" fill="#181824" stroke="#ff3333" stroke-width="2.2"/>
+                            <rect x="245" y="201" width="24" height="10" rx="3" fill="#38bdf8"/>
+                            <circle cx="249" cy="220" r="2.5" fill="#fbbf24"/>
+                            <circle cx="257" cy="220" r="2.5" fill="#ffffff"/>
+                            <circle cx="265" cy="220" r="2.5" fill="#34d399"/>
+                            <circle cx="249" cy="229" r="2.5" fill="#ffffff"/>
+                            <circle cx="257" cy="229" r="2.5" fill="#ff3333"/>
+                            <circle cx="265" cy="229" r="2.5" fill="#fbbf24"/>
                         </g>
                     </svg>
                 </div>
@@ -1148,7 +1210,7 @@
             </section>
 
             <!-- =========================================================
-                 SECTION 4: SMART AUDITING (ANALYTICS + AUDITOR CHARACTER + 6 FLOATING SVGS)
+                 SECTION 4: SMART AUDITING (ANALYTICS + SENIOR AUDITOR + 6 FLOATING SVGS)
                  ========================================================= -->
             <section class="slide" data-index="3">
                 <div class="art-stage">
@@ -1157,29 +1219,42 @@
 
                         <!-- Centerpiece: Live Analytics Board -->
                         <g class="centerpiece-group">
-                            <rect class="draw-path" x="86" y="72" width="120" height="110" rx="16" fill="#181824" stroke="#38bdf8" stroke-width="2.5"/>
-                            <rect class="bar-1" x="104" y="138" width="14" height="26" rx="4" fill="#38bdf8"/>
-                            <rect class="bar-2" x="128" y="120" width="14" height="44" rx="4" fill="#2563eb"/>
-                            <rect class="bar-3" x="152" y="104" width="14" height="60" rx="4" fill="#ff3333"/>
-                            <rect class="bar-4" x="176" y="86" width="14" height="78" rx="4" fill="#00ba7c"/>
-                            <path class="draw-path draw-delay-2" d="M106 128L134 108L158 114L184 78" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <rect class="draw-path" x="80" y="72" width="118" height="110" rx="16" fill="#181824" stroke="#38bdf8" stroke-width="2.5"/>
+                            <rect class="bar-1" x="98" y="138" width="14" height="26" rx="4" fill="#38bdf8"/>
+                            <rect class="bar-2" x="122" y="120" width="14" height="44" rx="4" fill="#2563eb"/>
+                            <rect class="bar-3" x="146" y="104" width="14" height="60" rx="4" fill="#ff3333"/>
+                            <rect class="bar-4" x="170" y="86" width="14" height="78" rx="4" fill="#00ba7c"/>
+                            <path class="draw-path draw-delay-2" d="M100 128L128 108L152 114L178 78" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </g>
 
-                        <!-- Storyset-Style Character 4: Analyst Presenting Growth (Face, Body, Hand) -->
+                        <!-- Detailed Corporate Character 4: Chief Data Auditor with Stylus & Executive Frames -->
                         <g class="character-group">
-                            <path class="draw-path" d="M202 190C202 168 213 156 226 156C239 156 250 168 250 190H202Z" fill="#2563eb" stroke="#ffffff" stroke-width="1.8"/>
+                            <path class="draw-path" d="M194 194C194 166 206 152 226 152C246 152 258 166 258 194H194Z" fill="#1e3a8a" stroke="#38bdf8" stroke-width="1.8"/>
+                            <polygon points="218,152 234,152 226,176" fill="#f8fafc"/>
+                            <polygon points="224,155 228,155 229,174 226,178 223,174" fill="#ff3333"/>
+                            <path d="M218 152L210 172L226 178" stroke="#60a5fa" stroke-width="1.4" fill="none"/>
+                            <path d="M234 152L242 172L226 178" stroke="#60a5fa" stroke-width="1.4" fill="none"/>
+                            <!-- Animated Arm Pointing Precision Audit Stylus at Analytics Trendline -->
                             <g class="character-arm-wave">
-                                <path d="M208 164L188 140" stroke="#38bdf8" stroke-width="5.5" stroke-linecap="round"/>
-                                <circle cx="186" cy="138" r="4.5" fill="#fbd38d"/>
+                                <path d="M202 162L182 136" stroke="#1e3a8a" stroke-width="8.5" stroke-linecap="round"/>
+                                <path d="M202 162L182 136" stroke="#38bdf8" stroke-width="1.4" stroke-linecap="round"/>
+                                <circle cx="180" cy="133" r="4.5" fill="url(#execSkin)"/>
+                                <!-- Precision Laser Stylus -->
+                                <line x1="178" y1="131" x2="166" y2="114" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
+                                <circle cx="166" cy="114" r="3" fill="#ff3333"/>
                             </g>
+                            <!-- Sculpted Head & Executive Glasses -->
                             <g class="character-head">
-                                <circle cx="226" cy="136" r="13.5" fill="#fbd38d" stroke="#ffffff" stroke-width="1.5"/>
-                                <!-- Smart Glasses on Face -->
-                                <rect x="216" y="132" width="8" height="5" rx="1.5" stroke="#0f172a" stroke-width="1.5" fill="rgba(56,189,248,0.25)"/>
-                                <rect x="226" y="132" width="8" height="5" rx="1.5" stroke="#0f172a" stroke-width="1.5" fill="rgba(56,189,248,0.25)"/>
-                                <line x1="224" y1="134" x2="226" y2="134" stroke="#0f172a" stroke-width="1.5"/>
-                                <path d="M213 131C214 120 225 118 235 121C240 123 240 129 239 132C234 126 221 126 213 131Z" fill="#0f172a"/>
-                                <path d="M222 142Q226 145 230 142" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                                <path d="M221 142H231V154H221V142Z" fill="url(#execSkin)"/>
+                                <circle cx="213" cy="133" r="3" fill="url(#execSkin)"/>
+                                <circle cx="239" cy="133" r="3" fill="url(#execSkin)"/>
+                                <rect x="214" y="116" width="24" height="29" rx="11" fill="url(#execSkin)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+                                <path d="M213 128C212 115 221 111 230 112C238 113 240 119 239 128C236 121 230 119 222 119C216 119 214 123 213 128Z" fill="#0f172a"/>
+                                <rect x="216" y="128" width="8.5" height="5.5" rx="1.5" fill="rgba(56,189,248,0.22)" stroke="#0f172a" stroke-width="1.4"/>
+                                <rect x="227" y="128" width="8.5" height="5.5" rx="1.5" fill="rgba(56,189,248,0.22)" stroke="#0f172a" stroke-width="1.4"/>
+                                <line x1="224.5" y1="130" x2="227" y2="130" stroke="#0f172a" stroke-width="1.4"/>
+                                <path d="M226 131V136L224.5 137" stroke="#b75515" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+                                <path d="M222 140.5Q226 142.5 229.5 140" stroke="#0f172a" stroke-width="1.5" stroke-linecap="round" fill="none"/>
                             </g>
                         </g>
 
@@ -1204,9 +1279,9 @@
 
                         <!-- Emoji SVG 4: Target / Accuracy -->
                         <g class="emoji-node e-4">
-                            <circle class="draw-path" cx="278" cy="142" r="21" fill="#2e1018" stroke="#ff3333" stroke-width="2.2"/>
-                            <circle class="draw-path draw-delay-1" cx="278" cy="142" r="11" stroke="#fbbf24" stroke-width="2"/>
-                            <circle cx="278" cy="142" r="4" fill="#34d399"/>
+                            <circle class="draw-path" cx="280" cy="142" r="20" fill="#2e1018" stroke="#ff3333" stroke-width="2.2"/>
+                            <circle class="draw-path draw-delay-1" cx="280" cy="142" r="10" stroke="#fbbf24" stroke-width="2"/>
+                            <circle cx="280" cy="142" r="4" fill="#34d399"/>
                         </g>
 
                         <!-- Emoji SVG 5: Clean Summary Report -->
@@ -1219,9 +1294,9 @@
 
                         <!-- Emoji SVG 6: Security Lock -->
                         <g class="emoji-node e-6">
-                            <rect class="draw-path" x="234" y="200" width="40" height="32" rx="7" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M245 200V192C245 187 249 183 254 183C259 183 263 187 263 192V200" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round"/>
-                            <circle cx="254" cy="216" r="4" fill="#fbbf24"/>
+                            <rect class="draw-path" x="238" y="200" width="40" height="32" rx="7" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M249 200V192C249 187 253 183 258 183C263 183 267 187 267 192V200" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round"/>
+                            <circle cx="258" cy="216" r="4" fill="#fbbf24"/>
                         </g>
                     </svg>
                 </div>
@@ -1235,7 +1310,7 @@
             </section>
 
             <!-- =========================================================
-                 SECTION 5: ALL SET (ROCKET + CELEBRATING CHARACTER + 6 FLOATING SVGS)
+                 SECTION 5: ALL SET (ROCKET + EXECUTIVE FOUNDER + 6 FLOATING SVGS)
                  ========================================================= -->
             <section class="slide" data-index="4" id="final-slide">
                 <div class="art-stage">
@@ -1244,30 +1319,45 @@
 
                         <!-- Centerpiece: Launch Rocket -->
                         <g class="centerpiece-group">
-                            <path class="rocket-flame" d="M136 176L148 212L160 176H136Z" fill="#ff3333"/>
-                            <path class="rocket-flame" d="M141 176L148 198L155 176H141Z" fill="#fbbf24"/>
-                            <path class="draw-path" d="M122 142L102 166H126V142Z" fill="#2563eb" stroke="#38bdf8" stroke-width="1.8"/>
-                            <path class="draw-path" d="M174 142L194 166H170V142Z" fill="#2563eb" stroke="#38bdf8" stroke-width="1.8"/>
-                            <path class="draw-path" d="M148 64C126 88 122 116 122 160H174C174 116 170 88 148 64Z" fill="#ffffff" stroke="#38bdf8" stroke-width="2.2"/>
-                            <path d="M148 64C137 76 132 88 129 100H167C164 88 159 76 148 64Z" fill="#ff3333"/>
-                            <circle class="draw-path draw-delay-1" cx="148" cy="124" r="11" fill="#38bdf8" stroke="#121212" stroke-width="3"/>
-                            <rect x="130" y="160" width="36" height="12" rx="4" fill="#fbbf24"/>
+                            <path class="rocket-flame" d="M130 176L142 212L154 176H130Z" fill="#ff3333"/>
+                            <path class="rocket-flame" d="M135 176L142 198L149 176H135Z" fill="#fbbf24"/>
+                            <path class="draw-path" d="M116 142L96 166H120V142Z" fill="#2563eb" stroke="#38bdf8" stroke-width="1.8"/>
+                            <path class="draw-path" d="M168 142L188 166H164V142Z" fill="#2563eb" stroke="#38bdf8" stroke-width="1.8"/>
+                            <path class="draw-path" d="M142 64C120 88 116 116 116 160H168C168 116 164 88 142 64Z" fill="#ffffff" stroke="#38bdf8" stroke-width="2.2"/>
+                            <path d="M142 64C131 76 126 88 123 100H161C158 88 153 76 142 64Z" fill="#ff3333"/>
+                            <circle class="draw-path draw-delay-1" cx="142" cy="124" r="11" fill="#38bdf8" stroke="#121212" stroke-width="3"/>
+                            <rect x="124" y="160" width="36" height="12" rx="4" fill="#fbbf24"/>
                         </g>
 
-                        <!-- Storyset-Style Character 5: Founder Celebrating Launch (Face, Body, Hand) -->
+                        <!-- Detailed Corporate Character 5: Founder / CEO in Bespoke Suit Launching Workspace -->
                         <g class="character-group">
-                            <path class="draw-path" d="M198 190C198 168 209 156 222 156C235 156 246 168 246 190H198Z" fill="url(#charSuit1)" stroke="#ffffff" stroke-width="1.8"/>
-                            <!-- Both Arms Raised Celebrating -->
+                            <path class="draw-path" d="M190 194C190 166 202 152 222 152C242 152 254 166 254 194H190Z" fill="url(#execSuitNavy)" stroke="#ff3333" stroke-width="1.8"/>
+                            <polygon points="214,152 230,152 222,178" fill="#ffffff"/>
+                            <polygon points="220,155 224,155 225,175 222,179 219,175" fill="#ff3333"/>
+                            <!-- Gold Tie Clip -->
+                            <line x1="219" y1="166" x2="225" y2="166" stroke="#fbbf24" stroke-width="1.8" stroke-linecap="round"/>
+                            <path d="M214 152L206 172L222 179" stroke="#38bdf8" stroke-width="1.5" fill="none"/>
+                            <path d="M230 152L238 172L222 179" stroke="#38bdf8" stroke-width="1.5" fill="none"/>
+                            <!-- Animated Right Arm Raised with Luxury Watch & Confident Launch Gesture -->
                             <g class="character-arm-wave">
-                                <path d="M238 162C248 152 254 138 250 126" stroke="#ff3333" stroke-width="5.5" stroke-linecap="round"/>
-                                <circle cx="250" cy="123" r="5" fill="#fbd38d" stroke="#ffffff" stroke-width="1.2"/>
+                                <path d="M244 160C254 150 260 136 257 122" stroke="#1e293b" stroke-width="8.5" stroke-linecap="round"/>
+                                <path d="M244 160C254 150 260 136 257 122" stroke="#ff3333" stroke-width="1.5" stroke-linecap="round"/>
+                                <rect x="252" y="119" width="9" height="4" rx="1.5" transform="rotate(-10 252 119)" fill="#ffffff"/>
+                                <rect x="253" y="117" width="7" height="2.5" rx="1" transform="rotate(-10 253 117)" fill="#fbbf24"/>
+                                <path d="M253 117C252 110 255 106 259 107C262 108 263 113 261 118Z" fill="url(#execSkin)"/>
                             </g>
+                            <!-- Sculpted Head, Hair & Executive Glasses -->
                             <g class="character-head">
-                                <circle cx="222" cy="136" r="13.5" fill="#fbd38d" stroke="#ffffff" stroke-width="1.5"/>
-                                <path d="M209 133C210 121 221 118 231 121C236 123 237 129 235 133C230 127 217 127 209 133Z" fill="#0f172a"/>
-                                <circle cx="217" cy="135" r="1.6" fill="#0f172a"/>
-                                <circle cx="226" cy="135" r="1.6" fill="#0f172a"/>
-                                <path d="M217 140Q222 146 227 140" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                                <path d="M217 142H227V154H217V142Z" fill="url(#execSkin)"/>
+                                <circle cx="209" cy="133" r="3" fill="url(#execSkin)"/>
+                                <circle cx="235" cy="133" r="3" fill="url(#execSkin)"/>
+                                <rect x="210" y="116" width="24" height="29" rx="11" fill="url(#execSkin)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+                                <path d="M209 128C208 115 216 111 225 112C233 113 236 119 235 128C232 121 227 119 219 119C213 119 210 123 209 128Z" fill="#0f172a"/>
+                                <rect x="213" y="128" width="8" height="5.5" rx="1.5" fill="rgba(56,189,248,0.2)" stroke="#0f172a" stroke-width="1.3"/>
+                                <rect x="223" y="128" width="8" height="5.5" rx="1.5" fill="rgba(56,189,248,0.2)" stroke="#0f172a" stroke-width="1.3"/>
+                                <line x1="221" y1="130" x2="223" y2="130" stroke="#0f172a" stroke-width="1.3"/>
+                                <path d="M222 131V136L220.5 137" stroke="#b75515" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+                                <path d="M218 140Q222 143 226 140" stroke="#0f172a" stroke-width="1.5" stroke-linecap="round" fill="none"/>
                             </g>
                         </g>
 
@@ -1292,9 +1382,9 @@
 
                         <!-- Emoji SVG 4: Connected Globe -->
                         <g class="emoji-node e-4">
-                            <circle class="draw-path" cx="278" cy="144" r="21" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
-                            <ellipse class="draw-path draw-delay-1" cx="278" cy="144" rx="9" ry="21" stroke="#38bdf8" stroke-width="1.8"/>
-                            <line class="draw-path draw-delay-1" x1="257" y1="144" x2="299" y2="144" stroke="#34d399" stroke-width="1.8"/>
+                            <circle class="draw-path" cx="280" cy="144" r="20" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
+                            <ellipse class="draw-path draw-delay-1" cx="280" cy="144" rx="9" ry="20" stroke="#38bdf8" stroke-width="1.8"/>
+                            <line class="draw-path draw-delay-1" x1="260" y1="144" x2="300" y2="144" stroke="#34d399" stroke-width="1.8"/>
                         </g>
 
                         <!-- Emoji SVG 5: Verified Ready Check -->
@@ -1305,8 +1395,8 @@
 
                         <!-- Emoji SVG 6: Customer Delight Heart -->
                         <g class="emoji-node e-6">
-                            <circle class="draw-path" cx="254" cy="214" r="20" fill="#31102f" stroke="#ff3333" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M254 224C254 224 242 216 242 208C242 204 245 201 249 201C252 201 254 203 254 205C254 203 256 201 259 201C263 201 266 204 266 208C266 216 254 224 254 224Z" fill="#ff3333"/>
+                            <circle class="draw-path" cx="256" cy="214" r="20" fill="#31102f" stroke="#ff3333" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M256 224C256 224 244 216 244 208C244 204 247 201 251 201C254 201 256 203 256 205C256 203 258 201 261 201C265 201 268 204 268 208C268 216 256 224 256 224Z" fill="#ff3333"/>
                         </g>
                     </svg>
                 </div>
@@ -1322,7 +1412,7 @@
         </div>
     </main>
 
-    <!-- Bottom Controls: Skip (Bottom Left) | Dots (Center) | Next (Bottom Right) -->
+    <!-- Bottom Controls: Exact Same Position (Skip | Dots | Next) -->
     <footer class="bottom-nav">
         <button id="skip-btn" class="skip-btn" aria-label="Skip Onboarding">
             <span>Skip</span>
