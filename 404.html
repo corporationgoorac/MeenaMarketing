@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>404 - Page Not Found | Meena Marketing</title>
+    <style>
+        /* Base Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0D1117;
+            color: #FFFFFF;
+            overflow: hidden; /* Prevents scrollbars from physics engine */
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Professional UI Card Container */
+        .card-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #161B22;
+            border: 1px solid #252B36;
+            border-radius: 12px;
+            padding: 48px 40px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            pointer-events: none; /* Let mouse pass through to physics objects */
+            user-select: none;
+        }
+
+        /* Branding Logo */
+        .brand-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            letter-spacing: 0.5px;
+        }
+        .brand-meena { color: #FF4F5A; }
+        .brand-marketing { color: #FFFFFF; }
+
+        /* Error Typography */
+        .error-code {
+            font-size: 88px;
+            font-weight: 800;
+            color: #252B36; /* Subtle dark inset look */
+            -webkit-text-stroke: 2px #FF4F5A; /* Meena Red */
+            line-height: 1;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+
+        .error-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-bottom: 12px;
+        }
+
+        .error-description {
+            font-size: 15px;
+            color: #7E8494;
+            line-height: 1.6;
+        }
+
+        /* Physics Objects */
+        .physics-item {
+            position: absolute;
+            top: -100px; /* Start off-screen */
+            left: 0;
+            width: 70px;
+            height: 70px;
+            z-index: 2; /* Sit in front of the card */
+            will-change: transform;
+            cursor: grab;
+        }
+
+        .physics-item svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.4));
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 480px) {
+            .card-container { padding: 40px 24px; }
+            .error-code { font-size: 72px; }
+            .physics-item { width: 55px; height: 55px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Professional UI Card -->
+    <div class="card-container">
+        <div class="brand-title">
+            <span class="brand-meena">Meena</span> <span class="brand-marketing">Marketing</span>
+        </div>
+        <div class="error-code">404</div>
+        <h1 class="error-title">System Route Not Found</h1>
+        <p class="error-description">
+            The requested module or directory does not exist on this server. Play with the lost elements below, or use your browser's back button to return to the admin console.
+        </p>
+    </div>
+
+    <!-- SVG Physics Objects -->
+    
+    <!-- 1. Broken Link (Meena Red) -->
+    <div class="physics-item" data-size="70">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FF4F5A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            <line x1="8" y1="8" x2="16" y2="16" stroke="#FFFFFF"></line>
+        </svg>
+    </div>
+
+    <!-- 2. Analytics Chart (Mint Green) -->
+    <div class="physics-item" data-size="70">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#20C997" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+            <rect x="2" y="2" width="20" height="20" rx="2" ry="2" stroke="#252B36"></rect>
+        </svg>
+    </div>
+
+    <!-- 3. Settings Gear (Golden Amber) -->
+    <div class="physics-item" data-size="70">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-2.82.33 1.65 1.65 0 0 0-.1 1.5 2 2 0 0 1-1.6 2.74h-.84a2 2 0 0 1-1.6-2.74 1.65 1.65 0 0 0-.1-1.5 1.65 1.65 0 0 0-2.82-.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.5-.1 2 2 0 0 1-2.74-1.6v-.84a2 2 0 0 1 2.74-1.6 1.65 1.65 0 0 0 1.5-.1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 2.82.33 1.65 1.65 0 0 0 .1-1.5 2 2 0 0 1 1.6-2.74h.84a2 2 0 0 1 1.6 2.74 1.65 1.65 0 0 0 .1 1.5 1.65 1.65 0 0 0 2.82.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82 1.65 1.65 0 0 0 1.5.1 2 2 0 0 1 2.74 1.6v.84a2 2 0 0 1-2.74 1.6 1.65 1.65 0 0 0-1.5.1z"></path>
+        </svg>
+    </div>
+
+    <!-- 4. Missing File (Bright Blue) -->
+    <div class="physics-item" data-size="70">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+            <polyline points="13 2 13 9 20 9"></polyline>
+            <line x1="9" y1="15" x2="15" y2="15"></line>
+        </svg>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const items = document.querySelectorAll('.physics-item');
+            const gravity = 0.5;
+            const friction = 0.98;
+            const bounce = 0.75; 
+
+            // Pointer Tracking
+            let pointerX = -1000;
+            let pointerY = -1000;
+
+            const updatePointer = (x, y) => { pointerX = x; pointerY = y; };
+
+            window.addEventListener('mousemove', e => updatePointer(e.clientX, e.clientY));
+            window.addEventListener('touchmove', e => updatePointer(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+            window.addEventListener('mouseleave', () => updatePointer(-1000, -1000));
+            window.addEventListener('touchend', () => updatePointer(-1000, -1000));
+
+            // Initialize State
+            const state = Array.from(items).map((el, index) => {
+                const isMobile = window.innerWidth <= 480;
+                const size = isMobile ? 55 : 70;
+                
+                return {
+                    el,
+                    size,
+                    x: (window.innerWidth / items.length) * index + 20, // Spread them out horizontally
+                    y: -150 - (Math.random() * 200), // Drop them in from the top
+                    vx: (Math.random() - 0.5) * 10, 
+                    vy: 0, 
+                    angle: Math.random() * 360,
+                    va: (Math.random() - 0.5) * 15 
+                };
+            });
+
+            // Physics Loop
+            function update() {
+                const w = window.innerWidth;
+                const h = window.innerHeight;
+
+                state.forEach(obj => {
+                    // Apply Gravity
+                    obj.vy += gravity;
+
+                    // Mouse Repulsion Force
+                    const centerX = obj.x + obj.size / 2;
+                    const centerY = obj.y + obj.size / 2;
+                    const dx = centerX - pointerX;
+                    const dy = centerY - pointerY;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 120) {
+                        const force = (120 - dist) / 120;
+                        obj.vx += (dx / dist) * force * 4;
+                        obj.vy += (dy / dist) * force * 4;
+                        obj.va += (dx / dist) * force * 8; 
+                    }
+
+                    // Apply Friction
+                    obj.vx *= friction;
+                    obj.vy *= friction;
+                    obj.va *= 0.99; 
+
+                    // Update Position
+                    obj.x += obj.vx;
+                    obj.y += obj.vy;
+                    obj.angle += obj.va;
+
+                    // Boundary Collisions
+                    if (obj.x < 0) { obj.x = 0; obj.vx *= -bounce; obj.va += obj.vy * 0.2; }
+                    if (obj.x + obj.size > w) { obj.x = w - obj.size; obj.vx *= -bounce; obj.va -= obj.vy * 0.2; }
+                    if (obj.y < 0) { obj.y = 0; obj.vy *= -bounce; }
+                    if (obj.y + obj.size > h) {
+                        obj.y = h - obj.size;
+                        obj.vy *= -bounce;
+                        obj.vx *= 0.95; // Ground friction
+                        obj.va *= 0.92; // Ground stops spin
+                    }
+
+                    // Render
+                    obj.el.style.transform = `translate3d(${obj.x}px, ${obj.y}px, 0) rotate(${obj.angle}deg)`;
+                });
+
+                requestAnimationFrame(update);
+            }
+
+            requestAnimationFrame(update);
+            
+            // Resize Handler
+            window.addEventListener('resize', () => {
+                const isMobile = window.innerWidth <= 480;
+                state.forEach(obj => {
+                    obj.size = isMobile ? 55 : 70;
+                    if (obj.x + obj.size > window.innerWidth) obj.x = window.innerWidth - obj.size;
+                    if (obj.y + obj.size > window.innerHeight) obj.y = window.innerHeight - obj.size;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
