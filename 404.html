@@ -5,7 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>404 - Page Not Found | Meena Marketing</title>
     <style>
-        /* Base Reset */
+        :root {
+            --bg: #0D1117;
+            --surface: #161B22;
+            --brand-red: #FF4F5A;
+            --mint: #20C997;
+            --amber: #F5A623;
+            --blue: #3B82F6;
+            --text-main: #FFFFFF;
+            --text-muted: #7E8494;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -14,243 +25,241 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #0D1117;
-            color: #FFFFFF;
-            overflow: hidden; /* Prevents scrollbars from physics engine */
-            width: 100vw;
+            background-color: var(--bg);
+            color: var(--text-main);
             height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
         }
 
-        /* Professional UI Card Container */
-        .card-container {
+        /* Ambient Background Glow */
+        .ambient-glow {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: #161B22;
-            border: 1px solid #252B36;
-            border-radius: 12px;
-            padding: 48px 40px;
-            width: 90%;
-            max-width: 500px;
+            width: 80vw;
+            height: 80vw;
+            max-width: 800px;
+            max-height: 800px;
+            background: radial-gradient(circle, rgba(255, 79, 90, 0.03) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Content Container */
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
             text-align: center;
-            z-index: 1;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            pointer-events: none; /* Let mouse pass through to physics objects */
-            user-select: none;
+            max-width: 500px;
+            padding: 0 24px;
+            animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        /* Branding Logo */
-        .brand-title {
-            font-size: 24px;
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Branding */
+        .brand-logo {
+            font-size: 14px;
             font-weight: 700;
-            margin-bottom: 32px;
-            letter-spacing: 0.5px;
-        }
-        .brand-meena { color: #FF4F5A; }
-        .brand-marketing { color: #FFFFFF; }
-
-        /* Error Typography */
-        .error-code {
-            font-size: 88px;
-            font-weight: 800;
-            color: #252B36; /* Subtle dark inset look */
-            -webkit-text-stroke: 2px #FF4F5A; /* Meena Red */
-            line-height: 1;
-            margin-bottom: 16px;
             letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            color: var(--text-muted);
+        }
+        .brand-logo span {
+            color: var(--brand-red);
+        }
+
+        /* Typography */
+        .error-code {
+            font-size: 120px;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -2px;
+            margin-bottom: 16px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.2) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .error-title {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 600;
-            color: #FFFFFF;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            color: var(--text-main);
         }
 
         .error-description {
             font-size: 15px;
-            color: #7E8494;
+            color: var(--text-muted);
             line-height: 1.6;
         }
 
-        /* Physics Objects */
-        .physics-item {
+        /* CSS Animated SVG Icons (Screen Animations) */
+        .icon-layer {
             position: absolute;
-            top: -100px; /* Start off-screen */
+            top: 0;
             left: 0;
-            width: 70px;
-            height: 70px;
-            z-index: 2; /* Sit in front of the card */
-            will-change: transform;
-            cursor: grab;
-        }
-
-        .physics-item svg {
             width: 100%;
             height: 100%;
-            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.4));
+            z-index: 1;
+            pointer-events: none;
         }
 
-        /* Mobile Adjustments */
-        @media (max-width: 480px) {
-            .card-container { padding: 40px 24px; }
-            .error-code { font-size: 72px; }
-            .physics-item { width: 55px; height: 55px; }
+        .floating-icon {
+            position: absolute;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .floating-icon svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));
+        }
+
+        /* Specific Icon Positions & Animations */
+        
+        /* 1. Broken Link (Red) - Top Left */
+        .icon-link {
+            top: 20%;
+            left: 15%;
+            width: 48px;
+            height: 48px;
+            animation: float-1 12s ease-in-out infinite, fadeIn 1s ease-out 0.2s forwards;
+        }
+
+        /* 2. Search Glass (Mint) - Top Right */
+        .icon-search {
+            top: 25%;
+            right: 18%;
+            width: 56px;
+            height: 56px;
+            animation: float-2 14s ease-in-out infinite, fadeIn 1s ease-out 0.4s forwards;
+        }
+
+        /* 3. Settings Gear (Amber) - Bottom Left */
+        .icon-gear {
+            bottom: 25%;
+            left: 20%;
+            width: 64px;
+            height: 64px;
+            animation: float-3 15s ease-in-out infinite, fadeIn 1s ease-out 0.6s forwards;
+        }
+
+        /* 4. Missing File (Blue) - Bottom Right */
+        .icon-file {
+            bottom: 20%;
+            right: 15%;
+            width: 52px;
+            height: 52px;
+            animation: float-4 13s ease-in-out infinite, fadeIn 1s ease-out 0.8s forwards;
+        }
+
+        /* Keyframes for Ambient Floating */
+        @keyframes fadeIn {
+            to { opacity: 0.6; }
+        }
+
+        @keyframes float-1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(15px, -20px) rotate(5deg); }
+            66% { transform: translate(-10px, 15px) rotate(-5deg); }
+        }
+
+        @keyframes float-2 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-20px, -15px) rotate(-10deg); }
+            66% { transform: translate(15px, -10px) rotate(5deg); }
+        }
+
+        @keyframes float-3 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(20px, 20px) rotate(15deg); }
+            66% { transform: translate(-15px, -15px) rotate(-5deg); }
+        }
+
+        @keyframes float-4 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-15px, 20px) rotate(-5deg); }
+            66% { transform: translate(20px, -15px) rotate(10deg); }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .error-code { font-size: 96px; }
+            .error-title { font-size: 20px; }
+            .icon-link { top: 10%; left: 10%; width: 36px; height: 36px; }
+            .icon-search { top: 12%; right: 10%; width: 42px; height: 42px; }
+            .icon-gear { bottom: 15%; left: 12%; width: 48px; height: 48px; }
+            .icon-file { bottom: 12%; right: 10%; width: 40px; height: 40px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Professional UI Card -->
-    <div class="card-container">
-        <div class="brand-title">
-            <span class="brand-meena">Meena</span> <span class="brand-marketing">Marketing</span>
+    <div class="ambient-glow"></div>
+
+    <!-- Animated SVG Layer -->
+    <div class="icon-layer">
+        
+        <!-- Broken Link -->
+        <div class="floating-icon icon-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                <line x1="8" y1="8" x2="16" y2="16" stroke="#FFFFFF"></line>
+            </svg>
         </div>
-        <div class="error-code">404</div>
-        <h1 class="error-title">System Route Not Found</h1>
+
+        <!-- Analytics/Search -->
+        <div class="floating-icon icon-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        </div>
+
+        <!-- Settings Gear -->
+        <div class="floating-icon icon-gear">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-2.82.33 1.65 1.65 0 0 0-.1 1.5 2 2 0 0 1-1.6 2.74h-.84a2 2 0 0 1-1.6-2.74 1.65 1.65 0 0 0-.1-1.5 1.65 1.65 0 0 0-2.82-.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.5-.1 2 2 0 0 1-2.74-1.6v-.84a2 2 0 0 1 2.74-1.6 1.65 1.65 0 0 0 1.5-.1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 2.82.33 1.65 1.65 0 0 0 .1-1.5 2 2 0 0 1 1.6-2.74h.84a2 2 0 0 1 1.6 2.74 1.65 1.65 0 0 0 .1 1.5 1.65 1.65 0 0 0 2.82.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82 1.65 1.65 0 0 0 1.5.1 2 2 0 0 1 2.74 1.6v.84a2 2 0 0 1-2.74 1.6 1.65 1.65 0 0 0-1.5.1z"></path>
+            </svg>
+        </div>
+
+        <!-- Missing File -->
+        <div class="floating-icon icon-file">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                <polyline points="13 2 13 9 20 9"></polyline>
+                <line x1="9" y1="15" x2="15" y2="15"></line>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Main Typography Content -->
+    <main class="content-wrapper">
+        <div class="brand-logo">
+            <span>Meena</span> Marketing
+        </div>
+        
+        <h1 class="error-code">404</h1>
+        <h2 class="error-title">Page Not Found</h2>
+        
         <p class="error-description">
-            The requested module or directory does not exist on this server. Play with the lost elements below, or use your browser's back button to return to the admin console.
+            The requested resource could not be located on this server. Please verify the URL or return to your previous console view.
         </p>
-    </div>
+    </main>
 
-    <!-- SVG Physics Objects -->
-    
-    <!-- 1. Broken Link (Meena Red) -->
-    <div class="physics-item" data-size="70">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#FF4F5A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-            <line x1="8" y1="8" x2="16" y2="16" stroke="#FFFFFF"></line>
-        </svg>
-    </div>
-
-    <!-- 2. Analytics Chart (Mint Green) -->
-    <div class="physics-item" data-size="70">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#20C997" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="20" x2="18" y2="10"></line>
-            <line x1="12" y1="20" x2="12" y2="4"></line>
-            <line x1="6" y1="20" x2="6" y2="14"></line>
-            <rect x="2" y="2" width="20" height="20" rx="2" ry="2" stroke="#252B36"></rect>
-        </svg>
-    </div>
-
-    <!-- 3. Settings Gear (Golden Amber) -->
-    <div class="physics-item" data-size="70">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-2.82.33 1.65 1.65 0 0 0-.1 1.5 2 2 0 0 1-1.6 2.74h-.84a2 2 0 0 1-1.6-2.74 1.65 1.65 0 0 0-.1-1.5 1.65 1.65 0 0 0-2.82-.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.5-.1 2 2 0 0 1-2.74-1.6v-.84a2 2 0 0 1 2.74-1.6 1.65 1.65 0 0 0 1.5-.1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 2.82.33 1.65 1.65 0 0 0 .1-1.5 2 2 0 0 1 1.6-2.74h.84a2 2 0 0 1 1.6 2.74 1.65 1.65 0 0 0 .1 1.5 1.65 1.65 0 0 0 2.82.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82 1.65 1.65 0 0 0 1.5.1 2 2 0 0 1 2.74 1.6v.84a2 2 0 0 1-2.74 1.6 1.65 1.65 0 0 0-1.5.1z"></path>
-        </svg>
-    </div>
-
-    <!-- 4. Missing File (Bright Blue) -->
-    <div class="physics-item" data-size="70">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-            <polyline points="13 2 13 9 20 9"></polyline>
-            <line x1="9" y1="15" x2="15" y2="15"></line>
-        </svg>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const items = document.querySelectorAll('.physics-item');
-            const gravity = 0.5;
-            const friction = 0.98;
-            const bounce = 0.75; 
-
-            // Pointer Tracking
-            let pointerX = -1000;
-            let pointerY = -1000;
-
-            const updatePointer = (x, y) => { pointerX = x; pointerY = y; };
-
-            window.addEventListener('mousemove', e => updatePointer(e.clientX, e.clientY));
-            window.addEventListener('touchmove', e => updatePointer(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
-            window.addEventListener('mouseleave', () => updatePointer(-1000, -1000));
-            window.addEventListener('touchend', () => updatePointer(-1000, -1000));
-
-            // Initialize State
-            const state = Array.from(items).map((el, index) => {
-                const isMobile = window.innerWidth <= 480;
-                const size = isMobile ? 55 : 70;
-                
-                return {
-                    el,
-                    size,
-                    x: (window.innerWidth / items.length) * index + 20, // Spread them out horizontally
-                    y: -150 - (Math.random() * 200), // Drop them in from the top
-                    vx: (Math.random() - 0.5) * 10, 
-                    vy: 0, 
-                    angle: Math.random() * 360,
-                    va: (Math.random() - 0.5) * 15 
-                };
-            });
-
-            // Physics Loop
-            function update() {
-                const w = window.innerWidth;
-                const h = window.innerHeight;
-
-                state.forEach(obj => {
-                    // Apply Gravity
-                    obj.vy += gravity;
-
-                    // Mouse Repulsion Force
-                    const centerX = obj.x + obj.size / 2;
-                    const centerY = obj.y + obj.size / 2;
-                    const dx = centerX - pointerX;
-                    const dy = centerY - pointerY;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < 120) {
-                        const force = (120 - dist) / 120;
-                        obj.vx += (dx / dist) * force * 4;
-                        obj.vy += (dy / dist) * force * 4;
-                        obj.va += (dx / dist) * force * 8; 
-                    }
-
-                    // Apply Friction
-                    obj.vx *= friction;
-                    obj.vy *= friction;
-                    obj.va *= 0.99; 
-
-                    // Update Position
-                    obj.x += obj.vx;
-                    obj.y += obj.vy;
-                    obj.angle += obj.va;
-
-                    // Boundary Collisions
-                    if (obj.x < 0) { obj.x = 0; obj.vx *= -bounce; obj.va += obj.vy * 0.2; }
-                    if (obj.x + obj.size > w) { obj.x = w - obj.size; obj.vx *= -bounce; obj.va -= obj.vy * 0.2; }
-                    if (obj.y < 0) { obj.y = 0; obj.vy *= -bounce; }
-                    if (obj.y + obj.size > h) {
-                        obj.y = h - obj.size;
-                        obj.vy *= -bounce;
-                        obj.vx *= 0.95; // Ground friction
-                        obj.va *= 0.92; // Ground stops spin
-                    }
-
-                    // Render
-                    obj.el.style.transform = `translate3d(${obj.x}px, ${obj.y}px, 0) rotate(${obj.angle}deg)`;
-                });
-
-                requestAnimationFrame(update);
-            }
-
-            requestAnimationFrame(update);
-            
-            // Resize Handler
-            window.addEventListener('resize', () => {
-                const isMobile = window.innerWidth <= 480;
-                state.forEach(obj => {
-                    obj.size = isMobile ? 55 : 70;
-                    if (obj.x + obj.size > window.innerWidth) obj.x = window.innerWidth - obj.size;
-                    if (obj.y + obj.size > window.innerHeight) obj.y = window.innerHeight - obj.size;
-                });
-            });
-        });
-    </script>
 </body>
 </html>
