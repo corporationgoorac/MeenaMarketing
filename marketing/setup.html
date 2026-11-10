@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-    <!-- GSAP 3 Animation Engine + Lottie-Web Player Engine for True Skeletal Character & Icon Manipulation -->
+    <!-- GSAP 3 Animation Engine + Lottie-Web Player Engine for Executive UI & Icon Manipulation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js" defer></script>
 
@@ -337,10 +337,10 @@
             50% { transform: translateY(-5px); }
         }
 
-        /* --- UNIFIED VIEW-BOX SKELETAL CHARACTER & ARM RIG (ZERO DETACHMENT) --- */
+        /* --- FLOATING EXECUTIVE UI & TELEMETRY OVERLAY RIG (CHARACTER-FREE SAAS ARCHITECTURE) --- */
         .character-group {
             transform-box: fill-box;
-            transform-origin: center bottom;
+            transform-origin: center;
             opacity: 0;
         }
 
@@ -349,11 +349,11 @@
                        characterBreathe 4s ease-in-out 0.7s infinite;
         }
 
-        /* Shoulder Joint Locked at Exact SVG Shoulder Coordinate (199px 154px) */
+        /* Secondary Floating Glassmorphic Sub-Module Motion */
         .character-arm-wave,
         .character-arm-action {
-            transform-box: view-box;
-            transform-origin: 199px 154px;
+            transform-box: fill-box;
+            transform-origin: center;
         }
 
         .slide.active .character-arm-wave {
@@ -364,28 +364,28 @@
             animation: ikArmInteractSweep 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
         }
 
-        /* Forearm & Hand Locked Rigidly to Exact SVG Elbow Socket (190px 168px) */
+        /* Inner Telemetry Sub-Layer Motion */
         .ik-forearm {
-            transform-box: view-box;
-            transform-origin: 190px 168px;
+            transform-box: fill-box;
+            transform-origin: center;
         }
 
         .slide.active .ik-forearm {
             animation: ikForearmFlex 2.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
         }
 
-        /* Interactive Icon / Widget Locked Directly into the Character's Hand Grip */
+        /* Interactive Floating Widget Card / Module */
         .interactive-held-icon {
-            transform-box: view-box;
-            transform-origin: 168px 150px;
-            filter: drop-shadow(0 8px 16px rgba(56, 189, 248, 0.4));
+            transform-box: fill-box;
+            transform-origin: center;
+            filter: drop-shadow(0 10px 20px rgba(56, 189, 248, 0.35));
         }
 
         .slide.active .interactive-held-icon {
             animation: heldIconPulse 2.8s ease-in-out infinite alternate;
         }
 
-        /* Target Dock Pulse where the Character Places/Touches the Icon */
+        /* Target Dock Pulse on the Central Hub */
         .interaction-target-ring {
             transform-box: fill-box;
             transform-origin: center;
@@ -407,7 +407,7 @@
             animation: hudPillFloat 2.6s ease-in-out infinite alternate;
         }
 
-        /* Energy Data Stream Line between Held Icon & Hub */
+        /* Energy Data Stream Line between Floating Module & Central Hub */
         .energy-stream-line {
             stroke-dasharray: 4 4;
             animation: streamFlow 0.9s linear infinite;
@@ -417,10 +417,10 @@
             to { stroke-dashoffset: -16; }
         }
 
-        /* Neck Joint Locked at Exact Base of Neck (224px 142px in SVG ViewBox) */
+        /* Floating Header Badge Motion */
         .character-head {
-            transform-box: view-box;
-            transform-origin: 224px 142px;
+            transform-box: fill-box;
+            transform-origin: center;
         }
 
         .slide.active .character-head {
@@ -428,51 +428,51 @@
         }
 
         @keyframes characterEntrance {
-            0% { opacity: 0; transform: translateY(14px) scale(0.95); }
+            0% { opacity: 0; transform: translateY(12px) scale(0.95); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         @keyframes characterBreathe {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-3px); }
+            50% { transform: translateY(-4px); }
         }
 
-        /* Subtle, Natural Connected Shoulder Rotation (Zero Detachment!) */
+        /* Smooth Executive Floating Card Glide */
         @keyframes ikArmGrabAndPlace {
-            0% { transform: rotate(-1.5deg); }
-            50% { transform: rotate(0.4deg); }
-            100% { transform: rotate(2.2deg); }
+            0% { transform: translate3d(0, 2px, 0); }
+            50% { transform: translate3d(-2px, -1px, 0); }
+            100% { transform: translate3d(-4px, -3px, 0); }
         }
 
         @keyframes ikArmInteractSweep {
-            0% { transform: rotate(-1.8deg); }
-            100% { transform: rotate(2.0deg); }
+            0% { transform: translate3d(2px, 2px, 0); }
+            100% { transform: translate3d(-3px, -3px, 0); }
         }
 
         @keyframes ikForearmFlex {
-            0% { transform: rotate(-1.2deg); }
-            100% { transform: rotate(1.8deg); }
+            0% { transform: scale(1); }
+            100% { transform: scale(1.02); }
         }
 
         @keyframes heldIconPulse {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-1px, -1px, 0); }
+            0% { transform: translate3d(0, 1px, 0); }
+            100% { transform: translate3d(0, -3px, 0); }
         }
 
         @keyframes targetDockPulse {
-            0% { opacity: 0.2; transform: scale(0.82); }
-            65% { opacity: 0.45; transform: scale(0.96); }
-            100% { opacity: 1; transform: scale(1.16); }
+            0% { opacity: 0.25; transform: scale(0.86); }
+            65% { opacity: 0.55; transform: scale(0.98); }
+            100% { opacity: 1; transform: scale(1.14); }
         }
 
         @keyframes hudPillFloat {
-            0% { opacity: 0.45; transform: translateY(3px) scale(0.94); }
-            100% { opacity: 1; transform: translateY(-3px) scale(1.03); }
+            0% { opacity: 0.55; transform: translateY(2px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(-3px) scale(1.02); }
         }
 
         @keyframes headNodMotion {
-            0%, 100% { transform: rotate(-1.2deg); }
-            50% { transform: rotate(1.6deg); }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
         }
 
         /* 6 Orbiting / Floating Emoji-Style Vector Icons per Screen */
@@ -532,8 +532,8 @@
             animation: laserSweep 2.2s ease-in-out infinite;
         }
         @keyframes laserSweep {
-            0%, 100% { transform: translateY(-16px); opacity: 0.35; }
-            50% { transform: translateY(18px); opacity: 1; }
+            0%, 100% { transform: translateY(-18px); opacity: 0.35; }
+            50% { transform: translateY(20px); opacity: 1; }
         }
 
         .slide.active .receipt-paper {
@@ -921,22 +921,22 @@
         <div class="slider-track" id="slider-track">
 
             <!-- =========================================================
-                 SECTION 1: HELLO THERE (STOREFRONT + STORYSET CHARACTER DOCKING PRODUCT MODULE)
+                 SECTION 1: HELLO THERE (EXECUTIVE RETAIL COMMAND HUB & LIVE SKU MODULES)
                  ========================================================= -->
             <section class="slide active" data-index="0">
                 <div class="art-stage">
                     <svg class="hero-scene-svg" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                            <!-- All Gradients use userSpaceOnUse so Colors NEVER Shift Independently on Rotating Limbs -->
-                            <linearGradient id="s1StoreBody" x1="70" y1="85" x2="195" y2="195" gradientUnits="userSpaceOnUse">
+                            <!-- All Gradients use userSpaceOnUse with the exact Meena Marketing Palette -->
+                            <linearGradient id="s1StoreBody" x1="88" y1="78" x2="224" y2="192" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stop-color="#1e293b"/>
                                 <stop offset="100%" stop-color="#0f172a"/>
                             </linearGradient>
-                            <linearGradient id="s1Awning" x1="65" y1="64" x2="195" y2="100" gradientUnits="userSpaceOnUse">
+                            <linearGradient id="s1Awning" x1="82" y1="62" x2="228" y2="96" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stop-color="#ff3333"/>
                                 <stop offset="100%" stop-color="#2563eb"/>
                             </linearGradient>
-                            <linearGradient id="execSuitNavy" x1="185" y1="140" x2="260" y2="205" gradientUnits="userSpaceOnUse">
+                            <linearGradient id="execSuitNavy" x1="175" y1="120" x2="250" y2="195" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stop-color="#1e293b"/>
                                 <stop offset="100%" stop-color="#0f172a"/>
                             </linearGradient>
@@ -949,14 +949,14 @@
                                 <stop offset="100%" stop-color="#be123c"/>
                             </linearGradient>
                             <linearGradient id="execSkin" x1="130" y1="95" x2="245" y2="160" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" stop-color="#f4c29f"/>
-                                <stop offset="100%" stop-color="#f4c29f"/>
+                                <stop offset="0%" stop-color="#38bdf8"/>
+                                <stop offset="100%" stop-color="#2563eb"/>
                             </linearGradient>
                             <linearGradient id="execSkinShadow" x1="210" y1="130" x2="235" y2="150" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" stop-color="#e0a37b"/>
-                                <stop offset="100%" stop-color="#d28f64"/>
+                                <stop offset="0%" stop-color="#1e293b"/>
+                                <stop offset="100%" stop-color="#0f172a"/>
                             </linearGradient>
-                            <linearGradient id="holoCardGrad" x1="100" y1="90" x2="155" y2="145" gradientUnits="userSpaceOnUse">
+                            <linearGradient id="holoCardGrad" x1="72" y1="125" x2="145" y2="190" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stop-color="#1e293b"/>
                                 <stop offset="100%" stop-color="#0f172a"/>
                             </linearGradient>
@@ -965,100 +965,69 @@
                         <!-- Decorative Orbit Ring (Self-Drawing) -->
                         <ellipse class="draw-path" cx="160" cy="135" rx="128" ry="88" stroke="rgba(56,189,248,0.18)" stroke-width="1.5" stroke-dasharray="6 6"/>
 
-                        <!-- Centerpiece: Grand Retail Hub with Interactive Slot -->
+                        <!-- Centerpiece: Centered Executive Retail Command Hub -->
                         <g class="centerpiece-group">
                             <!-- Floating HUD Status Pill Above Hub -->
                             <g class="hud-status-pill">
-                                <rect x="88" y="42" width="76" height="16" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.3"/>
-                                <circle cx="97" cy="50" r="3" fill="#00ba7c"/>
-                                <line x1="104" y1="50" x2="154" y2="50" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+                                <rect x="114" y="38" width="92" height="18" rx="9" fill="#0f172a" stroke="#38bdf8" stroke-width="1.4"/>
+                                <circle cx="125" cy="47" r="3.5" fill="#00ba7c"/>
+                                <line x1="134" y1="47" x2="174" y2="47" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
+                                <line x1="180" y1="47" x2="196" y2="47" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round"/>
                             </g>
-                            <rect class="draw-path" x="72" y="92" width="108" height="88" rx="14" fill="url(#s1StoreBody)" stroke="#38bdf8" stroke-width="2.4"/>
-                            <rect class="draw-path draw-delay-1" x="86" y="112" width="80" height="50" rx="9" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.8"/>
-                            <!-- Storefront Awning -->
-                            <path class="draw-path" d="M64 92L78 64H174L188 92H64Z" fill="url(#s1Awning)" stroke="#ff3333" stroke-width="1.5"/>
-                            <path d="M64 92C64 100 71 105 79 105C87 105 94 100 94 92" fill="#ff3333"/>
-                            <path d="M94 92C94 100 101 105 109 105C117 105 124 100 124 92" fill="#fbbf24"/>
-                            <path d="M124 92C124 100 131 105 139 105C147 105 154 100 154 92" fill="#38bdf8"/>
-                            <path d="M154 92C154 100 161 105 169 105C177 105 184 100 184 92" fill="#34d399"/>
+
+                            <!-- Main Flagship Storefront Architecture -->
+                            <rect class="draw-path" x="92" y="90" width="136" height="96" rx="16" fill="url(#s1StoreBody)" stroke="#38bdf8" stroke-width="2.4"/>
+                            <rect class="draw-path draw-delay-1" x="106" y="110" width="108" height="60" rx="10" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" stroke-width="1.8"/>
+
+                            <!-- Storefront Awning (Centered Symmetrical Canopy) -->
+                            <path class="draw-path" d="M84 90L98 64H222L236 90H84Z" fill="url(#s1Awning)" stroke="#ff3333" stroke-width="1.5"/>
+                            <path d="M84 90C84 98 92 104 103 104C114 104 122 98 122 90" fill="#ff3333"/>
+                            <path d="M122 90C122 98 130 104 141 104C152 104 160 98 160 90" fill="#fbbf24"/>
+                            <path d="M160 90C160 98 168 104 179 104C190 104 198 98 198 90" fill="#38bdf8"/>
+                            <path d="M198 90C198 98 206 104 217 104C228 104 236 98 236 90" fill="#34d399"/>
+
                             <!-- Interactive Target Dock Ring inside Retail Hub -->
                             <g class="interaction-target-ring">
-                                <circle cx="144" cy="144" r="14" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="1.6" stroke-dasharray="4 3"/>
-                                <circle cx="144" cy="144" r="5" fill="#00ba7c"/>
+                                <circle cx="160" cy="140" r="18" fill="rgba(56, 189, 248, 0.18)" stroke="#38bdf8" stroke-width="1.6" stroke-dasharray="4 3"/>
+                                <circle cx="160" cy="140" r="6.5" fill="#00ba7c"/>
                             </g>
-                            <rect x="94" y="122" width="28" height="6" rx="3" fill="#38bdf8"/>
-                            <rect x="94" y="133" width="20" height="5" rx="2.5" fill="rgba(255,255,255,0.45)"/>
-                            <rect x="94" y="143" width="24" height="5" rx="2.5" fill="#ff3333"/>
+
+                            <!-- Left & Right Interior Showroom Modules -->
+                            <rect x="114" y="120" width="24" height="6" rx="3" fill="#38bdf8"/>
+                            <rect x="114" y="131" width="18" height="5" rx="2.5" fill="rgba(255,255,255,0.45)"/>
+                            <rect x="114" y="141" width="22" height="5" rx="2.5" fill="#ff3333"/>
+                            <rect x="182" y="120" width="24" height="6" rx="3" fill="#fbbf24"/>
+                            <rect x="186" y="131" width="20" height="5" rx="2.5" fill="#34d399"/>
+                            <rect x="182" y="141" width="24" height="5" rx="2.5" fill="rgba(255,255,255,0.45)"/>
                         </g>
 
-                        <!-- Storyset-Style Character 1: Tailored Blazer Torso & Proportional Connected Arm -->
+                        <!-- Floating Executive UI Overlay (Replaces Character 1): Multi-Category Catalog & Live Sync Cards -->
                         <g class="character-group">
-                            <!-- Back/Right Arm Aligned Cleanly with Right Blazer Shoulder (249,153) -->
-                            <path d="M249 153L255 170L245 182" stroke="#1e3a8a" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <rect x="234" y="168" width="16" height="22" rx="3.5" transform="rotate(-8 234 168)" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
-                            <circle cx="244" cy="182" r="4.2" fill="#f4c29f"/>
-
-                            <!-- Tailored Structured Blazer Torso with True Shoulders (192..256) -->
-                            <path class="draw-path" d="M194 196L192 158C192 149 200 144 212 144H236C248 144 256 149 256 158L254 196H194Z" fill="url(#execBlazerBlue)" stroke="#38bdf8" stroke-width="1.6"/>
-                            <!-- Crisp White Shirt V-Neck & Red Tie -->
-                            <polygon points="215,144 233,144 224,174" fill="#ffffff"/>
-                            <polygon points="222,146 226,146 226.5,171 224,175 221.5,171" fill="#ff3333"/>
-                            <!-- Subtle Tailored Lapel Lines -->
-                            <path d="M215 144L208 162L224 174" stroke="#60a5fa" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
-                            <path d="M233 144L240 162L224 174" stroke="#60a5fa" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
-
-                            <!-- Clean Modern Storyset Head & Face (Locked at Neck 224,142) -->
+                            <!-- Right Floating Category Analytics Card -->
                             <g class="character-head">
-                                <!-- Neck & Chin Shadow -->
-                                <rect x="218" y="131" width="12" height="15" rx="5" fill="#f4c29f"/>
-                                <path d="M218 137Q224 142 230 137V143H218V137Z" fill="#e0a37b"/>
-                                <!-- Right Ear -->
-                                <circle cx="238" cy="120" r="3.8" fill="#e0a37b"/>
-                                <!-- Smooth Symmetrical Head Silhouette -->
-                                <rect x="210" y="101" width="28" height="33" rx="13.5" fill="#f4c29f"/>
-                                <!-- Sleek Modern Volumetric Haircut -->
-                                <path d="M209 116C208 103 215 96 226 96C237 96 241 103 239 115C237 108 232 105 225 105C217 105 212 109 209 116Z" fill="#0f172a"/>
-                                <path d="M216 100C221 98 229 98 234 101" stroke="#38bdf8" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>
-                                <!-- Expressive Eyes with White Catchlights & Brows -->
-                                <path d="M214 114Q217 112.5 220 114" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round"/>
-                                <path d="M225 114Q228 112.5 231 114" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round"/>
-                                <circle cx="217" cy="118.5" r="2" fill="#0f172a"/>
-                                <circle cx="228" cy="118.5" r="2" fill="#0f172a"/>
-                                <circle cx="216.3" cy="117.8" r="0.7" fill="#ffffff"/>
-                                <circle cx="227.3" cy="117.8" r="0.7" fill="#ffffff"/>
-                                <!-- Nose & Confident Smile -->
-                                <path d="M221.5 119V123.5" stroke="#d28f64" stroke-width="1.5" stroke-linecap="round"/>
-                                <path d="M219 127.5Q223 131 227.5 127.5" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+                                <rect x="190" y="142" width="66" height="54" rx="11" fill="url(#execSuitNavy)" stroke="#38bdf8" stroke-width="1.8"/>
+                                <rect x="198" y="151" width="28" height="5" rx="2.5" fill="#38bdf8"/>
+                                <circle cx="244" cy="153.5" r="4" fill="#00ba7c"/>
+                                <rect x="198" y="162" width="48" height="6" rx="3" fill="rgba(56,189,248,0.18)"/>
+                                <rect x="198" y="162" width="36" height="6" rx="3" fill="#ff3333"/>
+                                <rect x="198" y="173" width="48" height="6" rx="3" fill="rgba(56,189,248,0.18)"/>
+                                <rect x="198" y="173" width="42" height="6" rx="3" fill="#fbbf24"/>
+                                <rect x="198" y="184" width="30" height="4" rx="2" fill="#34d399"/>
                             </g>
 
-                            <!-- PROPORTIONAL BENT LEFT ARM (Shoulder 199,154 -> Elbow 190,168 -> Wrist 174,156 -> Hand 169,152) -->
+                            <!-- Left Floating Smart SKU Product Dock Card -->
                             <g class="character-arm-wave">
-                                <!-- Shoulder Socket Cap + Proportional Upper Arm -->
-                                <circle cx="199" cy="154" r="6.2" fill="#2563eb"/>
-                                <line x1="199" y1="154" x2="190" y2="168" stroke="url(#execBlazerBlue)" stroke-width="12" stroke-linecap="round"/>
-                                <line x1="197" y1="152" x2="189" y2="165" stroke="#60a5fa" stroke-width="1.1" stroke-linecap="round" opacity="0.6"/>
-
-                                <!-- Proportional Forearm & Compact Hand Locked Rigidly to Elbow Socket (190,168) -->
                                 <g class="ik-forearm">
-                                    <circle cx="190" cy="168" r="5.6" fill="#2563eb"/>
-                                    <line x1="190" y1="168" x2="174" y2="156" stroke="url(#execBlazerBlue)" stroke-width="11" stroke-linecap="round"/>
-                                    <!-- Crisp White Shirt Cuff at Wrist (174,156) -->
-                                    <line x1="175" y1="157" x2="172" y2="154.5" stroke="#ffffff" stroke-width="8.5" stroke-linecap="round"/>
-                                    <!-- Compact Anatomical Hand Palm & Thumb Locked to Wrist -->
-                                    <circle cx="169" cy="152" r="4.6" fill="#f4c29f"/>
-                                    <path d="M169 149L165 146" stroke="#f4c29f" stroke-width="3" stroke-linecap="round"/>
-
-                                    <!-- Held & Docked Holographic Product Icon Card Directly in Hand Grip -->
                                     <g class="interactive-held-icon">
-                                        <rect x="136" y="130" width="32" height="34" rx="7" fill="url(#holoCardGrad)" stroke="#38bdf8" stroke-width="2"/>
-                                        <rect x="141" y="135" width="22" height="12" rx="3" fill="rgba(56,189,248,0.2)" stroke="#38bdf8" stroke-width="1.2"/>
-                                        <circle cx="152" cy="141" r="2.8" fill="#ff3333"/>
-                                        <line x1="141" y1="152" x2="159" y2="152" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-                                        <line x1="141" y1="157" x2="153" y2="157" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
-                                        <!-- Thumb Wrapping Over Right Edge of Card -->
-                                        <circle cx="167" cy="150" r="3" fill="#f4c29f"/>
-                                        <!-- Live Animated Energy Stream into Hub -->
-                                        <line class="energy-stream-line" x1="136" y1="145" x2="144" y2="145" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                                        <rect x="66" y="136" width="62" height="52" rx="11" fill="url(#holoCardGrad)" stroke="#ff3333" stroke-width="1.8"/>
+                                        <rect x="74" y="144" width="46" height="18" rx="5" fill="rgba(255,51,51,0.16)" stroke="#ff3333" stroke-width="1.2"/>
+                                        <circle cx="85" cy="153" r="4.5" fill="#ff3333"/>
+                                        <line x1="94" y1="151" x2="112" y2="151" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+                                        <line x1="94" y1="156" x2="106" y2="156" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+                                        <line x1="74" y1="170" x2="114" y2="170" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round"/>
+                                        <line x1="74" y1="178" x2="102" y2="178" stroke="#34d399" stroke-width="2.2" stroke-linecap="round"/>
+                                        <!-- Live Animated Energy Stream into Hub Center -->
+                                        <line class="energy-stream-line" x1="128" y1="156" x2="160" y2="140" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
                                     </g>
                                 </g>
                             </g>
@@ -1118,81 +1087,65 @@
             </section>
 
             <!-- =========================================================
-                 SECTION 2: LIVE INVENTORY (CRATES + STORYSET ENGINEER DOCKING RFID MODULE)
+                 SECTION 2: LIVE INVENTORY (CENTERED SMART VAULT + FLOATING RFID TELEMETRY)
                  ========================================================= -->
             <section class="slide" data-index="1">
                 <div class="art-stage">
                     <svg class="hero-scene-svg" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <ellipse class="draw-path" cx="160" cy="135" rx="128" ry="88" stroke="rgba(56,189,248,0.16)" stroke-width="1.5" stroke-dasharray="6 6"/>
 
-                        <!-- Centerpiece: Smart Inventory Crates + Laser -->
+                        <!-- Centerpiece: Centered Smart Inventory Vault Crates + Laser -->
                         <g class="centerpiece-group">
                             <g class="hud-status-pill">
-                                <rect x="86" y="46" width="78" height="16" rx="8" fill="#0f172a" stroke="#00ba7c" stroke-width="1.3"/>
-                                <circle cx="95" cy="54" r="3" fill="#00ba7c"/>
-                                <line x1="102" y1="54" x2="154" y2="54" stroke="#34d399" stroke-width="2.2" stroke-linecap="round"/>
+                                <rect x="114" y="40" width="92" height="18" rx="9" fill="#0f172a" stroke="#00ba7c" stroke-width="1.4"/>
+                                <circle cx="125" cy="49" r="3.5" fill="#00ba7c"/>
+                                <line x1="134" y1="49" x2="194" y2="49" stroke="#34d399" stroke-width="2.4" stroke-linecap="round"/>
                             </g>
-                            <rect class="draw-path" x="74" y="136" width="102" height="52" rx="10" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2.5"/>
-                            <line class="draw-path draw-delay-1" x1="125" y1="136" x2="125" y2="156" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
-                            <rect x="90" y="166" width="30" height="8" rx="4" fill="#ff3333"/>
 
-                            <rect class="draw-path draw-delay-1" x="86" y="76" width="78" height="48" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
-                            <line class="draw-path draw-delay-2" x1="125" y1="76" x2="125" y2="94" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
+                            <!-- Bottom Heavy Warehouse Smart Crate (Centered) -->
+                            <rect class="draw-path" x="96" y="134" width="128" height="54" rx="12" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line class="draw-path draw-delay-1" x1="160" y1="134" x2="160" y2="156" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+                            <rect x="112" y="164" width="34" height="8" rx="4" fill="#ff3333"/>
+                            <rect x="174" y="164" width="34" height="8" rx="4" fill="#38bdf8"/>
+
+                            <!-- Top Serialized Smart Crate (Centered) -->
+                            <rect class="draw-path draw-delay-1" x="110" y="72" width="100" height="52" rx="11" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line class="draw-path draw-delay-2" x1="160" y1="72" x2="160" y2="92" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+
                             <!-- Target Dock Sensor on Top Crate -->
                             <g class="interaction-target-ring">
-                                <circle cx="147" cy="102" r="13" fill="rgba(0, 186, 124, 0.22)" stroke="#00ba7c" stroke-width="1.5" stroke-dasharray="3 3"/>
+                                <circle cx="160" cy="104" r="15" fill="rgba(0, 186, 124, 0.22)" stroke="#00ba7c" stroke-width="1.6" stroke-dasharray="3 3"/>
                             </g>
-                            <circle cx="147" cy="102" r="5.5" fill="#00ba7c"/>
+                            <circle cx="160" cy="104" r="5.5" fill="#00ba7c"/>
 
-                            <line class="scan-laser" x1="66" y1="128" x2="188" y2="128" stroke="#ff3333" stroke-width="3.5" stroke-linecap="round"/>
+                            <!-- Precision Full-Width Inventory Laser Beam -->
+                            <line class="scan-laser" x1="82" y1="128" x2="238" y2="128" stroke="#ff3333" stroke-width="3.5" stroke-linecap="round"/>
                         </g>
 
-                        <!-- Storyset-Style Character 2: Operations Engineer with Tailored Torso & Proportional Arm -->
+                        <!-- Floating Executive UI Overlay (Replaces Character 2): RFID Scanner & Live Stock Telemetry -->
                         <g class="character-group">
-                            <path d="M249 153L255 170L245 182" stroke="#0f172a" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <!-- Tailored Structured Tech Jacket matching the Arm -->
-                            <path class="draw-path" d="M194 196L192 158C192 149 200 144 212 144H236C248 144 256 149 256 158L254 196H194Z" fill="url(#execSuitNavy)" stroke="#38bdf8" stroke-width="1.6"/>
-                            <polygon points="215,144 233,144 224,173" fill="#38bdf8"/>
-                            <!-- Smart ID Lanyard -->
-                            <path d="M217 144L224 169L231 144" stroke="#ffffff" stroke-width="1.4" fill="none"/>
-                            <rect x="219" y="169" width="10" height="14" rx="2" fill="#1e293b" stroke="#fbbf24" stroke-width="1.2"/>
-
-                            <!-- Clean Modern Storyset Head & AR Visor (Locked at Neck 224,142) -->
+                            <!-- Right Floating Live Serial Telemetry HUD -->
                             <g class="character-head">
-                                <rect x="218" y="131" width="12" height="15" rx="5" fill="#f4c29f"/>
-                                <path d="M218 137Q224 142 230 137V143H218V137Z" fill="#e0a37b"/>
-                                <circle cx="238" cy="120" r="3.8" fill="#e0a37b"/>
-                                <rect x="210" y="101" width="28" height="33" rx="13.5" fill="#f4c29f"/>
-                                <path d="M209 116C208 103 215 96 226 96C237 96 241 103 239 115C237 108 232 105 225 105C217 105 212 109 209 116Z" fill="#0f172a"/>
-                                <!-- Sleek AR Inventory Glasses -->
-                                <rect x="212" y="114" width="22" height="6.5" rx="3" fill="rgba(56,189,248,0.28)" stroke="#38bdf8" stroke-width="1.4"/>
-                                <circle cx="217" cy="117.5" r="1.6" fill="#0f172a"/>
-                                <circle cx="228" cy="117.5" r="1.6" fill="#0f172a"/>
-                                <path d="M221.5 121V124" stroke="#d28f64" stroke-width="1.5" stroke-linecap="round"/>
-                                <path d="M219 128Q223 131 227.5 128" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+                                <rect x="192" y="142" width="66" height="52" rx="11" fill="url(#execSuitNavy)" stroke="#00ba7c" stroke-width="1.8"/>
+                                <circle cx="204" cy="154" r="4" fill="#00ba7c"/>
+                                <line x1="213" y1="154" x2="246" y2="154" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
+                                <line x1="202" y1="167" x2="248" y2="167" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
+                                <line x1="202" y1="176" x2="234" y2="176" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round"/>
+                                <rect x="202" y="183" width="44" height="4" rx="2" fill="#34d399"/>
                             </g>
 
-                            <!-- PROPORTIONAL BENT LEFT ARM (Shoulder 199,154 -> Elbow 190,168 -> Wrist 174,156 -> Hand 169,152) -->
+                            <!-- Left Floating RFID Matrix Scanner Pod -->
                             <g class="character-arm-action">
-                                <circle cx="199" cy="154" r="6.2" fill="#1e293b"/>
-                                <line x1="199" y1="154" x2="190" y2="168" stroke="url(#execSuitNavy)" stroke-width="12" stroke-linecap="round"/>
-                                <line x1="197" y1="152" x2="189" y2="165" stroke="#38bdf8" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
-
                                 <g class="ik-forearm">
-                                    <circle cx="190" cy="168" r="5.6" fill="#1e293b"/>
-                                    <line x1="190" y1="168" x2="174" y2="156" stroke="url(#execSuitNavy)" stroke-width="11" stroke-linecap="round"/>
-                                    <line x1="175" y1="157" x2="172" y2="154.5" stroke="#38bdf8" stroke-width="8.5" stroke-linecap="round"/>
-                                    <circle cx="169" cy="152" r="4.6" fill="#f4c29f"/>
-
-                                    <!-- Held & Docked RFID Smart Tag Icon Directly in Hand Grip -->
                                     <g class="interactive-held-icon">
-                                        <rect x="136" y="128" width="32" height="30" rx="7" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2"/>
-                                        <line x1="143" y1="135" x2="143" y2="151" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
-                                        <line x1="149" y1="135" x2="149" y2="151" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
-                                        <line x1="155" y1="135" x2="155" y2="151" stroke="#ff3333" stroke-width="2.2" stroke-linecap="round"/>
-                                        <circle cx="161" cy="137" r="2.8" fill="#00ba7c"/>
-                                        <circle cx="167" cy="150" r="3" fill="#f4c29f"/>
-                                        <polygon points="142,128 148,116 156,128" fill="rgba(56, 189, 248, 0.32)"/>
+                                        <rect x="66" y="86" width="56" height="44" rx="10" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2"/>
+                                        <line x1="78" y1="96" x2="78" y2="118" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/>
+                                        <line x1="86" y1="96" x2="86" y2="118" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
+                                        <line x1="94" y1="96" x2="94" y2="118" stroke="#ff3333" stroke-width="2.6" stroke-linecap="round"/>
+                                        <line x1="102" y1="96" x2="102" y2="118" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round"/>
+                                        <circle cx="112" cy="97" r="3.5" fill="#00ba7c"/>
+                                        <!-- Optical Scan Cone into Top Crate Sensor -->
+                                        <polygon points="122,102 156,96 156,112" fill="rgba(56, 189, 248, 0.25)"/>
                                     </g>
                                 </g>
                             </g>
@@ -1254,77 +1207,63 @@
             </section>
 
             <!-- =========================================================
-                 SECTION 3: EXPRESS BILLING (POS + STORYSET SPECIALIST TAPPING NFC CARD)
+                 SECTION 3: EXPRESS BILLING (CENTERED POS ENGINE + FLOATING NFC & GST MODULES)
                  ========================================================= -->
             <section class="slide" data-index="2">
                 <div class="art-stage">
                     <svg class="hero-scene-svg" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <ellipse class="draw-path" cx="160" cy="135" rx="128" ry="88" stroke="rgba(255,51,51,0.16)" stroke-width="1.5" stroke-dasharray="6 6"/>
 
-                        <!-- Centerpiece: Express POS + Animated Receipt -->
+                        <!-- Centerpiece: Centered Express POS Terminal + Animated GST Receipt -->
                         <g class="centerpiece-group">
                             <g class="receipt-paper">
-                                <rect class="draw-path" x="96" y="54" width="66" height="62" rx="6" fill="#ffffff"/>
-                                <line x1="108" y1="70" x2="150" y2="70" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/>
-                                <line x1="108" y1="82" x2="140" y2="82" stroke="#ff3333" stroke-width="3.5" stroke-linecap="round"/>
-                                <line x1="108" y1="94" x2="146" y2="94" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+                                <rect class="draw-path" x="122" y="48" width="76" height="66" rx="7" fill="#ffffff"/>
+                                <line x1="134" y1="64" x2="184" y2="64" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="134" y1="76" x2="172" y2="76" stroke="#ff3333" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="134" y1="88" x2="178" y2="88" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+                                <circle cx="182" cy="82" r="5" fill="#00ba7c"/>
                             </g>
-                            <rect class="draw-path" x="76" y="104" width="104" height="76" rx="14" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
-                            <line class="draw-path draw-delay-1" x1="90" y1="104" x2="166" y2="104" stroke="#ff3333" stroke-width="4.5" stroke-linecap="round"/>
-                            <rect class="draw-path draw-delay-1" x="94" y="122" width="68" height="24" rx="6" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+
+                            <!-- Main Centered POS Console -->
+                            <rect class="draw-path" x="96" y="102" width="128" height="80" rx="15" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line class="draw-path draw-delay-1" x1="114" y1="102" x2="206" y2="102" stroke="#ff3333" stroke-width="4.5" stroke-linecap="round"/>
+                            <rect class="draw-path draw-delay-1" x="116" y="118" width="88" height="28" rx="7" fill="rgba(56, 189, 248, 0.18)" stroke="#38bdf8" stroke-width="2"/>
+
                             <!-- NFC Contactless Target Zone on POS Screen -->
                             <g class="interaction-target-ring">
-                                <circle cx="144" cy="134" r="14" fill="rgba(52, 211, 153, 0.22)" stroke="#34d399" stroke-width="1.6" stroke-dasharray="3 3"/>
+                                <circle cx="160" cy="132" r="15" fill="rgba(52, 211, 153, 0.24)" stroke="#34d399" stroke-width="1.6" stroke-dasharray="3 3"/>
                             </g>
-                            <circle cx="102" cy="162" r="4.5" fill="#fbbf24"/>
-                            <circle cx="120" cy="162" r="4.5" fill="#38bdf8"/>
-                            <circle cx="138" cy="162" r="4.5" fill="#ff3333"/>
-                            <circle cx="156" cy="162" r="4.5" fill="#00ba7c"/>
+
+                            <!-- POS Touch Keys -->
+                            <circle cx="126" cy="162" r="4.5" fill="#fbbf24"/>
+                            <circle cx="148" cy="162" r="4.5" fill="#38bdf8"/>
+                            <circle cx="172" cy="162" r="4.5" fill="#ff3333"/>
+                            <circle cx="194" cy="162" r="4.5" fill="#00ba7c"/>
                         </g>
 
-                        <!-- Storyset-Style Character 3: Specialist in Tailored Crimson Blazer Sweeping NFC Card -->
+                        <!-- Floating Executive UI Overlay (Replaces Character 3): Contactless Card & GST Verified Dispatch Pod -->
                         <g class="character-group">
-                            <path d="M249 153L255 170L245 182" stroke="#be123c" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <!-- Tailored Structured Crimson Blazer matching the Arm 100% -->
-                            <path class="draw-path" d="M194 196L192 158C192 149 200 144 212 144H236C248 144 256 149 256 158L254 196H194Z" fill="url(#execBlazerCrimson)" stroke="#ff8080" stroke-width="1.6"/>
-                            <polygon points="215,144 233,144 224,174" fill="#ffffff"/>
-                            <polygon points="222,146 226,146 226.5,171 224,175 221.5,171" fill="#1e293b"/>
-
-                            <!-- Clean Modern Storyset Head (Locked at Neck 224,142) -->
+                            <!-- Right Floating GST Verified Invoice Status Card -->
                             <g class="character-head">
-                                <rect x="218" y="131" width="12" height="15" rx="5" fill="#f4c29f"/>
-                                <path d="M218 137Q224 142 230 137V143H218V137Z" fill="#e0a37b"/>
-                                <circle cx="238" cy="120" r="3.8" fill="#e0a37b"/>
-                                <rect x="210" y="101" width="28" height="33" rx="13.5" fill="#f4c29f"/>
-                                <path d="M209 116C208 103 215 96 226 96C237 96 241 103 239 115C237 108 232 105 225 105C217 105 212 109 209 116Z" fill="#0f172a"/>
-                                <path d="M214 114Q217 112.5 220 114" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round"/>
-                                <path d="M225 114Q228 112.5 231 114" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round"/>
-                                <circle cx="217" cy="118.5" r="2" fill="#0f172a"/>
-                                <circle cx="228" cy="118.5" r="2" fill="#0f172a"/>
-                                <circle cx="216.3" cy="117.8" r="0.7" fill="#ffffff"/>
-                                <circle cx="227.3" cy="117.8" r="0.7" fill="#ffffff"/>
-                                <path d="M221.5 119V123.5" stroke="#d28f64" stroke-width="1.5" stroke-linecap="round"/>
-                                <path d="M219 127.5Q223 131 227.5 127.5" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+                                <rect x="194" y="144" width="64" height="50" rx="11" fill="url(#execSuitNavy)" stroke="#ff3333" stroke-width="1.8"/>
+                                <circle cx="208" cy="158" r="5" fill="#00ba7c"/>
+                                <path d="M205.5 158L207.5 160L211 156" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="218" y1="158" x2="248" y2="158" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
+                                <line x1="204" y1="171" x2="246" y2="171" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round"/>
+                                <line x1="204" y1="181" x2="236" y2="181" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
                             </g>
 
-                            <!-- PROPORTIONAL BENT LEFT ARM (Shoulder 199,154 -> Elbow 190,168 -> Wrist 174,156 -> Hand 169,152) -->
+                            <!-- Left Floating Contactless Executive Payment Card -->
                             <g class="character-arm-action">
-                                <circle cx="199" cy="154" r="6.2" fill="#ff3333"/>
-                                <line x1="199" y1="154" x2="190" y2="168" stroke="url(#execBlazerCrimson)" stroke-width="12" stroke-linecap="round"/>
-
                                 <g class="ik-forearm">
-                                    <circle cx="190" cy="168" r="5.6" fill="#ff3333"/>
-                                    <line x1="190" y1="168" x2="174" y2="156" stroke="url(#execBlazerCrimson)" stroke-width="11" stroke-linecap="round"/>
-                                    <line x1="175" y1="157" x2="172" y2="154.5" stroke="#ffffff" stroke-width="8.5" stroke-linecap="round"/>
-                                    <circle cx="169" cy="152" r="4.6" fill="#f4c29f"/>
-
-                                    <!-- Held & Swept NFC Smart Card Icon Directly in Hand Grip -->
                                     <g class="interactive-held-icon">
-                                        <rect x="134" y="134" width="34" height="22" rx="5" transform="rotate(-5 134 134)" fill="url(#execBlazerBlue)" stroke="#38bdf8" stroke-width="1.8"/>
-                                        <rect x="140" y="140" width="7" height="5.5" rx="1.5" transform="rotate(-5 140 140)" fill="#fbbf24"/>
-                                        <line x1="141" y1="150" x2="158" y2="148" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
-                                        <circle cx="167" cy="150" r="3" fill="#f4c29f"/>
-                                        <path d="M129 138C125 142 125 148 129 152" stroke="#34d399" stroke-width="2" stroke-linecap="round"/>
+                                        <rect x="64" y="108" width="58" height="38" rx="8" transform="rotate(-6 64 108)" fill="url(#execBlazerBlue)" stroke="#38bdf8" stroke-width="2"/>
+                                        <rect x="73" y="117" width="11" height="8" rx="2" transform="rotate(-6 73 117)" fill="#fbbf24"/>
+                                        <line x1="75" y1="133" x2="110" y2="129" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+                                        <circle cx="110" cy="116" r="4" fill="#ff3333"/>
+                                        <!-- Contactless NFC Waves into POS Screen -->
+                                        <path d="M128 118C133 123 133 131 128 136" stroke="#34d399" stroke-width="2.2" stroke-linecap="round"/>
+                                        <path d="M134 114C141 121 141 133 134 140" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
                                     </g>
                                 </g>
                             </g>
@@ -1386,70 +1325,59 @@
             </section>
 
             <!-- =========================================================
-                 SECTION 4: SMART AUDITING (ANALYTICS + STORYSET AUDITOR SCANNING KPI LENS)
+                 SECTION 4: SMART AUDITING (CENTERED ANALYTICS SUITE + FLOATING KPI INSPECTOR)
                  ========================================================= -->
             <section class="slide" data-index="3">
                 <div class="art-stage">
                     <svg class="hero-scene-svg" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <ellipse class="draw-path" cx="160" cy="135" rx="128" ry="88" stroke="rgba(56,189,248,0.16)" stroke-width="1.5" stroke-dasharray="6 6"/>
 
-                        <!-- Centerpiece: Live Analytics Board -->
+                        <!-- Centerpiece: Centered Widescreen Live Analytics Board -->
                         <g class="centerpiece-group">
                             <g class="hud-status-pill">
-                                <rect x="92" y="46" width="76" height="16" rx="8" fill="#0f172a" stroke="#fbbf24" stroke-width="1.3"/>
-                                <circle cx="101" cy="54" r="3" fill="#fbbf24"/>
-                                <line x1="108" y1="54" x2="158" y2="54" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+                                <rect x="114" y="40" width="92" height="18" rx="9" fill="#0f172a" stroke="#fbbf24" stroke-width="1.4"/>
+                                <circle cx="125" cy="49" r="3.5" fill="#fbbf24"/>
+                                <line x1="134" y1="49" x2="194" y2="49" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
                             </g>
-                            <rect class="draw-path" x="72" y="72" width="118" height="110" rx="16" fill="#181824" stroke="#38bdf8" stroke-width="2.5"/>
-                            <rect class="bar-1" x="90" y="138" width="14" height="26" rx="4" fill="#38bdf8"/>
-                            <rect class="bar-2" x="114" y="120" width="14" height="44" rx="4" fill="#2563eb"/>
-                            <rect class="bar-3" x="138" y="104" width="14" height="60" rx="4" fill="#ff3333"/>
-                            <rect class="bar-4" x="162" y="86" width="14" height="78" rx="4" fill="#00ba7c"/>
-                            <path class="draw-path draw-delay-2" d="M92 128L120 108L144 114L170 78" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+                            <!-- Main Centered Analytics Frame -->
+                            <rect class="draw-path" x="92" y="70" width="136" height="114" rx="16" fill="#181824" stroke="#38bdf8" stroke-width="2.5"/>
+                            <rect class="bar-1" x="112" y="140" width="16" height="28" rx="4" fill="#38bdf8"/>
+                            <rect class="bar-2" x="138" y="122" width="16" height="46" rx="4" fill="#2563eb"/>
+                            <rect class="bar-3" x="164" y="104" width="16" height="64" rx="4" fill="#ff3333"/>
+                            <rect class="bar-4" x="190" y="86" width="16" height="82" rx="4" fill="#00ba7c"/>
+
+                            <!-- Growth Trend Line -->
+                            <path class="draw-path draw-delay-2" d="M118 130L146 110L172 114L198 78" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
                             <!-- Target Lock Ring on Peak Bar -->
                             <g class="interaction-target-ring">
-                                <circle cx="169" cy="84" r="14" fill="rgba(255, 51, 51, 0.2)" stroke="#fbbf24" stroke-width="1.6" stroke-dasharray="3 3"/>
+                                <circle cx="198" cy="82" r="15" fill="rgba(255, 51, 51, 0.2)" stroke="#fbbf24" stroke-width="1.6" stroke-dasharray="3 3"/>
                             </g>
                         </g>
 
-                        <!-- Storyset-Style Character 4: Senior Data Auditor with Tailored Torso & Proportional Arm -->
+                        <!-- Floating Executive UI Overlay (Replaces Character 4): Optical KPI Lens & Audit Summary Card -->
                         <g class="character-group">
-                            <path d="M249 153L255 170L245 182" stroke="#1e3a8a" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path class="draw-path" d="M194 196L192 158C192 149 200 144 212 144H236C248 144 256 149 256 158L254 196H194Z" fill="url(#execBlazerBlue)" stroke="#38bdf8" stroke-width="1.6"/>
-                            <polygon points="215,144 233,144 224,174" fill="#ffffff"/>
-                            <polygon points="222,146 226,146 226.5,171 224,175 221.5,171" fill="#ff3333"/>
-
-                            <!-- Clean Modern Storyset Head & Rimless Frames (Locked at Neck 224,142) -->
+                            <!-- Left Floating Audit Compliance Summary Card -->
                             <g class="character-head">
-                                <rect x="218" y="131" width="12" height="15" rx="5" fill="#f4c29f"/>
-                                <path d="M218 137Q224 142 230 137V143H218V137Z" fill="#e0a37b"/>
-                                <circle cx="238" cy="120" r="3.8" fill="#e0a37b"/>
-                                <rect x="210" y="101" width="28" height="33" rx="13.5" fill="#f4c29f"/>
-                                <path d="M209 116C208 103 215 96 226 96C237 96 241 103 239 115C237 108 232 105 225 105C217 105 212 109 209 116Z" fill="#0f172a"/>
-                                <rect x="212.5" y="115" width="9" height="6" rx="2" fill="rgba(56,189,248,0.2)" stroke="#0f172a" stroke-width="1.3"/>
-                                <rect x="223.5" y="115" width="9" height="6" rx="2" fill="rgba(56,189,248,0.2)" stroke="#0f172a" stroke-width="1.3"/>
-                                <line x1="221.5" y1="117.5" x2="223.5" y2="117.5" stroke="#0f172a" stroke-width="1.3"/>
-                                <path d="M221.5 121V124" stroke="#d28f64" stroke-width="1.5" stroke-linecap="round"/>
-                                <path d="M219 128Q223 131 227.5 128" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+                                <rect x="64" y="138" width="62" height="52" rx="11" fill="url(#execSuitNavy)" stroke="#38bdf8" stroke-width="1.8"/>
+                                <rect x="73" y="148" width="26" height="5" rx="2.5" fill="#00ba7c"/>
+                                <circle cx="114" cy="150.5" r="3.5" fill="#fbbf24"/>
+                                <line x1="73" y1="162" x2="116" y2="162" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+                                <line x1="73" y1="171" x2="108" y2="171" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
+                                <line x1="73" y1="180" x2="98" y2="180" stroke="#ff3333" stroke-width="2.2" stroke-linecap="round"/>
                             </g>
 
-                            <!-- PROPORTIONAL BENT LEFT ARM (Shoulder 199,154 -> Elbow 190,168 -> Wrist 174,156 -> Hand 169,152) -->
+                            <!-- Right Floating Optical KPI Magnifier Pod -->
                             <g class="character-arm-wave">
-                                <circle cx="199" cy="154" r="6.2" fill="#2563eb"/>
-                                <line x1="199" y1="154" x2="190" y2="168" stroke="url(#execBlazerBlue)" stroke-width="12" stroke-linecap="round"/>
-
                                 <g class="ik-forearm">
-                                    <circle cx="190" cy="168" r="5.6" fill="#2563eb"/>
-                                    <line x1="190" y1="168" x2="174" y2="156" stroke="url(#execBlazerBlue)" stroke-width="11" stroke-linecap="round"/>
-                                    <line x1="175" y1="157" x2="172" y2="154.5" stroke="#ffffff" stroke-width="8.5" stroke-linecap="round"/>
-                                    <circle cx="169" cy="152" r="4.6" fill="#f4c29f"/>
-
-                                    <!-- Held & Moved Interactive Audit Magnifier Lens Icon Directly in Hand Grip -->
                                     <g class="interactive-held-icon">
-                                        <circle cx="149" cy="133" r="14" fill="rgba(56, 189, 248, 0.24)" stroke="#fbbf24" stroke-width="2.4"/>
-                                        <line x1="159" y1="143" x2="169" y2="152" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
-                                        <path d="M143 133L147 137L156 128" stroke="#00ba7c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <circle cx="167" cy="150" r="3" fill="#f4c29f"/>
+                                        <rect x="196" y="128" width="60" height="48" rx="11" fill="#0f172a" stroke="#fbbf24" stroke-width="1.8"/>
+                                        <circle cx="218" cy="152" r="13" fill="rgba(56, 189, 248, 0.2)" stroke="#fbbf24" stroke-width="2.2"/>
+                                        <path d="M213 152L217 156L225 147" stroke="#00ba7c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <line x1="236" y1="145" x2="248" y2="145" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
+                                        <line x1="236" y1="154" x2="246" y2="154" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
+                                        <line x1="236" y1="162" x2="244" y2="162" stroke="#34d399" stroke-width="2.2" stroke-linecap="round"/>
                                     </g>
                                 </g>
                             </g>
@@ -1507,70 +1435,50 @@
             </section>
 
             <!-- =========================================================
-                 SECTION 5: ALL SET (ROCKET + STORYSET FOUNDER DOCKING IGNITION CORE)
+                 SECTION 5: ALL SET (CENTERED LAUNCH ROCKET + FLOATING SYSTEM READY PODS)
                  ========================================================= -->
             <section class="slide" data-index="4" id="final-slide">
                 <div class="art-stage">
                     <svg class="hero-scene-svg" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <ellipse class="draw-path" cx="160" cy="135" rx="128" ry="88" stroke="rgba(255,51,51,0.18)" stroke-width="1.5" stroke-dasharray="6 6"/>
 
-                        <!-- Centerpiece: Launch Rocket -->
+                        <!-- Centerpiece: Centered Precision Launch Rocket -->
                         <g class="centerpiece-group">
-                            <path class="rocket-flame" d="M122 176L134 212L146 176H122Z" fill="#ff3333"/>
-                            <path class="rocket-flame" d="M127 176L134 198L141 176H127Z" fill="#fbbf24"/>
-                            <path class="draw-path" d="M108 142L88 166H112V142Z" fill="#2563eb" stroke="#38bdf8" stroke-width="1.8"/>
-                            <path class="draw-path" d="M160 142L180 166H156V142Z" fill="#2563eb" stroke="#38bdf8" stroke-width="1.8"/>
-                            <path class="draw-path" d="M134 64C112 88 108 116 108 160H160C160 116 156 88 134 64Z" fill="#ffffff" stroke="#38bdf8" stroke-width="2.2"/>
-                            <path d="M134 64C123 76 118 88 115 100H153C150 88 145 76 134 64Z" fill="#ff3333"/>
+                            <path class="rocket-flame" d="M148 176L160 214L172 176H148Z" fill="#ff3333"/>
+                            <path class="rocket-flame" d="M153 176L160 198L167 176H153Z" fill="#fbbf24"/>
+                            <path class="draw-path" d="M134 142L114 166H138V142Z" fill="#2563eb" stroke="#38bdf8" stroke-width="1.8"/>
+                            <path class="draw-path" d="M186 142L206 166H182V142Z" fill="#2563eb" stroke="#38bdf8" stroke-width="1.8"/>
+                            <path class="draw-path" d="M160 62C138 86 134 116 134 160H186C186 116 182 86 160 62Z" fill="#ffffff" stroke="#38bdf8" stroke-width="2.2"/>
+                            <path d="M160 62C149 74 144 86 141 98H179C176 86 171 74 160 62Z" fill="#ff3333"/>
                             <!-- Rocket Core Target Dock -->
                             <g class="interaction-target-ring">
-                                <circle cx="134" cy="124" r="17" fill="rgba(56, 189, 248, 0.25)" stroke="#38bdf8" stroke-width="1.6" stroke-dasharray="3 3"/>
+                                <circle cx="160" cy="122" r="18" fill="rgba(56, 189, 248, 0.25)" stroke="#38bdf8" stroke-width="1.6" stroke-dasharray="3 3"/>
                             </g>
-                            <circle class="draw-path draw-delay-1" cx="134" cy="124" r="11" fill="#38bdf8" stroke="#121212" stroke-width="3"/>
-                            <rect x="116" y="160" width="36" height="12" rx="4" fill="#fbbf24"/>
+                            <circle class="draw-path draw-delay-1" cx="160" cy="122" r="11" fill="#38bdf8" stroke="#121212" stroke-width="3"/>
+                            <rect x="142" y="160" width="36" height="12" rx="4" fill="#fbbf24"/>
                         </g>
 
-                        <!-- Storyset-Style Character 5: Founder with Tailored Torso Docking Ignition Core -->
+                        <!-- Floating Executive UI Overlay (Replaces Character 5): System Telemetry & Cloud Ignition Core -->
                         <g class="character-group">
-                            <path d="M249 153L255 170L245 182" stroke="#0f172a" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path class="draw-path" d="M194 196L192 158C192 149 200 144 212 144H236C248 144 256 149 256 158L254 196H194Z" fill="url(#execSuitNavy)" stroke="#ff3333" stroke-width="1.7"/>
-                            <polygon points="215,144 233,144 224,174" fill="#ffffff"/>
-                            <polygon points="222,146 226,146 226.5,171 224,175 221.5,171" fill="#ff3333"/>
-                            <line x1="221" y1="160" x2="227" y2="160" stroke="#fbbf24" stroke-width="1.8" stroke-linecap="round"/>
-
-                            <!-- Clean Modern Storyset Head (Locked at Neck 224,142) -->
+                            <!-- Right Floating Cloud Readiness Status Card -->
                             <g class="character-head">
-                                <rect x="218" y="131" width="12" height="15" rx="5" fill="#f4c29f"/>
-                                <path d="M218 137Q224 142 230 137V143H218V137Z" fill="#e0a37b"/>
-                                <circle cx="238" cy="120" r="3.8" fill="#e0a37b"/>
-                                <rect x="210" y="101" width="28" height="33" rx="13.5" fill="#f4c29f"/>
-                                <path d="M209 116C208 103 215 96 226 96C237 96 241 103 239 115C237 108 232 105 225 105C217 105 212 109 209 116Z" fill="#0f172a"/>
-                                <path d="M214 114Q217 112.5 220 114" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round"/>
-                                <path d="M225 114Q228 112.5 231 114" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round"/>
-                                <circle cx="217" cy="118.5" r="2" fill="#0f172a"/>
-                                <circle cx="228" cy="118.5" r="2" fill="#0f172a"/>
-                                <circle cx="216.3" cy="117.8" r="0.7" fill="#ffffff"/>
-                                <circle cx="227.3" cy="117.8" r="0.7" fill="#ffffff"/>
-                                <path d="M221.5 119V123.5" stroke="#d28f64" stroke-width="1.5" stroke-linecap="round"/>
-                                <path d="M218.5 127Q223 131.5 228 127" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+                                <rect x="198" y="106" width="58" height="48" rx="10" fill="url(#execSuitNavy)" stroke="#00ba7c" stroke-width="1.8"/>
+                                <circle cx="210" cy="119" r="4" fill="#00ba7c"/>
+                                <line x1="219" y1="119" x2="246" y2="119" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+                                <circle cx="210" cy="131" r="4" fill="#38bdf8"/>
+                                <line x1="219" y1="131" x2="242" y2="131" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
+                                <circle cx="210" cy="143" r="4" fill="#fbbf24"/>
+                                <line x1="219" y1="143" x2="244" y2="143" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round"/>
                             </g>
 
-                            <!-- PROPORTIONAL BENT LEFT ARM (Shoulder 199,154 -> Elbow 190,168 -> Wrist 174,156 -> Hand 169,152) -->
+                            <!-- Left Floating Workspace Ignition Core Pod -->
                             <g class="character-arm-wave">
-                                <circle cx="199" cy="154" r="6.2" fill="#1e293b"/>
-                                <line x1="199" y1="154" x2="190" y2="168" stroke="url(#execSuitNavy)" stroke-width="12" stroke-linecap="round"/>
-
                                 <g class="ik-forearm">
-                                    <circle cx="190" cy="168" r="5.6" fill="#1e293b"/>
-                                    <line x1="190" y1="168" x2="174" y2="156" stroke="url(#execSuitNavy)" stroke-width="11" stroke-linecap="round"/>
-                                    <line x1="175" y1="157" x2="172" y2="154.5" stroke="#ffffff" stroke-width="8.5" stroke-linecap="round"/>
-                                    <circle cx="169" cy="152" r="4.6" fill="#f4c29f"/>
-
-                                    <!-- Held & Docked Launch Ignition Core Module Directly in Hand Grip -->
                                     <g class="interactive-held-icon">
-                                        <circle cx="154" cy="146" r="13" fill="#0f172a" stroke="#fbbf24" stroke-width="2.2"/>
-                                        <path d="M156 137L148 147H154L152 155L161 145H155L156 137Z" fill="#ff3333" stroke="#fbbf24" stroke-width="1" stroke-linejoin="round"/>
-                                        <circle cx="167" cy="150" r="3" fill="#f4c29f"/>
+                                        <rect x="66" y="104" width="54" height="48" rx="11" fill="#0f172a" stroke="#fbbf24" stroke-width="1.8"/>
+                                        <circle cx="93" cy="128" r="14" fill="#1e293b" stroke="#fbbf24" stroke-width="2"/>
+                                        <path d="M95 118L87 129H93L91 138L100 127H94L95 118Z" fill="#ff3333" stroke="#fbbf24" stroke-width="1" stroke-linejoin="round"/>
+                                        <line class="energy-stream-line" x1="120" y1="126" x2="148" y2="122" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
                                     </g>
                                 </g>
                             </g>
@@ -1674,7 +1582,7 @@
         }
     }
 
-    // --- GSAP SKELETAL INTERACTION ENGINE (ZERO LIMB ORIGIN OVERRIDE) ---
+    // --- GSAP EXECUTIVE UI INTERACTION ENGINE ---
     function runGsapCharacterInteraction(slideEl) {
         if (!window.gsap || !slideEl) return;
         const heldIcon = slideEl.querySelector('.interactive-held-icon');
@@ -1683,7 +1591,7 @@
         const armGroup = slideEl.querySelector('.character-arm-wave, .character-arm-action');
         const forearmGroup = slideEl.querySelector('.ik-forearm');
 
-        // Clear any inline GSAP transforms on arm/forearm/heldIcon so joints never detach from SVG view-box sockets
+        // Clear inline GSAP transforms so floating UI modules stay aligned with CSS fill-box anchors
         if (armGroup) {
             window.gsap.set(armGroup, { clearProps: 'transform,transformOrigin' });
         }
