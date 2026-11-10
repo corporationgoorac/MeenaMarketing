@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- GSAP 3 Animation Engine + Lottie-Web Player Engine for True Skeletal Character & Icon Manipulation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js" defer></script>
 
     <style>
         :root {
@@ -85,7 +88,7 @@
             transform: translate3d(0, 0, 0);
         }
 
-        /* --- TOP HEADER BAR (Corporate Sans-Serif: Meena in Red, Marketing in White) --- */
+        /* --- TOP HEADER BAR (Exact Same Position, Upgraded Executive Brand Wordmark) --- */
         .top-bar {
             height: 58px;
             padding: 16px 24px 0;
@@ -105,14 +108,14 @@
 
         .brand-handwriting {
             font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 21px;
+            font-size: 22px;
             font-weight: 800;
-            letter-spacing: -0.5px;
-            line-height: 1.1;
+            letter-spacing: -0.65px;
+            line-height: 1.08;
             white-space: nowrap;
             display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            align-items: baseline;
+            gap: 7px;
             clip-path: inset(0 100% 0 0);
             animation: handwritingReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.06s forwards;
             will-change: clip-path, transform;
@@ -122,34 +125,39 @@
             font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
             font-weight: 800;
             color: var(--accent);
-            background: linear-gradient(135deg, #ff3333 0%, #ff6b6b 100%);
+            background: linear-gradient(135deg, #ff2a2a 0%, #ff5555 55%, #ff8080 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 12px rgba(255, 51, 51, 0.32));
+            filter: drop-shadow(0 2px 14px rgba(255, 51, 51, 0.38));
         }
 
         .brand-marketing {
             font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
             font-weight: 700;
             color: #ffffff;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.35px;
+            background: linear-gradient(180deg, #ffffff 0%, #d4d4d8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .brand-underline {
             width: 100%;
             height: 6px;
-            margin-top: 3px;
+            margin-top: 4px;
             overflow: visible;
         }
 
         .brand-underline path {
             stroke: url(#brandLineGrad);
-            stroke-width: 2.2;
+            stroke-width: 2.4;
             stroke-linecap: round;
             fill: none;
             stroke-dasharray: 140;
             stroke-dashoffset: 140;
+            filter: drop-shadow(0 1px 6px rgba(255, 51, 51, 0.45));
             animation: signatureLineDraw 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
         }
 
@@ -189,17 +197,18 @@
             transition: none !important;
         }
 
+        /* --- MOBILE SLIDE: TRUE VISUAL SCREEN CENTERING --- */
         .slide {
             width: 20%;
             min-width: 20%;
             max-width: 20%;
             flex: 0 0 20%;
             height: 100%;
-            padding: 4px 24px 12px;
+            padding: 24px 24px 18px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: flex-end;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -209,9 +218,9 @@
         /* --- HALF-SCREEN NATIVE APP HERO ILLUSTRATION STAGE (WITH BLUE & RED AURORA) --- */
         .art-stage {
             width: 100%;
-            height: 58%;
-            min-height: 210px;
-            max-height: 360px;
+            height: 56%;
+            min-height: 220px;
+            max-height: 330px;
             background: transparent;
             border: none;
             box-shadow: none;
@@ -219,24 +228,26 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 12px;
+            margin-top: auto;
+            margin-bottom: 16px;
             flex-shrink: 0;
             opacity: 0;
             transform: scale(0.88) translateY(16px);
             transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+            cursor: pointer;
         }
 
         /* Primary Blue & Red Animated Gradient Aura strictly behind the SVG icons */
         .art-stage::before {
             content: '';
             position: absolute;
-            width: 265px;
-            height: 265px;
+            width: 275px;
+            height: 275px;
             border-radius: 50%;
             background: 
-                radial-gradient(circle at 30% 35%, rgba(37, 99, 235, 0.44) 0%, rgba(56, 189, 248, 0.24) 35%, transparent 70%),
-                radial-gradient(circle at 72% 68%, rgba(255, 51, 51, 0.42) 0%, rgba(225, 29, 72, 0.22) 40%, transparent 72%);
-            filter: blur(26px);
+                radial-gradient(circle at 28% 32%, rgba(37, 99, 235, 0.54) 0%, rgba(56, 189, 248, 0.3) 38%, transparent 72%),
+                radial-gradient(circle at 74% 70%, rgba(255, 51, 51, 0.5) 0%, rgba(225, 29, 72, 0.28) 42%, transparent 74%);
+            filter: blur(28px);
             z-index: 0;
             animation: auraBreathe 4.2s ease-in-out infinite alternate;
             pointer-events: none;
@@ -246,17 +257,17 @@
         .art-stage::after {
             content: '';
             position: absolute;
-            width: 220px;
-            height: 220px;
+            width: 230px;
+            height: 230px;
             border-radius: 50%;
             background: conic-gradient(
                 from 0deg at 50% 50%,
-                rgba(255, 51, 51, 0.26) 0deg,
-                rgba(37, 99, 235, 0.32) 120deg,
-                rgba(56, 189, 248, 0.24) 240deg,
-                rgba(255, 51, 51, 0.26) 360deg
+                rgba(255, 51, 51, 0.28) 0deg,
+                rgba(37, 99, 235, 0.36) 120deg,
+                rgba(56, 189, 248, 0.26) 240deg,
+                rgba(255, 51, 51, 0.28) 360deg
             );
-            filter: blur(30px);
+            filter: blur(32px);
             z-index: 0;
             animation: auroraOrbit 9s linear infinite;
             pointer-events: none;
@@ -283,12 +294,12 @@
         .hero-scene-svg {
             width: 100%;
             height: 100%;
-            max-width: 380px;
-            max-height: 320px;
+            max-width: 390px;
+            max-height: 315px;
             position: relative;
             z-index: 2;
             overflow: visible;
-            filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.6));
+            filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.65));
             transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
@@ -318,76 +329,150 @@
         }
 
         .slide.active .centerpiece-group {
-            animation: centerpieceFloat 4s ease-in-out infinite;
+            animation: centerpieceFloat 4.2s ease-in-out infinite;
         }
 
         @keyframes centerpieceFloat {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-7px); }
+            50% { transform: translateY(-5px); }
         }
 
-        /* --- STORYSET-STYLE HUMAN CHARACTER ANIMATIONS (HAND, BODY, FACE) --- */
+        /* --- UNIFIED FILL-BOX SKELETAL CHARACTER & ARM RIG (ZERO DETACHMENT) --- */
         .character-group {
             transform-box: fill-box;
-            transform-origin: bottom center;
+            transform-origin: center bottom;
             opacity: 0;
         }
 
         .slide.active .character-group {
-            animation: characterEntrance 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.14s forwards,
-                       characterBreathe 3.8s ease-in-out 0.8s infinite;
+            animation: characterEntrance 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards,
+                       characterBreathe 4s ease-in-out 0.7s infinite;
         }
 
-        .character-arm-wave {
+        /* Shoulder Joint Locked at Exact Fill-Box Shoulder Anchor (90% 62%) */
+        .character-arm-wave,
+        .character-arm-action {
             transform-box: fill-box;
-            transform-origin: left bottom;
+            transform-origin: 90% 62%;
         }
 
         .slide.active .character-arm-wave {
-            animation: handWaveMotion 1.8s ease-in-out infinite alternate;
-        }
-
-        .character-arm-action {
-            transform-box: fill-box;
-            transform-origin: right top;
+            animation: ikArmGrabAndPlace 2.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
         }
 
         .slide.active .character-arm-action {
-            animation: handActionMotion 2.1s ease-in-out infinite alternate;
+            animation: ikArmInteractSweep 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
         }
 
+        /* Forearm & Hand Locked Rigidly to Upper Arm so Hand Never Moves Independently */
+        .ik-forearm {
+            transform-box: fill-box;
+            transform-origin: 85% 85%;
+        }
+
+        .slide.active .ik-forearm {
+            animation: ikForearmFlex 2.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+        }
+
+        /* Interactive Icon / Widget Locked Directly into the Character's Hand Grip */
+        .interactive-held-icon {
+            transform-box: fill-box;
+            transform-origin: right center;
+            filter: drop-shadow(0 8px 16px rgba(56, 189, 248, 0.4));
+        }
+
+        .slide.active .interactive-held-icon {
+            animation: heldIconPulse 2.8s ease-in-out infinite alternate;
+        }
+
+        /* Target Dock Pulse where the Character Places/Touches the Icon */
+        .interaction-target-ring {
+            transform-box: fill-box;
+            transform-origin: center;
+            opacity: 0;
+        }
+
+        .slide.active .interaction-target-ring {
+            animation: targetDockPulse 2.6s ease-in-out infinite alternate;
+        }
+
+        /* Live Holographic Status Pill Pop-up */
+        .hud-status-pill {
+            transform-box: fill-box;
+            transform-origin: center;
+            opacity: 0;
+        }
+
+        .slide.active .hud-status-pill {
+            animation: hudPillFloat 2.6s ease-in-out infinite alternate;
+        }
+
+        /* Energy Data Stream Line between Held Icon & Hub */
+        .energy-stream-line {
+            stroke-dasharray: 4 4;
+            animation: streamFlow 0.9s linear infinite;
+        }
+
+        @keyframes streamFlow {
+            to { stroke-dashoffset: -16; }
+        }
+
+        /* Neck Joint Locked at Base of Neck (50% 92% of Head Fill-Box) */
         .character-head {
             transform-box: fill-box;
-            transform-origin: bottom center;
+            transform-origin: 50% 92%;
         }
 
         .slide.active .character-head {
-            animation: headNodMotion 3.2s ease-in-out infinite;
+            animation: headNodMotion 3.6s ease-in-out infinite;
         }
 
         @keyframes characterEntrance {
-            0% { opacity: 0; transform: translateY(18px) scale(0.9); }
+            0% { opacity: 0; transform: translateY(14px) scale(0.95); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         @keyframes characterBreathe {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-4px); }
+            50% { transform: translateY(-3px); }
         }
 
-        @keyframes handWaveMotion {
-            0% { transform: rotate(-8deg); }
-            100% { transform: rotate(18deg); }
+        /* Subtle, Natural Connected Shoulder Rotation (Zero Detachment!) */
+        @keyframes ikArmGrabAndPlace {
+            0% { transform: rotate(-2deg); }
+            50% { transform: rotate(0.5deg); }
+            100% { transform: rotate(2.8deg); }
         }
 
-        @keyframes handActionMotion {
-            0% { transform: rotate(-6deg) translateY(0px); }
-            100% { transform: rotate(10deg) translateY(-3px); }
+        @keyframes ikArmInteractSweep {
+            0% { transform: rotate(-2.2deg); }
+            100% { transform: rotate(2.5deg); }
+        }
+
+        @keyframes ikForearmFlex {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes heldIconPulse {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(0, -1px, 0); }
+        }
+
+        @keyframes targetDockPulse {
+            0% { opacity: 0.2; transform: scale(0.82); }
+            65% { opacity: 0.45; transform: scale(0.96); }
+            100% { opacity: 1; transform: scale(1.16); }
+        }
+
+        @keyframes hudPillFloat {
+            0% { opacity: 0.45; transform: translateY(3px) scale(0.94); }
+            100% { opacity: 1; transform: translateY(-3px) scale(1.03); }
         }
 
         @keyframes headNodMotion {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(3.5deg); }
+            0%, 100% { transform: rotate(-1.2deg); }
+            50% { transform: rotate(1.6deg); }
         }
 
         /* 6 Orbiting / Floating Emoji-Style Vector Icons per Screen */
@@ -494,7 +579,7 @@
             100% { transform: translateY(-260px) scale(1.12); opacity: 0; }
         }
 
-        /* --- SHORT, SWEET & PUNCHY TEXT BLOCK --- */
+        /* --- SHORT, SWEET & PUNCHY TEXT BLOCK (CENTERED WITH SVG) --- */
         .slide-copy {
             display: flex;
             flex-direction: column;
@@ -502,7 +587,8 @@
             justify-content: center;
             width: 100%;
             max-width: 360px;
-            margin-top: 4px;
+            margin-top: 6px;
+            margin-bottom: 18px;
             z-index: 5;
         }
 
@@ -583,7 +669,7 @@
             animation: kineticTextMove 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.03s;
         }
 
-        /* --- BOTTOM NAVIGATION BAR (ZERO-OVERLAP 3-COLUMN GRID) --- */
+        /* --- BOTTOM NAVIGATION BAR (EXACT ORIGINAL POSITION PRESERVED) --- */
         .bottom-nav {
             width: 100%;
             padding: 12px 16px calc(25% + env(safe-area-inset-bottom, 0px));
@@ -770,6 +856,7 @@
                 width: 54%;
                 height: 100%;
                 max-height: 340px;
+                margin-top: 0;
                 margin-bottom: 0;
                 background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03), transparent 70%);
                 border-radius: 24px;
@@ -786,6 +873,7 @@
                 align-items: flex-start;
                 text-align: left;
                 margin-top: 0;
+                margin-bottom: 0;
             }
 
             .slide-title {
@@ -808,7 +896,7 @@
 <body oncontextmenu="return false;">
 
 <div class="onboarding-shell">
-    <!-- Top Header: Corporate Sans-Serif Meena in Red, Marketing in White -->
+    <!-- Top Header: Executive Sans-Serif Meena in Red, Marketing in White -->
     <header class="top-bar">
         <div class="brand-signature" aria-label="Meena Marketing">
             <span class="brand-handwriting">
@@ -819,8 +907,8 @@
                 <defs>
                     <linearGradient id="brandLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" stop-color="#ff3333" />
-                        <stop offset="50%" stop-color="#38bdf8" />
-                        <stop offset="100%" stop-color="#ffffff" />
+                        <stop offset="48%" stop-color="#38bdf8" />
+                        <stop offset="100%" stop-color="rgba(255,255,255,0.15)" />
                     </linearGradient>
                 </defs>
                 <path d="M2 4.5 L 138 4.5" />
@@ -833,111 +921,188 @@
         <div class="slider-track" id="slider-track">
 
             <!-- =========================================================
-                 SECTION 1: HELLO THERE (STOREFRONT + HUMAN CHARACTER + 6 FLOATING SVGS)
+                 SECTION 1: HELLO THERE (STOREFRONT + STORYSET CHARACTER DOCKING PRODUCT MODULE)
                  ========================================================= -->
             <section class="slide active" data-index="0">
                 <div class="art-stage">
                     <svg class="hero-scene-svg" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                            <linearGradient id="s1StoreBody" x1="100" y1="90" x2="220" y2="195" gradientUnits="userSpaceOnUse">
+                            <!-- All Gradients use userSpaceOnUse so Colors NEVER Shift Independently on Rotating Limbs -->
+                            <linearGradient id="s1StoreBody" x1="70" y1="85" x2="195" y2="195" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stop-color="#1e293b"/>
                                 <stop offset="100%" stop-color="#0f172a"/>
                             </linearGradient>
-                            <linearGradient id="s1Awning" x1="92" y1="68" x2="228" y2="104" gradientUnits="userSpaceOnUse">
+                            <linearGradient id="s1Awning" x1="65" y1="64" x2="195" y2="100" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stop-color="#ff3333"/>
                                 <stop offset="100%" stop-color="#2563eb"/>
                             </linearGradient>
-                            <linearGradient id="charSuit1" x1="0" y1="0" x2="1" y2="1">
+                            <linearGradient id="execSuitNavy" x1="185" y1="140" x2="260" y2="205" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#1e293b"/>
+                                <stop offset="100%" stop-color="#0f172a"/>
+                            </linearGradient>
+                            <linearGradient id="execBlazerBlue" x1="145" y1="110" x2="255" y2="195" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stop-color="#2563eb"/>
-                                <stop offset="100%" stop-color="#ff3333"/>
+                                <stop offset="100%" stop-color="#1e3a8a"/>
+                            </linearGradient>
+                            <linearGradient id="execBlazerCrimson" x1="145" y1="110" x2="255" y2="195" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#ff3333"/>
+                                <stop offset="100%" stop-color="#be123c"/>
+                            </linearGradient>
+                            <linearGradient id="execSkin" x1="130" y1="95" x2="245" y2="160" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#f4c29f"/>
+                                <stop offset="100%" stop-color="#f4c29f"/>
+                            </linearGradient>
+                            <linearGradient id="execSkinShadow" x1="210" y1="130" x2="235" y2="150" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#e0a37b"/>
+                                <stop offset="100%" stop-color="#d28f64"/>
+                            </linearGradient>
+                            <linearGradient id="holoCardGrad" x1="100" y1="90" x2="155" y2="145" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#1e293b"/>
+                                <stop offset="100%" stop-color="#0f172a"/>
                             </linearGradient>
                         </defs>
 
                         <!-- Decorative Orbit Ring (Self-Drawing) -->
                         <ellipse class="draw-path" cx="160" cy="135" rx="128" ry="88" stroke="rgba(56,189,248,0.18)" stroke-width="1.5" stroke-dasharray="6 6"/>
 
-                        <!-- Centerpiece: Grand Retail Hub -->
+                        <!-- Centerpiece: Grand Retail Hub with Interactive Slot -->
                         <g class="centerpiece-group">
-                            <rect class="draw-path" x="92" y="92" width="108" height="84" rx="14" fill="url(#s1StoreBody)" stroke="#38bdf8" stroke-width="2.5"/>
-                            <rect class="draw-path draw-delay-1" x="108" y="112" width="74" height="46" rx="8" fill="rgba(56, 189, 248, 0.16)" stroke="#38bdf8" stroke-width="2"/>
-                            <path class="draw-path" d="M84 92L98 64H194L208 92H84Z" fill="url(#s1Awning)" stroke="#ff3333" stroke-width="1.5"/>
-                            <path d="M84 92C84 100 91 105 99 105C107 105 114 100 114 92" fill="#ff3333"/>
-                            <path d="M114 92C114 100 121 105 129 105C137 105 144 100 144 92" fill="#fbbf24"/>
-                            <path d="M144 92C144 100 151 105 159 105C167 105 174 100 174 92" fill="#38bdf8"/>
-                            <path d="M174 92C174 100 181 105 189 105C197 105 204 100 204 92" fill="#34d399"/>
-                            <circle cx="146" cy="135" r="8" fill="#fbbf24"/>
+                            <!-- Floating HUD Status Pill Above Hub -->
+                            <g class="hud-status-pill">
+                                <rect x="88" y="42" width="76" height="16" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.3"/>
+                                <circle cx="97" cy="50" r="3" fill="#00ba7c"/>
+                                <line x1="104" y1="50" x2="154" y2="50" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+                            </g>
+                            <rect class="draw-path" x="72" y="92" width="108" height="88" rx="14" fill="url(#s1StoreBody)" stroke="#38bdf8" stroke-width="2.4"/>
+                            <rect class="draw-path draw-delay-1" x="86" y="112" width="80" height="50" rx="9" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.8"/>
+                            <!-- Storefront Awning -->
+                            <path class="draw-path" d="M64 92L78 64H174L188 92H64Z" fill="url(#s1Awning)" stroke="#ff3333" stroke-width="1.5"/>
+                            <path d="M64 92C64 100 71 105 79 105C87 105 94 100 94 92" fill="#ff3333"/>
+                            <path d="M94 92C94 100 101 105 109 105C117 105 124 100 124 92" fill="#fbbf24"/>
+                            <path d="M124 92C124 100 131 105 139 105C147 105 154 100 154 92" fill="#38bdf8"/>
+                            <path d="M154 92C154 100 161 105 169 105C177 105 184 100 184 92" fill="#34d399"/>
+                            <!-- Interactive Target Dock Ring inside Retail Hub -->
+                            <g class="interaction-target-ring">
+                                <circle cx="144" cy="136" r="15" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="1.6" stroke-dasharray="4 3"/>
+                                <circle cx="144" cy="136" r="5.5" fill="#00ba7c"/>
+                            </g>
+                            <rect x="94" y="122" width="28" height="6" rx="3" fill="#38bdf8"/>
+                            <rect x="94" y="133" width="20" height="5" rx="2.5" fill="rgba(255,255,255,0.45)"/>
+                            <rect x="94" y="143" width="24" height="5" rx="2.5" fill="#ff3333"/>
                         </g>
 
-                        <!-- Storyset-Style Character 1: Store Manager Waving Hello (Face, Body, Hand) -->
+                        <!-- Storyset-Style Character 1: Unified Suit & Natural Bent Arm Holding Product Card -->
                         <g class="character-group">
-                            <!-- Torso / Blazer -->
-                            <path class="draw-path" d="M196 190C196 168 208 156 222 156C236 156 248 168 248 190H196Z" fill="url(#charSuit1)" stroke="#ffffff" stroke-width="1.8"/>
-                            <!-- Shirt & Tie -->
-                            <polygon points="217,156 227,156 222,174" fill="#ffffff"/>
-                            <polygon points="220,160 224,160 223,173 221,173" fill="#ff3333"/>
-                            <!-- Left Arm Resting -->
-                            <path d="M200 164C192 172 190 182 194 188" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
-                            <!-- Animated Right Waving Arm & Hand -->
-                            <g class="character-arm-wave">
-                                <path d="M242 164C254 156 262 142 258 130" stroke="#ff3333" stroke-width="5.5" stroke-linecap="round"/>
-                                <!-- Open Waving Hand & Fingers -->
-                                <circle cx="258" cy="126" r="5.5" fill="#fbd38d" stroke="#ffffff" stroke-width="1.2"/>
-                                <line x1="255" y1="121" x2="253" y2="116" stroke="#fbd38d" stroke-width="2.2" stroke-linecap="round"/>
-                                <line x1="258" y1="120" x2="258" y2="115" stroke="#fbd38d" stroke-width="2.2" stroke-linecap="round"/>
-                                <line x1="261" y1="121" x2="263" y2="117" stroke="#fbd38d" stroke-width="2.2" stroke-linecap="round"/>
-                            </g>
-                            <!-- Animated Head & Friendly Face -->
+                            <!-- Back/Right Arm Resting on Smart Tablet -->
+                            <path d="M242 154L252 174L238 184" stroke="#1e3a8a" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+                            <rect x="228" y="166" width="20" height="26" rx="4" transform="rotate(-10 228 166)" fill="#0f172a" stroke="#38bdf8" stroke-width="1.6"/>
+                            <circle cx="236" cy="182" r="4.5" fill="#f4c29f"/>
+
+                            <!-- Clean Modern Flat-Vector Blazer Torso (Unified Royal Blue matching the Arm 100%) -->
+                            <path class="draw-path" d="M194 196C194 166 203 146 224 146C245 146 254 166 254 196H194Z" fill="url(#execBlazerBlue)" stroke="#38bdf8" stroke-width="1.6"/>
+                            <!-- Crisp White Shirt V-Neck & Red Tie -->
+                            <polygon points="216,146 232,146 224,176" fill="#ffffff"/>
+                            <polygon points="222,149 226,149 227,173 224,177 221,173" fill="#ff3333"/>
+                            <!-- Subtle Tailored Lapel Lines -->
+                            <path d="M216 146L209 164L224 176" stroke="#60a5fa" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
+                            <path d="M232 146L239 164L224 176" stroke="#60a5fa" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
+
+                            <!-- Clean Modern Storyset Head & Face (Locked at Neck 224,140) -->
                             <g class="character-head">
-                                <rect x="218" y="147" width="8" height="10" rx="3" fill="#f6ad55"/>
-                                <circle cx="222" cy="136" r="14" fill="#fbd38d" stroke="#ffffff" stroke-width="1.5"/>
-                                <!-- Modern Hair -->
-                                <path d="M208 134C208 122 216 118 226 120C234 121 237 127 236 134C233 128 226 126 218 127C212 128 210 131 208 134Z" fill="#0f172a"/>
-                                <!-- Eyes & Smile -->
-                                <circle cx="217" cy="135" r="1.6" fill="#0f172a"/>
-                                <circle cx="227" cy="135" r="1.6" fill="#0f172a"/>
-                                <path d="M218 141Q222 145 226 141" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                                <!-- Neck & Chin Shadow -->
+                                <rect x="219" y="132" width="10" height="16" rx="5" fill="#f4c29f"/>
+                                <path d="M219 138Q224 143 229 138V143H219V138Z" fill="#e0a37b"/>
+                                <!-- Right Ear -->
+                                <circle cx="238" cy="121" r="4.2" fill="#e0a37b"/>
+                                <!-- Smooth Symmetrical Head Silhouette -->
+                                <rect x="210" y="102" width="28" height="34" rx="14" fill="#f4c29f"/>
+                                <!-- Sleek Modern Volumetric Haircut -->
+                                <path d="M209 117C208 104 215 96 226 96C237 96 242 103 240 116C238 109 233 106 225 106C217 106 212 110 209 117Z" fill="#0f172a"/>
+                                <path d="M216 100C221 98 229 98 234 101" stroke="#38bdf8" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>
+                                <!-- Expressive Eyes with White Catchlights & Brows -->
+                                <path d="M214 114Q217 112.5 220 114" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round"/>
+                                <path d="M225 114Q228 112.5 231 114" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round"/>
+                                <circle cx="217" cy="118.5" r="2" fill="#0f172a"/>
+                                <circle cx="228" cy="118.5" r="2" fill="#0f172a"/>
+                                <circle cx="216.3" cy="117.8" r="0.7" fill="#ffffff"/>
+                                <circle cx="227.3" cy="117.8" r="0.7" fill="#ffffff"/>
+                                <!-- Nose & Confident Smile -->
+                                <path d="M221.5 119V123.5" stroke="#d28f64" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M219 127.5Q223 131 227.5 127.5" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+                            </g>
+
+                            <!-- NATURAL BENT LEFT ARM (Shoulder 204,154 -> Elbow 186,164 -> Wrist/Hand 151,130) -->
+                            <g class="character-arm-wave">
+                                <!-- Shoulder Socket Cap + Upper Arm (Same Royal Blue as Torso) -->
+                                <circle cx="204" cy="154" r="7.5" fill="#2563eb"/>
+                                <line x1="204" y1="154" x2="186" y2="164" stroke="url(#execBlazerBlue)" stroke-width="14" stroke-linecap="round"/>
+                                <line x1="201" y1="150" x2="186" y2="159" stroke="#60a5fa" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+
+                                <!-- Forearm & Hand Locked Rigidly to Elbow Socket (186,164) -->
+                                <g class="ik-forearm">
+                                    <circle cx="186" cy="164" r="7" fill="#2563eb"/>
+                                    <line x1="186" y1="164" x2="158" y2="136" stroke="url(#execBlazerBlue)" stroke-width="13" stroke-linecap="round"/>
+                                    <!-- Crisp White Shirt Cuff at Wrist (158,136) -->
+                                    <line x1="160" y1="138" x2="155" y2="133" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+                                    <!-- Unified Solid-Color Sculpted Hand Locked to Wrist -->
+                                    <circle cx="151" cy="130" r="5.8" fill="#f4c29f"/>
+                                    <path d="M151 126L145 122" stroke="#f4c29f" stroke-width="3.4" stroke-linecap="round"/>
+
+                                    <!-- Held & Docked Holographic Product Icon Card Directly in Hand Grip -->
+                                    <g class="interactive-held-icon">
+                                        <rect x="116" y="106" width="34" height="38" rx="7" fill="url(#holoCardGrad)" stroke="#38bdf8" stroke-width="2"/>
+                                        <rect x="121" y="112" width="24" height="13" rx="3" fill="rgba(56,189,248,0.2)" stroke="#38bdf8" stroke-width="1.2"/>
+                                        <circle cx="133" cy="118.5" r="3" fill="#ff3333"/>
+                                        <line x1="121" y1="131" x2="140" y2="131" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+                                        <line x1="121" y1="137" x2="134" y2="137" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round"/>
+                                        <!-- Thumb Wrapping Over Front Edge of Card -->
+                                        <circle cx="148" cy="128" r="3.4" fill="#f4c29f"/>
+                                        <!-- Live Animated Energy Stream into Hub -->
+                                        <line class="energy-stream-line" x1="133" y1="136" x2="144" y2="136" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                                    </g>
+                                </g>
                             </g>
                         </g>
 
                         <!-- Emoji SVG 1: Smartphone (Top Left) -->
                         <g class="emoji-node e-1">
-                            <rect class="draw-path" x="30" y="34" width="32" height="54" rx="8" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2.2"/>
-                            <line class="draw-path draw-delay-1" x1="41" y1="41" x2="51" y2="41" stroke="#ff3333" stroke-width="2" stroke-linecap="round"/>
-                            <circle cx="46" cy="79" r="2.5" fill="#fbbf24"/>
+                            <rect class="draw-path" x="28" y="32" width="32" height="54" rx="8" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2.2"/>
+                            <line class="draw-path draw-delay-1" x1="39" y1="39" x2="49" y2="39" stroke="#ff3333" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="44" cy="77" r="2.5" fill="#fbbf24"/>
                         </g>
 
                         <!-- Emoji SVG 2: Smart TV / Monitor (Top Right) -->
                         <g class="emoji-node e-2">
-                            <rect class="draw-path" x="242" y="32" width="54" height="38" rx="7" fill="#0f172a" stroke="#38bdf8" stroke-width="2.2"/>
-                            <polygon points="265,44 265,58 277,51" fill="#ff3333"/>
-                            <path class="draw-path draw-delay-1" d="M258 76H280" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+                            <rect class="draw-path" x="244" y="30" width="54" height="38" rx="7" fill="#0f172a" stroke="#38bdf8" stroke-width="2.2"/>
+                            <polygon points="267,42 267,56 279,49" fill="#ff3333"/>
+                            <path class="draw-path draw-delay-1" d="M260 74H282" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
                         </g>
 
                         <!-- Emoji SVG 3: Luxury Sofa / Furniture (Middle Left) -->
                         <g class="emoji-node e-3">
-                            <rect class="draw-path" x="18" y="132" width="52" height="24" rx="6" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
-                            <rect class="draw-path draw-delay-1" x="12" y="142" width="64" height="18" rx="5" fill="#047857" stroke="#34d399" stroke-width="2"/>
+                            <rect class="draw-path" x="14" y="132" width="50" height="24" rx="6" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
+                            <rect class="draw-path draw-delay-1" x="8" y="142" width="62" height="18" rx="5" fill="#047857" stroke="#34d399" stroke-width="2"/>
                         </g>
 
                         <!-- Emoji SVG 4: Washing Machine / Appliance (Middle Right) -->
                         <g class="emoji-node e-4">
-                            <rect class="draw-path" x="262" y="118" width="42" height="50" rx="8" fill="#31102f" stroke="#ff3333" stroke-width="2.2"/>
-                            <circle class="draw-path draw-delay-1" cx="283" cy="147" r="11" fill="rgba(255,51,51,0.2)" stroke="#38bdf8" stroke-width="2.2"/>
-                            <circle cx="271" cy="127" r="2" fill="#38bdf8"/>
-                            <circle cx="278" cy="127" r="2" fill="#34d399"/>
+                            <rect class="draw-path" x="268" y="114" width="40" height="48" rx="8" fill="#31102f" stroke="#ff3333" stroke-width="2.2"/>
+                            <circle class="draw-path draw-delay-1" cx="288" cy="142" r="10" fill="rgba(255,51,51,0.2)" stroke="#38bdf8" stroke-width="2.2"/>
+                            <circle cx="276" cy="123" r="2" fill="#38bdf8"/>
+                            <circle cx="283" cy="123" r="2" fill="#34d399"/>
                         </g>
 
                         <!-- Emoji SVG 5: Shopping Bag (Bottom Left) -->
                         <g class="emoji-node e-5">
-                            <rect class="draw-path" x="52" y="194" width="38" height="40" rx="7" fill="#451a03" stroke="#fbbf24" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M63 194V187C63 182 67 179 71 179C75 179 79 182 79 187V194" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round"/>
-                            <circle cx="71" cy="214" r="5" fill="#ff3333"/>
+                            <rect class="draw-path" x="48" y="194" width="38" height="40" rx="7" fill="#451a03" stroke="#fbbf24" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M59 194V187C59 182 63 179 67 179C71 179 75 182 75 187V194" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round"/>
+                            <circle cx="67" cy="214" r="5" fill="#ff3333"/>
                         </g>
 
                         <!-- Emoji SVG 6: Instant Lightning Badge (Bottom Right) -->
                         <g class="emoji-node e-6">
-                            <circle class="draw-path" cx="248" cy="216" r="20" fill="#1e293b" stroke="#fbbf24" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M251 203L241 217H249L246 229L257 214H249L251 203Z" fill="#fbbf24" stroke="#fbbf24" stroke-width="1.2" stroke-linejoin="round"/>
+                            <circle class="draw-path" cx="264" cy="218" r="19" fill="#1e293b" stroke="#fbbf24" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M267 205L257 219H265L262 231L273 216H265L267 205Z" fill="#fbbf24" stroke="#fbbf24" stroke-width="1.2" stroke-linejoin="round"/>
                         </g>
                     </svg>
                 </div>
@@ -953,7 +1118,7 @@
             </section>
 
             <!-- =========================================================
-                 SECTION 2: LIVE INVENTORY (CRATES + SCANNING CHARACTER + 6 FLOATING SVGS)
+                 SECTION 2: LIVE INVENTORY (CRATES + STORYSET ENGINEER DOCKING RFID MODULE)
                  ========================================================= -->
             <section class="slide" data-index="1">
                 <div class="art-stage">
@@ -962,81 +1127,120 @@
 
                         <!-- Centerpiece: Smart Inventory Crates + Laser -->
                         <g class="centerpiece-group">
-                            <rect class="draw-path" x="92" y="134" width="104" height="52" rx="10" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2.5"/>
-                            <line class="draw-path draw-delay-1" x1="144" y1="134" x2="144" y2="154" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
-                            <rect x="108" y="164" width="30" height="8" rx="4" fill="#ff3333"/>
+                            <g class="hud-status-pill">
+                                <rect x="86" y="46" width="78" height="16" rx="8" fill="#0f172a" stroke="#00ba7c" stroke-width="1.3"/>
+                                <circle cx="95" cy="54" r="3" fill="#00ba7c"/>
+                                <line x1="102" y1="54" x2="154" y2="54" stroke="#34d399" stroke-width="2.2" stroke-linecap="round"/>
+                            </g>
+                            <rect class="draw-path" x="74" y="136" width="102" height="52" rx="10" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line class="draw-path draw-delay-1" x1="125" y1="136" x2="125" y2="156" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
+                            <rect x="90" y="166" width="30" height="8" rx="4" fill="#ff3333"/>
 
-                            <rect class="draw-path draw-delay-1" x="104" y="74" width="80" height="48" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
-                            <line class="draw-path draw-delay-2" x1="144" y1="74" x2="144" y2="92" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
-                            <circle cx="166" cy="102" r="6" fill="#00ba7c"/>
+                            <rect class="draw-path draw-delay-1" x="86" y="76" width="78" height="48" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line class="draw-path draw-delay-2" x1="125" y1="76" x2="125" y2="94" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
+                            <!-- Target Dock Sensor on Top Crate -->
+                            <g class="interaction-target-ring">
+                                <circle cx="147" cy="102" r="13" fill="rgba(0, 186, 124, 0.22)" stroke="#00ba7c" stroke-width="1.5" stroke-dasharray="3 3"/>
+                            </g>
+                            <circle cx="147" cy="102" r="5.5" fill="#00ba7c"/>
 
-                            <line class="scan-laser" x1="80" y1="128" x2="210" y2="128" stroke="#ff3333" stroke-width="3.5" stroke-linecap="round"/>
+                            <line class="scan-laser" x1="66" y1="128" x2="188" y2="128" stroke="#ff3333" stroke-width="3.5" stroke-linecap="round"/>
                         </g>
 
-                        <!-- Storyset-Style Character 2: Inventory Specialist Holding Scanner (Face, Body, Hand) -->
+                        <!-- Storyset-Style Character 2: Operations Engineer with Natural Bent Arm & RFID Scanner -->
                         <g class="character-group">
-                            <path class="draw-path" d="M202 190C202 168 213 156 226 156C239 156 250 168 250 190H202Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
-                            <!-- Animated Arm Pointing Barcode Scanner at Crates -->
-                            <g class="character-arm-action">
-                                <path d="M210 164L188 148" stroke="#2563eb" stroke-width="5.5" stroke-linecap="round"/>
-                                <circle cx="186" cy="146" r="4.5" fill="#fbd38d"/>
-                                <!-- Handheld Scanner Device -->
-                                <rect x="174" y="136" width="14" height="9" rx="3" fill="#ff3333" stroke="#ffffff" stroke-width="1.2"/>
-                                <path d="M174 140L156 132V148L174 140Z" fill="rgba(56, 189, 248, 0.35)"/>
-                            </g>
-                            <!-- Head & Face -->
+                            <path d="M242 154L252 174L238 184" stroke="#0f172a" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+                            <!-- Unified Slate-Navy Tech Jacket matching the Arm -->
+                            <path class="draw-path" d="M194 196C194 166 203 146 224 146C245 146 254 166 254 196H194Z" fill="url(#execSuitNavy)" stroke="#38bdf8" stroke-width="1.6"/>
+                            <polygon points="216,146 232,146 224,174" fill="#38bdf8"/>
+                            <!-- Smart ID Lanyard -->
+                            <path d="M217 146L224 170L231 146" stroke="#ffffff" stroke-width="1.4" fill="none"/>
+                            <rect x="219" y="170" width="10" height="14" rx="2" fill="#1e293b" stroke="#fbbf24" stroke-width="1.2"/>
+
+                            <!-- Clean Modern Storyset Head & AR Visor (Locked at Neck 224,140) -->
                             <g class="character-head">
-                                <circle cx="226" cy="136" r="13.5" fill="#fbd38d" stroke="#ffffff" stroke-width="1.5"/>
-                                <path d="M213 132C214 121 224 118 234 121C239 123 241 128 240 133C236 127 222 126 213 132Z" fill="#1e1b4b"/>
-                                <circle cx="221" cy="135" r="1.6" fill="#0f172a"/>
-                                <circle cx="230" cy="135" r="1.6" fill="#0f172a"/>
-                                <path d="M222 141Q226 144 230 141" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                                <rect x="219" y="132" width="10" height="16" rx="5" fill="#f4c29f"/>
+                                <path d="M219 138Q224 143 229 138V143H219V138Z" fill="#e0a37b"/>
+                                <circle cx="238" cy="121" r="4.2" fill="#e0a37b"/>
+                                <rect x="210" y="102" width="28" height="34" rx="14" fill="#f4c29f"/>
+                                <path d="M209 117C208 104 215 96 226 96C237 96 242 103 240 116C238 109 233 106 225 106C217 106 212 110 209 117Z" fill="#0f172a"/>
+                                <!-- Sleek AR Inventory Glasses -->
+                                <rect x="212" y="114" width="22" height="6.5" rx="3" fill="rgba(56,189,248,0.28)" stroke="#38bdf8" stroke-width="1.4"/>
+                                <circle cx="217" cy="117.5" r="1.6" fill="#0f172a"/>
+                                <circle cx="228" cy="117.5" r="1.6" fill="#0f172a"/>
+                                <path d="M221.5 121V124" stroke="#d28f64" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M219 128Q223 131 227.5 128" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+                            </g>
+
+                            <!-- NATURAL BENT LEFT ARM (Shoulder 204,154 -> Elbow 186,164 -> Wrist/Hand 151,130) -->
+                            <g class="character-arm-action">
+                                <circle cx="204" cy="154" r="7.5" fill="#1e293b"/>
+                                <line x1="204" y1="154" x2="186" y2="164" stroke="url(#execSuitNavy)" stroke-width="14" stroke-linecap="round"/>
+                                <line x1="201" y1="150" x2="186" y2="159" stroke="#38bdf8" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>
+
+                                <g class="ik-forearm">
+                                    <circle cx="186" cy="164" r="7" fill="#1e293b"/>
+                                    <line x1="186" y1="164" x2="158" y2="136" stroke="url(#execSuitNavy)" stroke-width="13" stroke-linecap="round"/>
+                                    <line x1="160" y1="138" x2="155" y2="133" stroke="#38bdf8" stroke-width="10" stroke-linecap="round"/>
+                                    <circle cx="151" cy="130" r="5.8" fill="#f4c29f"/>
+
+                                    <!-- Held & Docked RFID Smart Tag Icon Directly in Hand Grip -->
+                                    <g class="interactive-held-icon">
+                                        <rect x="116" y="104" width="34" height="32" rx="8" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2"/>
+                                        <line x1="124" y1="112" x2="124" y2="128" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
+                                        <line x1="130" y1="112" x2="130" y2="128" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                                        <line x1="136" y1="112" x2="136" y2="128" stroke="#ff3333" stroke-width="2.4" stroke-linecap="round"/>
+                                        <circle cx="142" cy="113" r="3" fill="#00ba7c"/>
+                                        <circle cx="148" cy="127" r="3.4" fill="#f4c29f"/>
+                                        <polygon points="133,104 143,96 151,104" fill="rgba(56, 189, 248, 0.32)"/>
+                                    </g>
+                                </g>
                             </g>
                         </g>
 
                         <!-- Emoji SVG 1: Barcode Scanner Tag -->
                         <g class="emoji-node e-1">
-                            <rect class="draw-path" x="24" y="38" width="52" height="36" rx="7" fill="#181826" stroke="#38bdf8" stroke-width="2.2"/>
-                            <line class="draw-path draw-delay-1" x1="35" y1="47" x2="35" y2="65" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-                            <line class="draw-path draw-delay-1" x1="43" y1="47" x2="43" y2="65" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
-                            <line class="draw-path draw-delay-2" x1="51" y1="47" x2="51" y2="65" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
-                            <line class="draw-path draw-delay-2" x1="61" y1="47" x2="61" y2="65" stroke="#ff3333" stroke-width="2.2" stroke-linecap="round"/>
+                            <rect class="draw-path" x="24" y="36" width="52" height="36" rx="7" fill="#181826" stroke="#38bdf8" stroke-width="2.2"/>
+                            <line class="draw-path draw-delay-1" x1="35" y1="45" x2="35" y2="63" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+                            <line class="draw-path draw-delay-1" x1="43" y1="45" x2="43" y2="63" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                            <line class="draw-path draw-delay-2" x1="51" y1="45" x2="51" y2="63" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                            <line class="draw-path draw-delay-2" x1="61" y1="45" x2="61" y2="63" stroke="#ff3333" stroke-width="2.2" stroke-linecap="round"/>
                         </g>
 
                         <!-- Emoji SVG 2: QR Matrix Badge -->
                         <g class="emoji-node e-2">
-                            <rect class="draw-path" x="246" y="34" width="46" height="46" rx="9" fill="#1e1b4b" stroke="#ff3333" stroke-width="2.2"/>
-                            <rect x="255" y="43" width="10" height="10" rx="2" stroke="#fbbf24" stroke-width="2.2"/>
-                            <rect x="273" y="43" width="10" height="10" rx="2" stroke="#38bdf8" stroke-width="2.2"/>
-                            <rect x="255" y="61" width="10" height="10" rx="2" stroke="#34d399" stroke-width="2.2"/>
-                            <circle cx="278" cy="66" r="4" fill="#ff3333"/>
+                            <rect class="draw-path" x="248" y="32" width="46" height="46" rx="9" fill="#1e1b4b" stroke="#ff3333" stroke-width="2.2"/>
+                            <rect x="257" y="41" width="10" height="10" rx="2" stroke="#fbbf24" stroke-width="2.2"/>
+                            <rect x="275" y="41" width="10" height="10" rx="2" stroke="#38bdf8" stroke-width="2.2"/>
+                            <rect x="257" y="59" width="10" height="10" rx="2" stroke="#34d399" stroke-width="2.2"/>
+                            <circle cx="280" cy="64" r="4" fill="#ff3333"/>
                         </g>
 
                         <!-- Emoji SVG 3: Fast Delivery Truck -->
                         <g class="emoji-node e-3">
-                            <rect class="draw-path" x="16" y="130" width="38" height="26" rx="5" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M54 138H68L74 147V156H54V138Z" fill="#047857" stroke="#34d399" stroke-width="2.2" stroke-linejoin="round"/>
-                            <circle cx="28" cy="158" r="5" fill="#fbbf24"/>
-                            <circle cx="62" cy="158" r="5" fill="#fbbf24"/>
+                            <rect class="draw-path" x="12" y="130" width="38" height="26" rx="5" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M50 138H64L70 147V156H50V138Z" fill="#047857" stroke="#34d399" stroke-width="2.2" stroke-linejoin="round"/>
+                            <circle cx="24" cy="158" r="5" fill="#fbbf24"/>
+                            <circle cx="58" cy="158" r="5" fill="#fbbf24"/>
                         </g>
 
                         <!-- Emoji SVG 4: Alert Bell -->
                         <g class="emoji-node e-4">
-                            <circle class="draw-path" cx="278" cy="144" r="21" fill="#2e1018" stroke="#ff3333" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M278 130C272 130 268 135 268 141V148L264 152H292L288 148V141C288 135 284 130 278 130Z" fill="#fbbf24"/>
-                            <circle cx="278" cy="156" r="3" fill="#ffffff"/>
+                            <circle class="draw-path" cx="282" cy="142" r="20" fill="#2e1018" stroke="#ff3333" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M282 128C276 128 272 133 272 139V146L268 150H296L292 146V139C292 133 288 128 282 128Z" fill="#fbbf24"/>
+                            <circle cx="282" cy="154" r="3" fill="#ffffff"/>
                         </g>
 
                         <!-- Emoji SVG 5: Verified Stock Shield -->
                         <g class="emoji-node e-5">
-                            <path class="draw-path" d="M68 186L88 194V210C88 223 79 232 68 236C57 232 48 223 48 210V194L68 186Z" fill="#0f291e" stroke="#00ba7c" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M60 211L66 217L77 205" stroke="#34d399" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path class="draw-path" d="M64 186L84 194V210C84 223 75 232 64 236C53 232 44 223 44 210V194L64 186Z" fill="#0f291e" stroke="#00ba7c" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M56 211L62 217L73 205" stroke="#34d399" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
                         </g>
 
                         <!-- Emoji SVG 6: Showroom Location Pin -->
                         <g class="emoji-node e-6">
-                            <path class="draw-path" d="M248 188C237 188 229 196 229 207C229 221 248 236 248 236C248 236 267 221 267 207C267 196 259 188 248 188Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2.2"/>
-                            <circle cx="248" cy="206" r="6" fill="#ff3333"/>
+                            <path class="draw-path" d="M262 190C251 190 243 198 243 209C243 223 262 238 262 238C262 238 281 223 281 209C281 198 273 190 262 190Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2.2"/>
+                            <circle cx="262" cy="208" r="6" fill="#ff3333"/>
                         </g>
                     </svg>
                 </div>
@@ -1050,7 +1254,7 @@
             </section>
 
             <!-- =========================================================
-                 SECTION 3: EXPRESS BILLING (POS + CASHIER CHARACTER + 6 FLOATING SVGS)
+                 SECTION 3: EXPRESS BILLING (POS + STORYSET SPECIALIST TAPPING NFC CARD)
                  ========================================================= -->
             <section class="slide" data-index="2">
                 <div class="art-stage">
@@ -1060,81 +1264,115 @@
                         <!-- Centerpiece: Express POS + Animated Receipt -->
                         <g class="centerpiece-group">
                             <g class="receipt-paper">
-                                <rect class="draw-path" x="114" y="54" width="66" height="62" rx="6" fill="#ffffff"/>
-                                <line x1="126" y1="70" x2="168" y2="70" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/>
-                                <line x1="126" y1="82" x2="158" y2="82" stroke="#ff3333" stroke-width="3.5" stroke-linecap="round"/>
-                                <line x1="126" y1="94" x2="164" y2="94" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+                                <rect class="draw-path" x="96" y="54" width="66" height="62" rx="6" fill="#ffffff"/>
+                                <line x1="108" y1="70" x2="150" y2="70" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="108" y1="82" x2="140" y2="82" stroke="#ff3333" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="108" y1="94" x2="146" y2="94" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
                             </g>
-                            <rect class="draw-path" x="94" y="104" width="106" height="76" rx="14" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
-                            <line class="draw-path draw-delay-1" x1="108" y1="104" x2="186" y2="104" stroke="#ff3333" stroke-width="4.5" stroke-linecap="round"/>
-                            <rect class="draw-path draw-delay-1" x="112" y="122" width="70" height="24" rx="6" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
-                            <circle cx="120" cy="162" r="4.5" fill="#fbbf24"/>
-                            <circle cx="138" cy="162" r="4.5" fill="#38bdf8"/>
-                            <circle cx="156" cy="162" r="4.5" fill="#ff3333"/>
-                            <circle cx="174" cy="162" r="4.5" fill="#00ba7c"/>
+                            <rect class="draw-path" x="76" y="104" width="104" height="76" rx="14" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line class="draw-path draw-delay-1" x1="90" y1="104" x2="166" y2="104" stroke="#ff3333" stroke-width="4.5" stroke-linecap="round"/>
+                            <rect class="draw-path draw-delay-1" x="94" y="122" width="68" height="24" rx="6" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+                            <!-- NFC Contactless Target Zone on POS Screen -->
+                            <g class="interaction-target-ring">
+                                <circle cx="144" cy="134" r="14" fill="rgba(52, 211, 153, 0.22)" stroke="#34d399" stroke-width="1.6" stroke-dasharray="3 3"/>
+                            </g>
+                            <circle cx="102" cy="162" r="4.5" fill="#fbbf24"/>
+                            <circle cx="120" cy="162" r="4.5" fill="#38bdf8"/>
+                            <circle cx="138" cy="162" r="4.5" fill="#ff3333"/>
+                            <circle cx="156" cy="162" r="4.5" fill="#00ba7c"/>
                         </g>
 
-                        <!-- Storyset-Style Character 3: Billing Executive Tapping POS (Face, Body, Hand) -->
+                        <!-- Storyset-Style Character 3: Specialist in Crimson Blazer Sweeping NFC Card -->
                         <g class="character-group">
-                            <path class="draw-path" d="M202 190C202 168 213 156 226 156C239 156 250 168 250 190H202Z" fill="#ff3333" stroke="#ffffff" stroke-width="1.8"/>
-                            <g class="character-arm-action">
-                                <path d="M208 164L186 152" stroke="#ff3333" stroke-width="5.5" stroke-linecap="round"/>
-                                <!-- Hand Tapping Screen -->
-                                <circle cx="183" cy="150" r="4.8" fill="#fbd38d" stroke="#ffffff" stroke-width="1.2"/>
-                                <circle cx="176" cy="146" r="7" stroke="#38bdf8" stroke-width="1.5" opacity="0.8"/>
-                            </g>
+                            <path d="M242 154L252 174L238 184" stroke="#be123c" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+                            <!-- Unified Crimson Blazer matching the Arm 100% -->
+                            <path class="draw-path" d="M194 196C194 166 203 146 224 146C245 146 254 166 254 196H194Z" fill="url(#execBlazerCrimson)" stroke="#ff8080" stroke-width="1.6"/>
+                            <polygon points="216,146 232,146 224,176" fill="#ffffff"/>
+                            <polygon points="222,149 226,149 227,173 224,177 221,173" fill="#1e293b"/>
+
+                            <!-- Clean Modern Storyset Head (Locked at Neck 224,140) -->
                             <g class="character-head">
-                                <circle cx="226" cy="136" r="13.5" fill="#fbd38d" stroke="#ffffff" stroke-width="1.5"/>
-                                <path d="M212 134C213 121 224 118 235 121C240 123 241 129 239 134C234 127 221 127 212 134Z" fill="#0f172a"/>
-                                <circle cx="221" cy="135" r="1.6" fill="#0f172a"/>
-                                <circle cx="230" cy="135" r="1.6" fill="#0f172a"/>
-                                <path d="M222 141Q226 145 230 141" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                                <rect x="219" y="132" width="10" height="16" rx="5" fill="#f4c29f"/>
+                                <path d="M219 138Q224 143 229 138V143H219V138Z" fill="#e0a37b"/>
+                                <circle cx="238" cy="121" r="4.2" fill="#e0a37b"/>
+                                <rect x="210" y="102" width="28" height="34" rx="14" fill="#f4c29f"/>
+                                <path d="M209 117C208 104 215 96 226 96C237 96 242 103 240 116C238 109 233 106 225 106C217 106 212 110 209 117Z" fill="#0f172a"/>
+                                <path d="M214 114Q217 112.5 220 114" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round"/>
+                                <path d="M225 114Q228 112.5 231 114" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round"/>
+                                <circle cx="217" cy="118.5" r="2" fill="#0f172a"/>
+                                <circle cx="228" cy="118.5" r="2" fill="#0f172a"/>
+                                <circle cx="216.3" cy="117.8" r="0.7" fill="#ffffff"/>
+                                <circle cx="227.3" cy="117.8" r="0.7" fill="#ffffff"/>
+                                <path d="M221.5 119V123.5" stroke="#d28f64" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M219 127.5Q223 131 227.5 127.5" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+                            </g>
+
+                            <!-- NATURAL BENT LEFT ARM (Shoulder 204,154 -> Elbow 186,164 -> Wrist/Hand 151,130) -->
+                            <g class="character-arm-action">
+                                <circle cx="204" cy="154" r="7.5" fill="#ff3333"/>
+                                <line x1="204" y1="154" x2="186" y2="164" stroke="url(#execBlazerCrimson)" stroke-width="14" stroke-linecap="round"/>
+
+                                <g class="ik-forearm">
+                                    <circle cx="186" cy="164" r="7" fill="#ff3333"/>
+                                    <line x1="186" y1="164" x2="158" y2="136" stroke="url(#execBlazerCrimson)" stroke-width="13" stroke-linecap="round"/>
+                                    <line x1="160" y1="138" x2="155" y2="133" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+                                    <circle cx="151" cy="130" r="5.8" fill="#f4c29f"/>
+
+                                    <!-- Held & Swept NFC Smart Card Icon Directly in Hand Grip -->
+                                    <g class="interactive-held-icon">
+                                        <rect x="114" y="116" width="36" height="24" rx="5" transform="rotate(-6 114 116)" fill="url(#execBlazerBlue)" stroke="#38bdf8" stroke-width="1.8"/>
+                                        <rect x="120" y="122" width="8" height="6" rx="1.5" transform="rotate(-6 120 122)" fill="#fbbf24"/>
+                                        <line x1="121" y1="132" x2="139" y2="130" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
+                                        <circle cx="148" cy="128" r="3.4" fill="#f4c29f"/>
+                                        <path d="M109 122C105 126 105 132 109 136" stroke="#34d399" stroke-width="2" stroke-linecap="round"/>
+                                    </g>
+                                </g>
                             </g>
                         </g>
 
                         <!-- Emoji SVG 1: Smart Card -->
                         <g class="emoji-node e-1">
-                            <rect class="draw-path" x="22" y="40" width="56" height="36" rx="7" fill="#31102f" stroke="#ff3333" stroke-width="2.2"/>
-                            <line class="draw-path draw-delay-1" x1="22" y1="52" x2="78" y2="52" stroke="#fbbf24" stroke-width="3"/>
-                            <rect x="30" y="60" width="12" height="8" rx="2" fill="#38bdf8"/>
+                            <rect class="draw-path" x="20" y="38" width="56" height="36" rx="7" fill="#31102f" stroke="#ff3333" stroke-width="2.2"/>
+                            <line class="draw-path draw-delay-1" x1="20" y1="50" x2="76" y2="50" stroke="#fbbf24" stroke-width="3"/>
+                            <rect x="28" y="58" width="12" height="8" rx="2" fill="#38bdf8"/>
                         </g>
 
                         <!-- Emoji SVG 2: Gold Currency Coin -->
                         <g class="emoji-node e-2">
-                            <circle class="draw-path" cx="268" cy="54" r="22" fill="#451a03" stroke="#fbbf24" stroke-width="2.5"/>
-                            <path class="draw-path draw-delay-1" d="M261 45H275M261 52H275M261 45C268 45 271 48 271 52C271 56 267 59 261 59L273 66" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle class="draw-path" cx="270" cy="52" r="22" fill="#451a03" stroke="#fbbf24" stroke-width="2.5"/>
+                            <path class="draw-path draw-delay-1" d="M263 43H277M263 50H277M263 43C270 43 273 46 273 50C273 54 269 57 263 57L275 64" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
                         </g>
 
                         <!-- Emoji SVG 3: Contactless / UPI Wave -->
                         <g class="emoji-node e-3">
-                            <circle class="draw-path" cx="42" cy="144" r="22" fill="#0f172a" stroke="#38bdf8" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M35 150C38 145 45 145 48 150" stroke="#34d399" stroke-width="2.4" stroke-linecap="round"/>
-                            <path class="draw-path draw-delay-2" d="M31 144C37 136 47 136 53 144" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round"/>
-                            <circle cx="42" cy="154" r="2.5" fill="#fbbf24"/>
+                            <circle class="draw-path" cx="38" cy="144" r="22" fill="#0f172a" stroke="#38bdf8" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M31 150C34 145 41 145 44 150" stroke="#34d399" stroke-width="2.4" stroke-linecap="round"/>
+                            <path class="draw-path draw-delay-2" d="M27 144C33 136 43 136 49 144" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round"/>
+                            <circle cx="38" cy="154" r="2.5" fill="#fbbf24"/>
                         </g>
 
                         <!-- Emoji SVG 4: Instant Share / Dispatch Plane -->
                         <g class="emoji-node e-4">
-                            <circle class="draw-path" cx="278" cy="144" r="21" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M266 143L288 134L281 156L276 147L266 143Z" fill="#34d399" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+                            <circle class="draw-path" cx="282" cy="142" r="20" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M270 141L292 132L285 154L280 145L270 141Z" fill="#34d399" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
                         </g>
 
                         <!-- Emoji SVG 5: GST Verified Star Badge -->
                         <g class="emoji-node e-5">
-                            <circle class="draw-path" cx="68" cy="212" r="21" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M60 212L66 218L77 206" stroke="#fbbf24" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle class="draw-path" cx="64" cy="212" r="21" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M56 212L62 218L73 206" stroke="#fbbf24" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
                         </g>
 
                         <!-- Emoji SVG 6: Tax Calculator Widget -->
                         <g class="emoji-node e-6">
-                            <rect class="draw-path" x="234" y="192" width="38" height="44" rx="8" fill="#181824" stroke="#ff3333" stroke-width="2.2"/>
-                            <rect x="241" y="199" width="24" height="10" rx="3" fill="#38bdf8"/>
-                            <circle cx="245" cy="218" r="2.5" fill="#fbbf24"/>
-                            <circle cx="253" cy="218" r="2.5" fill="#ffffff"/>
-                            <circle cx="261" cy="218" r="2.5" fill="#34d399"/>
-                            <circle cx="245" cy="227" r="2.5" fill="#ffffff"/>
-                            <circle cx="253" cy="227" r="2.5" fill="#ff3333"/>
-                            <circle cx="261" cy="227" r="2.5" fill="#fbbf24"/>
+                            <rect class="draw-path" x="246" y="194" width="38" height="44" rx="8" fill="#181824" stroke="#ff3333" stroke-width="2.2"/>
+                            <rect x="253" y="201" width="24" height="10" rx="3" fill="#38bdf8"/>
+                            <circle cx="257" cy="220" r="2.5" fill="#fbbf24"/>
+                            <circle cx="265" cy="220" r="2.5" fill="#ffffff"/>
+                            <circle cx="273" cy="220" r="2.5" fill="#34d399"/>
+                            <circle cx="257" cy="229" r="2.5" fill="#ffffff"/>
+                            <circle cx="265" cy="229" r="2.5" fill="#ff3333"/>
+                            <circle cx="273" cy="229" r="2.5" fill="#fbbf24"/>
                         </g>
                     </svg>
                 </div>
@@ -1148,7 +1386,7 @@
             </section>
 
             <!-- =========================================================
-                 SECTION 4: SMART AUDITING (ANALYTICS + AUDITOR CHARACTER + 6 FLOATING SVGS)
+                 SECTION 4: SMART AUDITING (ANALYTICS + STORYSET AUDITOR SCANNING KPI LENS)
                  ========================================================= -->
             <section class="slide" data-index="3">
                 <div class="art-stage">
@@ -1157,71 +1395,105 @@
 
                         <!-- Centerpiece: Live Analytics Board -->
                         <g class="centerpiece-group">
-                            <rect class="draw-path" x="86" y="72" width="120" height="110" rx="16" fill="#181824" stroke="#38bdf8" stroke-width="2.5"/>
-                            <rect class="bar-1" x="104" y="138" width="14" height="26" rx="4" fill="#38bdf8"/>
-                            <rect class="bar-2" x="128" y="120" width="14" height="44" rx="4" fill="#2563eb"/>
-                            <rect class="bar-3" x="152" y="104" width="14" height="60" rx="4" fill="#ff3333"/>
-                            <rect class="bar-4" x="176" y="86" width="14" height="78" rx="4" fill="#00ba7c"/>
-                            <path class="draw-path draw-delay-2" d="M106 128L134 108L158 114L184 78" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <g class="hud-status-pill">
+                                <rect x="92" y="46" width="76" height="16" rx="8" fill="#0f172a" stroke="#fbbf24" stroke-width="1.3"/>
+                                <circle cx="101" cy="54" r="3" fill="#fbbf24"/>
+                                <line x1="108" y1="54" x2="158" y2="54" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+                            </g>
+                            <rect class="draw-path" x="72" y="72" width="118" height="110" rx="16" fill="#181824" stroke="#38bdf8" stroke-width="2.5"/>
+                            <rect class="bar-1" x="90" y="138" width="14" height="26" rx="4" fill="#38bdf8"/>
+                            <rect class="bar-2" x="114" y="120" width="14" height="44" rx="4" fill="#2563eb"/>
+                            <rect class="bar-3" x="138" y="104" width="14" height="60" rx="4" fill="#ff3333"/>
+                            <rect class="bar-4" x="162" y="86" width="14" height="78" rx="4" fill="#00ba7c"/>
+                            <path class="draw-path draw-delay-2" d="M92 128L120 108L144 114L170 78" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <!-- Target Lock Ring on Peak Bar -->
+                            <g class="interaction-target-ring">
+                                <circle cx="169" cy="84" r="14" fill="rgba(255, 51, 51, 0.2)" stroke="#fbbf24" stroke-width="1.6" stroke-dasharray="3 3"/>
+                            </g>
                         </g>
 
-                        <!-- Storyset-Style Character 4: Analyst Presenting Growth (Face, Body, Hand) -->
+                        <!-- Storyset-Style Character 4: Senior Data Auditor Holding KPI Lens Over Chart -->
                         <g class="character-group">
-                            <path class="draw-path" d="M202 190C202 168 213 156 226 156C239 156 250 168 250 190H202Z" fill="#2563eb" stroke="#ffffff" stroke-width="1.8"/>
-                            <g class="character-arm-wave">
-                                <path d="M208 164L188 140" stroke="#38bdf8" stroke-width="5.5" stroke-linecap="round"/>
-                                <circle cx="186" cy="138" r="4.5" fill="#fbd38d"/>
-                            </g>
+                            <path d="M242 154L252 174L238 184" stroke="#1e3a8a" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path class="draw-path" d="M194 196C194 166 203 146 224 146C245 146 254 166 254 196H194Z" fill="url(#execBlazerBlue)" stroke="#38bdf8" stroke-width="1.6"/>
+                            <polygon points="216,146 232,146 224,176" fill="#ffffff"/>
+                            <polygon points="222,149 226,149 227,173 224,177 221,173" fill="#ff3333"/>
+
+                            <!-- Clean Modern Storyset Head & Rimless Frames (Locked at Neck 224,140) -->
                             <g class="character-head">
-                                <circle cx="226" cy="136" r="13.5" fill="#fbd38d" stroke="#ffffff" stroke-width="1.5"/>
-                                <!-- Smart Glasses on Face -->
-                                <rect x="216" y="132" width="8" height="5" rx="1.5" stroke="#0f172a" stroke-width="1.5" fill="rgba(56,189,248,0.25)"/>
-                                <rect x="226" y="132" width="8" height="5" rx="1.5" stroke="#0f172a" stroke-width="1.5" fill="rgba(56,189,248,0.25)"/>
-                                <line x1="224" y1="134" x2="226" y2="134" stroke="#0f172a" stroke-width="1.5"/>
-                                <path d="M213 131C214 120 225 118 235 121C240 123 240 129 239 132C234 126 221 126 213 131Z" fill="#0f172a"/>
-                                <path d="M222 142Q226 145 230 142" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                                <rect x="219" y="132" width="10" height="16" rx="5" fill="#f4c29f"/>
+                                <path d="M219 138Q224 143 229 138V143H219V138Z" fill="#e0a37b"/>
+                                <circle cx="238" cy="121" r="4.2" fill="#e0a37b"/>
+                                <rect x="210" y="102" width="28" height="34" rx="14" fill="#f4c29f"/>
+                                <path d="M209 117C208 104 215 96 226 96C237 96 242 103 240 116C238 109 233 106 225 106C217 106 212 110 209 117Z" fill="#0f172a"/>
+                                <rect x="212.5" y="115" width="9" height="6" rx="2" fill="rgba(56,189,248,0.2)" stroke="#0f172a" stroke-width="1.3"/>
+                                <rect x="223.5" y="115" width="9" height="6" rx="2" fill="rgba(56,189,248,0.2)" stroke="#0f172a" stroke-width="1.3"/>
+                                <line x1="221.5" y1="117.5" x2="223.5" y2="117.5" stroke="#0f172a" stroke-width="1.3"/>
+                                <path d="M221.5 121V124" stroke="#d28f64" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M219 128Q223 131 227.5 128" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+                            </g>
+
+                            <!-- NATURAL BENT LEFT ARM (Shoulder 204,154 -> Elbow 186,164 -> Wrist/Hand 151,130) -->
+                            <g class="character-arm-wave">
+                                <circle cx="204" cy="154" r="7.5" fill="#2563eb"/>
+                                <line x1="204" y1="154" x2="186" y2="164" stroke="url(#execBlazerBlue)" stroke-width="14" stroke-linecap="round"/>
+
+                                <g class="ik-forearm">
+                                    <circle cx="186" cy="164" r="7" fill="#2563eb"/>
+                                    <line x1="186" y1="164" x2="158" y2="136" stroke="url(#execBlazerBlue)" stroke-width="13" stroke-linecap="round"/>
+                                    <line x1="160" y1="138" x2="155" y2="133" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+                                    <circle cx="151" cy="130" r="5.8" fill="#f4c29f"/>
+
+                                    <!-- Held & Moved Interactive Audit Magnifier Lens Icon Directly in Hand Grip -->
+                                    <g class="interactive-held-icon">
+                                        <circle cx="132" cy="108" r="15" fill="rgba(56, 189, 248, 0.24)" stroke="#fbbf24" stroke-width="2.4"/>
+                                        <line x1="142" y1="119" x2="151" y2="130" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+                                        <path d="M126 108L130 112L139 103" stroke="#00ba7c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <circle cx="148" cy="127" r="3.4" fill="#f4c29f"/>
+                                    </g>
+                                </g>
                             </g>
                         </g>
 
                         <!-- Emoji SVG 1: Donut Chart -->
                         <g class="emoji-node e-1">
-                            <circle class="draw-path" cx="48" cy="54" r="22" fill="#1e1b4b" stroke="#38bdf8" stroke-width="4"/>
-                            <path class="draw-path draw-delay-1" d="M48 32A22 22 0 0 1 70 54" stroke="#ff3333" stroke-width="5" stroke-linecap="round"/>
-                            <circle cx="48" cy="54" r="7" fill="#fbbf24"/>
+                            <circle class="draw-path" cx="44" cy="52" r="22" fill="#1e1b4b" stroke="#38bdf8" stroke-width="4"/>
+                            <path class="draw-path draw-delay-1" d="M44 30A22 22 0 0 1 66 52" stroke="#ff3333" stroke-width="5" stroke-linecap="round"/>
+                            <circle cx="44" cy="52" r="7" fill="#fbbf24"/>
                         </g>
 
                         <!-- Emoji SVG 2: Audit Magnifier -->
                         <g class="emoji-node e-2">
-                            <circle class="draw-path" cx="264" cy="50" r="18" fill="rgba(56,189,248,0.15)" stroke="#38bdf8" stroke-width="2.5"/>
-                            <line class="draw-path draw-delay-1" x1="277" y1="63" x2="290" y2="76" stroke="#ff3333" stroke-width="4" stroke-linecap="round"/>
+                            <circle class="draw-path" cx="268" cy="48" r="18" fill="rgba(56,189,248,0.15)" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line class="draw-path draw-delay-1" x1="281" y1="61" x2="294" y2="74" stroke="#ff3333" stroke-width="4" stroke-linecap="round"/>
                         </g>
 
                         <!-- Emoji SVG 3: Cloud Sync Node -->
                         <g class="emoji-node e-3">
-                            <rect class="draw-path" x="16" y="124" width="52" height="36" rx="18" fill="#0f172a" stroke="#38bdf8" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M42 150V134M42 134L36 140M42 134L48 140" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                            <rect class="draw-path" x="12" y="124" width="52" height="36" rx="18" fill="#0f172a" stroke="#38bdf8" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M38 150V134M38 134L32 140M38 134L44 140" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
                         </g>
 
                         <!-- Emoji SVG 4: Target / Accuracy -->
                         <g class="emoji-node e-4">
-                            <circle class="draw-path" cx="278" cy="142" r="21" fill="#2e1018" stroke="#ff3333" stroke-width="2.2"/>
-                            <circle class="draw-path draw-delay-1" cx="278" cy="142" r="11" stroke="#fbbf24" stroke-width="2"/>
-                            <circle cx="278" cy="142" r="4" fill="#34d399"/>
+                            <circle class="draw-path" cx="282" cy="142" r="20" fill="#2e1018" stroke="#ff3333" stroke-width="2.2"/>
+                            <circle class="draw-path draw-delay-1" cx="282" cy="142" r="10" stroke="#fbbf24" stroke-width="2"/>
+                            <circle cx="282" cy="142" r="4" fill="#34d399"/>
                         </g>
 
                         <!-- Emoji SVG 5: Clean Summary Report -->
                         <g class="emoji-node e-5">
-                            <rect class="draw-path" x="48" y="190" width="38" height="46" rx="7" fill="#1e293b" stroke="#38bdf8" stroke-width="2.2"/>
-                            <line class="draw-path draw-delay-1" x1="56" y1="202" x2="78" y2="202" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
-                            <line class="draw-path draw-delay-1" x1="56" y1="212" x2="74" y2="212" stroke="#ff3333" stroke-width="2.5" stroke-linecap="round"/>
-                            <line class="draw-path draw-delay-2" x1="56" y1="222" x2="70" y2="222" stroke="#34d399" stroke-width="2.5" stroke-linecap="round"/>
+                            <rect class="draw-path" x="44" y="190" width="38" height="46" rx="7" fill="#1e293b" stroke="#38bdf8" stroke-width="2.2"/>
+                            <line class="draw-path draw-delay-1" x1="52" y1="202" x2="74" y2="202" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+                            <line class="draw-path draw-delay-1" x1="52" y1="212" x2="70" y2="212" stroke="#ff3333" stroke-width="2.5" stroke-linecap="round"/>
+                            <line class="draw-path draw-delay-2" x1="52" y1="222" x2="66" y2="222" stroke="#34d399" stroke-width="2.5" stroke-linecap="round"/>
                         </g>
 
                         <!-- Emoji SVG 6: Security Lock -->
                         <g class="emoji-node e-6">
-                            <rect class="draw-path" x="234" y="200" width="40" height="32" rx="7" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M245 200V192C245 187 249 183 254 183C259 183 263 187 263 192V200" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round"/>
-                            <circle cx="254" cy="216" r="4" fill="#fbbf24"/>
+                            <rect class="draw-path" x="246" y="200" width="40" height="32" rx="7" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M257 200V192C257 187 261 183 266 183C271 183 275 187 275 192V200" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round"/>
+                            <circle cx="266" cy="216" r="4" fill="#fbbf24"/>
                         </g>
                     </svg>
                 </div>
@@ -1235,7 +1507,7 @@
             </section>
 
             <!-- =========================================================
-                 SECTION 5: ALL SET (ROCKET + CELEBRATING CHARACTER + 6 FLOATING SVGS)
+                 SECTION 5: ALL SET (ROCKET + STORYSET FOUNDER DOCKING IGNITION CORE)
                  ========================================================= -->
             <section class="slide" data-index="4" id="final-slide">
                 <div class="art-stage">
@@ -1244,69 +1516,102 @@
 
                         <!-- Centerpiece: Launch Rocket -->
                         <g class="centerpiece-group">
-                            <path class="rocket-flame" d="M136 176L148 212L160 176H136Z" fill="#ff3333"/>
-                            <path class="rocket-flame" d="M141 176L148 198L155 176H141Z" fill="#fbbf24"/>
-                            <path class="draw-path" d="M122 142L102 166H126V142Z" fill="#2563eb" stroke="#38bdf8" stroke-width="1.8"/>
-                            <path class="draw-path" d="M174 142L194 166H170V142Z" fill="#2563eb" stroke="#38bdf8" stroke-width="1.8"/>
-                            <path class="draw-path" d="M148 64C126 88 122 116 122 160H174C174 116 170 88 148 64Z" fill="#ffffff" stroke="#38bdf8" stroke-width="2.2"/>
-                            <path d="M148 64C137 76 132 88 129 100H167C164 88 159 76 148 64Z" fill="#ff3333"/>
-                            <circle class="draw-path draw-delay-1" cx="148" cy="124" r="11" fill="#38bdf8" stroke="#121212" stroke-width="3"/>
-                            <rect x="130" y="160" width="36" height="12" rx="4" fill="#fbbf24"/>
+                            <path class="rocket-flame" d="M122 176L134 212L146 176H122Z" fill="#ff3333"/>
+                            <path class="rocket-flame" d="M127 176L134 198L141 176H127Z" fill="#fbbf24"/>
+                            <path class="draw-path" d="M108 142L88 166H112V142Z" fill="#2563eb" stroke="#38bdf8" stroke-width="1.8"/>
+                            <path class="draw-path" d="M160 142L180 166H156V142Z" fill="#2563eb" stroke="#38bdf8" stroke-width="1.8"/>
+                            <path class="draw-path" d="M134 64C112 88 108 116 108 160H160C160 116 156 88 134 64Z" fill="#ffffff" stroke="#38bdf8" stroke-width="2.2"/>
+                            <path d="M134 64C123 76 118 88 115 100H153C150 88 145 76 134 64Z" fill="#ff3333"/>
+                            <!-- Rocket Core Target Dock -->
+                            <g class="interaction-target-ring">
+                                <circle cx="134" cy="124" r="17" fill="rgba(56, 189, 248, 0.25)" stroke="#38bdf8" stroke-width="1.6" stroke-dasharray="3 3"/>
+                            </g>
+                            <circle class="draw-path draw-delay-1" cx="134" cy="124" r="11" fill="#38bdf8" stroke="#121212" stroke-width="3"/>
+                            <rect x="116" y="160" width="36" height="12" rx="4" fill="#fbbf24"/>
                         </g>
 
-                        <!-- Storyset-Style Character 5: Founder Celebrating Launch (Face, Body, Hand) -->
+                        <!-- Storyset-Style Character 5: Founder Docking Ignition Core into Rocket -->
                         <g class="character-group">
-                            <path class="draw-path" d="M198 190C198 168 209 156 222 156C235 156 246 168 246 190H198Z" fill="url(#charSuit1)" stroke="#ffffff" stroke-width="1.8"/>
-                            <!-- Both Arms Raised Celebrating -->
-                            <g class="character-arm-wave">
-                                <path d="M238 162C248 152 254 138 250 126" stroke="#ff3333" stroke-width="5.5" stroke-linecap="round"/>
-                                <circle cx="250" cy="123" r="5" fill="#fbd38d" stroke="#ffffff" stroke-width="1.2"/>
-                            </g>
+                            <path d="M242 154L252 174L238 184" stroke="#0f172a" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path class="draw-path" d="M194 196C194 166 203 146 224 146C245 146 254 166 254 196H194Z" fill="url(#execSuitNavy)" stroke="#ff3333" stroke-width="1.7"/>
+                            <polygon points="216,146 232,146 224,176" fill="#ffffff"/>
+                            <polygon points="222,149 226,149 227,173 224,177 221,173" fill="#ff3333"/>
+                            <line x1="221" y1="162" x2="227" y2="162" stroke="#fbbf24" stroke-width="1.8" stroke-linecap="round"/>
+
+                            <!-- Clean Modern Storyset Head (Locked at Neck 224,140) -->
                             <g class="character-head">
-                                <circle cx="222" cy="136" r="13.5" fill="#fbd38d" stroke="#ffffff" stroke-width="1.5"/>
-                                <path d="M209 133C210 121 221 118 231 121C236 123 237 129 235 133C230 127 217 127 209 133Z" fill="#0f172a"/>
-                                <circle cx="217" cy="135" r="1.6" fill="#0f172a"/>
-                                <circle cx="226" cy="135" r="1.6" fill="#0f172a"/>
-                                <path d="M217 140Q222 146 227 140" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                                <rect x="219" y="132" width="10" height="16" rx="5" fill="#f4c29f"/>
+                                <path d="M219 138Q224 143 229 138V143H219V138Z" fill="#e0a37b"/>
+                                <circle cx="238" cy="121" r="4.2" fill="#e0a37b"/>
+                                <rect x="210" y="102" width="28" height="34" rx="14" fill="#f4c29f"/>
+                                <path d="M209 117C208 104 215 96 226 96C237 96 242 103 240 116C238 109 233 106 225 106C217 106 212 110 209 117Z" fill="#0f172a"/>
+                                <path d="M214 114Q217 112.5 220 114" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round"/>
+                                <path d="M225 114Q228 112.5 231 114" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round"/>
+                                <circle cx="217" cy="118.5" r="2" fill="#0f172a"/>
+                                <circle cx="228" cy="118.5" r="2" fill="#0f172a"/>
+                                <circle cx="216.3" cy="117.8" r="0.7" fill="#ffffff"/>
+                                <circle cx="227.3" cy="117.8" r="0.7" fill="#ffffff"/>
+                                <path d="M221.5 119V123.5" stroke="#d28f64" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M218.5 127Q223 131.5 228 127" stroke="#0f172a" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+                            </g>
+
+                            <!-- NATURAL BENT LEFT ARM (Shoulder 204,154 -> Elbow 186,164 -> Wrist/Hand 151,130) -->
+                            <g class="character-arm-wave">
+                                <circle cx="204" cy="154" r="7.5" fill="#1e293b"/>
+                                <line x1="204" y1="154" x2="186" y2="164" stroke="url(#execSuitNavy)" stroke-width="14" stroke-linecap="round"/>
+
+                                <g class="ik-forearm">
+                                    <circle cx="186" cy="164" r="7" fill="#1e293b"/>
+                                    <line x1="186" y1="164" x2="158" y2="136" stroke="url(#execSuitNavy)" stroke-width="13" stroke-linecap="round"/>
+                                    <line x1="160" y1="138" x2="155" y2="133" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+                                    <circle cx="151" cy="130" r="5.8" fill="#f4c29f"/>
+
+                                    <!-- Held & Docked Launch Ignition Core Module Directly in Hand Grip -->
+                                    <g class="interactive-held-icon">
+                                        <circle cx="134" cy="124" r="14" fill="#0f172a" stroke="#fbbf24" stroke-width="2.2"/>
+                                        <path d="M136 115L128 125H134L132 133L141 123H135L136 115Z" fill="#ff3333" stroke="#fbbf24" stroke-width="1" stroke-linejoin="round"/>
+                                        <circle cx="148" cy="127" r="3.4" fill="#f4c29f"/>
+                                    </g>
+                                </g>
                             </g>
                         </g>
 
                         <!-- Emoji SVG 1: Premium Crown -->
                         <g class="emoji-node e-1">
-                            <path class="draw-path" d="M26 66L32 42L46 54L60 38L74 54L88 42L94 66H26Z" fill="#451a03" stroke="#fbbf24" stroke-width="2.2" stroke-linejoin="round"/>
-                            <circle cx="60" cy="34" r="3" fill="#ff3333"/>
+                            <path class="draw-path" d="M22 64L28 40L42 52L56 36L70 52L84 40L90 64H22Z" fill="#451a03" stroke="#fbbf24" stroke-width="2.2" stroke-linejoin="round"/>
+                            <circle cx="56" cy="32" r="3" fill="#ff3333"/>
                         </g>
 
                         <!-- Emoji SVG 2: Starburst Sparkle -->
                         <g class="emoji-node e-2">
-                            <circle class="draw-path" cx="268" cy="52" r="22" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M268 37L272 48L283 52L272 56L268 67L264 56L253 52L264 48L268 37Z" fill="#fbbf24"/>
+                            <circle class="draw-path" cx="270" cy="50" r="22" fill="#1e1b4b" stroke="#38bdf8" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M270 35L274 46L285 50L274 54L270 65L266 54L255 50L266 46L270 35Z" fill="#fbbf24"/>
                         </g>
 
                         <!-- Emoji SVG 3: High-Speed Gauge -->
                         <g class="emoji-node e-3">
-                            <circle class="draw-path" cx="42" cy="144" r="22" fill="#0f172a" stroke="#38bdf8" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M30 150A14 14 0 1 1 54 150" stroke="#34d399" stroke-width="2.5" stroke-linecap="round"/>
-                            <line class="draw-path draw-delay-2" x1="42" y1="148" x2="50" y2="138" stroke="#ff3333" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle class="draw-path" cx="38" cy="144" r="22" fill="#0f172a" stroke="#38bdf8" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M26 150A14 14 0 1 1 50 150" stroke="#34d399" stroke-width="2.5" stroke-linecap="round"/>
+                            <line class="draw-path draw-delay-2" x1="38" y1="148" x2="46" y2="138" stroke="#ff3333" stroke-width="2.5" stroke-linecap="round"/>
                         </g>
 
                         <!-- Emoji SVG 4: Connected Globe -->
                         <g class="emoji-node e-4">
-                            <circle class="draw-path" cx="278" cy="144" r="21" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
-                            <ellipse class="draw-path draw-delay-1" cx="278" cy="144" rx="9" ry="21" stroke="#38bdf8" stroke-width="1.8"/>
-                            <line class="draw-path draw-delay-1" x1="257" y1="144" x2="299" y2="144" stroke="#34d399" stroke-width="1.8"/>
+                            <circle class="draw-path" cx="282" cy="142" r="20" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
+                            <ellipse class="draw-path draw-delay-1" cx="282" cy="142" rx="9" ry="20" stroke="#38bdf8" stroke-width="1.8"/>
+                            <line class="draw-path draw-delay-1" x1="262" y1="142" x2="302" y2="142" stroke="#34d399" stroke-width="1.8"/>
                         </g>
 
                         <!-- Emoji SVG 5: Verified Ready Check -->
                         <g class="emoji-node e-5">
-                            <circle class="draw-path" cx="64" cy="212" r="21" fill="#0f291e" stroke="#00ba7c" stroke-width="2.4"/>
-                            <path class="draw-path draw-delay-1" d="M55 212L61 218L74 205" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle class="draw-path" cx="60" cy="212" r="21" fill="#0f291e" stroke="#00ba7c" stroke-width="2.4"/>
+                            <path class="draw-path draw-delay-1" d="M51 212L57 218L70 205" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                         </g>
 
                         <!-- Emoji SVG 6: Customer Delight Heart -->
                         <g class="emoji-node e-6">
-                            <circle class="draw-path" cx="254" cy="214" r="20" fill="#31102f" stroke="#ff3333" stroke-width="2.2"/>
-                            <path class="draw-path draw-delay-1" d="M254 224C254 224 242 216 242 208C242 204 245 201 249 201C252 201 254 203 254 205C254 203 256 201 259 201C263 201 266 204 266 208C266 216 254 224 254 224Z" fill="#ff3333"/>
+                            <circle class="draw-path" cx="264" cy="214" r="20" fill="#31102f" stroke="#ff3333" stroke-width="2.2"/>
+                            <path class="draw-path draw-delay-1" d="M264 224C264 224 252 216 252 208C252 204 255 201 259 201C262 201 264 203 264 205C264 203 266 201 269 201C273 201 276 204 276 208C276 216 264 224 264 224Z" fill="#ff3333"/>
                         </g>
                     </svg>
                 </div>
@@ -1322,7 +1627,7 @@
         </div>
     </main>
 
-    <!-- Bottom Controls: Skip (Bottom Left) | Dots (Center) | Next (Bottom Right) -->
+    <!-- Bottom Controls: Exact Same Position (Skip | Dots | Next) -->
     <footer class="bottom-nav">
         <button id="skip-btn" class="skip-btn" aria-label="Skip Onboarding">
             <span>Skip</span>
@@ -1369,6 +1674,56 @@
         }
     }
 
+    // --- GSAP SKELETAL INTERACTION ENGINE (ZERO LIMB ORIGIN OVERRIDE) ---
+    function runGsapCharacterInteraction(slideEl) {
+        if (!window.gsap || !slideEl) return;
+        const heldIcon = slideEl.querySelector('.interactive-held-icon');
+        const targetRing = slideEl.querySelector('.interaction-target-ring');
+        const charGroup = slideEl.querySelector('.character-group');
+        const armGroup = slideEl.querySelector('.character-arm-wave, .character-arm-action');
+        const forearmGroup = slideEl.querySelector('.ik-forearm');
+
+        // Clear any inline GSAP transforms on arm/forearm/heldIcon so joints never detach from CSS fill-box sockets
+        if (armGroup) {
+            window.gsap.set(armGroup, { clearProps: 'transform,transformOrigin' });
+        }
+        if (forearmGroup) {
+            window.gsap.set(forearmGroup, { clearProps: 'transform,transformOrigin' });
+        }
+        if (charGroup) {
+            window.gsap.fromTo(
+                charGroup,
+                { opacity: 0.92 },
+                { opacity: 1, duration: 0.45, ease: 'power2.out', overwrite: 'auto' }
+            );
+        }
+        if (heldIcon) {
+            window.gsap.set(
+                heldIcon,
+                { clearProps: 'transform,transformOrigin' },
+                { overwrite: 'auto' }
+            );
+        }
+        if (targetRing) {
+            window.gsap.fromTo(
+                targetRing,
+                { scale: 0.7, opacity: 0.2 },
+                { scale: 1.15, opacity: 0.95, duration: 0.65, ease: 'power2.out', overwrite: 'auto' }
+            );
+        }
+    }
+
+    // Interactive Tap Pulse on Art Stage
+    slides.forEach((slideEl) => {
+        const stage = slideEl.querySelector('.art-stage');
+        if (stage) {
+            stage.addEventListener('click', () => {
+                vibrate(8);
+                runGsapCharacterInteraction(slideEl);
+            });
+        }
+    });
+
     // --- NAVIGATION & HISTORY-SAFE REDIRECT ---
     function redirectToDashboard(withRocketBlast = false) {
         if (isLaunching) return;
@@ -1378,10 +1733,10 @@
         if (withRocketBlast && finalSlide) {
             finalSlide.classList.add('rocket-launching');
             setTimeout(() => {
-                window.location.replace('bill.html');
+                window.location.replace('index.html');
             }, 520);
         } else {
-            window.location.replace('bill.html');
+            window.location.replace('index.html');
         }
     }
 
@@ -1390,6 +1745,7 @@
         slideEl.classList.remove('text-kinetic-shake');
         void slideEl.offsetWidth; // Force clean reflow so SVG draw + text kinetic motion replay
         slideEl.classList.add('text-kinetic-shake');
+        runGsapCharacterInteraction(slideEl);
     }
 
     function goToSlide(index, withKineticText = true) {
@@ -1529,6 +1885,16 @@
     viewport.addEventListener('mouseleave', () => {
         const activeSvg = slides[currentIndex]?.querySelector('.hero-scene-svg');
         if (activeSvg) activeSvg.style.transform = '';
+    });
+
+    // Stabilize slider alignment on orientation or window resize
+    window.addEventListener('resize', () => {
+        goToSlide(currentIndex, false);
+    });
+
+    // Initialize GSAP interaction on first load once script is ready
+    window.addEventListener('DOMContentLoaded', () => {
+        runGsapCharacterInteraction(slides[currentIndex]);
     });
 
     // Keyboard navigation support for desktop testing
