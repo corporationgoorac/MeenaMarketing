@@ -177,6 +177,7 @@
             min-height: 0;
             overflow: hidden;
             position: relative;
+            z-index: 5;
             touch-action: pan-y;
         }
 
@@ -187,10 +188,12 @@
             width: 500%;
             height: 100%;
             flex-shrink: 0;
-            transition: transform 0.54s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: transform 0.56s cubic-bezier(0.22, 1, 0.36, 1);
             will-change: transform;
             transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            perspective: 1000px;
         }
 
         .slider-track.dragging {
@@ -213,6 +216,16 @@
             position: relative;
             overflow: hidden;
             backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transform: translate3d(0, 0, 0);
+            contain: layout paint;
+        }
+
+        /* Pause offscreen continuous blurs so active slide transitions run at 60fps */
+        .slide:not(.active) .art-stage::before,
+        .slide:not(.active) .art-stage::after,
+        .slide:not(.active) .energy-stream-line {
+            animation-play-state: paused !important;
         }
 
         /* --- HALF-SCREEN NATIVE APP HERO ILLUSTRATION STAGE (WITH BLUE & RED AURORA) --- */
@@ -232,8 +245,9 @@
             margin-bottom: 16px;
             flex-shrink: 0;
             opacity: 0;
-            transform: scale(0.88) translateY(16px);
-            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+            transform: scale(0.88) translate3d(0, 16px, 0);
+            transition: transform 0.58s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform, opacity;
             cursor: pointer;
         }
 
@@ -251,6 +265,8 @@
             z-index: 0;
             animation: auraBreathe 4.2s ease-in-out infinite alternate;
             pointer-events: none;
+            will-change: transform, opacity;
+            transform: translateZ(0);
         }
 
         /* Secondary Counter-Rotating Red & Electric Blue Mesh Glow */
@@ -271,6 +287,8 @@
             z-index: 0;
             animation: auroraOrbit 9s linear infinite;
             pointer-events: none;
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         @keyframes auraBreathe {
@@ -287,7 +305,7 @@
 
         .slide.active .art-stage {
             opacity: 1;
-            transform: scale(1) translateY(0);
+            transform: scale(1) translate3d(0, 0, 0);
         }
 
         /* Wide Interactive Vector Scene inside the Half-Screen Stage */
@@ -301,6 +319,7 @@
             overflow: visible;
             filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.65));
             transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
         }
 
         /* --- SELF-DRAWING & MOVING ANIMATIONS FOR EVERY SVG ELEMENT --- */
@@ -602,8 +621,9 @@
             margin-bottom: 10px;
             width: 100%;
             opacity: 0;
-            transform: translateY(12px);
-            transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.04s, opacity 0.4s ease 0.04s;
+            transform: translate3d(0, 12px, 0);
+            transition: transform 0.48s cubic-bezier(0.22, 1, 0.36, 1) 0.04s, opacity 0.4s ease 0.04s;
+            will-change: transform, opacity;
         }
 
         /* Instant Animated Multi-Color Gradient Greeting ("there") */
@@ -638,8 +658,9 @@
             max-width: 290px;
             width: 100%;
             opacity: 0;
-            transform: translateY(14px);
-            transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.09s, opacity 0.4s ease 0.09s;
+            transform: translate3d(0, 14px, 0);
+            transition: transform 0.48s cubic-bezier(0.22, 1, 0.36, 1) 0.09s, opacity 0.4s ease 0.09s;
+            will-change: transform, opacity;
         }
 
         .slide-subtitle strong {
@@ -650,7 +671,7 @@
         .slide.active .slide-title,
         .slide.active .slide-subtitle {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate3d(0, 0, 0);
         }
 
         /* Kinetic Text Shake & Glide when clicking Next */
@@ -678,7 +699,9 @@
             align-items: center;
             position: relative;
             flex-shrink: 0;
-            z-index: 20;
+            z-index: 50;
+            pointer-events: auto;
+            touch-action: manipulation;
         }
 
         .skip-btn {
@@ -697,6 +720,22 @@
             display: inline-flex;
             align-items: center;
             white-space: nowrap;
+            position: relative;
+            z-index: 30;
+            touch-action: manipulation;
+            pointer-events: auto;
+        }
+
+        /* Expanded invisible hit target so edge taps always register */
+        .skip-btn::before {
+            content: '';
+            position: absolute;
+            inset: -12px -14px;
+            border-radius: 9999px;
+        }
+
+        .skip-btn * {
+            pointer-events: none;
         }
 
         .skip-btn:hover {
@@ -726,6 +765,8 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
+            z-index: 25;
+            touch-action: manipulation;
         }
 
         .nav-dot {
@@ -738,6 +779,14 @@
             padding: 0;
             flex-shrink: 0;
             transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            touch-action: manipulation;
+        }
+
+        .nav-dot::before {
+            content: '';
+            position: absolute;
+            inset: -8px -4px;
         }
 
         .nav-dot:hover {
@@ -767,8 +816,28 @@
             justify-content: center;
             gap: 6px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
-            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: background-color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                        box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
             white-space: nowrap;
+            position: relative;
+            z-index: 30;
+            touch-action: manipulation;
+            pointer-events: auto;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Generous invisible touch cushion around Next button so every tap registers */
+        .next-action-btn::before {
+            content: '';
+            position: absolute;
+            inset: -14px -16px;
+            border-radius: 9999px;
+        }
+
+        /* Prevent child SVG/span from stealing or splitting touch target events */
+        .next-action-btn * {
+            pointer-events: none;
         }
 
         .next-action-btn:hover {
@@ -787,6 +856,7 @@
             fill: currentColor;
             transition: transform 0.25s ease;
             flex-shrink: 0;
+            pointer-events: none;
         }
 
         .next-action-btn:hover svg {
@@ -806,6 +876,7 @@
 
         .btn-label {
             white-space: nowrap;
+            pointer-events: none;
         }
 
         /* ============================================================================
@@ -1549,19 +1620,19 @@
 
     <!-- Bottom Controls: Exact Same Position (Skip | Dots | Next) -->
     <footer class="bottom-nav">
-        <button id="skip-btn" class="skip-btn" aria-label="Skip Onboarding">
+        <button id="skip-btn" type="button" class="skip-btn" aria-label="Skip Onboarding">
             <span>Skip</span>
         </button>
 
         <div class="dots-container" id="dots-container">
-            <button class="nav-dot active" data-slide="0" aria-label="Slide 1"></button>
-            <button class="nav-dot" data-slide="1" aria-label="Slide 2"></button>
-            <button class="nav-dot" data-slide="2" aria-label="Slide 3"></button>
-            <button class="nav-dot" data-slide="3" aria-label="Slide 4"></button>
-            <button class="nav-dot" data-slide="4" aria-label="Slide 5"></button>
+            <button type="button" class="nav-dot active" data-slide="0" aria-label="Slide 1"></button>
+            <button type="button" class="nav-dot" data-slide="1" aria-label="Slide 2"></button>
+            <button type="button" class="nav-dot" data-slide="2" aria-label="Slide 3"></button>
+            <button type="button" class="nav-dot" data-slide="3" aria-label="Slide 4"></button>
+            <button type="button" class="nav-dot" data-slide="4" aria-label="Slide 5"></button>
         </div>
 
-        <button id="next-btn" class="next-action-btn" aria-label="Next Slide">
+        <button id="next-btn" type="button" class="next-action-btn" aria-label="Next Slide">
             <span class="btn-label" id="next-btn-label">Next</span>
             <svg viewBox="0 0 24 24">
                 <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
@@ -1580,10 +1651,13 @@
     const nextBtnLabel = document.getElementById('next-btn-label');
     const skipBtn = document.getElementById('skip-btn');
     const finalSlide = document.getElementById('final-slide');
+    const bottomNav = document.querySelector('.bottom-nav');
 
     const TOTAL_SLIDES = slides.length;
     let currentIndex = 0;
     let isLaunching = false;
+    let lastNavActionTime = 0;
+    let animationRafId = null;
 
     // --- HAPTIC VIBRATION HELPER ---
     function vibrate(pattern = 12) {
@@ -1614,21 +1688,37 @@
             window.gsap.fromTo(
                 charGroup,
                 { opacity: 0.92 },
-                { opacity: 1, duration: 0.45, ease: 'power2.out', overwrite: 'auto' }
+                {
+                    opacity: 1,
+                    duration: 0.45,
+                    ease: 'power2.out',
+                    overwrite: 'auto',
+                    onComplete: () => {
+                        window.gsap.set(charGroup, { clearProps: 'opacity,transform' });
+                    }
+                }
             );
         }
         if (heldIcon) {
             window.gsap.set(
                 heldIcon,
-                { clearProps: 'transform,transformOrigin' },
-                { overwrite: 'auto' }
+                { clearProps: 'transform,transformOrigin' }
             );
         }
         if (targetRing) {
             window.gsap.fromTo(
                 targetRing,
                 { scale: 0.7, opacity: 0.2 },
-                { scale: 1.15, opacity: 0.95, duration: 0.65, ease: 'power2.out', overwrite: 'auto' }
+                {
+                    scale: 1.15,
+                    opacity: 0.95,
+                    duration: 0.65,
+                    ease: 'power2.out',
+                    overwrite: 'auto',
+                    onComplete: () => {
+                        window.gsap.set(targetRing, { clearProps: 'transform,opacity,scale' });
+                    }
+                }
             );
         }
     }
@@ -1662,14 +1752,22 @@
 
     function triggerSlideAnimations(slideEl) {
         if (!slideEl) return;
+        if (animationRafId) {
+            cancelAnimationFrame(animationRafId);
+        }
         slideEl.classList.remove('text-kinetic-shake');
-        void slideEl.offsetWidth; // Force clean reflow so SVG draw + text kinetic motion replay
-        slideEl.classList.add('text-kinetic-shake');
-        runGsapCharacterInteraction(slideEl);
+        animationRafId = requestAnimationFrame(() => {
+            void slideEl.offsetWidth; // Force clean reflow on next frame so track transition starts smoothly
+            slideEl.classList.add('text-kinetic-shake');
+            runGsapCharacterInteraction(slideEl);
+        });
     }
 
     function goToSlide(index, withKineticText = true) {
         if (isLaunching) return;
+        isSwiping = false;
+        track.classList.remove('dragging');
+
         const clamped = Math.max(0, Math.min(TOTAL_SLIDES - 1, index));
         const changed = clamped !== currentIndex;
         if (changed) {
@@ -1704,25 +1802,74 @@
         skipBtn.classList.toggle('hidden-skip', isLast);
     }
 
-    // --- BUTTON & DOT LISTENERS ---
-    nextBtn.addEventListener('click', () => {
+    // --- RELIABLE UNIFIED BUTTON & DOT HANDLERS (ZERO MISSED CLICKS ON FIRST SCREEN) ---
+    function handleNextAction(e) {
+        if (e) {
+            e.stopPropagation();
+        }
+        const now = performance.now();
+        if (now - lastNavActionTime < 220) return;
+        lastNavActionTime = now;
+
         if (currentIndex < TOTAL_SLIDES - 1) {
             goToSlide(currentIndex + 1, true);
         } else {
             redirectToDashboard(true);
         }
+    }
+
+    function handleSkipAction(e) {
+        if (e) {
+            e.stopPropagation();
+        }
+        const now = performance.now();
+        if (now - lastNavActionTime < 220) return;
+        lastNavActionTime = now;
+
+        redirectToDashboard(false);
+    }
+
+    // --- BUTTON & DOT LISTENERS ---
+    nextBtn.addEventListener('click', (e) => {
+        handleNextAction(e);
     });
 
-    skipBtn.addEventListener('click', () => {
-        redirectToDashboard(false);
+    nextBtn.addEventListener('touchend', (e) => {
+        if (e.cancelable) e.preventDefault();
+        handleNextAction(e);
+    }, { passive: false });
+
+    skipBtn.addEventListener('click', (e) => {
+        handleSkipAction(e);
     });
+
+    skipBtn.addEventListener('touchend', (e) => {
+        if (e.cancelable) e.preventDefault();
+        handleSkipAction(e);
+    }, { passive: false });
 
     dots.forEach((dot) => {
-        dot.addEventListener('click', () => {
+        const activateDot = (e) => {
+            if (e) e.stopPropagation();
+            const now = performance.now();
+            if (now - lastNavActionTime < 180) return;
+            lastNavActionTime = now;
             const target = parseInt(dot.getAttribute('data-slide'), 10);
             if (!isNaN(target)) goToSlide(target, true);
-        });
+        };
+        dot.addEventListener('click', activateDot);
+        dot.addEventListener('touchend', (e) => {
+            if (e.cancelable) e.preventDefault();
+            activateDot(e);
+        }, { passive: false });
     });
+
+    // Prevent bottom nav touches from ever triggering viewport swipe state
+    if (bottomNav) {
+        bottomNav.addEventListener('touchstart', (e) => {
+            e.stopPropagation();
+        }, { passive: true });
+    }
 
     // --- TOUCH & POINTER SWIPE PHYSICS + PARALLAX STAGE DEPTH ---
     let startX = 0;
@@ -1733,12 +1880,12 @@
 
     viewport.addEventListener('touchstart', (e) => {
         if (isLaunching || e.touches.length !== 1) return;
+        if (e.target && e.target.closest('.bottom-nav, button')) return;
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
         deltaX = 0;
         isSwiping = true;
         isScrollingVertically = false;
-        track.classList.add('dragging');
     }, { passive: true });
 
     viewport.addEventListener('touchmove', (e) => {
@@ -1755,6 +1902,13 @@
             goToSlide(currentIndex, false);
             return;
         }
+
+        // Only engage dragging class once horizontal movement exceeds micro-tap jitter (6px)
+        if (Math.abs(diffX) > 6 && !track.classList.contains('dragging')) {
+            track.classList.add('dragging');
+        }
+
+        if (!track.classList.contains('dragging')) return;
 
         deltaX = diffX;
         const width = viewport.clientWidth || window.innerWidth;
@@ -1774,8 +1928,14 @@
 
     function finishTouchSwipe() {
         if (!isSwiping) return;
+        const wasDragging = track.classList.contains('dragging');
         isSwiping = false;
         track.classList.remove('dragging');
+
+        if (!wasDragging) {
+            deltaX = 0;
+            return;
+        }
 
         const threshold = Math.min(80, (viewport.clientWidth || 360) * 0.16);
         if (deltaX < -threshold && currentIndex < TOTAL_SLIDES - 1) {
@@ -1807,13 +1967,31 @@
         if (activeSvg) activeSvg.style.transform = '';
     });
 
-    // Stabilize slider alignment on orientation or window resize
+    // Stabilize slider alignment on orientation or window resize without interrupting active transitions
+    let resizeRaf = null;
     window.addEventListener('resize', () => {
+        if (resizeRaf) cancelAnimationFrame(resizeRaf);
+        resizeRaf = requestAnimationFrame(() => {
+            if (!isSwiping && !isLaunching) {
+                const offsetPercent = -(currentIndex * (100 / TOTAL_SLIDES));
+                track.style.transform = `translate3d(${offsetPercent}%, 0, 0)`;
+            }
+        });
+    });
+
+    // Reset state if page is restored from back-forward cache (bfcache)
+    window.addEventListener('pageshow', () => {
+        isLaunching = false;
+        isSwiping = false;
+        track.classList.remove('dragging');
+        if (finalSlide) finalSlide.classList.remove('rocket-launching');
         goToSlide(currentIndex, false);
     });
 
     // Initialize GSAP interaction on first load once script is ready
     window.addEventListener('DOMContentLoaded', () => {
+        isLaunching = false;
+        goToSlide(0, false);
         runGsapCharacterInteraction(slides[currentIndex]);
     });
 
